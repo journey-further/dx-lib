@@ -25,3 +25,12 @@ export const enableScroll = (): void => {
     window.scrollTo(0, top);
   }
 };
+
+export const insertStyle = (style: string, ticket: string): void => {
+  if (!!!document.querySelector("#" + ticket)) {
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      `<style id="` + ticket + `">${style.toString()}</style>`
+    );
+  }
+};
