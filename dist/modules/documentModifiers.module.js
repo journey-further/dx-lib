@@ -23,3 +23,8 @@ export const enableScroll = () => {
         window.scrollTo(0, top);
     }
 };
+export const insertStyle = (style, ticket) => {
+    if (!!!document.querySelector("#" + ticket)) {
+        document.body.insertAdjacentHTML("beforeend", `<style id="` + ticket + `">${style.toString()}</style>`);
+    }
+};
