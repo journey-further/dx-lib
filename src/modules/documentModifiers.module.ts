@@ -26,11 +26,38 @@ export const enableScroll = (): void => {
   }
 };
 
-export const insertStyle = (style: string, ticket: string): void => {
-  if (!!!document.querySelector("#" + ticket)) {
-    document.body.insertAdjacentHTML(
-      "beforeend",
-      `<style id="` + ticket + `">${style.toString()}</style>`
-    );
+/**
+ * Add the passed style string to either the options.elem element or the document body.
+ *
+ * If no options.position value is provided we will default to "beforeend".
+ *
+ * If no options.elem is provided we will default to document.body
+ *
+ * @param {string} style -- A CSS string
+ * @param {string} ticket -- Ticket ID to prevent duplicate additions
+ * @param {object} options -- Config options for the insert, position
+ * is an insert position accepted by insertAdjacentHTML and elem is a HTML element
+ */
+export const insertStyle = (
+  style: string,
+  ticket: string,
+  options?: {
+    position?: "beforebegin" | "afterbegin" | "beforeend" | "afterend";
+    elem?: HTMLElement;
+  }
+): void => {
+  // Exit an element exists with this ID
+  if (!!document.querySelector("#" + ticket)) return;
+  // Generate our HTML
+  const styleElem: string =
+    `<style id="` + ticket + `">${style.toString()}</style>`;
+  // Get our insert position
+  const insertPosition = options?.position ? options.position : "beforeend";
+  // If an element was passed
+  if (options?.elem) {
+    options.elem.insertAdjacentHTML(insertPosition, styleElem);
+  } else {
+    // default to document.body
+    document.body.insertAdjacentHTML(insertPosition, styleElem);
   }
 };
