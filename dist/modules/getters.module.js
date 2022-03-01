@@ -8,15 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 export const waitFor = (callback, _tries = 0, _timeout = 100) => __awaiter(void 0, void 0, void 0, function* () {
+    // init our variables
     let tries = _tries, timeout = _timeout;
+    // Start our loop
     while (tries < 20) {
+        // Try get the output
         const output = callback();
+        // Check it is not falsey
         if (!output) {
+            // It is so increment variables
             tries += 1;
             timeout += 100;
+            // And wait for timeout
             yield new Promise((resolve) => setTimeout(resolve, timeout));
         }
         else {
+            // Otherwise return the output
             return output;
         }
     }
