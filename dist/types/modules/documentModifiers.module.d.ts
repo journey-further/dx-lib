@@ -16,3 +16,4 @@ export declare const insertStyle: (style: string, ticket: string, options?: {
     position?: "beforebegin" | "afterbegin" | "beforeend" | "afterend" | undefined;
     elem?: HTMLElement | undefined;
 } | undefined) => void;
+//# sourceMappingURL=documentModifiers.module.d.ts.map

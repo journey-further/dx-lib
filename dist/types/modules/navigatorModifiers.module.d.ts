@@ -4,3 +4,4 @@
  * @returns {void}
  */
 export declare const redirect: (url: string) => void;
+//# sourceMappingURL=navigatorModifiers.module.d.ts.map
