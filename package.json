@@ -6,7 +6,7 @@
   "author": "Paul Singh",
   "license": "MIT",
   "private": true,
-  "types": "./index.d.ts",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "test": "jest",
     "build": "tsc"
