@@ -7,11 +7,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-export const waitFor = (callback, _tries = 0, _timeout = 100) => __awaiter(void 0, void 0, void 0, function* () {
+export const waitFor = (callback, _maxTries = 20, _timeout = 100) => __awaiter(void 0, void 0, void 0, function* () {
     // init our variables
     let tries = 0, timeout = _timeout;
     // Start our loop
-    while (tries < _tries) {
+    while (tries < _maxTries) {
         // Try get the output
         const output = callback();
         // Check it is not falsey

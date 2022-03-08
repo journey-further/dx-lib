@@ -1,13 +1,13 @@
 export const waitFor = async (
   callback: () => unknown,
-  _tries: number = 0,
+  _maxTries: number = 20,
   _timeout: number = 100
 ): Promise<unknown> => {
   // init our variables
   let tries = 0,
     timeout = _timeout;
   // Start our loop
-  while (tries < _tries) {
+  while (tries < _maxTries) {
     // Try get the output
     const output = callback();
     // Check it is not falsey
