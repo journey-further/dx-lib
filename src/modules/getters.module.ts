@@ -53,9 +53,9 @@ export const findParents = (element: HTMLElement, selector: string, attribute? :
  * @param {string} parent
  * @returns {null | HTMLElement}
  */
- export const getElementByText = (tag: string, query: string, parent : string) : Node | null => {
-  const elementWithText = Array.from(document.querySelectorAll(tag)).find((elem: any) =>
-    new RegExp(query).test(elem.textContent ) 
+ export const getElementByText = (tag: string, query: string, parent: string): Element | null => {
+  const elementWithText = Array.from(document.querySelectorAll(tag)).find(
+    (elem) => elem?.textContent && new RegExp(query).test(elem?.textContent)
   );
   // no element so return null
   if (!!!elementWithText) return null;
