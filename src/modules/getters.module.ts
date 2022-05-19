@@ -24,3 +24,26 @@ export const waitFor = async (
   }
   return null;
 };
+
+
+export const getElementByXPath = (path: string): HTMLElement => {
+      return document.evaluate(
+      path,
+      document,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null
+    ).singleNodeValue as HTMLElement || undefined; 
+};
+
+export const findParentsByClassName = (element: HTMLElement, className: string): HTMLElement | null => {
+  if(!!!element.parentElement) return null;
+  if(element.parentElement.classList.contains(className)) return element.parentElement;
+  return findParentsByClassName(element.parentElement, className);
+}
+
+export const findParentsByAttribute = (element: HTMLElement, attribute: string, selector: string): HTMLElement | null => {
+  if(!!!element.parentElement) return null;
+  if(element.parentElement.hasAttribute(attribute) && element.parentElement.getAttribute(attribute)?.includes( selector)) return element.parentElement;
+  return findParentsByAttribute(element.parentElement, attribute, selector);
+}

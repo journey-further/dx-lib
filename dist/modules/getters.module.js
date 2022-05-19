@@ -29,3 +29,15 @@ export const waitFor = (callback, _maxTries = 20, _timeout = 100) => __awaiter(v
     }
     return null;
 });
+
+export const findElementByXpath = (path: string): HTMLElement => {
+    return (
+        (document.evaluate(
+            path,
+            document,
+            null,
+            XPathResult.FIRST_ORDERED_NODE_TYPE,
+            null
+        ).singleNodeValue as HTMLElement) || undefined
+    );
+};
