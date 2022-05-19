@@ -1,4 +1,4 @@
-import { waitFor, getElementByXPath, findParentsByClassName, findParentsByAttribute } from "../../src";
+import { waitFor, getElementByXPath, findParents } from "../../src";
 
 ("use strict");
 
@@ -92,7 +92,7 @@ describe("Find parents by ClassName", () => {
     h2.textContent = 'Hello';
 
 
-    const result = findParentsByClassName(h2, 'container');
+    const result = findParents(h2, 'container');
     expect(result).toBeDefined()
     expect(result instanceof HTMLElement).toBe(true)
     expect(result?.textContent).toBe("Hello")
@@ -101,37 +101,7 @@ describe("Find parents by ClassName", () => {
   it("Will return null", async() => {
     const h2 = document.createElement('h2');
     h2.textContent = 'Hello';
-    const result = findParentsByClassName(h2, 'container');
-    expect(result).toBeNull();
-  });
-
-});
-
-
-describe("Find parents by attribute", () => {
-  beforeAll(() => {
-    jest.clearAllMocks();
-  });
-
-  it("Will return a html element", async () => {
-
-    const div = document.createElement('div');
-    const h2 = document.createElement('h2');
-    div.setAttribute('id', 'container');
-    div.insertAdjacentElement('beforeend', h2);
-    h2.textContent = 'Hello';
-
-
-    const result = findParentsByAttribute(h2,'id', 'container');
-    expect(result).toBeDefined()
-    expect(result instanceof HTMLElement).toBe(true)
-    expect(result?.textContent).toBe("Hello")
-  });
-
-  it("Will return null with no parent element", async() => {
-    const h2 = document.createElement('h2');
-    h2.textContent = 'Hello';
-    const result = findParentsByClassName(h2, 'container');
+    const result = findParents(h2, 'container');
     expect(result).toBeNull();
   });
 
@@ -143,7 +113,7 @@ describe("Find parents by attribute", () => {
     div.insertAdjacentElement('beforeend', h2);
     h2.textContent = 'Hello';
 
-    const result = findParentsByAttribute(h2,'id', 'container');
+    const result = findParents(h2,'container', 'id');
     expect(result).toBeNull();
 
   });
