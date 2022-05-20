@@ -99,8 +99,6 @@ describe("isMobile", () => {
         value: MOBILE_USER_AGENTS[i],
         configurable: true,
       });
-      console.log(MOBILE_USER_AGENTS[i]);
-      console.log(isMobile());
       expect(isMobile()).toBe(true);
     }
   });
