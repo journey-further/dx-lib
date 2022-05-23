@@ -1,4 +1,9 @@
-import { enableScroll, preventScroll, insertStyle } from "../../src";
+import {
+  enableScroll,
+  preventScroll,
+  insertStyle,
+  insertHTML,
+} from "../../src";
 
 const STYLE_ELEMENT_ID = "#JFCRO-no-scroll";
 const ADDED_CLASS = "JFCRO_no-scroll";
@@ -8,6 +13,17 @@ const ADDED_INLINE_STYLE_ATTRS = ["position", "top", "width"];
 const MOCK_SCROLL_Y = 123;
 const MOCK_STYLE_STRING = `.test{background: red;}`;
 const MOCK_STYLE_ID = "mock-style";
+const MOCK_HTML_ID = "mock-html";
+const MOCK_HTML_ID_2 = "mock-html-2";
+const MOCK_HTML_ID_3 = "mock-html-3";
+const MOCK_HTML_ID_4 = "mock-html-4";
+const MOCK_HTML_ID_5 = "mock-html-5";
+const MOCK_INNER_HTML = `<div id="${MOCK_HTML_ID}"><h2>Hey</h2><p>This is a test</p></div>`;
+const MOCK_INNER_HTML_ALT = `<div id="${MOCK_HTML_ID}" class="ALT"><h2>Hey</h2><p>This is a test</p></div>`;
+const MOCK_INNER_HTML_2 = `<div id="${MOCK_HTML_ID}"><h2>Yo</h2><p>This is a test 2</p></div>`;
+const MOCK_INNER_HTML_3 = `<div id="${MOCK_HTML_ID_3}"><h2>Yo</h2><p>This is a test 2</p></div>`;
+const MOCK_INNER_HTML_4 = `<div id="${MOCK_HTML_ID_4}"><h2>Yo</h2><p>This is a test 2</p></div>`;
+const MOCK_INNER_HTML_5 = `<div id="${MOCK_HTML_ID_5}"><h2>Yo</h2><p>This is a test 2</p></div>`;
 
 describe("preventScroll", () => {
   beforeEach(() => {
@@ -98,6 +114,11 @@ describe("enableScroll", () => {
 });
 
 describe("insertStyle", () => {
+  afterEach(() => {
+    while (document.body.firstChild) {
+      document.body.firstChild.remove();
+    }
+  });
   it("will exit if there is already an element with the ID provided so to not double add", () => {
     document.body.insertAdjacentHTML(
       "beforeend",
@@ -107,5 +128,110 @@ describe("insertStyle", () => {
     const element = document.querySelector(`#${MOCK_STYLE_ID}`);
     expect(element?.tagName).toBe("DIV");
     expect(element?.textContent).toBe("Test");
+  });
+
+  it("will add a style element with the correct content and id", () => {
+    insertStyle(MOCK_STYLE_STRING, MOCK_STYLE_ID);
+    const style = document.querySelector(`#${MOCK_STYLE_ID}`);
+    expect(style).toBeDefined();
+    expect(style?.innerHTML).toBe(MOCK_STYLE_STRING);
+  });
+});
+
+describe("insertHTML", () => {
+  afterEach(() => {
+    while (document.body.firstChild) {
+      document.body.firstChild.remove();
+    }
+  });
+
+  it("will do nothing if an element with the provided selector exists and the 4th arg is not truthy", () => {
+    // Insert first
+    document.body.insertAdjacentHTML("afterbegin", MOCK_INNER_HTML_2);
+    insertHTML(MOCK_INNER_HTML, `#${MOCK_HTML_ID}`, "body");
+    const elem = document.getElementById(MOCK_HTML_ID);
+    expect(elem).toBeDefined();
+    expect(elem?.outerHTML).not.toBe(MOCK_INNER_HTML);
+    expect(elem?.outerHTML).toBe(MOCK_INNER_HTML_2);
+  });
+
+  it("will insert HTML if there is no element with the same selector", () => {
+    insertHTML(MOCK_INNER_HTML, `#${MOCK_HTML_ID}`, "body");
+    const elem = document.getElementById(MOCK_HTML_ID);
+    expect(elem).toBeDefined();
+    expect(elem?.outerHTML).toBe(MOCK_INNER_HTML);
+  });
+
+  it("will insert to the start of the element if no position is provided", () => {
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      `<div>Hey</div><div>Yo</div>`
+    );
+    insertHTML(MOCK_INNER_HTML, `#${MOCK_HTML_ID}`, "body");
+    const elem = document.getElementById(MOCK_HTML_ID);
+    expect(elem).toBeDefined();
+    expect(elem?.outerHTML).toBe(MOCK_INNER_HTML);
+    expect(document.body.childElementCount).toBe(3);
+    expect(document.body.firstElementChild?.id).toBe(elem?.id);
+    expect(document.body.firstElementChild?.outerHTML).toBe(elem?.outerHTML);
+  });
+
+  it("will insert to the correct position if one is provided", () => {
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      `<div id="${MOCK_HTML_ID_2}">Hey</div><div>Yo</div>`
+    );
+
+    // beforeend
+    insertHTML(MOCK_INNER_HTML, `#${MOCK_HTML_ID}`, "body", "beforeend");
+    const elem = document.getElementById(MOCK_HTML_ID);
+    expect(elem).toBeDefined();
+    expect(elem?.outerHTML).toBe(MOCK_INNER_HTML);
+    expect(document.body.lastElementChild?.outerHTML).toBe(elem?.outerHTML);
+
+    // afterend
+    insertHTML(
+      MOCK_INNER_HTML_3,
+      `#${MOCK_HTML_ID_3}`,
+      `#${MOCK_HTML_ID_2}`,
+      "afterend"
+    );
+    const elem2 = document.getElementById(MOCK_HTML_ID_2);
+    expect(elem2?.nextElementSibling?.outerHTML).toBe(MOCK_INNER_HTML_3);
+
+    // beforebegin
+    insertHTML(
+      MOCK_INNER_HTML_4,
+      `#${MOCK_HTML_ID_4}`,
+      `#${MOCK_HTML_ID_2}`,
+      "beforebegin"
+    );
+    const elem3 = document.getElementById(MOCK_HTML_ID_2);
+    expect(elem3?.previousElementSibling?.outerHTML).toBe(MOCK_INNER_HTML_4);
+
+    // afterbegin
+    insertHTML(
+      MOCK_INNER_HTML_5,
+      `#${MOCK_HTML_ID_5}`,
+      `#${MOCK_HTML_ID_2}`,
+      "afterbegin"
+    );
+    const elem4 = document.getElementById(MOCK_HTML_ID_2);
+    expect(elem4?.firstElementChild?.outerHTML).toBe(MOCK_INNER_HTML_5);
+  });
+
+  it("will replace the element with the same selector if the last arg is true", () => {
+    document.body.insertAdjacentHTML("afterbegin", MOCK_INNER_HTML);
+    insertHTML(
+      MOCK_INNER_HTML_ALT,
+      `#${MOCK_HTML_ID}`,
+      "body",
+      "afterbegin",
+      true
+    );
+    const elem = document.getElementById(MOCK_HTML_ID);
+    expect(elem).toBeDefined();
+    expect(elem?.outerHTML).not.toBe(MOCK_INNER_HTML);
+    expect(elem?.outerHTML).toBe(MOCK_INNER_HTML_ALT);
   });
 });
