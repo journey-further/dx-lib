@@ -1,3 +1,12 @@
+/**
+ * Either wait for the provided callback to return a truthy value (and then return it)
+ * or for max tries to be met, in which case just bail and return false.
+ *
+ * @param {function} callback
+ * @param {number} _maxTries
+ * @param {number} _timeout
+ * @returns {Promise}
+ */
 export const waitFor = async (
   callback: () => unknown,
   _maxTries: number = 20,
@@ -24,3 +33,12 @@ export const waitFor = async (
   }
   return null;
 };
+
+/**
+ * Return a true array of HTML elements
+ *
+ * @param {string} selector
+ * @returns {array}
+ */
+export const queryAll = (selector: string): HTMLElement[] =>
+  Array.from(document.querySelectorAll(selector));

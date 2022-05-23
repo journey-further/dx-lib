@@ -1,6 +1,17 @@
 import { isIphone } from "./deviceIdentifiers.module";
 
+/**
+ * Disable the ability for the user to scroll their device
+ * @returns {void}
+ */
 export const preventScroll = (): void => {
+  // add style element to prevent scroll if there isn't one already
+  if (!!!document.querySelector("#JFCRO-no-scroll")) {
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      `<style id="JFCRO-no-scroll">.JFCRO-no-scroll{overflow: hidden !important;}</style>`
+    );
+  }
   document.body.classList.add("JFCRO_no-scroll");
   document.querySelector("html")?.classList.add("JFCRO_no-scroll");
   // If is mobile use some JS trickery to prevent scroll on the main DOM
@@ -11,7 +22,12 @@ export const preventScroll = (): void => {
   }
 };
 
+/**
+ * Reenable the ability for the user to scroll on the device
+ * @returns {void}
+ */
 export const enableScroll = (): void => {
+  document.querySelector("#JFCRO-no-scroll")?.remove();
   document.querySelector("html")?.classList.remove("JFCRO_no-scroll");
   document.body.classList.remove("JFCRO_no-scroll");
   // If the useragent is a mobile then remove our style properties
@@ -40,17 +56,16 @@ export const enableScroll = (): void => {
  */
 export const insertStyle = (
   style: string,
-  ticket: string,
+  id: string,
   options?: {
     position?: "beforebegin" | "afterbegin" | "beforeend" | "afterend";
     elem?: HTMLElement;
   }
 ): void => {
   // Exit an element exists with this ID
-  if (!!document.querySelector("#" + ticket)) return;
+  if (!!document.querySelector(`#${id}`)) return;
   // Generate our HTML
-  const styleElem: string =
-    `<style id="` + ticket + `">${style.toString()}</style>`;
+  const styleElem: string = `<style id="${id}">${style.toString()}</style>`;
   // Get our insert position
   const insertPosition = options?.position ? options.position : "beforeend";
   // If an element was passed
@@ -60,4 +75,59 @@ export const insertStyle = (
     // default to document.body
     document.body.insertAdjacentHTML(insertPosition, styleElem);
   }
+};
+
+/**
+ * Function to insert HTML code into a target element using insertAdjacentHTML which
+ * prevents addition of duplicate elements.
+ *
+ * If there is no element with targetSelector return false
+ *
+ * If there is already an element with selector and replace is false return false
+ *
+ * If there is already an element with selector and replace it true, remove existing and
+ * insert our HTML into target at position.
+ *
+ * IF there is no element with selector and target is defined insert the HTML to target
+ * at position
+ *
+ * @param {string} html -- The HTML markup you wish to insert
+ * @param {string} selector -- The selector which will identify duplicates of HTML
+ * @param {string} targetSelector -- CSS selector of the element you wish insert into
+ * @param {string} position -- Position for insertAdjacentHTML
+ * @param {boolean} replace -- Boolean whether or not to replace an existing element with selector
+ * @returns {boolean} -- Whether or not the HTML was inserted
+ */
+export const insertHTML = (
+  html: string,
+  selector: string,
+  targetSelector: string,
+  position:
+    | "afterbegin"
+    | "beforebegin"
+    | "afterend"
+    | "beforeend" = "afterbegin",
+  replace: boolean = false
+): boolean => {
+  // Get the target element
+  const target = document.querySelector(targetSelector);
+  // No target so we can't do anything anyway
+  if (!!!target) return false;
+  // First query for the element we wish to add
+  const existingElement = document.querySelector(selector);
+  // If it exists and we do not want to replace it just exit and return false
+  if (!!existingElement && replace === false) return false;
+  // Element exists but we want to replace it
+  if (!!existingElement && replace === true) {
+    // Remove the existing element
+    existingElement.remove();
+    // Insert the new one into target
+    target.insertAdjacentHTML(position, html);
+    // Return true so we know it was successful
+    return true;
+  }
+  // Element doesn't exist already and target exists so just insert the HTML
+  target.insertAdjacentHTML(position, html);
+  // Return true so we know it was successful
+  return true;
 };
