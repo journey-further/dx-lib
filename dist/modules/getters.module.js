@@ -7,6 +7,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+/**
+ * Either wait for the provided callback to return a truthy value (and then return it)
+ * or for max tries to be met, in which case just bail and return false.
+ *
+ * @param {function} callback
+ * @param {number} _maxTries
+ * @param {number} _timeout
+ * @returns {Promise}
+ */
 export const waitFor = (callback, _maxTries = 20, _timeout = 100) => __awaiter(void 0, void 0, void 0, function* () {
     // init our variables
     let tries = 0, timeout = _timeout;
@@ -29,3 +38,10 @@ export const waitFor = (callback, _maxTries = 20, _timeout = 100) => __awaiter(v
     }
     return null;
 });
+/**
+ * Return a true array of HTML elements
+ *
+ * @param {string} selector
+ * @returns {array}
+ */
+export const queryAll = (selector) => Array.from(document.querySelectorAll(selector));
