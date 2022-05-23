@@ -1,4 +1,4 @@
-import { waitFor, queryAll } from "../../src";
+import { waitFor, queryAll, getElementByXPath, findParents } from "../../src";
 
 ("use strict");
 
@@ -70,5 +70,64 @@ describe("queryAll", () => {
     queryAll(MOCK_QUERY);
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(MOCK_QUERY);
+  });
+});
+
+describe("Get Element By XPath", () => {
+  beforeAll(() => {
+    jest.clearAllMocks();
+  });
+
+  it("Will return a html element", async () => {
+    document.body.insertAdjacentHTML("afterbegin", `<h2>Hello</h2>`);
+    const result = getElementByXPath(`//h2[contains(string(), 'Hello')]`);
+    expect(result).toBeDefined();
+    expect(result instanceof HTMLElement).toBe(true);
+    expect(result.textContent).toBe("Hello");
+  });
+
+  it("Will return undefined", async () => {
+    document.body.insertAdjacentHTML("afterbegin", `<h2>Hello</h2>`);
+    const result = getElementByXPath(`//h3[contains(string(), 'Hello')]`);
+    expect(result).toBeUndefined();
+  });
+});
+
+describe("Find parents by ClassName", () => {
+  beforeAll(() => {
+    jest.clearAllMocks();
+  });
+
+  it("Will return a html element", async () => {
+    // document.body.insertAdjacentHTML("afterbegin", `<div class="container"><h2>Hello</h2></div>`);
+
+    const div = document.createElement("div");
+    const h2 = document.createElement("h2");
+    div.classList.add("container");
+    div.insertAdjacentElement("beforeend", h2);
+    h2.textContent = "Hello";
+
+    const result = findParents(h2, "container");
+    expect(result).toBeDefined();
+    expect(result instanceof HTMLElement).toBe(true);
+    expect(result?.textContent).toBe("Hello");
+  });
+
+  it("Will return null", async () => {
+    const h2 = document.createElement("h2");
+    h2.textContent = "Hello";
+    const result = findParents(h2, "container");
+    expect(result).toBeNull();
+  });
+
+  it("Will return null with wrong attribute", async () => {
+    const div = document.createElement("div");
+    const h2 = document.createElement("h2");
+    div.setAttribute("class", "container");
+    div.insertAdjacentElement("beforeend", h2);
+    h2.textContent = "Hello";
+
+    const result = findParents(h2, "container", "id");
+    expect(result).toBeNull();
   });
 });
