@@ -42,3 +42,62 @@ export const waitFor = async (
  */
 export const queryAll = (selector: string): HTMLElement[] =>
   Array.from(document.querySelectorAll(selector));
+
+export const getElementByXPath = (path: string): HTMLElement => {
+  return (
+    (document.evaluate(
+      path,
+      document,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null
+    ).singleNodeValue as HTMLElement) || undefined
+  );
+};
+
+export const findParents = (
+  element: HTMLElement,
+  selector: string,
+  attribute?: string
+): HTMLElement | null => {
+  if (!!!element.parentElement) return null;
+  if (
+    attribute &&
+    element.parentElement.hasAttribute(selector) &&
+    element.parentElement.getAttribute(selector) === attribute
+  )
+    return element.parentElement;
+  if (element.parentElement.classList.contains(selector))
+    return element.parentElement;
+  return findParents(element.parentElement, selector);
+};
+
+/**
+ * Return the element which has textContent that matches query. Query can be a string or regex.
+ * Either way the function will use regex to find the element.
+ * If there is no element it will return null.
+ *
+ * @param {string} tag
+ * @param {string | regex} query
+ * @param {string} parent
+ * @returns {null | HTMLElement}
+ */
+export const getElementByText = (
+  tag: string,
+  query: string,
+  parent: string
+): Element | null => {
+  const elementWithText = Array.from(document.querySelectorAll(tag)).find(
+    (elem) => elem?.textContent && new RegExp(query).test(elem?.textContent)
+  );
+  // no element so return null
+  if (!!!elementWithText) return null;
+  // If there was a selector provided for parent
+  if (!!parent) {
+    const parentElement = elementWithText.closest(parent);
+    // Conditionally return the parent
+    return !!parentElement ? parentElement : null;
+  }
+  // Otherwise return null
+  return elementWithText;
+};

@@ -15,4 +15,17 @@ export declare const waitFor: (callback: () => unknown, _maxTries?: number, _tim
  * @returns {array}
  */
 export declare const queryAll: (selector: string) => HTMLElement[];
+export declare const getElementByXPath: (path: string) => HTMLElement;
+export declare const findParents: (element: HTMLElement, selector: string, attribute?: string | undefined) => HTMLElement | null;
+/**
+ * Return the element which has textContent that matches query. Query can be a string or regex.
+ * Either way the function will use regex to find the element.
+ * If there is no element it will return null.
+ *
+ * @param {string} tag
+ * @param {string | regex} query
+ * @param {string} parent
+ * @returns {null | HTMLElement}
+ */
+export declare const getElementByText: (tag: string, query: string, parent: string) => Element | null;
 //# sourceMappingURL=getters.module.d.ts.map
