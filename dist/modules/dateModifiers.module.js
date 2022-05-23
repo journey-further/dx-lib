@@ -1,5 +1,13 @@
+/**
+ * Return an object with the number of days, hours, minutes and seconds until the provided timestamp is met
+ * @param { number } timestamp -- The timestamp you wish to countdown to
+ * @returns { ParsedTimeObject } -- An object containing days hours and minutes until provided timestamp
+ */
 export const getTimeTo = (timestamp) => {
     const now = new Date().getTime();
+    // Throw is the provided timestamp has passed already
+    if (now >= timestamp)
+        throw new Error("Provided timestamp has already passed");
     // Get amount of seconds left until timestamp from now
     const distance = timestamp - now;
     // Get the number of days left
