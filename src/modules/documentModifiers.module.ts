@@ -12,14 +12,14 @@ export const preventScroll = (): void => {
       `<style id="JFCRO-no-scroll">.JFCRO-no-scroll{overflow: hidden !important;}</style>`
     );
   }
-  document.body.classList.add("JFCRO_no-scroll");
-  document.querySelector("html")?.classList.add("JFCRO_no-scroll");
   // If is mobile use some JS trickery to prevent scroll on the main DOM
   if (isIphone()) {
     document.body.style.position = "fixed";
     document.body.style.top = `-${window.scrollY}px`;
     document.body.style.width = "100%";
   }
+  document.body.classList.add("JFCRO_no-scroll");
+  document.querySelector("html")?.classList.add("JFCRO_no-scroll");
 };
 
 /**
