@@ -11,8 +11,8 @@ export const preventScroll = () => {
     }
     // If is mobile use some JS trickery to prevent scroll on the main DOM
     if (isIphone()) {
-        document.body.style.position = "fixed";
         document.body.style.top = `-${window.scrollY}px`;
+        document.body.style.position = "fixed";
         document.body.style.width = "100%";
     }
     document.body.classList.add("JFCRO_no-scroll");
