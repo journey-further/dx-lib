@@ -3,34 +3,34 @@
  * @param { number } timestamp -- The timestamp you wish to countdown to
  * @returns { ParsedTimeObject } -- An object containing days hours and minutes until provided timestamp
  */
-export const getTimeTo = (timestamp) => {
-    const now = new Date().getTime();
+export var getTimeTo = function (timestamp) {
+    var now = new Date().getTime();
     // Throw is the provided timestamp has passed already
     if (now >= timestamp)
         throw new Error("Provided timestamp has already passed");
     // Get amount of seconds left until timestamp from now
-    const distance = timestamp - now;
+    var distance = timestamp - now;
     // Get the number of days left
-    let days = Math.floor(distance / (1000 * 60 * 60 * 24)).toString();
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24)).toString();
     // prepend a 0 if needed
     days = days.length < 2 ? "0" + days : days;
     // Get the number of hours
-    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString();
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString();
     // Prepend a 0 if needed
     hours = hours.length < 2 ? "0" + hours : hours;
     // Get the number of minutes
-    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString();
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString();
     // Prepend a 0 if needed
     minutes = minutes.length < 2 ? "0" + minutes : minutes;
     // Get the number of seconds
-    let seconds = Math.floor((distance % (1000 * 60)) / 1000).toString();
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000).toString();
     // Prepend 0 if needed
     seconds = seconds.length < 2 ? "0" + seconds : seconds;
     // Return object with days, hours, minutes, seconds
     return {
-        days,
-        hours,
-        minutes,
-        seconds,
+        days: days,
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds,
     };
 };

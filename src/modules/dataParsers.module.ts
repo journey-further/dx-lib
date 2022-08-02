@@ -4,10 +4,10 @@
  * @returns {FormData}
  */
 export const parseJsonToFormData = (json: { [key: string]: unknown }) => {
-  if (typeof json !== "object")
-    throw new Error("Parameter 1 must be of type object");
+  if (typeof json !== "object") throw new Error("Parameter 1 must be of type object");
   const formData = new FormData();
-  for (let key in json) {
+  for (const key in json) {
+    if (!Object.prototype.hasOwnProperty.call(json, key)) continue;
     const typedKey = key;
     // Ensure we only try to add properties which exist on the object
     if (Object.prototype.hasOwnProperty.call(json, typedKey)) {

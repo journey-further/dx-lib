@@ -13,8 +13,8 @@ export const waitFor = async (
   _timeout: number = 100
 ): Promise<unknown> => {
   // init our variables
-  let tries = 0,
-    timeout = _timeout;
+  let tries = 0;
+  let timeout = _timeout;
   // Start our loop
   while (tries < _maxTries) {
     // Try get the output
@@ -40,26 +40,13 @@ export const waitFor = async (
  * @param {string} selector
  * @returns {array}
  */
-export const queryAll = (selector: string): HTMLElement[] =>
-  Array.from(document.querySelectorAll(selector));
+export const queryAll = (selector: string): HTMLElement[] => Array.from(document.querySelectorAll(selector));
 
-export const getElementByXPath = (path: string): HTMLElement => {
-  return (
-    (document.evaluate(
-      path,
-      document,
-      null,
-      XPathResult.FIRST_ORDERED_NODE_TYPE,
-      null
-    ).singleNodeValue as HTMLElement) || undefined
-  );
-};
+export const getElementByXPath = (path: string): HTMLElement =>
+  (document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue as HTMLElement) ||
+  undefined;
 
-export const findParents = (
-  element: HTMLElement,
-  selector: string,
-  attribute?: string
-): HTMLElement | null => {
+export const findParents = (element: HTMLElement, selector: string, attribute?: string): HTMLElement | null => {
   if (!!!element.parentElement) return null;
   if (
     attribute &&
@@ -67,8 +54,7 @@ export const findParents = (
     element.parentElement.getAttribute(selector) === attribute
   )
     return element.parentElement;
-  if (element.parentElement.classList.contains(selector))
-    return element.parentElement;
+  if (element.parentElement.classList.contains(selector)) return element.parentElement;
   return findParents(element.parentElement, selector);
 };
 
@@ -82,11 +68,7 @@ export const findParents = (
  * @param {string} parent
  * @returns {null | HTMLElement}
  */
-export const getElementByText = (
-  tag: string,
-  query: string,
-  parent: string
-): Element | null => {
+export const getElementByText = (tag: string, query: string, parent: string): Element | null => {
   const elementWithText = Array.from(document.querySelectorAll(tag)).find(
     (elem) => elem?.textContent && new RegExp(query).test(elem?.textContent)
   );

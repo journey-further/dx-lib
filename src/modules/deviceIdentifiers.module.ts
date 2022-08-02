@@ -18,6 +18,4 @@ export const isMobile = (): boolean =>
  * @returns {boolean}
  */
 export const isOldSafari = (): boolean =>
-  /version\/(?:1|2|3|4|5|6|7|8|9|10|11)\.[\w\s/\d.]+safari/gi.test(
-    navigator.userAgent
-  );
+  /version\/(?:1|2|3|4|5|6|7|8|9|10|11)\.[\w\s/\d.]+safari/gi.test(navigator.userAgent);

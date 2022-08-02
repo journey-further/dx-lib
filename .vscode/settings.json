@@ -1,0 +1,61 @@
+{
+  "files.associations": {
+    "*.yaml": "home-assistant"
+  },
+  "cSpell.words": [
+    "behaviour",
+    "capitalisation",
+    "colourists",
+    "crosssell",
+    "Drinksware",
+    "ecommerce",
+    "Elem",
+    "Energising",
+    "Exfoliators",
+    "favourite",
+    "fieldtype",
+    "Initialise",
+    "Ivybridge",
+    "jewellery",
+    "JFCOD",
+    "JFODD",
+    "labelledby",
+    "lablledby",
+    "Loungewear",
+    "Merch",
+    "Moisturisers",
+    "navigations",
+    "onetime",
+    "Sidmouth",
+    "tagline",
+    "upsell",
+    "upsert",
+    "Uttarakhand",
+    "visualiser",
+    "XXXL",
+    "ZENA"
+  ],
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}

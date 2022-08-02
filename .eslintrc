@@ -1,15 +1,98 @@
 {
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "node": true
   },
-  "parser": "babel-eslint",
+  "globals": {
+    "Test": true,
+    "jQuery": true,
+    "$": true,
+    "moment": true,
+    "SS": true,
+    "Config": true,
+    "WT": true,
+    "ready": true,
+    "dataLayer": true,
+    "Trustpilot": true,
+    "__NEXT_DATA__": true,
+    "SCADataLayer": true,
+    "require": true
+  },
+  "plugins": ["prettier", "import"],
   "parserOptions": {
+    "ecmaVersion": 2021,
     "sourceType": "module",
-    "allowImportExportEverywhere": true
+    "project": "tsconfig.json",
+    "parser": "@typescript-eslint/parser"
   },
+  "extends": [
+    "airbnb-base",
+    "airbnb-typescript/base",
+    "prettier",
+    "eslint:recommended",
+    "plugin:import/typescript",
+    "plugin:import/recommended",
+    "plugin:node/recommended"
+  ],
   "rules": {
-    // Override our default settings just for this directory
-    "eqeqeq": "warn"
-  }
+    "no-promise-executor-return": "off",
+    "@typescript-eslint/default-param-last": ["off"],
+    "import/prefer-default-export": "off",
+    "node/no-missing-import": "off",
+    "@typescript-eslint/naming-convention": "off",
+    "no-restricted-imports": ["error", "waitFor"],
+    "semi": "warn",
+    "no-undef": "error",
+    "no-mixed-spaces-and-tabs": "off",
+    "no-unused-vars": "warn",
+    "no-use-before-define": "off",
+    "no-empty": "warn",
+    "no-extra-boolean-cast": "off",
+    "camelcase": "off",
+    "prefer-const": "warn",
+    "prefer-arrow-callback": "warn",
+    "quotes": "off",
+    "vars-on-top": "off",
+    "prettier/prettier": "warn",
+    "no-console": "off",
+    "func-names": "off",
+    "no-process-exit": "off",
+    "object-shorthand": "off",
+    "class-methods-use-this": "off",
+    "node/no-unpublished-require": "off",
+    "import/no-extraneous-dependencies": "off",
+    "prefer-regex-literals": "off",
+    "no-param-reassign": "off",
+    "eqeqeq": "off",
+    "no-underscore-dangle": "warn",
+    "no-restricted-syntax": "off",
+    "no-await-in-loop": "off",
+    "no-plusplus": ["warn", { "allowForLoopAfterthoughts": true }],
+    "node/no-unpublished-import": "off",
+    "no-continue": "off",
+    "import/no-unresolved": "off",
+    "spaced-comment": "off",
+    "node/no-unsupported-features/es-syntax": [
+      "error",
+      {
+        "ignores": ["modules"]
+      }
+    ]
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts"]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true,
+        "project": "tsconfig.json"
+      }
+    },
+    "node": {
+      "tryExtensions": [".ts"]
+    }
+  },
+  "ignorePatterns": ["jest.config.ts", "__tests__"]
 }

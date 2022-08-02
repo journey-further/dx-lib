@@ -3,15 +3,15 @@ import { isIphone } from "./deviceIdentifiers.module";
  * Disable the ability for the user to scroll their device
  * @returns {void}
  */
-export const preventScroll = () => {
+export var preventScroll = function () {
     var _a;
     // add style element to prevent scroll if there isn't one already
     if (!!!document.querySelector("#JFCRO-no-scroll")) {
-        document.body.insertAdjacentHTML("beforeend", `<style id="JFCRO-no-scroll">.JFCRO-no-scroll{overflow: hidden !important;}</style>`);
+        document.body.insertAdjacentHTML("beforeend", "<style id=\"JFCRO-no-scroll\">.JFCRO-no-scroll{overflow: hidden !important;}</style>");
     }
     // If is mobile use some JS trickery to prevent scroll on the main DOM
     if (isIphone()) {
-        document.body.style.top = `-${window.scrollY}px`;
+        document.body.style.top = "-".concat(window.scrollY, "px");
         document.body.style.position = "fixed";
         document.body.style.width = "100%";
     }
@@ -22,20 +22,20 @@ export const preventScroll = () => {
  * Reenable the ability for the user to scroll on the device
  * @returns {void}
  */
-export const enableScroll = () => {
+export var enableScroll = function () {
     var _a, _b;
     (_a = document.querySelector("#JFCRO-no-scroll")) === null || _a === void 0 ? void 0 : _a.remove();
     (_b = document.querySelector("html")) === null || _b === void 0 ? void 0 : _b.classList.remove("JFCRO_no-scroll");
     document.body.classList.remove("JFCRO_no-scroll");
     // If the useragent is a mobile then remove our style properties
     if (isIphone()) {
-        const top = document.body.style.top.includes("-")
+        var top_1 = document.body.style.top.includes("-")
             ? parseInt(document.body.style.top.split("-")[1].split("px")[0])
             : parseInt(document.body.style.top.split("px")[0]);
         document.body.style.removeProperty("position");
         document.body.style.removeProperty("top");
         document.body.style.removeProperty("width");
-        window.scrollTo(0, top);
+        window.scrollTo(0, top_1);
     }
 };
 /**
@@ -50,14 +50,14 @@ export const enableScroll = () => {
  * @param {object} options -- Config options for the insert, position
  * is an insert position accepted by insertAdjacentHTML and elem is a HTML element
  */
-export const insertStyle = (style, id, options) => {
+export var insertStyle = function (style, id, options) {
     // Exit an element exists with this ID
-    if (!!document.querySelector(`#${id}`))
+    if (!!document.querySelector("#".concat(id)))
         return;
     // Generate our HTML
-    const styleElem = `<style id="${id}">${style.toString()}</style>`;
+    var styleElem = "<style id=\"".concat(id, "\">").concat(style.toString(), "</style>");
     // Get our insert position
-    const insertPosition = (options === null || options === void 0 ? void 0 : options.position) ? options.position : "beforeend";
+    var insertPosition = (options === null || options === void 0 ? void 0 : options.position) ? options.position : "beforeend";
     // If an element was passed
     if (options === null || options === void 0 ? void 0 : options.elem) {
         options.elem.insertAdjacentHTML(insertPosition, styleElem);
@@ -88,14 +88,16 @@ export const insertStyle = (style, id, options) => {
  * @param {boolean} replace -- Boolean whether or not to replace an existing element with selector
  * @returns {boolean} -- Whether or not the HTML was inserted
  */
-export const insertHTML = (html, selector, targetSelector, position = "afterbegin", replace = false) => {
+export var insertHTML = function (html, selector, targetSelector, position, replace) {
+    if (position === void 0) { position = "afterbegin"; }
+    if (replace === void 0) { replace = false; }
     // Get the target element
-    const target = document.querySelector(targetSelector);
+    var target = document.querySelector(targetSelector);
     // No target so we can't do anything anyway
     if (!!!target)
         return false;
     // First query for the element we wish to add
-    const existingElement = document.querySelector(selector);
+    var existingElement = document.querySelector(selector);
     // If it exists and we do not want to replace it just exit and return false
     if (!!existingElement && replace === false)
         return false;

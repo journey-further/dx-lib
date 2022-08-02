@@ -1,4 +1,4 @@
-import { getTimeTo } from "../../src";
+import { getTimeTo } from "../../src/index";
 import { ParsedTimeObject } from "../../src/types";
 
 const PASSED_TIMESTAMP_ERROR = "Provided timestamp has already passed";
@@ -25,9 +25,7 @@ describe("getTimeTo", () => {
     jest.resetAllMocks();
   });
   it("will throw if the timestamp provided has already passed", () => {
-    expect(() => getTimeTo(new Date().getTime() - 2000)).toThrowError(
-      PASSED_TIMESTAMP_ERROR
-    );
+    expect(() => getTimeTo(new Date().getTime() - 2000)).toThrowError(PASSED_TIMESTAMP_ERROR);
   });
 
   it("will return an object with the correct number for days, time, minutes and seconds", () => {

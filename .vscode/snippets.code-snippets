@@ -1,0 +1,397 @@
+{
+  // Place your jf-conversion workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+  // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
+  // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
+  // used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
+  // Placeholders with the same ids are connected.
+  // Example:
+  // "Print to console": {
+  // 	"scope": "javascript,typescript",
+  // 	"prefix": "log",
+  // 	"body": [
+  // 		"console.log(\"$1\");",
+  // 		"$2"
+  // 	],
+  // 	"description": "Log output to console"
+  // },
+
+  // Generic Helpers
+  "Self-Executing Function": {
+    "scope": "javascript,html",
+    "prefix": "selfFn",
+    "body": ["(function(){", "\t${1:// do something}", "})()"],
+    "description": "Self-Executing Function"
+  },
+
+  "Add init function": {
+    "scope": "javascript",
+    "prefix": "init",
+    "body": [
+      "(function init () {",
+      "  try {",
+      "    $0",
+      "  } catch (e) {",
+      "    console.warn(e);",
+      "  } finally {",
+      "    window.dataLayer = window.dataLayer || [];",
+      "    window.dataLayer.push({",
+      "      event: \"Optimize-View\",",
+      "      eventAction: \"_JFXXX_XXXX\",",
+      "      eventLabel: \"_\",",
+      "    });",
+      "  }",
+      "})();"
+    ],
+    "description": "Add an init function"
+  },
+
+  "Empty innerHTML import": {
+    "prefix": "emp",
+    "body": "import {emptyElem} from \"../../../modules/lib/dist\""
+  },
+
+  "Element In View": {
+    "prefix": "elemInView",
+    "body": [
+      "// This function will determine if the element passed through is in view of the user.",
+      "const elementInView = (element) => {",
+      " const position = element.getBoundingClientRect();",
+      "",
+      " // checking whether fully visible",
+      " if (position.top >= 0 && position.bottom <= window.innerHeight) {",
+      "   return true;",
+      " }",
+      "",
+      " // checking for partial visibility",
+      " if (position.top < window.innerHeight && position.bottom >= 0) {",
+      "   return true;",
+      " }",
+      "",
+      " return false;",
+      "};"
+    ]
+  },
+  // Class selector
+  "CSS Class Combinator": {
+    "prefix": "jqc",
+    "body": "[class*=\"$1\"]"
+  },
+
+  // Useful JS functions
+  "Query Selector": {
+    "scope": "javascript,html",
+    "prefix": "qs",
+    "body": "document.querySelector(\"${1:selector}\")"
+  },
+
+  "Query Selector All": {
+    "scope": "javascript,html",
+    "prefix": "qsa",
+    "body": "document.querySelectorAll(\"${1:selector}\")"
+  },
+
+  "Query Selector Array": {
+    "scope": "javascript,html",
+    "prefix": "qsaa",
+    "body": "Array.from(document.querySelectorAll(\"${1:selector}\"))"
+  },
+
+  "Insert Style": {
+    "scope": "javascript, html",
+    "prefix": "styleInsert",
+    "body": ["import { insertStyle } from 'jf-lib';"]
+  },
+
+  "Insert CSS": {
+    "scope": "javascript,html",
+    "prefix": "insertCSS",
+    "body": ["document.body.insertAdjacentHTML(\"beforeend\",`", "  <style>", "    $2", "  </style>", "`);"]
+  },
+
+  "Append": {
+    "scope": "javascript,html",
+    "prefix": "append",
+    "body": [
+      "var e = document.createElement('$1');",
+      "e.innerHTML = '$2';",
+      "var t = document.querySelector('$3');",
+      "t.append(e);"
+    ],
+    "description": ""
+  },
+
+  "Prepend": {
+    "scope": "javascript,html",
+    "prefix": "prepend",
+    "body": [
+      "var e = document.createElement(\"$1\");",
+      "e.innerHTML = \"$2\";",
+      "var t = document.querySelector(\"$3\");",
+      "t.prepend(e);"
+    ],
+    "description": ""
+  },
+
+  "Insert Before": {
+    "scope": "javascript,html",
+    "prefix": "insertBefore",
+    "body": [
+      "var e = document.createElement(\"$1\");",
+      "e.innerHTML = \"$2\";",
+      "var t = document.querySelector(\"$3\");",
+      "t.parentNode.insertBefore(e, t);"
+    ],
+    "description": ""
+  },
+
+  "Insert After": {
+    "scope": "javascript,html",
+    "prefix": "insertAfter",
+    "body": [
+      "var e = document.createElement(\"$1\");",
+      "e.innerHTML = \"$2\";",
+      "var t = document.querySelector(\"$3\");",
+      "t.parentNode.insertBefore(e, t.nextSibling);"
+    ],
+    "description": ""
+  },
+
+  "Add Class": {
+    "scope": "javascript,html",
+    "prefix": "addClass",
+    "body": "document.querySelector(\"${1:selector}\").classList.add(\"${2:class}\");"
+  },
+
+  "Remove Class": {
+    "scope": "javascript,html",
+    "prefix": "removeClass",
+    "body": "document.querySelector(\"${1:selector}\").classList.remove(\"${2:class}\");"
+  },
+
+  "Toggle Class": {
+    "scope": "javascript,html",
+    "prefix": "toggleClass",
+    "body": "document.querySelector(\"${1:selector}\").classList.toggle(\"${2:class}\");"
+  },
+
+  "scrollTo": {
+    "scope": "javascript,html",
+    "prefix": "scrollto",
+    "body": "document.querySelector(\"${1:selector}\").scrollIntoView({ behavior: \"smooth\", block: \"start\"});"
+  },
+
+  "Check Body for class": {
+    "scope": "javascript,html",
+    "prefix": "bodyClass",
+    "body": "document.querySelector(\"body\").classList.contains(\"${1:selector}\");"
+  },
+
+  "Check URL": {
+    "scope": "javascript,html",
+    "prefix": "urlMatch",
+    "body": "/$1/i.test(window.location.href)"
+  },
+
+  // Regex Snippets
+  "Match Anything": {
+    "prefix": "match",
+    "body": "(?:(?:.|\\n)*?)"
+  },
+
+  "Negative Match": {
+    "prefix": "neg",
+    "body": "(?!.*dont_match)match"
+  },
+
+  "End of URL": {
+    "prefix": "end",
+    "body": "(\\/?)(\\?|$)"
+  },
+
+  // Mutation Observers
+  "Ready Function JS": {
+    "prefix": "mo",
+    "body": [
+      "// prettier-ignore",
+      "// eslint-disable-next-line",
+      "!function(e){var t,r=[],n=e.document,o=e.MutationObserver||e.WebKitMutationObserver;function c(){for(var e,t,o=0,c=r.length;o<c;o++){e=r[o];for(var l,s=0,u=(t=n.querySelectorAll(e.selector)).length;s<u;s++)(l=t[s]).ready||(l.ready=!0,e.fn.call(l,l))}}e.ready=function(e,l){r.push({selector:e,fn:l}),t||(t=new o(c)).observe(n.documentElement,{childList:!0,subtree:!0}),c()}}(window);"
+    ]
+  },
+
+  "Ready Function": {
+    "prefix": "er",
+    "body": ["ready(\"${1:selector}\", function(el) {", "  ${2:// do something}", "});"]
+  },
+
+  "Always listening MO": {
+    "prefix": "ko",
+    "body": [
+      "var target = document.querySelector(\"${1:selector}\")",
+      "var observer = new MutationObserver(function(mutations) {",
+      "  mutations.forEach(function(mutation) {",
+      "    ${2:// do something}",
+      "  });",
+      "});",
+      "var config = { attributes: true, childList: true, characterData: true };",
+      "observer.observe(target, config);"
+    ]
+  },
+
+  // WebTrends
+  "GA dataLayer Tracking": {
+    "prefix": "dl",
+    "body": [
+      "window.dataLayer = window.dataLayer || [];",
+      "dataLayer.push({",
+      "  \"event\":\"Optimize-View\",",
+      "  \"eventAction\":\"$1\",",
+      "  \"eventLabel\":\"$2\"",
+      "});"
+    ]
+  },
+
+  "WTO Data": {
+    "prefix": "wtdata",
+    "body": "WT.optimizeModule.prototype.wtConfigObj.data"
+  },
+
+  "WTO Click": {
+    "prefix": "wtclick",
+    "body": "WT.click({ testAlias: 'ta_JFLBA_0094', conversionPoint: 'dead_click' });"
+  },
+
+  "opt_data Event tracking": {
+    "prefix": "opt_data",
+    "body": ["window.opt_data = window.opt_data || [];", "window.opt_data.push({", "\t\"event\" : \"$1\"", "})"]
+  },
+  "OBF pollAndExecute": {
+    "prefix": "pollAndExecute",
+    "body": [
+      "Test.pageview.suspend(\"waiting for page\");",
+      "var pollAndExecute = function(){",
+      "",
+      "    if( $1 ){",
+      "      // Conditions met, proceed",
+      "      WT.helpers.bdebug.log(\"%cConditions met\", \"background: #199bd7; color: #fff; padding: 2px 5px;\")",
+      "    } else {",
+      "      // Conditions not met, halt the test and show the page",
+      "      WT.helpers.bdebug.log(\"%cConditions not met\", \"background: #c00; color: #fff; padding: 2px 5px;\");",
+      "      Test.showHidePage(Config.showPage);",
+      "      return false;",
+      "    }",
+      "",
+      "    // Poll the page - this will run constantly until pollTimeout is reached",
+      "    Test.poll({",
+      "        msg: \"Polling the page\",",
+      "        // Poll until the below returns true",
+      "        when: function()",
+      "        {",
+      "            return !!document.querySelector(\"$2\")",
+      "        },",
+      "        // Then run the following callback",
+      "        then: function()",
+      "        {",
+      "            WT.helpers.bdebug.log(\"%cSuccess!\", \"background: #0dc05f; color: #fff; padding: 2px 5px;\")",
+      "            Test.pageview.track();",
+      "            Test.start(\"Rendering\", Test.Render);",
+      "            Test.start(\"Tracking\", Test.Tracking);",
+      "            Test.showHidePage(Config.showPage);",
+      "        },",
+      "        pollTimeout: 4000",
+      "    });",
+      "}",
+      "",
+      "pollAndExecute();",
+      "Test.poll({",
+      "    when: function(){ return true },",
+      "    then: function(){",
+      "        window.addEventListener(\"wt-pagechange\", function(){",
+      "            pollAndExecute();",
+      "        });",
+      "    }",
+      "});"
+    ]
+  },
+
+  // SiteSpect
+  "Dynamic Modify": {
+    "prefix": "domvar",
+    "body": [
+      "try {",
+      "  window.SS && SS.SPA && SS.SPA.dynamicModify({",
+      "      \"staticContainer\": \"body\",",
+      "      \"dynamicContainer\": \"$1\",",
+      "      \"callbackFunction\": function (){",
+      "        $2",
+      "      },",
+      "      \"runCallbackNow\": false,",
+      "      \"watchSubtree\": true",
+      "  })",
+      "} catch(err) {}"
+    ]
+  },
+
+  "Get element by Xpath": {
+    "prefix": "xpathGet",
+    "body": [
+      "function getElementByXpath(path) {",
+      "  return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;",
+      "}"
+    ]
+  },
+
+  "XPath contains text": {
+    "prefix": "xpathContainsText",
+    "body": ["//div[contains(string(), 'Elangovan')]"]
+  },
+  "Push to GA": {
+    "prefix": "pushToDL",
+    "body": [
+      "window.dataLayer = window.dataLayer || [];",
+      "window.dataLayer.push({",
+      "  event: \"Optimize-View\",",
+      "  eventAction: \"_JFXXX_XXXX\",",
+      "  eventLabel: \"_\"",
+      "});"
+    ]
+  },
+  "Get parent": {
+    "prefix": "pa",
+    "body": [
+      "function getParents(el, parent){",
+      "  if(!!el.parentNode){",
+      "     if(el.parentNode.classList.contains(parent) || el.parentNode.tagName === parent.toUpperCase()){ ",
+      "       return el.parentNode;",
+      "     } else {",
+      "       return getParents(el.parentNode, parent);",
+      "     }",
+      "  }",
+      "}"
+    ]
+  },
+
+  "GHD OneTrustActiveGroups Cookie check": {
+    "prefix": "otag",
+    "body": " && !!window.OnetrustActiveGroups && /C0002/.test(OnetrustActiveGroups)"
+  },
+
+  "Try/Catch/Finally": {
+    "prefix": "tcf",
+    "body": [
+      "try {",
+      "\t$1",
+      "} catch(error){",
+      "\tconsole.warn(error);",
+      "} finally {",
+      "\twindow.dataLayer = window.dataLayer || [];",
+      "\tdataLayer.push({",
+      "\t\t\"event\":\"Optimize-View\",",
+      "\t\t\"eventAction\":\"$2\",",
+      "\t\t\"eventLabel\":\"$3\"",
+      "\t});",
+      "}"
+    ],
+    "description": "Insert a try...catch...finally including the DataLayer push"
+  }
+}

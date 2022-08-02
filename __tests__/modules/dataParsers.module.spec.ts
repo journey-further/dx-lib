@@ -17,9 +17,7 @@ describe("parseToFormData", () => {
 
   it("will throw if the argument is not a json", () => {
     // @ts-expect-error
-    expect(() => parseJsonToFormData("Hey")).toThrowError(
-      WRONG_ARGUMENT_TYPE_ERROR_MESSAGE
-    );
+    expect(() => parseJsonToFormData("Hey")).toThrowError(WRONG_ARGUMENT_TYPE_ERROR_MESSAGE);
   });
 
   it("will not throw if the argument is a json", () => {

@@ -1,4 +1,4 @@
-import { isOldSafari, isMobile, isIphone } from "../../src";
+import { isOldSafari, isMobile, isIphone } from "modules/index";
 
 const OLD_SAFARI_USER_AGENTS = [
   "Mozilla/5.0 (iPhone; CPU iPhone OS 11_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Mobile/15E148 Safari/604.1",
@@ -31,10 +31,7 @@ const IPAD_USER_AGENT =
   "Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148";
 const GALAXY_TABLET_USER_AGENT =
   "Mozilla/5.0 (Linux; Android 7.1.1; SM-T555 Build/NMF26X; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.96 Safari/537.36";
-const DESKTOP_USER_AGENTS = [
-  WINDOWS_DESKTOP_USER_AGENT,
-  MAC_DESKTOP_USER_AGENT,
-];
+const DESKTOP_USER_AGENTS = [WINDOWS_DESKTOP_USER_AGENT, MAC_DESKTOP_USER_AGENT];
 const MOBILE_USER_AGENTS = [
   ...OLD_SAFARI_USER_AGENTS,
   ...MODERN_SAFARI_USER_AGENTS,
@@ -42,16 +39,8 @@ const MOBILE_USER_AGENTS = [
   IPHONE_USER_AGENT,
 ];
 const TABLET_USER_AGENTS = [IPAD_USER_AGENT, GALAXY_TABLET_USER_AGENT];
-const NON_IPHONE_USER_AGENTS = [
-  ...TABLET_USER_AGENTS,
-  ...DESKTOP_USER_AGENTS,
-  ANDROID_USER_AGENT,
-];
-const IPHONE_USER_AGENTS = [
-  OLD_SAFARI_USER_AGENTS,
-  MODERN_SAFARI_USER_AGENTS,
-  IPHONE_USER_AGENT,
-];
+const NON_IPHONE_USER_AGENTS = [...TABLET_USER_AGENTS, ...DESKTOP_USER_AGENTS, ANDROID_USER_AGENT];
+const IPHONE_USER_AGENTS = [OLD_SAFARI_USER_AGENTS, MODERN_SAFARI_USER_AGENTS, IPHONE_USER_AGENT];
 describe("isOldSafari", () => {
   it("will return false for user agents with safari 1 - 11", () => {
     for (let i = 0; i < OLD_SAFARI_USER_AGENTS.length; i++) {

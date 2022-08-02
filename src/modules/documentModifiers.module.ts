@@ -33,8 +33,8 @@ export const enableScroll = (): void => {
   // If the useragent is a mobile then remove our style properties
   if (isIphone()) {
     const top: number = document.body.style.top.includes("-")
-      ? parseInt(document.body.style.top.split("-")[1].split("px")[0])
-      : parseInt(document.body.style.top.split("px")[0]);
+      ? parseInt(document.body.style.top.split("-")[1].split("px")[0], 10)
+      : parseInt(document.body.style.top.split("px")[0], 10);
     document.body.style.removeProperty("position");
     document.body.style.removeProperty("top");
     document.body.style.removeProperty("width");
@@ -102,11 +102,7 @@ export const insertHTML = (
   html: string,
   selector: string,
   targetSelector: string,
-  position:
-    | "afterbegin"
-    | "beforebegin"
-    | "afterend"
-    | "beforeend" = "afterbegin",
+  position: "afterbegin" | "beforebegin" | "afterend" | "beforeend" = "afterbegin",
   replace: boolean = false
 ): boolean => {
   // Get the target element
