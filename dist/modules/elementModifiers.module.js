@@ -5,7 +5,7 @@
  *
  * @param {HTMLElement} elem The HTML element to remove children from
  */
-export var emptyElem = function (elem) {
+var emptyElem = function (elem) {
     if (!!!elem)
         throw new Error("Function requires an argument");
     if (!(elem instanceof HTMLElement))
@@ -19,7 +19,7 @@ export var emptyElem = function (elem) {
  * @param {HTMLElement} elem
  * @param {string} html
  */
-export var replaceHTML = function (elem, html) {
+var replaceHTML = function (elem, html) {
     if (!!!elem)
         throw new Error("You did not provide an element");
     if (!(elem instanceof HTMLElement))
@@ -31,3 +31,5 @@ export var replaceHTML = function (elem, html) {
     emptyElem(elem);
     elem.insertAdjacentHTML("afterbegin", html);
 };
+
+export { emptyElem, replaceHTML };

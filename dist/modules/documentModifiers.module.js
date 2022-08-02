@@ -1,9 +1,10 @@
-import { isIphone } from "./deviceIdentifiers.module";
+import { isIphone } from './deviceIdentifiers.module.js';
+
 /**
  * Disable the ability for the user to scroll their device
  * @returns {void}
  */
-export var preventScroll = function () {
+var preventScroll = function () {
     var _a;
     // add style element to prevent scroll if there isn't one already
     if (!!!document.querySelector("#JFCRO-no-scroll")) {
@@ -22,7 +23,7 @@ export var preventScroll = function () {
  * Reenable the ability for the user to scroll on the device
  * @returns {void}
  */
-export var enableScroll = function () {
+var enableScroll = function () {
     var _a, _b;
     (_a = document.querySelector("#JFCRO-no-scroll")) === null || _a === void 0 ? void 0 : _a.remove();
     (_b = document.querySelector("html")) === null || _b === void 0 ? void 0 : _b.classList.remove("JFCRO_no-scroll");
@@ -30,8 +31,8 @@ export var enableScroll = function () {
     // If the useragent is a mobile then remove our style properties
     if (isIphone()) {
         var top_1 = document.body.style.top.includes("-")
-            ? parseInt(document.body.style.top.split("-")[1].split("px")[0])
-            : parseInt(document.body.style.top.split("px")[0]);
+            ? parseInt(document.body.style.top.split("-")[1].split("px")[0], 10)
+            : parseInt(document.body.style.top.split("px")[0], 10);
         document.body.style.removeProperty("position");
         document.body.style.removeProperty("top");
         document.body.style.removeProperty("width");
@@ -50,7 +51,7 @@ export var enableScroll = function () {
  * @param {object} options -- Config options for the insert, position
  * is an insert position accepted by insertAdjacentHTML and elem is a HTML element
  */
-export var insertStyle = function (style, id, options) {
+var insertStyle = function (style, id, options) {
     // Exit an element exists with this ID
     if (!!document.querySelector("#".concat(id)))
         return;
@@ -88,7 +89,7 @@ export var insertStyle = function (style, id, options) {
  * @param {boolean} replace -- Boolean whether or not to replace an existing element with selector
  * @returns {boolean} -- Whether or not the HTML was inserted
  */
-export var insertHTML = function (html, selector, targetSelector, position, replace) {
+var insertHTML = function (html, selector, targetSelector, position, replace) {
     if (position === void 0) { position = "afterbegin"; }
     if (replace === void 0) { replace = false; }
     // Get the target element
@@ -115,3 +116,5 @@ export var insertHTML = function (html, selector, targetSelector, position, repl
     // Return true so we know it was successful
     return true;
 };
+
+export { enableScroll, insertHTML, insertStyle, preventScroll };

@@ -3,11 +3,13 @@
  * @param {Object} json The object you wish to parse
  * @returns {FormData}
  */
-export var parseJsonToFormData = function (json) {
+var parseJsonToFormData = function (json) {
     if (typeof json !== "object")
         throw new Error("Parameter 1 must be of type object");
     var formData = new FormData();
     for (var key in json) {
+        if (!Object.prototype.hasOwnProperty.call(json, key))
+            continue;
         var typedKey = key;
         // Ensure we only try to add properties which exist on the object
         if (Object.prototype.hasOwnProperty.call(json, typedKey)) {
@@ -17,3 +19,5 @@ export var parseJsonToFormData = function (json) {
     }
     return formData;
 };
+
+export { parseJsonToFormData };

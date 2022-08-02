@@ -5,5 +5,3 @@ declare global {
     dataLayer: any[];
   }
 }
-
-declare let global;

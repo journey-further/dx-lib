@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
+    "rootDir": "src",
+    "outDir": "dist",
     "declarationMap": true,
     "declarationDir": "./dist/types",
     "esModuleInterop": true,
@@ -19,5 +20,6 @@
       "types/*": ["types/*"]
     }
   },
-  "include": ["./src", "index.d.ts", "__tests__"]
+  "include": ["./src"],
+  "exclude": ["jest.config.ts", "rollup.config.ts"]
 }

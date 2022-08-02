@@ -5,7 +5,7 @@
  * @param {string} action -- The ticket ID
  * @param {string} label -- The test ID
  */
-export var pushToDL = function (event, action, label) {
+var pushToDL = function (event, action, label) {
     if (event === void 0) { event = "Optimize-View"; }
     if (!!!event || !!!label || !!!action)
         throw new Error("All three arguments must be provided");
@@ -25,3 +25,5 @@ export var pushToDL = function (event, action, label) {
         eventLabel: label,
     });
 };
+
+export { pushToDL };
