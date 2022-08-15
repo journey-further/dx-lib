@@ -1,4 +1,4 @@
-import { __awaiter, __generator } from '../node_modules/tslib/tslib.es6.js';
+import { __awaiter, __generator } from '../_virtual/_tslib.js';
 
 /**
  * Either wait for the provided callback to return a truthy value (and then return it)

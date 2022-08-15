@@ -1,4 +1,4 @@
-import { __awaiter, __generator } from '../node_modules/tslib/tslib.es6.js';
+import { __awaiter, __generator } from '../_virtual/_tslib.js';
 
 // Doc ready function
 var docReady = function (maxAttempts, timeout) {
