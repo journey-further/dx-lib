@@ -1,9 +1,4 @@
-export type ParsedTimeObject = {
-  days: string;
-  hours: string;
-  minutes: string;
-  seconds: string;
-};
+import { ParsedTimeObject } from "types/index";
 
 /**
  * Return an object with the number of days, hours, minutes and seconds until the provided timestamp is met
