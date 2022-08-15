@@ -18,8 +18,10 @@
     "paths": {
       "modules/*": ["modules/*"],
       "types/*": ["types/*"]
-    }
+    },
+    "plugins": [{ "transform": "@zerollup/ts-transform-paths" }]
   },
+
   "include": ["./src"],
   "exclude": ["jest.config.ts", "rollup.config.ts"]
 }
