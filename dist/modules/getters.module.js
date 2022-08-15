@@ -1,4 +1,4 @@
-import { __awaiter, __generator } from '../_virtual/_tslib.js';
+import { __awaiter } from '../_virtual/_tslib.js';
 
 /**
  * Either wait for the provided callback to return a truthy value (and then return it)
@@ -9,51 +9,39 @@ import { __awaiter, __generator } from '../_virtual/_tslib.js';
  * @param {number} _timeout
  * @returns {Promise}
  */
-var waitFor = function (callback, _maxTries, _timeout) {
-    if (_maxTries === void 0) { _maxTries = 20; }
-    if (_timeout === void 0) { _timeout = 100; }
-    return __awaiter(void 0, void 0, void 0, function () {
-        var tries, timeout, output;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    tries = 0;
-                    timeout = _timeout;
-                    _a.label = 1;
-                case 1:
-                    if (!(tries < _maxTries)) return [3 /*break*/, 5];
-                    output = callback();
-                    if (!!output) return [3 /*break*/, 3];
-                    // It is so increment variables
-                    tries += 1;
-                    timeout += _timeout;
-                    // And wait for timeout
-                    return [4 /*yield*/, new Promise(function (resolve) { return setTimeout(resolve, timeout); })];
-                case 2:
-                    // And wait for timeout
-                    _a.sent();
-                    return [3 /*break*/, 4];
-                case 3: 
-                // Otherwise return the output
-                return [2 /*return*/, output];
-                case 4: return [3 /*break*/, 1];
-                case 5: return [2 /*return*/, null];
-            }
-        });
-    });
-};
+const waitFor = (callback, _maxTries = 20, _timeout = 100) => __awaiter(void 0, void 0, void 0, function* () {
+    // init our variables
+    let tries = 0;
+    let timeout = _timeout;
+    // Start our loop
+    while (tries < _maxTries) {
+        // Try get the output
+        const output = callback();
+        // Check it is not falsey
+        if (!output) {
+            // It is so increment variables
+            tries += 1;
+            timeout += _timeout;
+            // And wait for timeout
+            yield new Promise((resolve) => setTimeout(resolve, timeout));
+        }
+        else {
+            // Otherwise return the output
+            return output;
+        }
+    }
+    return null;
+});
 /**
  * Return a true array of HTML elements
  *
  * @param {string} selector
  * @returns {array}
  */
-var queryAll = function (selector) { return Array.from(document.querySelectorAll(selector)); };
-var getElementByXPath = function (path) {
-    return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue ||
-        undefined;
-};
-var findParents = function (element, selector, attribute) {
+const queryAll = (selector) => Array.from(document.querySelectorAll(selector));
+const getElementByXPath = (path) => document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue ||
+    undefined;
+const findParents = (element, selector, attribute) => {
     if (!!!element.parentElement)
         return null;
     if (attribute &&
@@ -74,14 +62,14 @@ var findParents = function (element, selector, attribute) {
  * @param {string} parent
  * @returns {null | HTMLElement}
  */
-var getElementByText = function (tag, query, parent) {
-    var elementWithText = Array.from(document.querySelectorAll(tag)).find(function (elem) { return (elem === null || elem === void 0 ? void 0 : elem.textContent) && new RegExp(query).test(elem === null || elem === void 0 ? void 0 : elem.textContent); });
+const getElementByText = (tag, query, parent) => {
+    const elementWithText = Array.from(document.querySelectorAll(tag)).find((elem) => (elem === null || elem === void 0 ? void 0 : elem.textContent) && new RegExp(query).test(elem === null || elem === void 0 ? void 0 : elem.textContent));
     // no element so return null
     if (!!!elementWithText)
         return null;
     // If there was a selector provided for parent
     if (!!parent) {
-        var parentElement = elementWithText.closest(parent);
+        const parentElement = elementWithText.closest(parent);
         // Conditionally return the parent
         return !!parentElement ? parentElement : null;
     }

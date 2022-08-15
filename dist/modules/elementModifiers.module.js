@@ -5,7 +5,7 @@
  *
  * @param {HTMLElement} elem The HTML element to remove children from
  */
-var emptyElem = function (elem) {
+const emptyElem = (elem) => {
     if (!!!elem)
         throw new Error("Function requires an argument");
     if (!(elem instanceof HTMLElement))
@@ -19,7 +19,7 @@ var emptyElem = function (elem) {
  * @param {HTMLElement} elem
  * @param {string} html
  */
-var replaceHTML = function (elem, html) {
+const replaceHTML = (elem, html) => {
     if (!!!elem)
         throw new Error("You did not provide an element");
     if (!(elem instanceof HTMLElement))

@@ -5,8 +5,7 @@
  * @param {string} action -- The ticket ID
  * @param {string} label -- The test ID
  */
-var pushToDL = function (event, action, label) {
-    if (event === void 0) { event = "Optimize-View"; }
+const pushToDL = (event = "Optimize-View", action, label) => {
     if (!!!event || !!!label || !!!action)
         throw new Error("All three arguments must be provided");
     if (typeof event !== "string") {
