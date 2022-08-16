@@ -3,7 +3,7 @@
  * @param {Object} json The object you wish to parse
  * @returns {FormData}
  */
-const parseJsonToFormData = (json) => {
+export const parseJsonToFormData = (json) => {
     if (typeof json !== "object")
         throw new Error("Parameter 1 must be of type object");
     const formData = new FormData();
@@ -19,5 +19,3 @@ const parseJsonToFormData = (json) => {
     }
     return formData;
 };
-
-export { parseJsonToFormData };

@@ -13,12 +13,7 @@
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
     "lib": ["es2015", "dom", "dom.iterable"],
-    "skipLibCheck": true,
-    "paths": {
-      "modules/*": ["modules/*"],
-      "types/*": ["types/*"]
-    },
-    "plugins": [{ "transform": "@zerollup/ts-transform-paths" }]
+    "skipLibCheck": true
   },
 
   "include": ["./src"],
