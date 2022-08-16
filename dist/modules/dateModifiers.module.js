@@ -3,7 +3,7 @@
  * @param { number } timestamp -- The timestamp you wish to countdown to
  * @returns { ParsedTimeObject } -- An object containing days hours and minutes until provided timestamp
  */
-const getTimeTo = (timestamp) => {
+export const getTimeTo = (timestamp) => {
     const now = new Date().getTime();
     // Throw is the provided timestamp has passed already
     if (now >= timestamp)
@@ -34,5 +34,3 @@ const getTimeTo = (timestamp) => {
         seconds,
     };
 };
-
-export { getTimeTo };

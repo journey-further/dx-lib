@@ -3,10 +3,8 @@
  * @param {string} url The URL to redirect to
  * @returns {void}
  */
-const redirect = (url) => {
+export const redirect = (url) => {
     if (!url)
         return;
     window.location.href = url;
 };
-
-export { redirect };

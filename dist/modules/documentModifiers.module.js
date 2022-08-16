@@ -1,10 +1,9 @@
-import { isIphone } from './deviceIdentifiers.module.js';
-
+import { isIphone } from "./deviceIdentifiers.module";
 /**
  * Disable the ability for the user to scroll their device
  * @returns {void}
  */
-const preventScroll = () => {
+export const preventScroll = () => {
     var _a;
     // add style element to prevent scroll if there isn't one already
     if (!!!document.querySelector("#JFCRO-no-scroll")) {
@@ -23,7 +22,7 @@ const preventScroll = () => {
  * Reenable the ability for the user to scroll on the device
  * @returns {void}
  */
-const enableScroll = () => {
+export const enableScroll = () => {
     var _a, _b;
     (_a = document.querySelector("#JFCRO-no-scroll")) === null || _a === void 0 ? void 0 : _a.remove();
     (_b = document.querySelector("html")) === null || _b === void 0 ? void 0 : _b.classList.remove("JFCRO_no-scroll");
@@ -51,7 +50,7 @@ const enableScroll = () => {
  * @param {object} options -- Config options for the insert, position
  * is an insert position accepted by insertAdjacentHTML and elem is a HTML element
  */
-const insertStyle = (style, id, options) => {
+export const insertStyle = (style, id, options) => {
     // Exit an element exists with this ID
     if (!!document.querySelector(`#${id}`))
         return;
@@ -89,7 +88,7 @@ const insertStyle = (style, id, options) => {
  * @param {boolean} replace -- Boolean whether or not to replace an existing element with selector
  * @returns {boolean} -- Whether or not the HTML was inserted
  */
-const insertHTML = (html, selector, targetSelector, position = "afterbegin", replace = false) => {
+export const insertHTML = (html, selector, targetSelector, position = "afterbegin", replace = false) => {
     // Get the target element
     const target = document.querySelector(targetSelector);
     // No target so we can't do anything anyway
@@ -114,5 +113,3 @@ const insertHTML = (html, selector, targetSelector, position = "afterbegin", rep
     // Return true so we know it was successful
     return true;
 };
-
-export { enableScroll, insertHTML, insertStyle, preventScroll };

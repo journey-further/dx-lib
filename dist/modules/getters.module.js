@@ -1,5 +1,12 @@
-import { __awaiter } from '../_virtual/_tslib.js';
-
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 /**
  * Either wait for the provided callback to return a truthy value (and then return it)
  * or for max tries to be met, in which case just bail and return false.
@@ -9,7 +16,7 @@ import { __awaiter } from '../_virtual/_tslib.js';
  * @param {number} _timeout
  * @returns {Promise}
  */
-const waitFor = (callback, _maxTries = 20, _timeout = 100) => __awaiter(void 0, void 0, void 0, function* () {
+export const waitFor = (callback, _maxTries = 20, _timeout = 100) => __awaiter(void 0, void 0, void 0, function* () {
     // init our variables
     let tries = 0;
     let timeout = _timeout;
@@ -38,10 +45,10 @@ const waitFor = (callback, _maxTries = 20, _timeout = 100) => __awaiter(void 0, 
  * @param {string} selector
  * @returns {array}
  */
-const queryAll = (selector) => Array.from(document.querySelectorAll(selector));
-const getElementByXPath = (path) => document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue ||
+export const queryAll = (selector) => Array.from(document.querySelectorAll(selector));
+export const getElementByXPath = (path) => document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue ||
     undefined;
-const findParents = (element, selector, attribute) => {
+export const findParents = (element, selector, attribute) => {
     if (!!!element.parentElement)
         return null;
     if (attribute &&
@@ -62,7 +69,7 @@ const findParents = (element, selector, attribute) => {
  * @param {string} parent
  * @returns {null | HTMLElement}
  */
-const getElementByText = (tag, query, parent) => {
+export const getElementByText = (tag, query, parent) => {
     const elementWithText = Array.from(document.querySelectorAll(tag)).find((elem) => (elem === null || elem === void 0 ? void 0 : elem.textContent) && new RegExp(query).test(elem === null || elem === void 0 ? void 0 : elem.textContent));
     // no element so return null
     if (!!!elementWithText)
@@ -76,5 +83,3 @@ const getElementByText = (tag, query, parent) => {
     // Otherwise return null
     return elementWithText;
 };
-
-export { findParents, getElementByText, getElementByXPath, queryAll, waitFor };

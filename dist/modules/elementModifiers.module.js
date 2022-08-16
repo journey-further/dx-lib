@@ -5,7 +5,7 @@
  *
  * @param {HTMLElement} elem The HTML element to remove children from
  */
-const emptyElem = (elem) => {
+export const emptyElem = (elem) => {
     if (!!!elem)
         throw new Error("Function requires an argument");
     if (!(elem instanceof HTMLElement))
@@ -19,7 +19,7 @@ const emptyElem = (elem) => {
  * @param {HTMLElement} elem
  * @param {string} html
  */
-const replaceHTML = (elem, html) => {
+export const replaceHTML = (elem, html) => {
     if (!!!elem)
         throw new Error("You did not provide an element");
     if (!(elem instanceof HTMLElement))
@@ -31,5 +31,3 @@ const replaceHTML = (elem, html) => {
     emptyElem(elem);
     elem.insertAdjacentHTML("afterbegin", html);
 };
-
-export { emptyElem, replaceHTML };
