@@ -1,0 +1,8 @@
+src
+yarn.lock
+docs
+.*
+jest.config.ts
+jsdoc.config.json
+__tests__
+tsconfig.json

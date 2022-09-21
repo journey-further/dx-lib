@@ -25,6 +25,7 @@ export const waitFor = async (
       tries += 1;
       timeout += _timeout;
       // And wait for timeout
+      // eslint-disable-next-line
       await new Promise((resolve) => setTimeout(resolve, timeout));
     } else {
       // Otherwise return the output
@@ -42,19 +43,24 @@ export const waitFor = async (
  */
 export const queryAll = (selector: string): HTMLElement[] => Array.from(document.querySelectorAll(selector));
 
+/**
+ * Return the element that matches the provided xPath string
+ * @param path
+ * @returns {HTMLElement}
+ */
 export const getElementByXPath = (path: string): HTMLElement =>
   (document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue as HTMLElement) ||
   undefined;
 
-export const findParents = (element: HTMLElement, selector: string, attribute?: string): HTMLElement | null => {
+/**
+ * Recursively search for a parent element with the provided CSS Selector
+ * @param element
+ * @param selector
+ * @returns {HTMLElement | null}
+ */
+export const findParents = (element: HTMLElement, selector: string): HTMLElement | null => {
   if (!!!element.parentElement) return null;
-  if (
-    attribute &&
-    element.parentElement.hasAttribute(selector) &&
-    element.parentElement.getAttribute(selector) === attribute
-  )
-    return element.parentElement;
-  if (element.parentElement.classList.contains(selector)) return element.parentElement;
+  if (!!element.parentElement.matches(selector)) return element.parentElement;
   return findParents(element.parentElement, selector);
 };
 
@@ -82,4 +88,28 @@ export const getElementByText = (tag: string, query: string, parent: string): El
   }
   // Otherwise return null
   return elementWithText;
+};
+
+/**
+ * Return the HTML element (within the HTML string provided) which matches the provided CSS selector.
+ * @param html {string} HTML String to be parsed
+ * @param selector {string} CSS selector to match the returned HTML element
+ * @returns {HTMLElement | null}
+ */
+export const getElementFromHtmlString = (html: string, selector: string): HTMLElement | null => {
+  const parser = new DOMParser();
+  const dom = parser.parseFromString(html, "text/html");
+  return dom.querySelector(selector) || null;
+};
+
+/**
+ * Return a unique string to be used as a HTML ID
+ * @returns {string}
+ */
+export const generateId = () => {
+  let id: string;
+  while (!!!id || /^\d/.test(id) || !!document.querySelector(`#${id}`)) {
+    id = Math.random().toString(36).substring(2, 9);
+  }
+  return id;
 };

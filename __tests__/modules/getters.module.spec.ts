@@ -1,13 +1,12 @@
-import { waitFor, queryAll, getElementByXPath, findParents } from "../../src";
+import { waitFor, queryAll, getElementByXPath, findParents, generateId, getElementFromHtmlString } from "../../src";
 
 ("use strict");
 
 const MOCK_QUERY = ".mock";
 
 // We need to mock our timers
-jest.useRealTimers();
+jest.useFakeTimers({ advanceTimers: true });
 jest.spyOn(global, "setTimeout");
-jest.setTimeout(100000);
 
 describe("waitFor", () => {
   // Cleanup after each test
@@ -29,21 +28,25 @@ describe("waitFor", () => {
 
   it("will call callback 20 times by default", async () => {
     const callback = jest.fn().mockReturnValue(undefined);
-    await waitFor(callback, undefined, 1); // set poll to 1s as we dont care about that
+    await waitFor(callback, undefined, 1); // set poll to 1s as we don't care about that
     expect(setTimeout).toHaveBeenCalledTimes(20);
     expect(callback).toHaveBeenCalledTimes(20);
   });
 
   it("will call callback X times by when passed", async () => {
     const callback = jest.fn().mockReturnValue(undefined);
-    await waitFor(callback, 50, 1); // set poll to 1s as we dont care about that
+    await waitFor(callback, 50, 1); // set poll to 1s as we don't care about that
     expect(setTimeout).toHaveBeenCalledTimes(50);
     expect(callback).toHaveBeenCalledTimes(50);
   });
 
   it("will call timeout with the correct default poll values", async () => {
     const callback = jest.fn().mockReturnValue(undefined);
-    await waitFor(callback); // set poll to 1s as we dont care about that
+    waitFor(callback);
+    for (let i = 0; i < 20; i++) {
+      jest.advanceTimersByTime(10000);
+      await Promise.resolve();
+    }
     expect(setTimeout).toHaveBeenCalledTimes(20);
     expect((setTimeout as unknown as jest.Mock).mock.calls[0][1]).toBe(200); // First recursion should be 100 + 100
     expect((setTimeout as unknown as jest.Mock).mock.calls[19][1]).toBe(2100); // Last recursion should be 2100
@@ -73,7 +76,7 @@ describe("queryAll", () => {
   });
 });
 
-describe("Get Element By XPath", () => {
+describe("getElementByXPath", () => {
   beforeAll(() => {
     jest.clearAllMocks();
   });
@@ -93,41 +96,84 @@ describe("Get Element By XPath", () => {
   });
 });
 
-describe("Find parents by ClassName", () => {
-  beforeAll(() => {
+describe("findParents", () => {
+  afterEach(() => {
     jest.clearAllMocks();
+    document.body.innerHTML = "";
   });
 
-  it("Will return a html element", async () => {
-    // document.body.insertAdjacentHTML("afterbegin", `<div class="container"><h2>Hello</h2></div>`);
-
+  it("Will return a html element", () => {
     const div = document.createElement("div");
     const h2 = document.createElement("h2");
     div.classList.add("container");
     div.insertAdjacentElement("beforeend", h2);
     h2.textContent = "Hello";
-
-    const result = findParents(h2, "container");
+    const result = findParents(h2, ".container");
     expect(result).toBeDefined();
     expect(result instanceof HTMLElement).toBe(true);
     expect(result?.textContent).toBe("Hello");
   });
 
-  it("Will return null", async () => {
+  it("Will return null", () => {
     const h2 = document.createElement("h2");
     h2.textContent = "Hello";
     const result = findParents(h2, "container");
     expect(result).toBeNull();
   });
 
-  it("Will return null with wrong attribute", async () => {
+  it("Will return null with wrong attribute", () => {
     const div = document.createElement("div");
     const h2 = document.createElement("h2");
     div.setAttribute("class", "container");
     div.insertAdjacentElement("beforeend", h2);
     h2.textContent = "Hello";
-
-    const result = findParents(h2, "container", "id");
+    const result = findParents(h2, "#container");
     expect(result).toBeNull();
+  });
+});
+
+describe("generateId", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("will return a string which starts with a letter", () => {
+    expect(/^[a-z]/.test(generateId())).toBe(true);
+  });
+
+  it("will generate a new ID if the one generated starts with a number", () => {
+    const ID = "1hello";
+    const NEW_ID = "hello-again";
+    const mockSubstring = jest.spyOn(String.prototype, "substring");
+    const mockRandom = jest.spyOn(Math, "random").mockReturnValue(0.3);
+    mockSubstring.mockReturnValueOnce(ID);
+    mockSubstring.mockReturnValueOnce(NEW_ID);
+    const output = generateId();
+    expect(mockRandom).toBeCalledTimes(2);
+    expect(mockSubstring).toBeCalledTimes(2);
+    expect(output).toBe(NEW_ID);
+  });
+
+  it("will generate a new ID if there is an element with the one that exists already", () => {
+    const ID = "hello";
+    const NEW_ID = "hello-again";
+    const mockSubstring = jest.spyOn(String.prototype, "substring");
+    const mockRandom = jest.spyOn(Math, "random").mockReturnValue(0.3);
+    mockSubstring.mockReturnValueOnce(ID);
+    mockSubstring.mockReturnValueOnce(NEW_ID);
+    global.document.body.insertAdjacentHTML("afterbegin", `<div id="${ID}">Hey</div>`);
+    const output = generateId();
+    expect(mockRandom).toBeCalledTimes(2);
+    expect(mockSubstring).toBeCalledTimes(2);
+    expect(output).toBe(NEW_ID);
+  });
+});
+
+describe("getElementFromHtmlString", () => {
+  it("will return the element which matches the provided selector", () => {
+    const HTML = `<div class="one">hey</div><div class="two">Yo</div>`;
+    const element = getElementFromHtmlString(HTML, ".one");
+    expect(element instanceof HTMLElement).toBe(true);
+    expect(element?.matches(".one")).toBe(true);
   });
 });

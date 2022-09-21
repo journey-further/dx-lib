@@ -8,11 +8,13 @@
   "private": true,
   "types": "dist/types/index.d.ts",
   "scripts": {
+    "prepare": "yarn --silent build",
     "test": "jest",
     "lint": "eslint src --fix",
     "prettier": "prettier src --write",
     "rollup": "rm -rf ./dist && rollup --config rollup.config.ts --configPlugin typescript",
-    "build": "tsc"
+    "build": "tsc",
+    "docs": "./node_modules/.bin/jsdoc -c jsdoc.config.json -r"
   },
   "devDependencies": {
     "@types/jest": "^28.1.6",
@@ -35,6 +37,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "jest": "^28.1.3",
     "jest-environment-jsdom": "^28.1.3",
+    "jsdoc": "^3.6.11",
     "prettier": "^2.7.1",
     "ts-jest": "^28.0.7",
     "ts-node": "^10.9.1",
