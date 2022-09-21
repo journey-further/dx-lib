@@ -8,7 +8,7 @@
   "private": true,
   "types": "dist/types/index.d.ts",
   "scripts": {
-    "prepare": "yarn build",
+    "prepare": "yarn --silent build",
     "test": "jest",
     "lint": "eslint src --fix",
     "prettier": "prettier src --write",
