@@ -8,3 +8,4 @@ export * from "./getters.module";
 export * from "./docState.module";
 export * from "./dataParsers.module";
 export * from "./performanceHelpers.module";
+export * from "./emitters.module";

@@ -1,4 +1,4 @@
-import { ParsedTimeObject } from "../types/index";
+import { ParsedTimeObject } from "../types/generic";
 
 /**
  * Return an object with the number of days, hours, minutes and seconds until the provided timestamp is met
