@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "declarationDir": "dist/declarations"
+  },
+  "include": ["src"],
+  "tsc-alias": {
+    "resolveFullPaths": true
+  }
+}

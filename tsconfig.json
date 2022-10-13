@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": "dist",
     "declarationMap": true,
     "declarationDir": "./dist/types",
@@ -15,8 +15,5 @@
     "downlevelIteration": true,
     "lib": ["es2015", "dom", "dom.iterable"],
     "skipLibCheck": true
-  },
-
-  "include": ["./src"],
-  "exclude": ["jest.config.ts"]
+  }
 }
