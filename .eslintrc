@@ -20,7 +20,7 @@
     "require": true,
     "jfExperiment": true
   },
-  "plugins": ["prettier", "import"],
+  "plugins": ["prettier", "import", "@typescript-eslint"],
   "parserOptions": {
     "ecmaVersion": 2021,
     "sourceType": "module",
@@ -34,7 +34,9 @@
     "eslint:recommended",
     "plugin:import/typescript",
     "plugin:import/recommended",
-    "plugin:node/recommended"
+    "plugin:node/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
   ],
   "rules": {
     "no-promise-executor-return": "off",
@@ -46,7 +48,6 @@
     "semi": "warn",
     "no-undef": "error",
     "no-mixed-spaces-and-tabs": "off",
-    "no-unused-vars": "warn",
     "no-use-before-define": "off",
     "no-empty": "warn",
     "no-extra-boolean-cast": "off",
