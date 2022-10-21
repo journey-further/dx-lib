@@ -1,4 +1,4 @@
-import { emitEvent } from "../../src";
+import { emitEvent, listenForSwipe } from "../../src";
 import { JfExperiment, jfEvents } from "../../src/types/generic";
 
 const THROW_MESSAGE = "Could not find global experiment information object";
@@ -12,6 +12,21 @@ const CORRECT_VARIANT = "A";
 const BAD_TICKET = "nope";
 const BAD_VARIANT = "nope";
 const MESSAGE = "Whoops";
+const LEFT_CALLBACK = jest.fn();
+const RIGHT_CALLBACK = jest.fn();
+
+class PointerEvent extends MouseEvent {
+  pointerType: string;
+  clientX: number;
+  constructor(type, { pointerType = "", ...MouseEventInit } = {}) {
+    super(type, MouseEventInit);
+    this.pointerType = pointerType;
+    // continue with https://developer.mozilla.org/en-US/docs/Web/API/PointerEvent/PointerEvent#Arguments
+    Object.defineProperty(this, "clientX", {
+      writable: true,
+    });
+  }
+}
 
 describe("emitEvent", () => {
   const handleErr = (event: CustomEvent) => {
@@ -70,5 +85,63 @@ describe("emitEvent", () => {
     };
     emitEvent("error", MESSAGE);
     emitEvent("load");
+  });
+});
+
+describe("listenForSwipe", () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it("will call the correct callback when the user swipes right", () => {
+    const element = document.createElement("div");
+    const pointerDown = new PointerEvent("pointerdown");
+    const pointerUp = new PointerEvent("pointerup");
+    pointerDown.clientX = 50;
+    pointerUp.clientX = 100;
+    listenForSwipe(element, LEFT_CALLBACK, RIGHT_CALLBACK);
+    element.dispatchEvent(pointerDown);
+    element.dispatchEvent(pointerUp);
+    expect(RIGHT_CALLBACK).toBeCalledTimes(1);
+    expect(LEFT_CALLBACK).toBeCalledTimes(0);
+  });
+
+  it("will call the correct callback when the user swipes left", () => {
+    const element = document.createElement("div");
+    const pointerDown = new PointerEvent("pointerdown");
+    const pointerUp = new PointerEvent("pointerup");
+    pointerDown.clientX = 100;
+    pointerUp.clientX = 50;
+    listenForSwipe(element, LEFT_CALLBACK, RIGHT_CALLBACK);
+    element.dispatchEvent(pointerDown);
+    element.dispatchEvent(pointerUp);
+    expect(LEFT_CALLBACK).toBeCalledTimes(1);
+    expect(RIGHT_CALLBACK).toBeCalledTimes(0);
+  });
+
+  it("will not fire a callback if the movement right is not over the 50px threshold", () => {
+    const element = document.createElement("div");
+    const pointerDown = new PointerEvent("pointerdown");
+    const pointerUp = new PointerEvent("pointerup");
+    pointerDown.clientX = 100;
+    pointerUp.clientX = 80;
+    listenForSwipe(element, LEFT_CALLBACK, RIGHT_CALLBACK);
+    element.dispatchEvent(pointerDown);
+    element.dispatchEvent(pointerUp);
+    expect(RIGHT_CALLBACK).toBeCalledTimes(0);
+    expect(LEFT_CALLBACK).toBeCalledTimes(0);
+  });
+
+  it("will not fire a callback if the movement left is not over the 50px threshold", () => {
+    const element = document.createElement("div");
+    const pointerDown = new PointerEvent("pointerdown");
+    const pointerUp = new PointerEvent("pointerup");
+    pointerDown.clientX = 100;
+    pointerUp.clientX = 80;
+    listenForSwipe(element, LEFT_CALLBACK, RIGHT_CALLBACK);
+    element.dispatchEvent(pointerDown);
+    element.dispatchEvent(pointerUp);
+    expect(RIGHT_CALLBACK).toBeCalledTimes(0);
+    expect(LEFT_CALLBACK).toBeCalledTimes(0);
   });
 });

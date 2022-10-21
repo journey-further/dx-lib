@@ -1,4 +1,3 @@
 interface Window {
-  dataLayer: any[];
+  dataLayer: any[]; // eslint-disable-line
 }
-declare let jfExperiment: any;

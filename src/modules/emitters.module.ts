@@ -1,5 +1,13 @@
-import { isJfEvent, JfEvent, jfEvents } from "../types/generic";
+import { FunctionWithArgs, isJfEvent, JfEvent, jfEvents, JfExperiment } from "../types/generic";
 
+declare const jfExperiment: JfExperiment;
+
+/**
+ * Emit an event related to the JF ticket object which is in the global scope.
+ * Used to let the canary testing tool know if a test has fired or failed.
+ * @param { JfEvent } type The event which is to be emitted
+ * @param { string } msg The message to emit in the case of an error
+ */
 export const emitEvent = (type: JfEvent, msg?: string) => {
   if (!isJfEvent(type)) throw new Error(`Argument 1 can only be one of the following: ${jfEvents.join(", ")}`);
   // eslint-disable-next-line no-undef
@@ -38,4 +46,30 @@ export const emitEvent = (type: JfEvent, msg?: string) => {
       })
     );
   }
+};
+
+/**
+ * Watch an element for user swipe gestures and fire the correct callback depending which
+ * direction the user swiped
+ * @param { HTMLElement } element The element we want to watch for swipes on
+ * @param { FunctionWithArgs } leftCallback The callback to execute when the user swipes left
+ * @param { FunctionWithArgs } rightCallback The callback to execute when the user swipes right
+ */
+export const listenForSwipe = (element: Element, leftCallback: FunctionWithArgs, rightCallback: FunctionWithArgs) => {
+  let touchStart: number;
+  const handlePointerUp = (event: MouseEvent) => {
+    if (touchStart - event.clientX <= -50) {
+      rightCallback();
+    } else if (touchStart - event.clientX >= 50) {
+      leftCallback(event);
+    }
+    element.removeEventListener("pointerup", handlePointerUp, { capture: true });
+  };
+
+  const handlePointerDown = (event: MouseEvent) => {
+    touchStart = event.clientX;
+    element.addEventListener("pointerup", handlePointerUp, { capture: true });
+  };
+
+  element.addEventListener("pointerdown", handlePointerDown, { capture: true });
 };
