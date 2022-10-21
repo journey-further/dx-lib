@@ -1,5 +1,5 @@
-import { getTimeTo } from "../../src/index";
-import { ParsedTimeObject } from "../../types/generic";
+import { getTimeTo } from "modules";
+import { ParsedTimeObject } from "types/generic";
 
 const PASSED_TIMESTAMP_ERROR = "Provided timestamp has already passed";
 
