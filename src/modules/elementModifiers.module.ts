@@ -1,7 +1,7 @@
 /**
- *  Remove all child nodes of the element provided in the arguments.
+ * Remove all child nodes of the element provided in the arguments.
  *
- *  This will also remove text and comment nodes.
+ * This will also remove text and comment nodes.
  *
  * @param {HTMLElement} elem The HTML element to remove children from
  */
@@ -15,8 +15,9 @@ export const emptyElem = (elem: HTMLElement): void => {
 
 /**
  * Replace the HTML content of the provided element with the string passed as the 2nd argument
- * @param {HTMLElement} elem
- * @param {string} html
+ *
+ * @param {HTMLElement} elem The element which we want to replace the HTML of
+ * @param {string} html The HTML to insert into the element
  */
 export const replaceHTML = (elem: HTMLElement, html: string): void => {
   if (!!!elem) throw new Error("You did not provide an element");

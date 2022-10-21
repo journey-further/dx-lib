@@ -1,8 +1,8 @@
 // Doc ready function
-export const docReady = async (maxAttempts: number = 10, timeout: number = 200): Promise<boolean> => {
+export const docReady = async (maxAttempts = 10, timeout = 200): Promise<boolean> => {
   let attempts = 0;
-  if ((document.readyState as DocumentReadyState) === "complete") return true;
-  while ((document.readyState as DocumentReadyState) !== "complete") {
+  if (document.readyState === "complete") return true;
+  while (!/^complete$/gi.test(document.readyState)) {
     if (attempts >= maxAttempts) return false;
     attempts += 1;
     await new Promise((resolve) =>

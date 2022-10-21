@@ -2,9 +2,10 @@ import { FunctionWithArgs } from "types/generic";
 
 /**
  * Delay a function by a specified time
- * @param callback Function to run
- * @param delay Time to delay in ms (default: 200)
- * @returns
+ *
+ * @param {FunctionWithArgs} callback Function to run
+ * @param {number} delay Time to delay in ms (default: 200)
+ * @returns {FunctionWithArgs} An anonymous function
  */
 export function debounce(callback: FunctionWithArgs, delay = 200) {
   let timer: ReturnType<typeof setTimeout>;

@@ -5,7 +5,7 @@
  * @param {string} action -- The ticket ID
  * @param {string} label -- The test ID
  */
-export const pushToDL = (event: string = "Optimize-View", action: string, label: string): void => {
+export const pushToDL = (event = "Optimize-View", action: string, label: string): void => {
   if (!!!event || !!!label || !!!action) throw new Error("All three arguments must be provided");
 
   if (typeof event !== "string") {
