@@ -9,7 +9,7 @@
   "types": "dist/declarations/index.d.ts",
   "scripts": {
     "prepare": "yarn --silent build",
-    "test": "jest --silent",
+    "test": "jest",
     "lint": "eslint src --fix",
     "prettier": "prettier src --write",
     "build": "tsc -p tsconfig.prod.json && tsc-alias -p tsconfig.prod.json && rm -rf dist/types",
