@@ -13,7 +13,7 @@
     "declaration": true,
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
-    "lib": ["es2015", "dom", "dom.iterable"],
+    "lib": ["es2015", "dom", "dom.iterable", "ES2022"],
     "skipLibCheck": true
   }
 }
