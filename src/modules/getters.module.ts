@@ -7,11 +7,7 @@
  * @param {number} _timeout
  * @returns {Promise}
  */
-export const waitFor = async (
-  callback: () => unknown,
-  _maxTries: number = 20,
-  _timeout: number = 100
-): Promise<unknown> => {
+export const waitFor = async (callback: () => unknown, _maxTries = 20, _timeout = 100): Promise<unknown> => {
   // init our variables
   let tries = 0;
   let timeout = _timeout;
