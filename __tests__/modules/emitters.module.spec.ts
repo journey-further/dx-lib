@@ -38,10 +38,15 @@ describe("emitEvent", () => {
     expect(event.detail.variant).toBe(CORRECT_VARIANT);
     expect(event.detail.ticket).toBe(CORRECT_TICKET);
   };
+  const handleTrack = (event: CustomEvent) => {
+    expect(event.detail.variant).toBe(CORRECT_VARIANT);
+    expect(event.detail.ticket).toBe(CORRECT_TICKET);
+  };
 
   afterEach(() => {
     window.removeEventListener("jf-wx-err", handleErr);
     window.removeEventListener("jf-wx-test", handleLoad);
+    window.removeEventListener("jf-wx-track", handleTrack);
   });
 
   it("will throw an error if there is no fully formed jfExperiment object in the global scope", () => {
@@ -85,6 +90,7 @@ describe("emitEvent", () => {
     };
     emitEvent("error", MESSAGE);
     emitEvent("load");
+    emitEvent("track");
   });
 });
 

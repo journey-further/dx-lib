@@ -10,7 +10,7 @@ export type ParsedTimeObject = {
   seconds: string;
 };
 
-export const jfEvents = ["load", "error"] as const;
+export const jfEvents = ["load", "error", "track"] as const;
 export type JfEvent = typeof jfEvents[number];
 export const isJfEvent = (event: JfEvent): event is JfEvent => jfEvents.includes(event);
 // eslint-disable-next-line
