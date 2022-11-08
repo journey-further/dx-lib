@@ -1,35 +1,34 @@
 import { FunctionWithArgs, isJfEvent, JfEvent, jfEvents, JfExperiment } from "types/generic";
 
-declare const jfExperiment: JfExperiment;
-
 /**
  * Emit an event related to the JF ticket object which is in the global scope. Used to let the canary testing tool know
  * if a test has fired or failed.
  *
  * @param {JfEvent} type The event which is to be emitted
+ * @param {JfExperiment} experiment The experiment object
  * @param {string} msg The message to emit in the case of an error
  */
-export const emitEvent = (type: JfEvent, msg?: string) => {
+export const emitEvent = (type: JfEvent, experiment: JfExperiment, msg?: string) => {
   if (!isJfEvent(type)) throw new Error(`Argument 1 can only be one of the following: ${jfEvents.join(", ")}`);
   // eslint-disable-next-line no-undef
-  if (typeof jfExperiment === "undefined") throw new Error("Could not find global experiment information object");
-  if (!jfExperiment?.variant) throw new Error("Variant is missing from global experiment information object");
-  if (!/^[A-Z]$/.test(jfExperiment.variant)) throw new Error("Variant is invalid, it should be a single letter");
-  if (!jfExperiment?.ticketId) throw new Error("Ticket ID is missing from global experiment information object");
-  if (!/^[A-Z]{3}_[0-9]{6}$/.test(jfExperiment.ticketId))
+  if (typeof experiment === "undefined") throw new Error("Could not find global experiment information object");
+  if (!experiment?.variant) throw new Error("Variant is missing from global experiment information object");
+  if (!/^[A-Z]$/.test(experiment.variant)) throw new Error("Variant is invalid, it should be a single letter");
+  if (!experiment?.ticketId) throw new Error("Ticket ID is missing from global experiment information object");
+  if (!/^[A-Z]{3}_[0-9]{6}$/.test(experiment.ticketId))
     throw new Error("Ticket ID is invalid it should follow the format: XXX_000000");
 
   if (type === "error") {
     // eslint-disable-next-line no-undef
-    console.warn(`${jfExperiment.ticketId}: ${msg}`);
+    console.warn(`${experiment.ticketId}: ${msg}`);
     window.dispatchEvent(
       new CustomEvent("jf-wx-err", {
         detail: {
           // eslint-disable-next-line no-undef
-          ticket: jfExperiment.ticketId,
+          ticket: experiment.ticketId,
           message: msg,
           // eslint-disable-next-line no-undef
-          variant: jfExperiment.variant,
+          variant: experiment.variant,
         },
       })
     );
@@ -39,9 +38,9 @@ export const emitEvent = (type: JfEvent, msg?: string) => {
       new CustomEvent("jf-wx-test", {
         detail: {
           // eslint-disable-next-line no-undef
-          ticket: jfExperiment.ticketId,
+          ticket: experiment.ticketId,
           // eslint-disable-next-line no-undef
-          variant: jfExperiment.variant,
+          variant: experiment.variant,
         },
       })
     );
@@ -51,9 +50,9 @@ export const emitEvent = (type: JfEvent, msg?: string) => {
       new CustomEvent("jf-wx-track", {
         detail: {
           // eslint-disable-next-line no-undef
-          ticket: jfExperiment.ticketId,
+          ticket: experiment.ticketId,
           // eslint-disable-next-line no-undef
-          variant: jfExperiment.variant,
+          variant: experiment.variant,
         },
       })
     );

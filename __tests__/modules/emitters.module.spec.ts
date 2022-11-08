@@ -11,6 +11,14 @@ const CORRECT_TICKET = "TIK_000000";
 const CORRECT_VARIANT = "A";
 const BAD_TICKET = "nope";
 const BAD_VARIANT = "nope";
+const JF_EXPERIMENT_CORRECT = {
+  ticketId: CORRECT_TICKET,
+  variant: CORRECT_VARIANT,
+};
+const JF_EXPERIMENT_INCORRECT = {
+  ticketId: BAD_TICKET,
+  variant: BAD_VARIANT,
+};
 const MESSAGE = "Whoops";
 const LEFT_CALLBACK = jest.fn();
 const RIGHT_CALLBACK = jest.fn();
@@ -52,45 +60,53 @@ describe("emitEvent", () => {
   it("will throw an error if there is no fully formed jfExperiment object in the global scope", () => {
     // @ts-ignore
     expect(() => emitEvent("tits")).toThrow(BAD_TYPE_THROW);
+    // @ts-ignore
     expect(() => emitEvent("load")).toThrow(THROW_MESSAGE);
 
     // @ts-ignore
-    global.jfExperiment = {
-      ticketId: CORRECT_TICKET,
-    } as JfExperiment;
-    expect(() => emitEvent("load")).toThrow(NO_VARIANT_THROW);
+    expect(() => emitEvent("load", { ticketId: CORRECT_TICKET })).toThrow(NO_VARIANT_THROW);
 
     // @ts-ignore
-    global.jfExperiment = {
-      variant: CORRECT_VARIANT,
-    } as JfExperiment;
-    expect(() => emitEvent("load")).toThrow(NO_TICKET_THROW);
+    expect(() => emitEvent("load", { variant: CORRECT_VARIANT })).toThrow(NO_TICKET_THROW);
 
     // @ts-ignore
-    global.jfExperiment = {
-      variant: BAD_VARIANT,
-      ticketId: CORRECT_TICKET,
-    } as JfExperiment;
-    expect(() => emitEvent("load")).toThrow(BAD_VARIANT_THROW);
+    expect(() =>
+      emitEvent("load", {
+        variant: BAD_VARIANT,
+        ticketId: CORRECT_TICKET,
+      })
+    ).toThrow(BAD_VARIANT_THROW);
 
     // @ts-ignore
-    global.jfExperiment = {
-      ticketId: BAD_TICKET,
-      variant: CORRECT_VARIANT,
-    } as JfExperiment;
-    expect(() => emitEvent("load")).toThrow(BAD_TICKET_THROW);
+    expect(() =>
+      emitEvent("load", {
+        ticketId: BAD_TICKET,
+        variant: CORRECT_VARIANT,
+      })
+    ).toThrow(BAD_TICKET_THROW);
   });
 
   it("will dispatch the correct event with the correct detail", () => {
     jest.spyOn(console, "warn").mockImplementationOnce(() => {});
     // @ts-ignore
-    global.jfExperiment = {
+    emitEvent(
+      "error",
+      {
+        ticketId: CORRECT_TICKET,
+        variant: CORRECT_VARIANT,
+      },
+      MESSAGE
+    );
+    // @ts-ignore
+    emitEvent("load", {
       ticketId: CORRECT_TICKET,
       variant: CORRECT_VARIANT,
-    };
-    emitEvent("error", MESSAGE);
-    emitEvent("load");
-    emitEvent("track");
+    });
+    // @ts-ignore
+    emitEvent("track", {
+      ticketId: CORRECT_TICKET,
+      variant: CORRECT_VARIANT,
+    });
   });
 });
 
