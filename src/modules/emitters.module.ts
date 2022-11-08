@@ -1,4 +1,4 @@
-import { FunctionWithArgs, isJfEvent, JfEvent, jfEvents, JfExperiment } from "../types/generic";
+import { FunctionWithArgs, isJfEvent, JfEvent, jfEvents, JfExperiment } from "types/generic";
 
 declare const jfExperiment: JfExperiment;
 
