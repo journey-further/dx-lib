@@ -13,7 +13,8 @@ export const emitEvent = (type: JfEvent, experiment: JfExperiment, msg?: string)
   // eslint-disable-next-line no-undef
   if (typeof experiment === "undefined") throw new Error("Could not find global experiment information object");
   if (!experiment?.variant) throw new Error("Variant is missing from global experiment information object");
-  if (!/^[A-Z]$/.test(experiment.variant)) throw new Error("Variant is invalid, it should be a single letter");
+  if (!/^(?:[A-Z]|CONTROL)$/.test(experiment.variant))
+    throw new Error("Variant is invalid, it should be a single letter or 'CONTROL'");
   if (!experiment?.ticketId) throw new Error("Ticket ID is missing from global experiment information object");
   if (!/^[A-Z]{3}_[0-9]{6}$/.test(experiment.ticketId))
     throw new Error("Ticket ID is invalid it should follow the format: XXX_000000");
