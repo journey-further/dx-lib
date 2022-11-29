@@ -16,7 +16,7 @@ export const emitEvent = (type: JfEvent, experiment: JfExperiment, msg?: string)
   if (!/^(?:[A-Z]|CONTROL)$/.test(experiment.variant))
     throw new Error("Variant is invalid, it should be a single letter or 'CONTROL'");
   if (!experiment?.ticketId) throw new Error("Ticket ID is missing from global experiment information object");
-  if (!/^[A-Z]{3}_[0-9]{6}$/.test(experiment.ticketId))
+  if (!/^[A-Z0-9]{3}_[0-9]{6}$/.test(experiment.ticketId))
     throw new Error("Ticket ID is invalid it should follow the format: XXX_000000");
 
   if (type === "error") {
