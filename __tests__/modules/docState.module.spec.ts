@@ -1,4 +1,4 @@
-import { docReady } from "../../src";
+import { docReady, isInDom } from "../../src";
 
 const DEFAULT_TIMEOUT = 200;
 const DEFAULT_ATTEMPTS = 10;
@@ -97,4 +97,47 @@ describe("docReady", () => {
     await promise;
     expect(spy.mock.calls[0][1]).toBe(DEFAULT_TIMEOUT);
   });
+});
+
+
+describe("isInDom", () => {
+  it("Will fail if a dom element doesn't exist", async () => {
+    const dom = 
+    `
+      <html> 
+      <head>
+      </head>
+      <body>  
+          <div id="element"></div>
+      </body>
+      </html>
+    `;
+
+    const doc = new DOMParser().parseFromString(dom, "text/xml");
+    const element = doc.querySelector('#element').cloneNode(true);
+
+    const check = isInDom(element, doc);
+    expect(check).toBe(false);
+  });
+
+    it("Will pass if a dom does exist", async () => {
+    const dom = 
+    `
+      <html> 
+      <head>
+      </head>
+      <body>  
+          <div id="element"></div>
+      </body>
+      </html>
+    `;
+
+    const doc = new DOMParser().parseFromString(dom, "text/xml");
+    const element = doc.querySelector('#element');
+
+    const check = isInDom(element, doc);
+    expect(check).toBe(true);
+  });
+
+  
 });
