@@ -13,3 +13,8 @@ export const docReady = async (maxAttempts = 10, timeout = 200): Promise<boolean
   }
   return true;
 };
+
+export const isInDom = (element, dom?): Boolean => {
+  let doc = dom ?? document;
+  return !!element && doc.documentElement.contains(element);
+}
