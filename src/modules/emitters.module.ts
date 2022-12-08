@@ -69,19 +69,62 @@ export const emitEvent = (type: JfEvent, experiment: JfExperiment, msg?: string)
  */
 export const listenForSwipe = (element: Element, leftCallback: FunctionWithArgs, rightCallback: FunctionWithArgs) => {
   let touchStart: number;
+  let initialTouch: number;
+  let touchEnd: number;
+  let touching = false;
+
+  const resetTouch = () => {
+    touchEnd = undefined;
+    touching = false;
+    initialTouch = undefined;
+    touchStart = undefined;
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    if (e.touches.length < 1) return;
+    touchEnd = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    const diff = initialTouch && touchEnd ? initialTouch - touchEnd : 0;
+
+    // the user moved less that 50px so open nav or link
+    if (diff <= -50) {
+      rightCallback();
+    } else if (diff >= 50) {
+      leftCallback();
+    }
+    resetTouch();
+    element.removeEventListener("touchmove", handleTouchMove);
+    element.removeEventListener("touchend", handleTouchEnd);
+  };
+
+  const handleTouchStart = (e: TouchEvent) => {
+    e.preventDefault();
+    if (touching) return;
+    touching = true;
+    initialTouch = e?.touches[0]?.clientX;
+    element.addEventListener("touchend", handleTouchEnd);
+    element.addEventListener("touchmove", handleTouchMove);
+  };
+
   const handlePointerUp = (event: MouseEvent) => {
     if (touchStart - event.clientX <= -50) {
       rightCallback();
     } else if (touchStart - event.clientX >= 50) {
-      leftCallback(event);
+      leftCallback();
     }
-    element.removeEventListener("pointerup", handlePointerUp, { capture: true });
+    resetTouch();
+    element.removeEventListener("pointerup", handlePointerUp);
   };
 
   const handlePointerDown = (event: MouseEvent) => {
+    if (touching) return;
+    touching = true;
     touchStart = event.clientX;
     element.addEventListener("pointerup", handlePointerUp, { capture: true });
   };
 
-  element.addEventListener("pointerdown", handlePointerDown, { capture: true });
+  element.addEventListener("pointerdown", handlePointerDown);
+  element.addEventListener("touchstart", handleTouchStart);
 };
