@@ -1,3 +1,4 @@
+import { JfObserveFunction, JfObserver, JfObserverObject } from "types/generic";
 import { isIphone } from "./deviceIdentifiers.module";
 
 /**
@@ -128,4 +129,64 @@ export const insertHTML = (
   target.insertAdjacentHTML(position, html);
   // Return true so we know it was successful
   return true;
+};
+
+/**
+ * Scoped mutation observer which will prevent itself from re-adding and will utilise a globally scoped jfObservers
+ * array on the window object.
+ *
+ * Using this will allow the WTO tag to remove all active observers on page change to ensure we avoid any memory leaks
+ * from multiple observers
+ *
+ * @param id The id of the ticket in which this observer will be executed
+ * @returns
+ */
+
+export const useMutationObserver = (id: string): JfObserver => {
+  // Get the current observer array
+  window.jfObservers = window.jfObservers || [];
+  // Get the current observer object
+  let observerObject: JfObserverObject | undefined = window.jfObservers.find(
+    (obs: JfObserverObject) => obs.ticketId === id
+  ) as JfObserverObject;
+  // No current object in global array
+  if (!observerObject) {
+    // Make one
+    observerObject = {
+      observer: undefined,
+      isObserving: false,
+      ticketId: id,
+    };
+    // Push this instance to the global array
+    window.jfObservers.push(observerObject);
+  }
+
+  const wrappedObserve: JfObserveFunction = (target, config, callback) => {
+    // Check if we are already observing
+    if (observerObject.isObserving) {
+      console.warn("ALREADY OBSERVING");
+      return false;
+    }
+    // Observe if not
+    console.warn("OBSERVING");
+    observerObject.observer = new MutationObserver(callback);
+    observerObject.observer.observe(target, config);
+    observerObject.isObserving = true;
+    return true;
+  };
+
+  const wrappedDisconnect = () => {
+    console.warn("DISCONNECTING");
+    observerObject.observer?.disconnect();
+    observerObject.observer = undefined;
+    observerObject.isObserving = false;
+    // Remove this instance from the global array
+    window.jfObservers = window.jfObservers.filter((obs: JfObserverObject) => obs.ticketId !== id);
+  };
+
+  return {
+    details: observerObject,
+    observe: wrappedObserve,
+    disconnect: wrappedDisconnect,
+  };
 };

@@ -115,7 +115,7 @@ describe("listenForSwipe", () => {
     jest.resetAllMocks();
   });
 
-  it("will call the correct callback when the user swipes right", () => {
+  it("will call the correct callback when the user swipes right with pointer events", () => {
     const element = document.createElement("div");
     const pointerDown = new PointerEvent("pointerdown");
     const pointerUp = new PointerEvent("pointerup");
@@ -128,7 +128,7 @@ describe("listenForSwipe", () => {
     expect(LEFT_CALLBACK).toBeCalledTimes(0);
   });
 
-  it("will call the correct callback when the user swipes left", () => {
+  it("will call the correct callback when the user swipes left with pointer events", () => {
     const element = document.createElement("div");
     const pointerDown = new PointerEvent("pointerdown");
     const pointerUp = new PointerEvent("pointerup");
@@ -141,7 +141,7 @@ describe("listenForSwipe", () => {
     expect(RIGHT_CALLBACK).toBeCalledTimes(0);
   });
 
-  it("will not fire a callback if the movement right is not over the 50px threshold", () => {
+  it("will not fire a callback if the movement right is not over the 50px threshold with pointer events", () => {
     const element = document.createElement("div");
     const pointerDown = new PointerEvent("pointerdown");
     const pointerUp = new PointerEvent("pointerup");
@@ -154,7 +154,7 @@ describe("listenForSwipe", () => {
     expect(LEFT_CALLBACK).toBeCalledTimes(0);
   });
 
-  it("will not fire a callback if the movement left is not over the 50px threshold", () => {
+  it("will not fire a callback if the movement left is not over the 50px threshold with pointer events", () => {
     const element = document.createElement("div");
     const pointerDown = new PointerEvent("pointerdown");
     const pointerUp = new PointerEvent("pointerup");
@@ -163,6 +163,58 @@ describe("listenForSwipe", () => {
     listenForSwipe(element, LEFT_CALLBACK, RIGHT_CALLBACK);
     element.dispatchEvent(pointerDown);
     element.dispatchEvent(pointerUp);
+    expect(RIGHT_CALLBACK).toBeCalledTimes(0);
+    expect(LEFT_CALLBACK).toBeCalledTimes(0);
+  });
+
+  it("will call the correct callback when the user swipes right with touch events", () => {
+    const element = document.createElement("div");
+    const touchStart = new TouchEvent("touchstart", { touches: [{ clientX: 50 } as Touch] });
+    const touchMove = new TouchEvent("touchmove", { touches: [{ clientX: 150 } as Touch] });
+    const touchEnd = new TouchEvent("touchend");
+    listenForSwipe(element, LEFT_CALLBACK, RIGHT_CALLBACK);
+    element.dispatchEvent(touchStart);
+    element.dispatchEvent(touchMove);
+    element.dispatchEvent(touchEnd);
+    expect(RIGHT_CALLBACK).toBeCalledTimes(1);
+    expect(LEFT_CALLBACK).toBeCalledTimes(0);
+  });
+
+  it("will call the correct callback when the user swipes left with touch events", () => {
+    const element = document.createElement("div");
+    const touchStart = new TouchEvent("touchstart", { touches: [{ clientX: 150 } as Touch] });
+    const touchMove = new TouchEvent("touchmove", { touches: [{ clientX: 50 } as Touch] });
+    const touchEnd = new TouchEvent("touchend");
+    listenForSwipe(element, LEFT_CALLBACK, RIGHT_CALLBACK);
+    element.dispatchEvent(touchStart);
+    element.dispatchEvent(touchMove);
+    element.dispatchEvent(touchEnd);
+    expect(RIGHT_CALLBACK).toBeCalledTimes(0);
+    expect(LEFT_CALLBACK).toBeCalledTimes(1);
+  });
+
+  it("will not fire a callback if the movement right is not over the 50px threshold with touch events", () => {
+    const element = document.createElement("div");
+    const touchStart = new TouchEvent("touchstart", { touches: [{ clientX: 100 } as Touch] });
+    const touchMove = new TouchEvent("touchmove", { touches: [{ clientX: 80 } as Touch] });
+    const touchEnd = new TouchEvent("touchend");
+    listenForSwipe(element, LEFT_CALLBACK, RIGHT_CALLBACK);
+    element.dispatchEvent(touchStart);
+    element.dispatchEvent(touchMove);
+    element.dispatchEvent(touchEnd);
+    expect(RIGHT_CALLBACK).toBeCalledTimes(0);
+    expect(LEFT_CALLBACK).toBeCalledTimes(0);
+  });
+
+  it("will not fire a callback if the movement left is not over the 50px threshold with touch events", () => {
+    const element = document.createElement("div");
+    const touchStart = new TouchEvent("touchstart", { touches: [{ clientX: 80 } as Touch] });
+    const touchMove = new TouchEvent("touchmove", { touches: [{ clientX: 100 } as Touch] });
+    const touchEnd = new TouchEvent("touchend");
+    listenForSwipe(element, LEFT_CALLBACK, RIGHT_CALLBACK);
+    element.dispatchEvent(touchStart);
+    element.dispatchEvent(touchMove);
+    element.dispatchEvent(touchEnd);
     expect(RIGHT_CALLBACK).toBeCalledTimes(0);
     expect(LEFT_CALLBACK).toBeCalledTimes(0);
   });

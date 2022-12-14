@@ -67,6 +67,8 @@
     "import/no-extraneous-dependencies": "off",
     "prefer-regex-literals": "off",
     "no-param-reassign": "off",
+    "jsdoc/require-param-type": "off",
+    "jsdoc/require-returns-type": "off",
     "eqeqeq": "off",
     "no-underscore-dangle": "warn",
     "no-restricted-syntax": "off",
