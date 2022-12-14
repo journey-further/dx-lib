@@ -22,9 +22,10 @@ export interface JfObserverObject {
   ticketId: string;
 }
 
-export type JfObserveFunction = (target: Node, config: MutationObserverInit, callback: MutationCallback) => void;
+export type JfObserveFunction = (target: Node, config: MutationObserverInit, callback: MutationCallback) => boolean;
 
-export interface JfObserver extends JfObserverObject {
+export interface JfObserver {
+  details: JfObserverObject;
   disconnect: () => void;
   observe: JfObserveFunction;
 }

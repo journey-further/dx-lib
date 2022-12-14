@@ -1,9 +1,4 @@
-import {
-  enableScroll,
-  preventScroll,
-  insertStyle,
-  insertHTML,
-} from "../../src";
+import { useMutationObserver, enableScroll, preventScroll, insertStyle, insertHTML } from "../../src";
 
 const STYLE_ELEMENT_ID = "#JFCRO-no-scroll";
 const ADDED_CLASS = "JFCRO_no-scroll";
@@ -30,9 +25,7 @@ describe("preventScroll", () => {
     // Reset dom
     document.body.classList.remove(ADDED_CLASS);
     document.querySelector("html")?.classList.remove(ADDED_CLASS);
-    ADDED_INLINE_STYLE_ATTRS.forEach((attr) =>
-      document.body.style.removeProperty(attr)
-    );
+    ADDED_INLINE_STYLE_ATTRS.forEach((attr) => document.body.style.removeProperty(attr));
   });
 
   it("will add a style element to the document", () => {
@@ -46,9 +39,7 @@ describe("preventScroll", () => {
 
   it("will add the correct class to the main body and html elements", () => {
     expect(document.body.classList.contains(ADDED_CLASS)).toBe(false);
-    expect(
-      document.querySelector("html")?.classList.contains(ADDED_CLASS)
-    ).toBe(false);
+    expect(document.querySelector("html")?.classList.contains(ADDED_CLASS)).toBe(false);
   });
 
   it("will add inline style attributes to the body if on an iPhone", () => {
@@ -60,9 +51,7 @@ describe("preventScroll", () => {
     preventScroll();
     expect(document.body.style).toHaveLength(ADDED_INLINE_STYLE_ATTRS.length);
     for (let i = 0; i < ADDED_INLINE_STYLE_ATTRS.length; i++) {
-      expect(
-        document.body.style.getPropertyValue(ADDED_INLINE_STYLE_ATTRS[i])
-      ).toBeDefined();
+      expect(document.body.style.getPropertyValue(ADDED_INLINE_STYLE_ATTRS[i])).toBeDefined();
     }
   });
 
@@ -120,10 +109,7 @@ describe("insertStyle", () => {
     }
   });
   it("will exit if there is already an element with the ID provided so to not double add", () => {
-    document.body.insertAdjacentHTML(
-      "beforeend",
-      `<div id="${MOCK_STYLE_ID}">Test</div>`
-    );
+    document.body.insertAdjacentHTML("beforeend", `<div id="${MOCK_STYLE_ID}">Test</div>`);
     insertStyle(MOCK_STYLE_STRING, MOCK_STYLE_ID);
     const element = document.querySelector(`#${MOCK_STYLE_ID}`);
     expect(element?.tagName).toBe("DIV");
@@ -163,10 +149,7 @@ describe("insertHTML", () => {
   });
 
   it("will insert to the start of the element if no position is provided", () => {
-    document.body.insertAdjacentHTML(
-      "beforeend",
-      `<div>Hey</div><div>Yo</div>`
-    );
+    document.body.insertAdjacentHTML("beforeend", `<div>Hey</div><div>Yo</div>`);
     insertHTML(MOCK_INNER_HTML, `#${MOCK_HTML_ID}`, "body");
     const elem = document.getElementById(MOCK_HTML_ID);
     expect(elem).toBeDefined();
@@ -177,10 +160,7 @@ describe("insertHTML", () => {
   });
 
   it("will insert to the correct position if one is provided", () => {
-    document.body.insertAdjacentHTML(
-      "beforeend",
-      `<div id="${MOCK_HTML_ID_2}">Hey</div><div>Yo</div>`
-    );
+    document.body.insertAdjacentHTML("beforeend", `<div id="${MOCK_HTML_ID_2}">Hey</div><div>Yo</div>`);
 
     // beforeend
     insertHTML(MOCK_INNER_HTML, `#${MOCK_HTML_ID}`, "body", "beforeend");
@@ -190,48 +170,121 @@ describe("insertHTML", () => {
     expect(document.body.lastElementChild?.outerHTML).toBe(elem?.outerHTML);
 
     // afterend
-    insertHTML(
-      MOCK_INNER_HTML_3,
-      `#${MOCK_HTML_ID_3}`,
-      `#${MOCK_HTML_ID_2}`,
-      "afterend"
-    );
+    insertHTML(MOCK_INNER_HTML_3, `#${MOCK_HTML_ID_3}`, `#${MOCK_HTML_ID_2}`, "afterend");
     const elem2 = document.getElementById(MOCK_HTML_ID_2);
     expect(elem2?.nextElementSibling?.outerHTML).toBe(MOCK_INNER_HTML_3);
 
     // beforebegin
-    insertHTML(
-      MOCK_INNER_HTML_4,
-      `#${MOCK_HTML_ID_4}`,
-      `#${MOCK_HTML_ID_2}`,
-      "beforebegin"
-    );
+    insertHTML(MOCK_INNER_HTML_4, `#${MOCK_HTML_ID_4}`, `#${MOCK_HTML_ID_2}`, "beforebegin");
     const elem3 = document.getElementById(MOCK_HTML_ID_2);
     expect(elem3?.previousElementSibling?.outerHTML).toBe(MOCK_INNER_HTML_4);
 
     // afterbegin
-    insertHTML(
-      MOCK_INNER_HTML_5,
-      `#${MOCK_HTML_ID_5}`,
-      `#${MOCK_HTML_ID_2}`,
-      "afterbegin"
-    );
+    insertHTML(MOCK_INNER_HTML_5, `#${MOCK_HTML_ID_5}`, `#${MOCK_HTML_ID_2}`, "afterbegin");
     const elem4 = document.getElementById(MOCK_HTML_ID_2);
     expect(elem4?.firstElementChild?.outerHTML).toBe(MOCK_INNER_HTML_5);
   });
 
   it("will replace the element with the same selector if the last arg is true", () => {
     document.body.insertAdjacentHTML("afterbegin", MOCK_INNER_HTML);
-    insertHTML(
-      MOCK_INNER_HTML_ALT,
-      `#${MOCK_HTML_ID}`,
-      "body",
-      "afterbegin",
-      true
-    );
+    insertHTML(MOCK_INNER_HTML_ALT, `#${MOCK_HTML_ID}`, "body", "afterbegin", true);
     const elem = document.getElementById(MOCK_HTML_ID);
     expect(elem).toBeDefined();
     expect(elem?.outerHTML).not.toBe(MOCK_INNER_HTML);
     expect(elem?.outerHTML).toBe(MOCK_INNER_HTML_ALT);
+  });
+});
+
+describe("useMutationObserver", () => {
+  const OBSERVER_ID = "OBS";
+  const CONFIG = {
+    childList: true,
+    subtree: true,
+    attributes: true,
+  };
+  let DEFAULT_OBJECT = {
+    ticketId: OBSERVER_ID,
+    observer: undefined,
+    isObserving: false,
+  };
+  const CALLBACK = jest.fn();
+  afterEach(() => {
+    delete window.jfObservers;
+    while (document.body.firstChild) {
+      document.body.firstChild.remove();
+    }
+    DEFAULT_OBJECT = {
+      ticketId: OBSERVER_ID,
+      observer: undefined,
+      isObserving: false,
+    };
+    jest.resetAllMocks();
+    jest.clearAllTimers();
+    jest.clearAllMocks();
+  });
+
+  it("will create an observer object and push it into the global observer array if there isn't one with the Id provided there already", () => {
+    useMutationObserver(OBSERVER_ID);
+    expect(window.jfObservers.find((obs) => obs.ticketId === OBSERVER_ID)).toEqual(DEFAULT_OBJECT);
+  });
+
+  it("will return info from the current observer object if there is one with the provided ID already in the global array", () => {
+    window.jfObservers = [DEFAULT_OBJECT];
+    const { details } = useMutationObserver(OBSERVER_ID);
+    expect(window.jfObservers.find((obs) => obs.ticketId === OBSERVER_ID)).toEqual(DEFAULT_OBJECT);
+    expect(window.jfObservers).toHaveLength(1);
+    expect(details).toBe(DEFAULT_OBJECT);
+  });
+
+  it("will correctly create a mutation observer and assign it to the correct observer object when the observe function it exposes is called", () => {
+    document.body.insertAdjacentHTML("beforeend", `<div id="${OBSERVER_ID}">Hey</div>`);
+    window.jfObservers = [DEFAULT_OBJECT];
+    const { observe, details } = useMutationObserver(OBSERVER_ID);
+    const node = document.querySelector(`#${OBSERVER_ID}`);
+    const output = observe(node, CONFIG, CALLBACK);
+    expect(output).toBe(true);
+    expect(DEFAULT_OBJECT.observer).toBeDefined();
+    expect(CALLBACK).not.toHaveBeenCalled();
+  });
+
+  it("will correctly attach the observer to the provided node and fire the provided callback when a mutation occurs", () => {
+    document.body.insertAdjacentHTML("beforeend", `<div id="${OBSERVER_ID}">Hey</div>`);
+    window.jfObservers = [DEFAULT_OBJECT];
+    const { observe, details } = useMutationObserver(OBSERVER_ID);
+    const node = document.querySelector(`#${OBSERVER_ID}`);
+    const output = observe(node, CONFIG, CALLBACK);
+    expect(output).toBe(true);
+    expect(DEFAULT_OBJECT.observer).toBeDefined();
+    expect(CALLBACK).not.toHaveBeenCalled();
+    node.insertAdjacentHTML("beforeend", `<div id="${OBSERVER_ID}-2">Hey</div>`);
+    setTimeout(() => {
+      expect(CALLBACK).toHaveBeenCalled();
+    }, 200);
+  });
+
+  it("will log a warning to the console if you try and call the observe function while the observer is already observing", () => {
+    jest.spyOn(console, "warn");
+    document.body.insertAdjacentHTML("beforeend", `<div id="${OBSERVER_ID}">Hey</div>`);
+    window.jfObservers = [DEFAULT_OBJECT];
+    const { observe, details } = useMutationObserver(OBSERVER_ID);
+    const node = document.querySelector(`#${OBSERVER_ID}`);
+    const output = observe(node, CONFIG, CALLBACK);
+    expect(output).toBe(true);
+    expect(DEFAULT_OBJECT.observer).toBeDefined();
+    expect(observe(node, CONFIG, CALLBACK)).toBe(false);
+    expect(console.warn).toBeCalledWith("ALREADY OBSERVING");
+  });
+
+  it("will correctly disconnect and clean the observer object from the global array if you call the disconnect method", () => {
+    document.body.insertAdjacentHTML("beforeend", `<div id="${OBSERVER_ID}">Hey</div>`);
+    window.jfObservers = [DEFAULT_OBJECT];
+    const { observe, disconnect } = useMutationObserver(OBSERVER_ID);
+    const node = document.querySelector(`#${OBSERVER_ID}`);
+    const output = observe(node, CONFIG, CALLBACK);
+    expect(output).toBe(true);
+    disconnect();
+    expect(window.jfObservers).toHaveLength(0);
+    expect(DEFAULT_OBJECT.isObserving).toBe(false);
+    expect(DEFAULT_OBJECT.observer).toBe(undefined);
   });
 });

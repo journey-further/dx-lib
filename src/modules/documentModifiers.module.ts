@@ -146,7 +146,9 @@ export const useMutationObserver = (id: string): JfObserver => {
   // Get the current observer array
   window.jfObservers = window.jfObservers || [];
   // Get the current observer object
-  let observerObject = window.jfObservers.find((obs: JfObserverObject) => obs.ticketId === id) as JfObserverObject;
+  let observerObject: JfObserverObject | undefined = window.jfObservers.find(
+    (obs: JfObserverObject) => obs.ticketId === id
+  ) as JfObserverObject;
   // No current object in global array
   if (!observerObject) {
     // Make one
@@ -163,25 +165,27 @@ export const useMutationObserver = (id: string): JfObserver => {
     // Check if we are already observing
     if (observerObject.isObserving) {
       console.warn("ALREADY OBSERVING");
-    } else {
-      // Observe if not
-      console.warn("OBSERVING");
-      observerObject.observer = new MutationObserver(callback);
-      observerObject.observer.observe(target, config);
-      observerObject.isObserving = true;
+      return false;
     }
+    // Observe if not
+    console.warn("OBSERVING");
+    observerObject.observer = new MutationObserver(callback);
+    observerObject.observer.observe(target, config);
+    observerObject.isObserving = true;
+    return true;
   };
 
   const wrappedDisconnect = () => {
     console.warn("DISCONNECTING");
     observerObject.observer?.disconnect();
+    observerObject.observer = undefined;
     observerObject.isObserving = false;
     // Remove this instance from the global array
     window.jfObservers = window.jfObservers.filter((obs: JfObserverObject) => obs.ticketId !== id);
   };
 
   return {
-    ...observerObject,
+    details: observerObject,
     observe: wrappedObserve,
     disconnect: wrappedDisconnect,
   };

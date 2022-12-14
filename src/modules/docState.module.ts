@@ -24,14 +24,11 @@ export const docReady = async (maxAttempts = 10, timeout = 200): Promise<boolean
  * Check whether the provided element is contained within the current DOM. If a second param is passed it will be used
  * as the DOM.
  *
+ * @param element.element
  * @param element -- The element to check
  * @param dom -- The dom to check in
+ * @param element.dom
  * @returns Whether or not the element is in the current dom
  */
-export const isInDom = (
-  element /* What type is this? Should be HTMLElement */,
-  dom? /* We should allow the user to use the function without passing a dom. To do this we can use a default param dom = document */
-): boolean => {
-  const doc = dom ?? document; // Delete this line with the default param
-  return !!element && doc.documentElement.contains(element); // Remove the safety check and let it throw if the function was called without an element param
-};
+export const isInDom = (element: Element, dom?: Document): boolean =>
+  !!(!!element && (!!dom ? dom : document)?.documentElement?.contains(element));
