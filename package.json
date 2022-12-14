@@ -50,5 +50,8 @@
     "typescript": "^4.7.4",
     "yarn": "^1.22.19"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "engines": {
+    "node": ">=14"
+  }
 }
