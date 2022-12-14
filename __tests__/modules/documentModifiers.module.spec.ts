@@ -262,8 +262,7 @@ describe("useMutationObserver", () => {
     }, 200);
   });
 
-  it("will log a warning to the console if you try and call the observe function while the observer is already observing", () => {
-    jest.spyOn(console, "warn");
+  it("will return false if you try and call the observe function while the observer is already observing", () => {
     document.body.insertAdjacentHTML("beforeend", `<div id="${OBSERVER_ID}">Hey</div>`);
     window.jfObservers = [DEFAULT_OBJECT];
     const { observe, details } = useMutationObserver(OBSERVER_ID);
@@ -272,7 +271,6 @@ describe("useMutationObserver", () => {
     expect(output).toBe(true);
     expect(DEFAULT_OBJECT.observer).toBeDefined();
     expect(observe(node, CONFIG, CALLBACK)).toBe(false);
-    expect(console.warn).toBeCalledWith("ALREADY OBSERVING");
   });
 
   it("will correctly disconnect and clean the observer object from the global array if you call the disconnect method", () => {

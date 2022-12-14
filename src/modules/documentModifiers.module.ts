@@ -164,11 +164,9 @@ export const useMutationObserver = (id: string): JfObserver => {
   const wrappedObserve: JfObserveFunction = (target, config, callback) => {
     // Check if we are already observing
     if (observerObject.isObserving) {
-      console.warn("ALREADY OBSERVING");
       return false;
     }
     // Observe if not
-    console.warn("OBSERVING");
     observerObject.observer = new MutationObserver(callback);
     observerObject.observer.observe(target, config);
     observerObject.isObserving = true;
@@ -176,7 +174,6 @@ export const useMutationObserver = (id: string): JfObserver => {
   };
 
   const wrappedDisconnect = () => {
-    console.warn("DISCONNECTING");
     observerObject.observer?.disconnect();
     observerObject.observer = undefined;
     observerObject.isObserving = false;
