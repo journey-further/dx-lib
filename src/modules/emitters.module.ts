@@ -1,4 +1,6 @@
-import { FunctionWithArgs, isJfEvent, JfEvent, jfEvents, JfExperiment } from "types/generic";
+import { jfEvents } from "types/constants";
+import { isJfEvent } from "types/typeGuards";
+import { FunctionWithArgs, JfEvent, JfExperiment } from "types/defs";
 
 /**
  * Emit an event related to the JF ticket object which is in the global scope. Used to let the canary testing tool know
@@ -68,9 +70,9 @@ export const emitEvent = (type: JfEvent, experiment: JfExperiment, msg?: string)
  * @param {FunctionWithArgs} rightCallback The callback to execute when the user swipes right
  */
 export const listenForSwipe = (element: Element, leftCallback: FunctionWithArgs, rightCallback: FunctionWithArgs) => {
-  let touchStart: number;
-  let initialTouch: number;
-  let touchEnd: number;
+  let touchStart: number | undefined;
+  let initialTouch: number | undefined;
+  let touchEnd: number | undefined;
   let touching = false;
 
   const resetTouch = () => {

@@ -1,5 +1,5 @@
+import { jfEvents } from "types/constants";
 import { emitEvent, listenForSwipe } from "../../src";
-import { JfExperiment, jfEvents } from "../../src/types/generic";
 
 const THROW_MESSAGE = "Could not find global experiment information object";
 const NO_VARIANT_THROW = "Variant is missing from global experiment information object";

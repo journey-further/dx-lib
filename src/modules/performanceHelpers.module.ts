@@ -1,4 +1,4 @@
-import { FunctionWithArgs } from "types/generic";
+import { FunctionWithArgs } from "types/defs";
 
 /**
  * Delay a function by a specified time

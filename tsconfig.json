@@ -3,7 +3,6 @@
     "rootDir": ".",
     "outDir": "dist",
     "declarationMap": true,
-    "declarationDir": "./dist/types",
     "esModuleInterop": true,
     "target": "ES6",
     "moduleResolution": "node",
