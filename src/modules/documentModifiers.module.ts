@@ -137,12 +137,7 @@ export const insertHTML = (
  *
  * Using this will allow the WTO tag to remove all active observers on page change to ensure we avoid any memory leaks
  * from multiple observers
- *
- * @param id The id of the ticket in which this observer will be executed
- * @returns {{ details: JfObserverObject; observe: JfObserveFunction; disconnect: Function }} An object containing
- *   observer methods and details observer functions and information
  */
-
 export const useMutationObserver = (id: string): JfObserver => {
   // Get the current observer array
   window.jfObservers = window.jfObservers || [];
