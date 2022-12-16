@@ -1,7 +1,8 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "rootDir": "src"
+    "rootDir": "src",
+    "declarationDir": "dist/declarations"
   },
   "include": ["src/**/*"],
   "tsc-alias": {
@@ -10,12 +11,6 @@
       "typeDefs": {
         "enabled": true,
         "file": "./replacer.cjs"
-      },
-      "base-url": {
-        "enabled": true
-      },
-      "default": {
-        "enabled": true
       }
     }
   }

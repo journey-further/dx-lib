@@ -6,7 +6,7 @@
   "author": "Paul Singh",
   "license": "MIT",
   "private": true,
-  "types": "dist/declarations/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "prepare": "yarn --silent build",
     "test": "jest",
