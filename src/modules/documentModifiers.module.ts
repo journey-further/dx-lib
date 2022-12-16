@@ -139,7 +139,8 @@ export const insertHTML = (
  * from multiple observers
  *
  * @param id The id of the ticket in which this observer will be executed
- * @returns
+ * @returns {{ details: JfObserverObject; observe: JfObserveFunction; disconnect: Function }} An object containing
+ *   observer methods and details observer functions and information
  */
 
 export const useMutationObserver = (id: string): JfObserver => {
