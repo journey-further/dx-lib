@@ -99,5 +99,5 @@
       "tryExtensions": [".ts"]
     }
   },
-  "ignorePatterns": ["jest.config.ts", "__tests__", "dist", "rollup.config.ts", "docs"]
+  "ignorePatterns": ["jest.config.ts", "__tests__", "dist", "rollup.config.ts", "docs", "replacer.cjs"]
 }

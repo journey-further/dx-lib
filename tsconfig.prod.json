@@ -1,11 +1,22 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "rootDir": "src",
-    "declarationDir": "dist/declarations"
+    "rootDir": "src"
   },
-  "include": ["src"],
+  "include": ["src/**/*"],
   "tsc-alias": {
-    "resolveFullPaths": true
+    "resolveFullPaths": true,
+    "replacers": {
+      "typeDefs": {
+        "enabled": true,
+        "file": "./replacer.cjs"
+      },
+      "base-url": {
+        "enabled": true
+      },
+      "default": {
+        "enabled": true
+      }
+    }
   }
 }

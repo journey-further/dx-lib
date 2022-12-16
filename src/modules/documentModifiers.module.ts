@@ -1,4 +1,4 @@
-import { JfObserveFunction, JfObserver, JfObserverObject } from "types/generic";
+import { JfObserveFunction, JfObserver, JfObserverObject } from "types/defs";
 import { isIphone } from "./deviceIdentifiers.module";
 
 /**
@@ -148,7 +148,7 @@ export const useMutationObserver = (id: string): JfObserver => {
   // Get the current observer object
   let observerObject: JfObserverObject | undefined = window.jfObservers.find(
     (obs: JfObserverObject) => obs.ticketId === id
-  ) as JfObserverObject;
+  );
   // No current object in global array
   if (!observerObject) {
     // Make one
