@@ -6,9 +6,9 @@ import { FunctionWithArgs, JfEvent, JfExperiment } from "types/defs";
  * Emit an event related to the JF ticket object which is in the global scope. Used to let the canary testing tool know
  * if a test has fired or failed.
  *
- * @param {JfEvent} type The event which is to be emitted
- * @param {JfExperiment} experiment The experiment object
- * @param {string} msg The message to emit in the case of an error
+ * @param type The event which is to be emitted
+ * @param experiment The experiment object
+ * @param msg The message to emit in the case of an error
  */
 export const emitEvent = (type: JfEvent, experiment: JfExperiment, msg?: string) => {
   if (!isJfEvent(type)) throw new Error(`Argument 1 can only be one of the following: ${jfEvents.join(", ")}`);
@@ -65,9 +65,9 @@ export const emitEvent = (type: JfEvent, experiment: JfExperiment, msg?: string)
 /**
  * Watch an element for user swipe gestures and fire the correct callback depending which direction the user swiped
  *
- * @param {HTMLElement} element The element we want to watch for swipes on
- * @param {FunctionWithArgs} leftCallback The callback to execute when the user swipes left
- * @param {FunctionWithArgs} rightCallback The callback to execute when the user swipes right
+ * @param element The element we want to watch for swipes on
+ * @param leftCallback The callback to execute when the user swipes left
+ * @param rightCallback The callback to execute when the user swipes right
  */
 export const listenForSwipe = (element: Element, leftCallback: FunctionWithArgs, rightCallback: FunctionWithArgs) => {
   let touchStart: number | undefined;

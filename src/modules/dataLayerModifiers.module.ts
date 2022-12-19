@@ -1,9 +1,9 @@
 /**
  * Push an event object into the website's global data layer with the provided info
  *
- * @param {string} event -- The event name
- * @param {string} action -- The ticket ID
- * @param {string} label -- The test ID
+ * @param event -- The event name
+ * @param action -- The ticket ID
+ * @param label -- The test ID
  */
 export const pushToDL = (event = "Optimize-View", action: string, label: string): void => {
   if (!!!event || !!!label || !!!action) throw new Error("All three arguments must be provided");
