@@ -1,11 +1,7 @@
 import { JfObserveFunction, JfObserver, JfObserverObject } from "types/defs";
 import { isIphone } from "./deviceIdentifiers.module";
 
-/**
- * Disable the ability for the user to scroll their device
- *
- * @returns {void}
- */
+/** Disable the ability for the user to scroll their device */
 export const preventScroll = (): void => {
   // add style element to prevent scroll if there isn't one already
   if (!!!document.querySelector("#JFCRO-no-scroll")) {
@@ -24,11 +20,7 @@ export const preventScroll = (): void => {
   document.querySelector("html")?.classList.add("JFCRO_no-scroll");
 };
 
-/**
- * Reenable the ability for the user to scroll on the device
- *
- * @returns {void}
- */
+/** Reenable the ability for the user to scroll on the device */
 export const enableScroll = (): void => {
   document.querySelector("#JFCRO-no-scroll")?.remove();
   document.querySelector("html")?.classList.remove("JFCRO_no-scroll");
@@ -52,11 +44,11 @@ export const enableScroll = (): void => {
  *
  * If no options.elem is provided we will default to document.body
  *
- * @param {string} style -- A CSS string
- * @param {string} id Ticket ID to prevent duplicate additions
- * @param {object} options -- Config options for the insert, position
- * @param {string} options.position Insert position accepted by insertAdjacentHTML and elem is a HTML element
- * @param {HTMLElement} options.elem A HTMLElement to insert the style into
+ * @param style -- A CSS string
+ * @param id Ticket ID to prevent duplicate additions
+ * @param options -- Config options for the insert, position
+ * @param options.position Insert position accepted by insertAdjacentHTML and elem is a HTML element
+ * @param options.elem A HTMLElement to insert the style into
  */
 export const insertStyle = (
   style: string,
@@ -94,12 +86,12 @@ export const insertStyle = (
  *
  * IF there is no element with selector and target is defined insert the HTML to target at position
  *
- * @param {string} html -- The HTML markup you wish to insert
- * @param {string} selector -- The selector which will identify duplicates of HTML
- * @param {string} targetSelector -- CSS selector of the element you wish insert into
- * @param {string} position -- Position for insertAdjacentHTML
- * @param {boolean} replace -- Boolean whether or not to replace an existing element with selector
- * @returns {boolean} -- Whether or not the HTML was inserted
+ * @param html -- The HTML markup you wish to insert
+ * @param selector -- The selector which will identify duplicates of HTML
+ * @param targetSelector -- CSS selector of the element you wish insert into
+ * @param position -- Position for insertAdjacentHTML
+ * @param replace -- Boolean whether or not to replace an existing element with selector
+ * @returns -- Whether or not the HTML was inserted
  */
 export const insertHTML = (
   html: string,
@@ -137,6 +129,8 @@ export const insertHTML = (
  *
  * Using this will allow the WTO tag to remove all active observers on page change to ensure we avoid any memory leaks
  * from multiple observers
+ *
+ * @param id -- The Id of the observer
  */
 export const useMutationObserver = (id: string): JfObserver => {
   // Get the current observer array
@@ -169,6 +163,7 @@ export const useMutationObserver = (id: string): JfObserver => {
     return true;
   };
 
+  /** Wrapper for the native disconnect function from the Mutation Observer API */
   const wrappedDisconnect = () => {
     observerObject.observer?.disconnect();
     observerObject.observer = undefined;

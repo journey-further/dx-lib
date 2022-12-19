@@ -1,8 +1,8 @@
 /**
  * Convert the passed JSON object into a FormData object
  *
- * @param {object} json The object you wish to parse
- * @returns {FormData} A FormData instance with all the data from the provided json
+ * @param json The object you wish to parse
+ * @returns A FormData instance with all the data from the provided json
  */
 export const parseJsonToFormData = (json: { [key: string]: unknown }) => {
   if (typeof json !== "object") throw new Error("Parameter 1 must be of type object");

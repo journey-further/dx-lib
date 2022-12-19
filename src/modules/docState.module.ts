@@ -24,10 +24,8 @@ export const docReady = async (maxAttempts = 10, timeout = 200): Promise<boolean
  * Check whether the provided element is contained within the current DOM. If a second param is passed it will be used
  * as the DOM.
  *
- * @param element.element
  * @param element -- The element to check
  * @param dom -- The dom to check in
- * @param element.dom
  * @returns Whether or not the element is in the current dom
  */
 export const isInDom = (element: Element, dom?: Document): boolean =>
