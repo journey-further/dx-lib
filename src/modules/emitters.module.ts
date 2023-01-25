@@ -1,6 +1,13 @@
-import { jfEvents } from "types/constants";
-import { isJfEvent } from "types/typeGuards";
-import { FunctionWithArgs, JfEvent, JfExperiment } from "types/defs";
+export const jfEvents = ["load", "error", "track"] as const;
+export const isJfEvent = (event: JfEvent): event is JfEvent => jfEvents.includes(event);
+/** A type union for JF Events */
+export type JfEvent = typeof jfEvents[number];
+
+/** Journey Further Experiment information */
+interface JfExperiment {
+  ticketId: string;
+  variant: string;
+}
 
 /**
  * Emit an event related to the JF ticket object which is in the global scope. Used to let the canary testing tool know
@@ -61,6 +68,9 @@ export const emitEvent = (type: JfEvent, experiment: JfExperiment, msg?: string)
     );
   }
 };
+
+/** A simple function with args */
+export type FunctionWithArgs = (...args: unknown[]) => void;
 
 /**
  * Watch an element for user swipe gestures and fire the correct callback depending which direction the user swiped

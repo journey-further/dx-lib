@@ -1,4 +1,3 @@
-import { JfObserveFunction, JfObserver, JfObserverObject } from "types/defs";
 import { isIphone } from "./deviceIdentifiers.module";
 
 /** Disable the ability for the user to scroll their device */
@@ -122,6 +121,29 @@ export const insertHTML = (
   // Return true so we know it was successful
   return true;
 };
+
+/** An object with information relating to a mutation observer applied by useMutationObserver */
+export interface JfObserverObject {
+  observer: MutationObserver | undefined;
+  isObserving: boolean;
+  ticketId: string;
+}
+
+/** Wrapper for the observe function in the mutation observer api */
+export type JfObserveFunction = (target: Node, config: MutationObserverInit, callback: MutationCallback) => boolean;
+
+/** The object returned by the useMutationObserver function */
+export interface JfObserver {
+  details: JfObserverObject;
+  disconnect: () => void;
+  observe: JfObserveFunction;
+}
+
+declare global {
+  interface Window {
+    jfObservers: JfObserverObject[];
+  }
+}
 
 /**
  * Scoped mutation observer which will prevent itself from re-adding and will utilise a globally scoped jfObservers

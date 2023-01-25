@@ -4,15 +4,15 @@
     "outDir": "dist",
     "declarationMap": true,
     "esModuleInterop": true,
-    "target": "ES6",
+    "target": "es2018",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "module": "ES2022",
+    "module": "esnext",
     "baseUrl": "src",
     "declaration": true,
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
-    "lib": ["DOM", "ES2022"],
+    "lib": ["DOM", "ES2022", "dom.iterable"],
     "skipLibCheck": true
   }
 }

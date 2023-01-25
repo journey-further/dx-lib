@@ -1,3 +1,9 @@
+declare global {
+  interface Window {
+    dataLayer: any[]; // eslint-disable-line
+  }
+}
+
 /**
  * Push an event object into the website's global data layer with the provided info
  *

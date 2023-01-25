@@ -4,14 +4,14 @@
     "rootDir": "src",
     "declarationDir": "dist/declarations"
   },
-  "include": ["src/**/*"],
+  "include": ["src/index.ts"],
   "tsc-alias": {
     "resolveFullPaths": true,
     "replacers": {
-      "typeDefs": {
-        "enabled": true,
-        "file": "./replacer.cjs"
-      }
+      //"typeDefs": {
+      //  "enabled": true,
+      //  "file": "./replacer.cjs"
+      //}
     }
   }
 }

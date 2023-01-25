@@ -1,4 +1,10 @@
-import { ParsedTimeObject } from "types/defs";
+/** An object with key/value pairs relating to time measurements */
+export type ParsedTimeObject = {
+  days: string;
+  hours: string;
+  minutes: string;
+  seconds: string;
+};
 
 /**
  * Return an object with the number of days, hours, minutes and seconds until the provided timestamp is met
