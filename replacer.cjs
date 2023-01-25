@@ -11,7 +11,7 @@ exports.default = function typeDefs({ orig, file }) {
     const relativePath = path.relative(file, RESOLVED_TYPE_PATH);
     const newContents = fileContents.replace(/from "types\/defs";/g, `from "${relativePath}";`);
     fs.writeFileSync(file, newContents);
-    return `from "${relativePath}"`;
+    return `from "${relativePath.replace(".d.ts", ".ts")}"`;
   }
 
   return orig;

@@ -1,4 +1,4 @@
-import { FunctionWithArgs } from "types/defs";
+import { FunctionWithArgs } from "modules/emitters.module";
 
 /**
  * Delay a function by a specified time
