@@ -1,8 +1,12 @@
 src
 yarn.lock
 docs
+coverage
 .*
 jest.config.ts
 jsdoc.config.json
 __tests__
 tsconfig.json
+tsconfig.prod.json
+typedoc.json
+
