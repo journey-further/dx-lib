@@ -6,12 +6,6 @@
   },
   "include": ["src/index.ts"],
   "tsc-alias": {
-    "resolveFullPaths": true,
-    "replacers": {
-      //"typeDefs": {
-      //  "enabled": true,
-      //  "file": "./replacer.cjs"
-      //}
-    }
+    "resolveFullPaths": true
   }
 }
