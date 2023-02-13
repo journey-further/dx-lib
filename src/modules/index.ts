@@ -13,6 +13,7 @@ export * from "./debounce";
 export * from "./emitEvent";
 export * from "./listenForSwipe";
 export * from "./waitFor";
+export * from "./waitForElement";
 export * from "./redirect";
 export * from "./queryAll";
 export * from "./pushToDL";
