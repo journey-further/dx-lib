@@ -7,10 +7,10 @@ const TIMESTAMP_TODAY_1 = 1892550630764; // Tue Dec 21 2029 12:30:30 GMT+0000 (G
 const TIMESTAMP_TODAY_2 = 1892933877764; // Tue Dec 25 2029 22:57:57 GMT+0000 (Greenwich Mean Time)
 
 const EXPECTED_RESULT_1: ParsedTimeObject = {
-  days: "10",
-  hours: "11",
-  minutes: "29",
-  seconds: "30",
+  days: 10,
+  hours: 11,
+  minutes: 29,
+  seconds: 30,
 };
 
 const EXPECTED_RESULT_2: ParsedTimeObject = {
@@ -37,10 +37,10 @@ describe("getTimeTo", () => {
     expect(result.seconds).toBe(EXPECTED_RESULT_1.seconds);
   });
 
-  it("will prepend numbers lower than 10 with a 0", () => {
+  it("will prepend numbers lower than 10 with a 0 if should pad is true", () => {
     // 06 days, 01 hours, 02 minutes, 03 seconds
     jest.useFakeTimers().setSystemTime(TIMESTAMP_TODAY_2);
-    const result = getTimeTo(TIMESTAMP_FUTURE);
+    const result = getTimeTo(TIMESTAMP_FUTURE, true);
     expect(result.days).toBe(EXPECTED_RESULT_2.days);
     expect(result.hours).toBe(EXPECTED_RESULT_2.hours);
     expect(result.minutes).toBe(EXPECTED_RESULT_2.minutes);
