@@ -41,7 +41,6 @@ export const listenForSwipe = (element: Element, leftCallback: FunctionWithArgs,
   };
 
   const handleTouchStart = (e: TouchEvent) => {
-    e.preventDefault();
     if (touching) return;
     touching = true;
     initialTouch = e?.touches[0]?.clientX;
