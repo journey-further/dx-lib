@@ -9,6 +9,7 @@ export type FunctionWithArgs = (...args: unknown[]) => void;
  * @param rightCallback The callback to execute when the user swipes right
  */
 export const listenForSwipe = (element: Element, leftCallback: FunctionWithArgs, rightCallback: FunctionWithArgs) => {
+  const TOUCHING_STYLE = ".touching{pointer-events:none;touch-action:none;}";
   let touchStart: number | undefined;
   let initialTouch: number | undefined;
   let touchEnd: number | undefined;
@@ -38,6 +39,7 @@ export const listenForSwipe = (element: Element, leftCallback: FunctionWithArgs,
     resetTouch();
     element.removeEventListener("touchmove", handleTouchMove);
     element.removeEventListener("touchend", handleTouchEnd);
+    document.body.classList.remove("touching");
   };
 
   const handleTouchStart = (e: TouchEvent) => {
@@ -46,6 +48,7 @@ export const listenForSwipe = (element: Element, leftCallback: FunctionWithArgs,
     initialTouch = e?.touches[0]?.clientX;
     element.addEventListener("touchend", handleTouchEnd);
     element.addEventListener("touchmove", handleTouchMove);
+    document.body.classList.add("touching");
   };
 
   const handleMouseUp = (event: MouseEvent) => {
@@ -56,6 +59,7 @@ export const listenForSwipe = (element: Element, leftCallback: FunctionWithArgs,
     }
     resetTouch();
     element.removeEventListener("mouseup", handleMouseUp);
+    document.body.classList.remove("touching");
   };
 
   const handleMouseDown = (event: MouseEvent) => {
@@ -63,8 +67,12 @@ export const listenForSwipe = (element: Element, leftCallback: FunctionWithArgs,
     touching = true;
     touchStart = event.clientX;
     element.addEventListener("mouseup", handleMouseUp, { capture: true });
+    document.body.classList.add("touching");
   };
 
   element.addEventListener("mousedown", handleMouseDown);
   element.addEventListener("touchstart", handleTouchStart);
+  if (!document.querySelector("#jf-lib-swipe-style")) {
+    document.body.insertAdjacentHTML("beforeend", `<style id="jf-lib-swipe-style">${TOUCHING_STYLE}</style>`);
+  }
 };
