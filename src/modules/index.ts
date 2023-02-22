@@ -26,3 +26,4 @@ export * from "./replaceHTML";
 export * from "./emptyElem";
 export * from "./getTimeTo";
 export * from "./createElement";
+export * from "./isWtoPreview";
