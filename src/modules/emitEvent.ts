@@ -1,7 +1,7 @@
 export const jfEvents = ["load", "error", "track"] as const;
 export const isJfEvent = (event: JfEvent): event is JfEvent => jfEvents.includes(event);
 /** A type union for JF Events */
-export type JfEvent = typeof jfEvents[number];
+export type JfEvent = (typeof jfEvents)[number];
 
 /** Journey Further Experiment information */
 interface JfExperiment {

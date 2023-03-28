@@ -1,6 +1,7 @@
 export * from "./parseJsonToFormData";
 export * from "./isOldSafari";
 export * from "./isIphone";
+export * from "./isTouchDevice";
 export * from "./isMobile";
 export * from "./docReady";
 export * from "./isInDom";
