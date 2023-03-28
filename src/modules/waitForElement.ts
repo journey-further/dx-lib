@@ -1,6 +1,6 @@
 /**
- * Wait for an element that matches the passed CSS selector and return it, or for max tries to be met, in
- * which case just bail and return false.
+ * Wait for an element that matches the passed CSS selector and return it, or for max tries to be met, in which case
+ * just bail and return false.
  *
  * @param selector The CSS selector to find
  * @param _maxTries The maximum number of attempts
@@ -14,7 +14,7 @@ export const waitForElement = async (selector: string, _maxTries = 20, _timeout 
   // Start our loop
   while (tries < _maxTries) {
     // Try get the output
-    const output = document.querySelector(selector)
+    const output = document.querySelector(selector);
     // Check it is not falsey
     if (!!!output) {
       // It is so increment variables
