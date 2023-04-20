@@ -1,6 +1,7 @@
 export * from "./parseJsonToFormData";
 export * from "./isOldSafari";
 export * from "./isIphone";
+export * from "./isTouchDevice";
 export * from "./isMobile";
 export * from "./docReady";
 export * from "./isInDom";
@@ -27,3 +28,4 @@ export * from "./emptyElem";
 export * from "./getTimeTo";
 export * from "./createElement";
 export * from "./isWtoPreview";
+export * from "./elementInView";
