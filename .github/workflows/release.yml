@@ -1,0 +1,27 @@
+name: Release
+on:
+  push:
+    branches:
+      - release
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Node.js
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build Release
+        run: yarn build
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
