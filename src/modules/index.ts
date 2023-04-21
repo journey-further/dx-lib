@@ -29,3 +29,4 @@ export * from "./getTimeTo";
 export * from "./createElement";
 export * from "./isWtoPreview";
 export * from "./elementInView";
+export * from "./getLocaleFromUrl";
