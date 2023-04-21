@@ -1,7 +1,12 @@
 {
   "branches": ["release", { "name": "beta", "prerelease": true }, { "name": "alpha", "prerelease": true }],
   "plugins": [
-    "@semantic-release/commit-analyzer",
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "present": "eslint"
+      }
+    ],
     [
       "@semantic-release/github",
       {
@@ -15,7 +20,12 @@
         "npmPublish": false
       }
     ],
-    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "eslint"
+      }
+    ],
     [
       "@semantic-release/git",
       {
