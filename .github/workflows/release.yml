@@ -16,9 +16,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "^18"
+        uses: actions/checkout@v3
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Build Release
