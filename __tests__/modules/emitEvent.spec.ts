@@ -33,6 +33,10 @@ describe("emitEvent", () => {
     window.removeEventListener("jf-wx-track", handleTrack);
   });
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("will throw an error if there is no fully formed jfExperiment object in the global scope", () => {
     // @ts-ignore
     expect(() => emitEvent("tits")).toThrow(BAD_TYPE_THROW);
@@ -83,5 +87,19 @@ describe("emitEvent", () => {
       ticketId: CORRECT_TICKET,
       variant: CORRECT_VARIANT,
     });
+  });
+
+  it("will log the stack trace and error cause if an error object is passed to it", () => {
+    jest.spyOn(console, "warn").mockImplementationOnce(() => {});
+    emitEvent(
+      "error",
+      {
+        ticketId: CORRECT_TICKET,
+        variant: CORRECT_VARIANT,
+      },
+      new Error(MESSAGE, { cause: "Your mum" })
+    );
+
+    expect(console.warn).toBeCalledTimes(3);
   });
 });
