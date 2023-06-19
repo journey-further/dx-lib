@@ -30,4 +30,4 @@ jobs:
         run: npx semantic-release
         # Merge the updated version back
       - name: Merge to Staging
-        run: git pull && git checkout staging && git merge prod && git push -u origin staging
+        run: git pull && git checkout staging && git merge main && git push -u origin staging
