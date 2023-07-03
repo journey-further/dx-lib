@@ -30,3 +30,4 @@ export * from "./createElement";
 export * from "./isWtoPreview";
 export * from "./elementInView";
 export * from "./getLocaleFromUrl";
+export * from "./useSetTimeout";
