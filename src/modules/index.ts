@@ -31,3 +31,4 @@ export * from "./isWtoPreview";
 export * from "./elementInView";
 export * from "./getLocaleFromUrl";
 export * from "./useSetTimeout";
+export * from "./useEventListener";
