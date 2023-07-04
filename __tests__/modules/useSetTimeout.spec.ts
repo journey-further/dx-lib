@@ -60,4 +60,13 @@ describe("useSetTimeout", () => {
     expect(objFromWindow).not.toBeDefined();
     expect(window.jfTimers.length).toBe(0);
   });
+
+  it("will return the correct object when it is called", () => {
+    const obj = useSetTimeout(CALLBACK, 200, TIMEOUT_ID);
+    expect(obj.id).toBe(TIMEOUT_ID);
+    expect(obj.handler).toBe(CALLBACK);
+    expect(obj.timeout).toBe(200);
+    expect(typeof obj.timer).toBe("number");
+    expect(typeof obj.disconnect).toBe("function");
+  });
 });
