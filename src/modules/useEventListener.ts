@@ -45,6 +45,8 @@ export const useEventListener = (
   if (typeof eventName !== "string") throw new Error("Arg 3 must be of type string");
   if (typeof handler !== "function") throw new Error("Arg 4 must be of type function");
   if (typeof options !== "object" && options) throw new Error("Arg 5 must be an object or undefined");
+  // define the array in case there isnt one
+  window.jfListeners = window.jfListeners || [];
   // define callback to remove this listener
   const disconnect = () => {
     element.removeEventListener(eventName, handler, options);
