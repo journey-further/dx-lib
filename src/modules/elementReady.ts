@@ -25,7 +25,7 @@ export const elementReady = (
     const targets = document.querySelectorAll(selector);
     targets.forEach((target) => {
       // if it's already been marked as ready, then skip this
-      if (!!!target.ready || !target.ready.includes(id)) return;
+      if (!!target.ready && typeof target.ready == "object" && target.ready.includes(id)) return;
 
       // check if it also matches the conditions
       if (conditions(target) !== true) return;
