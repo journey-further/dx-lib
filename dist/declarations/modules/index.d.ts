@@ -29,4 +29,8 @@ export * from "./getTimeTo";
 export * from "./createElement";
 export * from "./isWtoPreview";
 export * from "./elementInView";
+export * from "./getLocaleFromUrl";
+export * from "./useSetTimeout";
+export * from "./useEventListener";
+export * from "./elementReady";
 //# sourceMappingURL=index.d.ts.map

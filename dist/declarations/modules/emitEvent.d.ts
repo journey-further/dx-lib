@@ -3,7 +3,7 @@ export declare const isJfEvent: (event: JfEvent) => event is "track" | "load" | 
 /** A type union for JF Events */
 export type JfEvent = (typeof jfEvents)[number];
 /** Journey Further Experiment information */
-interface JfExperiment {
+export interface JfExperiment {
     ticketId: string;
     variant: string;
 }
@@ -13,8 +13,7 @@ interface JfExperiment {
  *
  * @param type The event which is to be emitted
  * @param experiment The experiment object
- * @param msg The message to emit in the case of an error
+ * @param err The message to emit in the case of an error or an error object
  */
-export declare const emitEvent: (type: JfEvent, experiment: JfExperiment, msg?: string) => void;
-export {};
+export declare const emitEvent: (type: JfEvent, experiment: JfExperiment, err?: string | Error) => void;
 //# sourceMappingURL=emitEvent.d.ts.map

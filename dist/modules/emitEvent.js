@@ -6,9 +6,9 @@ export const isJfEvent = (event) => jfEvents.includes(event);
  *
  * @param type The event which is to be emitted
  * @param experiment The experiment object
- * @param msg The message to emit in the case of an error
+ * @param err The message to emit in the case of an error or an error object
  */
-export const emitEvent = (type, experiment, msg) => {
+export const emitEvent = (type, experiment, err) => {
     if (!isJfEvent(type))
         throw new Error(`Argument 1 can only be one of the following: ${jfEvents.join(", ")}`);
     // eslint-disable-next-line no-undef
@@ -24,12 +24,21 @@ export const emitEvent = (type, experiment, msg) => {
         throw new Error("Ticket ID is invalid it should follow the format: XXX_000000");
     if (type === "error") {
         // eslint-disable-next-line no-undef
-        console.warn(`${experiment.ticketId}: ${msg}`);
+        console.warn(`${experiment.ticketId}: ${typeof err === "string" ? err : err.message}`);
+        // if we have an error object reveal the stack trace
+        if (err instanceof Error && err.stack) {
+            console.warn(err.stack);
+        }
+        // reveal the cause
+        if (err instanceof Error && err.cause) {
+            console.warn(`The above error had the following cause: ${JSON.stringify(err.cause)}`);
+        }
         window.dispatchEvent(new CustomEvent("jf-wx-err", {
             detail: {
                 // eslint-disable-next-line no-undef
                 ticket: experiment.ticketId,
-                message: msg,
+                message: typeof err === "string" ? err : err.message,
+                errorObject: err instanceof Error ? err : undefined,
                 // eslint-disable-next-line no-undef
                 variant: experiment.variant,
             },
