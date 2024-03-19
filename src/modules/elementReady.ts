@@ -24,9 +24,8 @@ export const elementReady = (
   const loopDom = () => {
     const targets = document.querySelectorAll(selector);
     targets.forEach((target) => {
-      const notMarked = !!!target.ready || target.ready.includes(id);
       // if it's already been marked as ready, then skip this
-      if (!notMarked) return;
+      if (!!!target.ready || !target.ready.includes(id)) return;
 
       // check if it also matches the conditions
       if (conditions(target) !== true) return;
