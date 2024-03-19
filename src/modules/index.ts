@@ -32,3 +32,4 @@ export * from "./elementInView";
 export * from "./getLocaleFromUrl";
 export * from "./useSetTimeout";
 export * from "./useEventListener";
+export * from "./elementReady";

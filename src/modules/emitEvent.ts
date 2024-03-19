@@ -4,7 +4,7 @@ export const isJfEvent = (event: JfEvent): event is JfEvent => jfEvents.includes
 export type JfEvent = (typeof jfEvents)[number];
 
 /** Journey Further Experiment information */
-interface JfExperiment {
+export interface JfExperiment {
   ticketId: string;
   variant: string;
 }
