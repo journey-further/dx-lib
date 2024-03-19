@@ -34,7 +34,7 @@ export const elementReady = (
       target.ready = target.ready || [];
       target.ready.push(id);
 
-      // run our callback
+      // then run our callback
       callback(target);
     });
   };
