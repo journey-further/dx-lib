@@ -1,3 +1,4 @@
+import { generateId } from "./generateId";
 import { useMutationObserver } from "./useMutationObserver";
 import { waitFor } from "./waitFor";
 
@@ -18,7 +19,7 @@ declare global {
 export const elementReady = (
   selector: string,
   callback: (el: Element) => void,
-  id: string,
+  id = generateId(),
   conditions = (el: Element) => !!el
 ) => {
   if (!!!selector) {
@@ -29,9 +30,10 @@ export const elementReady = (
     throw new Error("Callback is not defined");
   }
 
-  if (!!!id) {
-    throw new Error("No id provided");
-  }
+  // NOTE: reverting this change to make it generate a random one if not provided
+  // if (!!!id) {
+  //   throw new Error("No id provided");
+  // }
 
   const loopDom = () => {
     const targets = document.querySelectorAll(selector);
