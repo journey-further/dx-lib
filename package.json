@@ -15,7 +15,8 @@
     "prettier": "prettier src --write",
     "build": "rm -rf dist && tsc -p tsconfig.prod.json && tsc-alias -p tsconfig.prod.json",
     "release:dry": "node-env-run --exec \"semantic-release --dry-run --debug --no-ci --repositoryUrl \"$(git remote get-url origin | tr -d '\n')\"\"",
-    "docs": "typedoc"
+    "docs": "yarn index && typedoc",
+    "index": "npx run-func ./generateIndex.js init"
   },
   "devDependencies": {
     "@semantic-release/git": "^10.0.1",
@@ -59,5 +60,6 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "dependencies": {}
 }
