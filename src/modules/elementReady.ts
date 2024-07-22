@@ -19,7 +19,7 @@ declare global {
 export const elementReady = (
   selector: string,
   callback: (el: Element) => void,
-  id = generateId(),
+  id: string,
   conditions = (el: Element) => !!el
 ) => {
   if (!!!selector) {
@@ -30,10 +30,9 @@ export const elementReady = (
     throw new Error("Callback is not defined");
   }
 
-  // NOTE: reverting this change to make it generate a random one if not provided
-  // if (!!!id) {
-  //   throw new Error("No id provided");
-  // }
+  if (!!!id) {
+    throw new Error("No id provided");
+  }
 
   const loopDom = () => {
     const targets = document.querySelectorAll(selector);
@@ -71,6 +70,4 @@ export const elementReady = (
   // 2. bind an MO to listen for any future changes
   // eslint-disable-next-line
   bindObserver();
-
-  // stupid fucking commit messages
 };
