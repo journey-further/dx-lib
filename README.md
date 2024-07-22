@@ -32,7 +32,7 @@ With that in mind it is always a good idea to check if you can personally
 replicate a bug before reporting it.
 
 If you can replicate it, please include the exact steps which are required in
-order for another dev to do so.
+order for another dev to do so
 
 To raise a bug ticket please use the following link:
 https://github.com/jf-conversion/jf-lib/issues
