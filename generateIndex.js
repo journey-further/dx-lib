@@ -5,6 +5,7 @@
 @typescript-eslint/restrict-template-expressions: 0, 
 @typescript-eslint/no-unsafe-argument: 0, 
 @typescript-eslint/no-unsafe-return: 0 */
+
 import fs from "fs";
 
 const listAllFiles = (dirPath, arrayOfFiles) => {
