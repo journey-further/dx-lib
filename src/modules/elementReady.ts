@@ -69,4 +69,6 @@ export const elementReady = (
   // 2. bind an MO to listen for any future changes
   // eslint-disable-next-line
   bindObserver();
+
+  // stupid fucking commit messages
 };
