@@ -19,7 +19,6 @@ export const waitFor = async (callback: () => unknown, _maxTries = 20, _timeout 
     if (!output) {
       // It is so increment variables
       tries += 1;
-      // timeout += _timeout;
       // And wait for timeout
       // eslint-disable-next-line
       await new Promise((resolve) => setTimeout(resolve, timeout));
