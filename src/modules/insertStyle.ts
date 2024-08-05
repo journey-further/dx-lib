@@ -20,7 +20,7 @@ export const insertStyle = async (
     position?: "beforebegin" | "afterbegin" | "beforeend" | "afterend";
     elem?: HTMLElement;
   }
-): void => {
+): Promise<void> => {
   // Exit an element exists with this ID
   if (!!document.querySelector(`#${id}`)) return;
   // Generate our HTML
