@@ -1,4 +1,3 @@
-import { generateId } from "./generateId";
 import { useMutationObserver } from "./useMutationObserver";
 import { waitFor } from "./waitFor";
 
@@ -58,7 +57,6 @@ export const elementReady = (
       await waitFor(() => !!document.body);
       const observer = useMutationObserver(id);
       observer.observe(document.body, { childList: true, subtree: true }, loopDom);
-      return;
     } catch (error) {
       console.error(error);
     }
@@ -68,6 +66,6 @@ export const elementReady = (
   loopDom();
 
   // 2. bind an MO to listen for any future changes
-  // eslint-disable-next-line
+
   bindObserver();
 };
