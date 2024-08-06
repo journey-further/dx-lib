@@ -4,7 +4,7 @@ import { waitForElement } from "./waitForElement";
 
 // -- TYPES --
 
-type RBTestOptions = {
+export type RBTestOptions = {
   /** The function to apply when the test runs (required) */
   apply: () => void;
   /** Regex condition or string to check we're on the right page (required) */
@@ -78,9 +78,9 @@ const removeElementFromDOM = (selector: string) => {
 /**
  * Class framework to create a test structure on Russell & Bromley
  *
- * @param {string} id Campaign ID
- * @param {RBTestOptions} options Options for Test setup
- * @param {string} options.apply The function to apply when the test runs (required)
+ * @param id Campaign ID
+ * @param options Options for Test setup
+ * @param options.apply The function to apply when the test runs (required)
  * @param options.pageMatch Regex condition or string to check we're on the right page (required)
  * @param options.reset Function to run that will reset the test (optional)
  * @param options.style Stylesheet to insert (optional)
@@ -116,9 +116,9 @@ export class RBTest {
   /**
    * Class framework to create a test structure on Russell & Bromley
    *
-   * @param {string} id Campaign ID
-   * @param {RBTestOptions} options Options for Test setup
-   * @param {string} options.apply The function to apply when the test runs (required)
+   * @param id Campaign ID
+   * @param options Options for Test setup
+   * @param options.apply The function to apply when the test runs (required)
    * @param options.pageMatch Regex condition or string to check we're on the right page (required)
    * @param options.reset Function to run that will reset the test (optional)
    * @param options.style Stylesheet to insert (optional)
