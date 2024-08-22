@@ -1,3 +1,5 @@
+import { waitFor } from "./waitFor";
+
 /**
  * Wait for an element that matches the passed CSS selector and return it, or for max tries to be met, in which case
  * just bail and return false.
@@ -8,25 +10,14 @@
  * @returns The Element if found
  */
 export const waitForElement = async (selector: string, _maxTries = 20, _timeout = 100): Promise<Element | null> => {
-  // init our variables
-  let tries = 0;
-  let timeout = _timeout;
-  // Start our loop
-  while (tries < _maxTries) {
-    // Try get the output
-    const output = document.querySelector(selector);
-    // Check it is not falsey
-    if (!!!output) {
-      // It is so increment variables
-      tries += 1;
-      timeout += _timeout;
-      // And wait for timeout
-      // eslint-disable-next-line
-      await new Promise((resolve) => setTimeout(resolve, timeout));
-    } else {
-      // Otherwise return the output
-      return output;
-    }
-  }
-  return null;
+  const el = (await waitFor(() => document.querySelector(selector), _maxTries, _timeout)) as Promise<Element | null>;
+  return el;
 };
+
+/**
+ * NOTE: @samrenfrew
+ *
+ * - This is a duplication of the `waitFor` function, with the inherent difference that it doesn't require a user to use a
+ *   callback, as the callback is set by default in this function to find an element in the page
+ * - Therefore we're better off just using this as a wrapper for `waitFor` and calling that very specific function
+ */
