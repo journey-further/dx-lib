@@ -1,5 +1,6 @@
 name: Release
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -24,6 +25,8 @@ jobs:
           git config user.email "conversion@journeyfurther.com"
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
+        env:
+          GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
