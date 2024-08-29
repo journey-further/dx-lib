@@ -72,7 +72,7 @@ const removeElementFromDOM = (selector: string) => {
   if (elements.length == 0) return;
   // Remove each matching element
   elements.forEach((element) => element.remove());
-  console.log(`🗑️ %cRemoved elements: ${selector}`, "background: green; color: #fff; padding: 2px 5px;");
+  console.log(`%cRemoved elements: ${selector}`, "background: green; color: #fff; padding: 2px 5px;");
 };
 
 /**
@@ -135,13 +135,13 @@ export class RBTest {
       window.jfTests = window.jfTests || { tests: [] };
       this.isRunning = !!window.jfTests.tests.find((test) => test.id == id);
       if (this.isRunning) {
-        console.log(`‼️ %cTest ${id} already setup`, "background: orange; color: #fff; padding: 2px 5px;");
+        console.log(`%cTest ${id} already setup`, "background: orange; color: #fff; padding: 2px 5px;");
         // change our init function so it does nothing as this version of the test doesn't need to run
         this.init = () => null;
         return;
       }
 
-      console.log(`🛠️ %cCreate RB Test: ${id}`, "background: green; color: #fff; padding: 2px 5px;");
+      console.log(`%cCreate RB Test: ${id}`, "background: green; color: #fff; padding: 2px 5px;");
 
       // Push it to global object and mark this as running
       window.jfTests.tests.push(this);
@@ -207,7 +207,7 @@ export class RBTest {
       this.#bindMainRemovalListener();
 
       // Bind an event to handle the page change
-      console.log(`\t➕ %cBinding Page Change`, "background: purple; color: #fff; padding: 2px 5px;");
+      console.log(`\t%cBinding Page Change`, "background: purple; color: #fff; padding: 2px 5px;");
       window.removeEventListener("wt-pagechange", this.#handlePageChange);
       window.addEventListener("wt-pagechange", this.#handlePageChange);
     } catch (e) {
@@ -226,7 +226,7 @@ export class RBTest {
           const regex = new RegExp(reg, "gi");
           if (!regex.test(window.location.pathname)) {
             // Not the right page
-            console.log(`❌ %cPage not matched`, "background: red; color: #fff; padding: 2px 5px;");
+            console.log(`%cPage not matched`, "background: red; color: #fff; padding: 2px 5px;");
             // If we have a reset function, run that
             this.#runReset();
             return;
@@ -237,7 +237,7 @@ export class RBTest {
         if (typeof this.#pageMatch == "string") {
           if (window.location.pathname != this.#pageMatch) {
             // Not the right page
-            console.log(`❌ %cPage not matched`, "background: red; color: #fff; padding: 2px 5px;");
+            console.log(`%cPage not matched`, "background: red; color: #fff; padding: 2px 5px;");
             // If we have a reset function, run that
             this.#runReset();
             return;
@@ -249,7 +249,7 @@ export class RBTest {
           const matchedPage = (this.#pageMatch as string[]).find((selector) => window.location.pathname == selector);
           if (!matchedPage) {
             // Not the right page
-            console.log(`❌ %cPage not matched`, "background: red; color: #fff; padding: 2px 5px;");
+            console.log(`%cPage not matched`, "background: red; color: #fff; padding: 2px 5px;");
             // If we have a reset function, run that
             this.#runReset();
             return;
@@ -257,7 +257,7 @@ export class RBTest {
         }
       }
 
-      console.log(`✅ %cPage matched`, "background: #199bd7; color: #fff; padding: 2px 5px;");
+      console.log(`%cPage matched`, "background: #199bd7; color: #fff; padding: 2px 5px;");
       // Wait for the body to exist to avoid issues
       await waitForElement("body");
       this.#applyTest();
@@ -289,7 +289,7 @@ export class RBTest {
 
   #handlePageChange = async () => {
     try {
-      console.log(`🔁 %cPage changed`, "background: #199bd7; color: #fff; padding: 2px 5px;");
+      console.log(`%cPage changed`, "background: #199bd7; color: #fff; padding: 2px 5px;");
       this.#loopCount = 0; // Reset the loop counter
       if (!!this.#removeOnPageChange) await this.#removeElements();
       await this.init();
@@ -300,7 +300,7 @@ export class RBTest {
 
   #applyTest = () => {
     try {
-      console.log(`✅ %cApplying Test`, "background: #199bd7; color: #fff; padding: 2px 5px;");
+      console.log(`%cApplying Test`, "background: #199bd7; color: #fff; padding: 2px 5px;");
       this.#insertStyleSheet();
       this.#bindWatchForRemoval();
       this.#apply();
@@ -313,7 +313,7 @@ export class RBTest {
     // TODO: if we have an array, then get it as a list of strings
     try {
       if (!!!this.#watchForRemoval) return;
-      console.log(`\t➕ %cBinding Removal Watcher`, "background: purple; color: #fff; padding: 2px 5px;");
+      console.log(`\t%cBinding Removal Watcher`, "background: purple; color: #fff; padding: 2px 5px;");
 
       // Create a new observer
       const observer = useMutationObserver(`${this.id}--removal`);
@@ -331,11 +331,11 @@ export class RBTest {
           // Check if the node matches the selector
           if ((node as Element)?.matches(selector)) {
             console.log(
-              `🗑️ %cElement ${selector} was removed, re-init`,
+              `%cElement ${selector} was removed, re-init`,
               "background: orange; color: #fff; padding: 2px 5px;"
             );
             if (this.#loopCount >= this.#maxLoopCount) {
-              console.log(`❌ %cMax loop count reached, aborting`, "background: red; color: #fff; padding: 2px 5px;");
+              console.log(`%cMax loop count reached, aborting`, "background: red; color: #fff; padding: 2px 5px;");
               this.#runReset();
               return;
             }
@@ -373,7 +373,7 @@ export class RBTest {
   };
 
   #runReset = () => {
-    console.log(`\t🔄 %cResetting Test`, "background: #199bd7; color: #fff; padding: 2px 5px;");
+    console.log(`\t%cResetting Test`, "background: #199bd7; color: #fff; padding: 2px 5px;");
     // Remove the inserted stylesheet
     this.#removeStyleSheet();
     // Run the reset function
@@ -385,7 +385,7 @@ export class RBTest {
       // Abort if we don't have a stylesheet
       if (!!!this.#style) return;
       // Insert our stylesheet
-      console.log(`\t➕ %cInserting Stylesheet`, "background: purple; color: #fff; padding: 2px 5px;");
+      console.log(`\t%cInserting Stylesheet`, "background: purple; color: #fff; padding: 2px 5px;");
       insertStyle(this.#style, `${this.id}--style`);
     } catch (e) {
       this.#error(e);
