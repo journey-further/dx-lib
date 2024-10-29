@@ -1,12 +1,7 @@
 {
   "branches": ["main", { "name": "staging", "prerelease": true }],
   "plugins": [
-    [
-      "@semantic-release/commit-analyzer",
-      {
-        "preset": "eslint"
-      }
-    ],
+    ["@semantic-release/commit-analyzer"],
     [
       "@semantic-release/github",
       {
