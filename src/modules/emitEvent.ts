@@ -19,7 +19,7 @@ export interface JfExperiment {
  */
 export const emitEvent = (type: JfEvent, experiment: JfExperiment, err?: string | Error) => {
   if (!isJfEvent(type)) throw new Error(`Argument 1 can only be one of the following: ${jfEvents.join(", ")}`);
-  // eslint-disable-next-line no-undef
+
   if (typeof experiment === "undefined") throw new Error("Could not find global experiment information object");
   if (!experiment?.variant) throw new Error("Variant is missing from global experiment information object");
   if (!/^(?:[A-Z]|CONTROL)$/.test(experiment.variant))
@@ -29,7 +29,6 @@ export const emitEvent = (type: JfEvent, experiment: JfExperiment, err?: string 
     throw new Error("Ticket ID is invalid it should follow the format: XXX_000000");
 
   if (type === "error") {
-    // eslint-disable-next-line no-undef
     console.warn(`${experiment.ticketId}: ${typeof err === "string" ? err : err.message}`);
 
     // if we have an error object reveal the stack trace
@@ -44,11 +43,10 @@ export const emitEvent = (type: JfEvent, experiment: JfExperiment, err?: string 
     window.dispatchEvent(
       new CustomEvent("jf-wx-err", {
         detail: {
-          // eslint-disable-next-line no-undef
           ticket: experiment.ticketId,
           message: typeof err === "string" ? err : err.message,
           errorObject: err instanceof Error ? err : undefined,
-          // eslint-disable-next-line no-undef
+
           variant: experiment.variant,
         },
       })
@@ -58,9 +56,8 @@ export const emitEvent = (type: JfEvent, experiment: JfExperiment, err?: string 
     window.dispatchEvent(
       new CustomEvent("jf-wx-test", {
         detail: {
-          // eslint-disable-next-line no-undef
           ticket: experiment.ticketId,
-          // eslint-disable-next-line no-undef
+
           variant: experiment.variant,
         },
       })
@@ -70,9 +67,8 @@ export const emitEvent = (type: JfEvent, experiment: JfExperiment, err?: string 
     window.dispatchEvent(
       new CustomEvent("jf-wx-track", {
         detail: {
-          // eslint-disable-next-line no-undef
           ticket: experiment.ticketId,
-          // eslint-disable-next-line no-undef
+
           variant: experiment.variant,
         },
       })
