@@ -1,4 +1,14 @@
-/** An object with key/value pairs relating to time measurements */
+/**
+ * Represents a structured object containing time measurements in days, hours, minutes, and seconds.
+ *
+ * Each property can be a number or a string, allowing flexibility for scenarios where time values may need to be
+ * zero-padded or formatted as strings.
+ *
+ * @property {string | number} days - The number of days.
+ * @property {string | number} hours - The number of hours.
+ * @property {string | number} minutes - The number of minutes.
+ * @property {string | number} seconds - The number of seconds.
+ */
 export type ParsedTimeObject = {
   days: string | number;
   hours: string | number;

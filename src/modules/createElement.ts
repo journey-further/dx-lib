@@ -1,3 +1,11 @@
+/**
+ * Represents the parameters for creating an HTML element with attributes.
+ *
+ * This interface defines a key-value mapping where:
+ *
+ * - Keys represent attribute names (e.g., "id", "class", "data-attribute").
+ * - Values represent the corresponding attribute values as strings.
+ */
 export interface CreateElementParams {
   [key: string]: string;
 }

@@ -1,9 +1,30 @@
 export const jfEvents = ["load", "error", "track"] as const;
 export const isJfEvent = (event: JfEvent): event is JfEvent => jfEvents.includes(event);
-/** A type union for JF Events */
+/**
+ * A type representing the possible values of Journey Further (JF) events.
+ *
+ * This type is a union of all possible event names defined in the `jfEvents` array. It ensures that only valid event
+ * names can be used in code where this type is applied.
+ */
 export type JfEvent = (typeof jfEvents)[number];
 
-/** Journey Further Experiment information */
+/**
+ * Represents the details of a Journey Further (JF) experiment.
+ *
+ * This interface provides the essential information required to identify and manage an experiment.
+ *
+ * Example:
+ *
+ * ```javascript
+ * const jfExperiment = {
+ *   ticketId: "ABC_123456",
+ *   variant: "A",
+ * };
+ * ```
+ *
+ * @property {string} ticketId - A unique identifier for the experiment ticket
+ * @property {string} variant - The variant of the experiment
+ */
 export interface JfExperiment {
   ticketId: string;
   variant: string;

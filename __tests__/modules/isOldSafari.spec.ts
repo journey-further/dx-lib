@@ -12,10 +12,10 @@ const OLD_SAFARI_USER_AGENTS = [
   "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_6; en-us) AppleWebKit/525.27.1 (KHTML, like Gecko) Version/3.2.1 Mobile/1231 Safari/525.27.1",
   "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_6; en-us) AppleWebKit/525.27.1 (KHTML, like Gecko) Version/2.1 Mobile/1231 Safari/525.27.1",
   "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_6; en-us) AppleWebKit/525.27.1 (KHTML, like Gecko) Version/1.0 Mobile/1231 Safari/525.27.1",
-];
-const MODERN_SAFARI_USER_AGENTS = [
   "Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1",
   "Mozilla/5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.5 Mobile/15E148 Safari/604.1",
+];
+const MODERN_SAFARI_USER_AGENTS = [
   "Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1",
   "Mozilla/5.0 (iPhone; CPU iPhone OS 15_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Mobile/15E148 Safari/604.1",
 ];
@@ -31,7 +31,7 @@ describe("isOldSafari", () => {
     }
   });
 
-  it("will return false for user agents 12+", () => {
+  it("will return false for user agents 14+", () => {
     for (let i = 0; i < MODERN_SAFARI_USER_AGENTS.length; i++) {
       Object.defineProperty(global.navigator, "userAgent", {
         value: MODERN_SAFARI_USER_AGENTS[i],
