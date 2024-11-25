@@ -1,18 +1,25 @@
 /**
- * Either wait for the provided callback to return a truthy value (and then return it) or for max tries to be met, in
- * which case just bail and return false.
+ * Waits for a provided callback to return a truthy value or until a maximum number of attempts is reached.
  *
- * @param callback The callback to execute
- * @param _maxTries The maximum number of times to check the callback
- * @param _timeout The timeout between each check of callback
- * @returns The truthy/falsy value
+ * This function executes the callback repeatedly at specified intervals (default: 100ms), returning the first truthy
+ * value it gets. If the maximum number of attempts is reached (default: 20) without a truthy value, it returns `null`.
+ *
+ * Note: This function is intended to handle short waits to avoid DOM race conditions. For longer or more complex
+ * scenarios, consider using mutation observers or a dedicated monitoring solution like `elementReady`.
+ *
+ * @param {() => unknown} callback - The function to execute on each attempt.
+ * @param {number} [maxTries=20] - The maximum number of attempts to execute the callback. Default is `20`
+ * @param {number} [timeout=100] - The time in milliseconds to wait between attempts. Default is `100`
+ * @returns {Promise<unknown>} Resolves with the truthy value returned by the callback or `null` if attempts are
+ *   exhausted.
  */
-export const waitFor = async (callback: () => unknown, _maxTries = 20, _timeout = 100): Promise<unknown> => {
+
+export const waitFor = async (callback: () => unknown, maxTries = 20, timeout = 100): Promise<unknown> => {
   // init our variables
   let tries = 0;
-  const timeout = _timeout;
+  const time = timeout;
   // Start our loop
-  while (tries < _maxTries) {
+  while (tries < maxTries) {
     // Try get the output
     const output = callback();
     // Check it is not falsey
@@ -21,7 +28,7 @@ export const waitFor = async (callback: () => unknown, _maxTries = 20, _timeout 
       tries += 1;
       // And wait for timeout
 
-      await new Promise((resolve) => setTimeout(resolve, timeout));
+      await new Promise((resolve) => setTimeout(resolve, time));
     } else {
       // Otherwise return the output
       return output;

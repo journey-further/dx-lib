@@ -1,4 +1,15 @@
-/** Object for listeners added with useEventListener */
+/**
+ * An object representing an event listener added using `useEventListener`.
+ *
+ * This object provides details about the event listener and a method to remove it.
+ *
+ * - `id`: A unique identifier for the listener.
+ * - `handler`: The callback function executed when the event is triggered.
+ * - `element`: The DOM element the listener is attached to.
+ * - `options`: Additional options passed to `addEventListener`.
+ * - `eventName`: The name of the event being listened for (e.g., "click", "keydown").
+ * - `disconnect`: A function to remove the event listener and clean up resources.
+ */
 export type JfListenerObject = {
   /** The ID of the listener */
   id: string;
@@ -14,6 +25,13 @@ export type JfListenerObject = {
   disconnect: () => void;
 };
 
+/**
+ * Extends the `Window` interface to include a globally scoped array of `JfListenerObject` instances.
+ *
+ * This global array (`window.jfListeners`) is used to track all active event listeners, allowing for centralized
+ * management and cleanup of listeners across the application. It ensures that duplicate listeners are not added and
+ * that listeners can be removed efficiently when no longer needed.
+ */
 declare global {
   interface Window {
     jfListeners: JfListenerObject[];
@@ -21,18 +39,26 @@ declare global {
 }
 
 /**
- * Wrapper around the addEventListener function which utilises a window scoped array of all listeners.
+ * Adds an event listener to an element and tracks it globally to prevent duplicates and manage cleanup.
  *
- * Mostly useful on SPA websites where the possibility of event listeners being incorrectly applied after page changes
- * is much greater but can be useful to limit double adds of event listeners on static sites also.
+ * This function attaches an event listener to the specified element and ensures:
  *
- * @param id The ID of this listener
- * @param element The element to listen for events on
- * @param eventName The name of the event to listen for
- * @param handler The handler to fire when the event is triggered
- * @param options The options to pass to the event listener
- * @returns An object with information about the listener and a method to remove it
+ * - Listeners with the same ID are not added multiple times.
+ * - Existing listeners are removed if they conflict with the new one.
+ * - A `disconnect` method is provided to easily remove the listener and clean up its record.
+ *
+ * This is especially useful in Single Page Applications (SPAs) where listeners might persist across page transitions,
+ * preventing memory leaks or unexpected behaviour. It can also be helpful in static sites to avoid duplicate
+ * listeners.
+ *
+ * @param {string} id - A unique ID for the listener to track it globally.
+ * @param {HTMLElement} element - The element to attach the listener to.
+ * @param {string} eventName - The name of the event to listen for (e.g., "click", "keydown").
+ * @param {EventListener} handler - The function to execute when the event is triggered.
+ * @param {AddEventListenerOptions} [options] - Optional settings for the listener (e.g., `capture`, `once`).
+ * @returns {JfListenerObject} An object containing details about the listener and a method to remove it.
  */
+
 export const useEventListener = (
   id: string,
   element: HTMLElement,

@@ -8,13 +8,20 @@ declare global {
 }
 
 /**
- * Detect when an element has been added to the DOM
+ * Detects when an element matching a specific CSS selector is added to the DOM and executes a callback.
  *
- * @param selector A CSS selector to find the element
- * @param callback Callback to run when the element is found
- * @param id Unique identifier for this function
- * @param conditions Extra conditions to check (must return true to fire callback)
+ * This function monitors the DOM for elements matching the given selector. Once a matching element is found and
+ * satisfies optional conditions, the callback function is executed. Each element is marked as "ready" after the
+ * callback has run, preventing duplicate executions.
+ *
+ * @param {string} selector - A CSS selector string used to identify the target element. _(Required)_
+ * @param {Function} callback - A function to execute when the element is found. Receives the element as its parameter.
+ *   _(Required)_
+ * @param {string} id - A unique identifier to track elements that have already triggered the callback. _(Required)_
+ * @param {Function} conditions - Optional conditions to validate the element before triggering the callback. Must be a
+ *   function that returns `true` for the callback to execute.
  */
+
 export const elementReady = (
   selector: string,
   callback: (el: Element) => void,

@@ -59,7 +59,7 @@
     "ts-node": "^10.9.1",
     "tsc-alias": "^1.7.0",
     "tslib": "^2.4.0",
-    "typedoc": "^0.26.5",
+    "typedoc": "^0.26.11",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.0.0",
     "webpack": "^5.52.0",
@@ -72,6 +72,7 @@
   },
   "dependencies": {
     "@eslint/eslintrc": "^3.1.0",
-    "swc-loader": "^0.2.3"
+    "swc-loader": "^0.2.3",
+    "typedoc-github-theme": "^0.1.2"
   }
 }

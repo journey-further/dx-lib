@@ -1,3 +1,15 @@
+/**
+ * Represents a managed timer created using `useSetTimeout`.
+ *
+ * This object contains details about the timer, its configuration, and a method to clear it.
+ *
+ * - `id`: A unique identifier for the timer.
+ * - `timer`: The `setTimeout` instance for the timer.
+ * - `timeout`: The time, in milliseconds, to wait before executing the handler.
+ * - `handler`: The function to execute when the timer expires.
+ * - `disconnect`: A method to clear the timer and remove it from the global `jfTimers` array.
+ */
+
 export type JfTimerObject = {
   id: string;
   timer: ReturnType<typeof setTimeout>;
@@ -6,6 +18,13 @@ export type JfTimerObject = {
   disconnect: () => void;
 };
 
+/**
+ * Extends the `Window` interface to include a globally scoped array of `JfTimerObject` instances.
+ *
+ * The `window.jfTimers` array tracks all active timers created with `useSetTimeout`, allowing centralized management
+ * and cleanup. This is particularly useful in Single Page Applications (SPAs) to prevent timers from persisting across
+ * page transitions.
+ */
 declare global {
   interface Window {
     jfTimers: JfTimerObject[];
@@ -13,19 +32,21 @@ declare global {
 }
 
 /**
- * Wrapper around the setTimeout function.
+ * Creates a managed `setTimeout` instance and tracks it globally to prevent duplicates and enable cleanup.
  *
- * Use this function to use the window scoped jfTimers array which will allow us to remove timers on page change on
- * SPAs.
+ * This function wraps the `setTimeout` method, adding the timer to a globally scoped `jfTimers` array on the `window`
+ * object. It ensures:
  *
- * This is a simple function which will ensure that you never add the same timer twice. It will add an object with the
- * provided ID to the window.jfTimers array and then manage re-addition of the timer if/when this occurs.
+ * - No duplicate timers are added (timers with the same ID are cleared and replaced).
+ * - Timers can be tracked and removed easily, especially in Single Page Applications (SPAs) during page transitions.
+ * - A `disconnect` method is provided to clear the timer manually if needed.
  *
- * @param handler A function to execute when timeout expires
- * @param timeout A number to indicate how much time should pass before executing he handler
- * @param id A unique identifier for the timer
- * @returns An object with information about this timer
+ * @param {() => void} handler - A function to execute when the timer expires. _(Required)_
+ * @param {number} timeout - The time, in milliseconds, to wait before executing the handler. _(Required)_
+ * @param {string} id - A unique identifier for the timer. _(Required)_
+ * @returns {JfTimerObject} An object containing details about the timer and a method to clear it.
  */
+
 export const useSetTimeout = (handler: () => void, timeout: number, id: string): JfTimerObject => {
   if (typeof handler !== "function") throw new Error("Arg 1 must be a function");
   if (!timeout || typeof timeout !== "number") throw new Error("Arg 2 must be a number");

@@ -1,15 +1,20 @@
 /**
- * Take a URL and extract the localisation URL path by using a number of in page attributes. The function will check the
- * following in the specified order:
+ * Extracts the localisation segment from a given URL using in-page attributes and specific checks.
  *
- * 1. The array of provided includes the first section of the url path provided
- * 2. The HTML language attribute includes the first section of the url path
- * 3. There is an alternate link to this page with the first section of the url path
+ * This function determines the locale by checking the following in order:
  *
- * @param url The url to check, defaults to pathname
- * @param userOverrides An array of accepted un-standardised localities, for example 'global'
- * @returns The locality which has matched a check or null
+ * 1. If the first segment of the URL path matches any value in the `userOverrides` array (if provided).
+ * 2. If the HTML `lang` attribute contains the first segment of the URL path.
+ * 3. If there is an `<link rel="alternate">` element pointing to a URL with the same first segment.
+ *
+ * If no matches are found, the function returns `null`.
+ *
+ * @param {string} [url=window.location.pathname] - The URL to check. Defaults to the current pathname. Default is
+ *   `window.location.pathname`
+ * @param {string[]} [userOverrides] - An optional array of custom localities (e.g., "global") to include in the checks.
+ * @returns {string | null} The matching locale string if found, or `null` if no match is identified.
  */
+
 export const getLocaleFromUrl = (url = window.location.pathname, userOverrides?: string[]): null | string => {
   // Catch some possible errors
   if (userOverrides && !Array.isArray(userOverrides))

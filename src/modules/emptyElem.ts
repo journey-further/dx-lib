@@ -1,9 +1,9 @@
 /**
- * Remove all child nodes of the element provided in the arguments.
+ * Removes all child nodes, including text and comment nodes, from a specified HTML element.
  *
- * This will also remove text and comment nodes.
+ * This function clears the content of the provided element by removing all of its children.
  *
- * @param elem The HTML element to remove children from
+ * @param {HTMLElement} elem - The HTML element to clear.
  */
 export const emptyElem = (elem: HTMLElement): void => {
   if (!!!elem) throw new Error("Function requires an argument");

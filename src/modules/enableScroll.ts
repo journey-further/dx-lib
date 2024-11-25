@@ -1,6 +1,15 @@
 import { isIphone } from "./isIphone";
 
-/** Reenable the ability for the user to scroll on the device */
+/**
+ * Re-enables user scrolling on the device by removing restrictions applied to the page - used in conjunction with
+ * `preventScroll` function
+ *
+ * This function restores normal scrolling behaviour by:
+ *
+ * - Removing elements and classes that disable scrolling.
+ * - Resetting styles applied to the `<html>` and `<body>` elements.
+ * - For iPhone devices, restoring the previous scroll position and removing specific style properties.
+ */
 export const enableScroll = (): void => {
   document.querySelector("#JFCRO-no-scroll")?.remove();
   document.querySelector("html")?.classList.remove("JFCRO_no-scroll");
