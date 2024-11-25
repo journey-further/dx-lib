@@ -2,5 +2,6 @@
   "entryPoints": ["./src/index.ts"],
   "out": "docs",
   "githubPages": true,
-  "readme": "none"
+  "readme": "none",
+  "plugin": ["typedoc-github-theme"]
 }
