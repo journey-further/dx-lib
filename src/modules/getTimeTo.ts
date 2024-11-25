@@ -7,12 +7,18 @@ export type ParsedTimeObject = {
 };
 
 /**
- * Return an object with the number of days, hours, minutes and seconds until the provided timestamp is met
+ * Calculates the time remaining until a given timestamp and returns it as an object with days, hours, minutes, and
+ * seconds.
  *
- * @param timestamp -- The timestamp you wish to countdown to
- * @param shouldPad -- Whether to add a leading 0 to numbers less than 10 (will mean all numbers are a string)
- * @returns An object containing days hours and minutes until provided timestamp
+ * This function takes a future timestamp and calculates the difference between the current time and the provided time.
+ * If the `shouldPad` parameter is `true`, all numbers less than 10 are padded with a leading zero and returned as
+ * strings, otherwise they will be returned as numbers.
+ *
+ * @param {number} timestamp - The future timestamp to count down to, in milliseconds.
+ * @param {boolean} [shouldPad=false] - Whether to pad numbers less than 10 with a leading zero. Default is `false`
+ * @returns {ParsedTimeObject} An object containing the remaining `days`, `hours`, `minutes`, and `seconds`.
  */
+
 export const getTimeTo = (timestamp: number, shouldPad = false): ParsedTimeObject => {
   const now: number = new Date().getTime();
   // Throw is the provided timestamp has passed already

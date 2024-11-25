@@ -1,13 +1,19 @@
 /**
- * Return the element which has textContent that matches query. Query can be a string or regex. Either way the function
- * will use regex to find the element. If there is no element it will return null.
+ * Finds an element by matching its text content to a string or regular expression.
  *
- * @param tag The element tag (for example 'div')
- * @param query The text or regex to match
- * @param parentSelector The CSS selector for the desired parent element. If this is omitted and an element matching the
- *   query is found the matching element will be returned. Otherwise the parent will be.
- * @returns The element or null
+ * This function searches for an element of the specified tag type whose `textContent` matches the provided query.
+ * Optionally, it can return the closest parent element that matches a given CSS selector instead.
+ *
+ * - Providing a string will make an exact match the textContent of the element
+ * - For a looser match, regex can be used including params such as g (global) and i (case-insensitive)
+ *
+ * @param {keyof HTMLElementTagNameMap} tag - The tag name of the HTML element to search for (e.g., 'div', 'span').
+ * @param {string | RegExp} query - The text or regular expression to match against the element's `textContent`.
+ * @param {string} [parentSelector] - An optional CSS selector for the desired parent element. If provided, the function
+ *   will return the matching parent element if it exists, otherwise the matching element itself.
+ * @returns {Element | null} The matching element, its parent (if specified), or `null` if no match is found.
  */
+
 export const getElementByText = (
   tag: keyof HTMLElementTagNameMap,
   query: string | ReturnType<typeof RegExp>,

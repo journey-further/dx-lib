@@ -10,13 +10,17 @@ export interface JfExperiment {
 }
 
 /**
- * Emit an event related to the JF ticket object which is in the global scope. Used to let the canary testing tool know
- * if a test has fired or failed.
+ * Emits an event related to a Journey Further experiment for monitoring and debugging purposes.
  *
- * @param type The event which is to be emitted
- * @param experiment The experiment object
- * @param err The message to emit in the case of an error or an error object
+ * This function communicates with the canary testing tool by dispatching custom events to the global scope. It supports
+ * events for test lifecycle states, such as "load", "error", and "track", and validates experiment data before emitting
+ * events. Errors and issues are logged to the console with detailed information if applicable.
+ *
+ * @param {JfEvent} type - The type of event to emit. Must be one of "load", "error", or "track".
+ * @param {JfExperiment} experiment - The experiment details, including the ticket ID and variant information.
+ * @param {string | Error} [err] - An error message or object, used when emitting an "error" event.
  */
+
 export const emitEvent = (type: JfEvent, experiment: JfExperiment, err?: string | Error) => {
   if (!isJfEvent(type)) throw new Error(`Argument 1 can only be one of the following: ${jfEvents.join(", ")}`);
 

@@ -3,16 +3,23 @@ export interface CreateElementParams {
 }
 
 /**
- * Function to create a new HTML Element according to the provided string. If no elem parameter is provided it will
- * default to a div container. If the elem parameter is provided but is not of the type string returns null. If the
- * params parameter is not of the true object type it will be ignored If the innerHTML object key is provided the newly
- * created element's innerHTML will be set If a param key is provided with an underscore it will be converted to a
- * hyphen
+ * Creates a new HTML element of the specified type with optional attributes and content.
  *
- * @param elem The HTML node type, defaults to 'div'
- * @param params Optional object of attributes to set on the element. innerHTML and textContent will both invoke their
- *   respective methods
- * @returns Newly created HTML node
+ * This function generates an HTML element based on the provided tag name (e.g., "div", "span"). If no tag name is
+ * supplied, it defaults to a `<div>` element. Attributes and content can be applied via an optional `params` object.
+ *
+ * - If the `params` object includes an `innerHTML` key, its value will set the element's HTML content.
+ * - If the `params` object includes a `textContent` key, its value will set the element's text content.
+ * - Any additional object keys can also be set here - e.g. `class` or `id` to define an elements class/id, or `href` to
+ *   define a link on an `a` tag
+ * - Any attribute keys in `params` containing underscores (`_`) will be converted to hyphens (`-`).
+ *
+ * Invalid input for the `elem` parameter (e.g., non-string types or invalid tag names) will throw an error. If `params`
+ * is not a valid object, it will be ignored.
+ *
+ * @param {string} [elem="div"] - The type of HTML element to create (e.g., "div", "span"). Default is `"div"`
+ * @param {object} [params] - Optional attributes and content for the new element.
+ * @returns {HTMLElement} - The newly created HTML element.
  */
 export const createElement = (
   elem: keyof HTMLElementTagNameMap | undefined = "div",

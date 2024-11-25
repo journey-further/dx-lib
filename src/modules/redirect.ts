@@ -1,7 +1,9 @@
 /**
- * Redirect the current webpage to the URL which as been passed as an argument.
+ * Redirects the current webpage to the specified URL.
  *
- * @param url The URL to redirect to
+ * This function changes the location of the current page to the provided URL.
+ *
+ * @param {string} url - The URL to redirect the browser to.
  */
 
 export const redirect = (url: string): void => {

@@ -2,13 +2,24 @@
 export type FunctionWithArgs = (...args: unknown[]) => void;
 
 /**
- * Watch an element for user swipe gestures and fire the correct callback depending which direction the user swiped
+ * Watches an element for swipe gestures and triggers the appropriate callback based on the swipe direction.
  *
- * @param element The element we want to watch for swipes on
- * @param leftCallback The callback to execute when the user swipes left
- * @param rightCallback The callback to execute when the user swipes right
+ * This function listens for touch or mouse events on the specified element to detect left or right swipes. It triggers
+ * a callback when a swipe exceeding a specified distance (default: 50px) is detected in either direction.
+ *
+ * @param {Element} element - The element to monitor for swipe gestures.
+ * @param {FunctionWithArgs} leftCallback - The function to execute when a left swipe is detected.
+ * @param {FunctionWithArgs} rightCallback - The function to execute when a right swipe is detected.
+ * @param {number} [minDistance=50] - The minimum swipe distance, in pixels, required to trigger a callback. Default is
+ *   `50`
  */
-export const listenForSwipe = (element: Element, leftCallback: FunctionWithArgs, rightCallback: FunctionWithArgs) => {
+
+export const listenForSwipe = (
+  element: Element,
+  leftCallback: FunctionWithArgs,
+  rightCallback: FunctionWithArgs,
+  minDistance = 50
+) => {
   let touchStart: number | undefined;
   let initialTouch: number | undefined;
   let touchEnd: number | undefined;
@@ -29,10 +40,10 @@ export const listenForSwipe = (element: Element, leftCallback: FunctionWithArgs,
   const handleTouchEnd = (e: TouchEvent) => {
     const diff = initialTouch && touchEnd ? initialTouch - touchEnd : 0;
 
-    // the user moved less that 50px so open nav or link
-    if (diff <= -50) {
+    // the user moved less than specified minDistance (default: 50px) so open nav or link
+    if (diff <= -minDistance) {
       rightCallback(e);
-    } else if (diff >= 50) {
+    } else if (diff >= minDistance) {
       leftCallback(e);
     }
     resetTouch();

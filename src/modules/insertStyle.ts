@@ -1,18 +1,21 @@
 import { waitFor } from "./waitFor";
 
 /**
- * Add the passed style string to either the options.elem element or the document body.
+ * Inserts a `<style>` element containing the provided CSS string into a specified element or the document body.
  *
- * If no options.position value is provided we will default to "beforeend".
+ * This function ensures that duplicate `<style>` elements are not added by checking for an existing element with the
+ * specified ID. If a target element is not provided, the `<style>` element is added to the `document.body`. If an
+ * insertion position is not specified, it defaults to `"beforeend"`.
  *
- * If no options.elem is provided we will default to document.body
- *
- * @param style -- A CSS string
- * @param id Ticket ID to prevent duplicate additions
- * @param options -- Config options for the insert, position
- * @param options.position Insert position accepted by insertAdjacentHTML and elem is a HTML element
- * @param options.elem A HTMLElement to insert the style into
+ * @param {string} style - The CSS string to include in the `<style>` element.
+ * @param {string} id - A unique ID to assign to the `<style>` element, ensuring no duplicates are added.
+ * @param {object} [options] - Configuration options for the insertion.
+ * @param {"beforebegin" | "afterbegin" | "beforeend" | "afterend"} [options.position="beforeend"] - The position where
+ *   the `<style>` element should be inserted. Default is `"beforeend"`
+ * @param {HTMLElement} [options.elem] - The element to insert the `<style>` element into. Defaults to `document.body`.
+ * @returns {Promise<void>} Resolves when the `<style>` element is successfully inserted.
  */
+
 export const insertStyle = async (
   style: string,
   id: string,

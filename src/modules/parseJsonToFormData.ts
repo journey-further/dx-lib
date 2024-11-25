@@ -1,9 +1,14 @@
 /**
- * Convert the passed JSON object into a FormData object
+ * Converts a JSON object into a `FormData` object.
  *
- * @param json The object you wish to parse
- * @returns A FormData instance with all the data from the provided json
+ * This function transforms the key-value pairs of a JSON object into a `FormData` instance, suitable for use in form
+ * submissions or API requests. Each key-value pair in the object is added to the `FormData` object, with values cast to
+ * strings as necessary.
+ *
+ * @param {{ [key: string]: unknown }} json - The JSON object to convert.
+ * @returns {FormData} A `FormData` instance containing all key-value pairs from the JSON object.
  */
+
 export const parseJsonToFormData = (json: { [key: string]: unknown }) => {
   if (typeof json !== "object") throw new Error("Parameter 1 must be of type object");
   const formData = new FormData();

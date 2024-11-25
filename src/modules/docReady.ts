@@ -1,10 +1,16 @@
 /**
- * Async function to allow us to wait for the document to be in the 'complete' state
+ * Waits asynchronously until the document reaches the 'complete' ready state.
  *
- * @param maxAttempts The maximum number of times the function should check
- * @param timeout The time between each check
- * @returns Whether the doc is in the ready state
+ * This function repeatedly checks if the document's `readyState` is "complete" and resolves once it is, or stops after
+ * a specified number of attempts. It can be used to ensure the document is fully loaded before executing further
+ * logic.
+ *
+ * @param {number} [maxAttempts=10] - The maximum number of times to check the document's ready state. Default is `10`
+ * @param {number} [timeout=200] - The delay in milliseconds between each check. Default is `200`
+ * @returns {Promise<boolean>} A promise that resolves to `true` if the document reaches the 'complete' state, or
+ *   `false` if the maximum attempts are exceeded.
  */
+
 export const docReady = async (maxAttempts = 10, timeout = 200): Promise<boolean> => {
   let attempts = 0;
   if (document.readyState === "complete") return true;

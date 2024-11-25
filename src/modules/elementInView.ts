@@ -1,11 +1,15 @@
 /**
- * Take the provided element and return true or false indicating whether or not it is view of the user. If the second
- * parameter is set to false the function will return false when the element is only partially visible in the dom.
+ * Determines whether a given HTML element is visible within the user's viewport.
  *
- * @param element The element we wish to check for the position of
- * @param partial Whether or not to return true for a partial match, defaults to true
- * @returns Whether or not the element is in view of the user
+ * This function checks the position of an element relative to the viewport and returns `true` or `false` based on its
+ * visibility. By default, it considers the element visible if it is partially in view, but this behaviour can be
+ * disabled by setting `partial` parameter to `false`, forcing a check for the entire element to be visible.
+ *
+ * @param {HTMLElement} element - The HTML element to check for visibility.
+ * @param {boolean} [partial=true] - Whether to allow for partial visibility. Default is `true`
+ * @returns {boolean} `true` if the element is in view (partially or fully, based on `partial`), otherwise `false`.
  */
+
 export const elementInView = (element: HTMLElement, partial = true): boolean => {
   // Error stuff
   if (!element) throw new Error("Parameter one is required");

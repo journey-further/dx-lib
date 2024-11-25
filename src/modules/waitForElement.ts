@@ -1,16 +1,20 @@
 import { waitFor } from "./waitFor";
 
 /**
- * Wait for an element that matches the passed CSS selector and return it, or for max tries to be met, in which case
- * just bail and return false.
+ * Waits for an element that matches the specified CSS selector to appear in the DOM and returns it.
  *
- * @param selector The CSS selector to find
- * @param _maxTries The maximum number of attempts
- * @param _timeout The initial timeout
- * @returns The Element if found
+ * This function uses the `waitFor` utility to repeatedly check for the presence of an element matching the provided CSS
+ * selector. If the element is found within the maximum number of attempts (default: 20), it is returned. If not, the
+ * function returns `null`.
+ *
+ * @param {string} selector - The CSS selector of the element to wait for.
+ * @param {number} [maxTries=20] - The maximum number of attempts to find the element. Default is 20. Default is `20`
+ * @param {number} [timeout=100] - The time in milliseconds to wait between attempts. Default is 100ms. Default is `100`
+ * @returns {Promise<Element | null>} Resolves with the element if found, or `null` if attempts are exhausted.
  */
-export const waitForElement = async (selector: string, _maxTries = 20, _timeout = 100): Promise<Element | null> => {
-  const el = (await waitFor(() => document.querySelector(selector), _maxTries, _timeout)) as Promise<Element | null>;
+
+export const waitForElement = async (selector: string, maxTries = 20, timeout = 100): Promise<Element | null> => {
+  const el = (await waitFor(() => document.querySelector(selector), maxTries, timeout)) as Promise<Element | null>;
   return el;
 };
 

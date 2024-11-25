@@ -1,28 +1,29 @@
 /**
- * Function to insert HTML code into a target element using insertAdjacentHTML which prevents addition of duplicate
- * elements.
+ * Inserts HTML code into a target element using `insertAdjacentHTML`, preventing duplicate elements unless specified to
+ * replace.
  *
- * If there is no element with targetSelector return false
+ * This function checks if an element matching the given CSS selector already exists:
  *
- * If there is already an element with selector and replace is false return false
+ * - If no target element matches `targetSelector`, it does nothing and returns `false`.
+ * - If an element with `selector` exists and `replace` is `false`, it does nothing and returns `false`.
+ * - If an element with `selector` exists and `replace` is `true`, it removes the existing element and inserts the new
+ *   HTML.
+ * - If no element with `selector` exists, it inserts the HTML into the target element at the specified position.
  *
- * If there is already an element with selector and replace it true, remove existing and insert our HTML into target at
- * position.
- *
- * IF there is no element with selector and target is defined insert the HTML to target at position
- *
- * @param html -- The HTML markup you wish to insert
- * @param selector -- The selector which will identify duplicates of HTML
- * @param targetSelector -- CSS selector of the element you wish insert into
- * @param position -- Position for insertAdjacentHTML
- * @param replace -- Boolean whether or not to replace an existing element with selector
- * @returns -- Whether or not the HTML was inserted
+ * @param {string} html - The HTML markup to insert.
+ * @param {string} targetSelector - The CSS selector of the target element to insert into.
+ * @param {string} selector - A selector to identify existing elements that match the new HTML.
+ * @param {"afterbegin" | "beforebegin" | "afterend" | "beforeend"} [position="beforeend"] - The position where the HTML
+ *   should be inserted. Default is `"beforeend"`
+ * @param {boolean} [replace=false] - Whether to replace an existing element matching `selector`. Default is `false`
+ * @returns {boolean} `true` if the HTML was inserted, otherwise `false`.
  */
+
 export const insertHTML = (
   html: string,
   selector: string,
   targetSelector: string,
-  position: "afterbegin" | "beforebegin" | "afterend" | "beforeend" = "afterbegin",
+  position: "afterbegin" | "beforebegin" | "afterend" | "beforeend" = "beforeend",
   replace = false
 ): boolean => {
   // Get the target element
