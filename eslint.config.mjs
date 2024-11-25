@@ -154,6 +154,7 @@ export default [
           ignores: ["modules"],
         },
       ],
+      "jsdoc/no-defaults": "off",
     },
   },
 ];
