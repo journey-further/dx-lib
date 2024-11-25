@@ -8,4 +8,4 @@
  * @returns {HTMLElement[]} An array of matching HTML elements.
  */
 
-export const queryAll = (selector: string): HTMLElement[] => [...document.querySelectorAll(selector)];
+export const queryAll = (selector: string): HTMLElement[] => Array.from(document.querySelectorAll(selector));
