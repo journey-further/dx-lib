@@ -10,8 +10,7 @@ import { FunctionWithArgs } from "./listenForSwipe";
  * @param {number} [delay=200] - The time to delay execution. Default is `200`
  * @returns {Function} A debounced version of the provided function.
  */
-
-export function debounce(callback: FunctionWithArgs, delay = 200) {
+export const debounce = (callback: FunctionWithArgs, delay = 200) => {
   let timer: ReturnType<typeof setTimeout>;
   return (...args: unknown[]) => {
     clearTimeout(timer);
@@ -19,4 +18,4 @@ export function debounce(callback: FunctionWithArgs, delay = 200) {
       callback.apply(this, args);
     }, delay);
   };
-}
+};

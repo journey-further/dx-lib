@@ -1,4 +1,11 @@
-/** A simple function with args */
+/**
+ * Represents a function that accepts any number of arguments.
+ *
+ * This type defines a function signature where:
+ *
+ * - The function can take any number of arguments of any type.
+ * - The function does not return a value (`void`).
+ */
 export type FunctionWithArgs = (...args: unknown[]) => void;
 
 /**
@@ -13,7 +20,6 @@ export type FunctionWithArgs = (...args: unknown[]) => void;
  * @param {number} [minDistance=50] - The minimum swipe distance, in pixels, required to trigger a callback. Default is
  *   `50`
  */
-
 export const listenForSwipe = (
   element: Element,
   leftCallback: FunctionWithArgs,
