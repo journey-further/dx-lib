@@ -75,12 +75,14 @@ export type LogLevel = "info" | "detail" | "success" | "warn" | "error";
 /**
  * Creates a new SPA test instance for implementing A/B tests on Single Page Applications.
  *
- * The SPA class provides a structured way to implement tests with features such as:
+ * The SPA class provides a structured way to implement tests with features:
  *
- * - Applying test-specific styles and functions
- * - Watching for element removal and reapplying the test automatically
- * - Handling page changes in Single Page Applications (SPAs)
- * - Cleaning up resources to prevent memory leaks or unintended side effects
+ * - Automatically applies the test when initialized and ensures it only runs once
+ * - Validates the test setup, including required parameters like `apply` and `pageMatch`
+ * - Watches for specific DOM element removal and re-applies the test if necessary
+ * - Listens for page changes in SPAs and ensures the test is applied or reset as needed
+ * - Integrates with mutation observers for reliable DOM monitoring
+ * - Provides cleanup methods to prevent memory leaks
  *
  * The class integrates with globally scoped listeners and observers to manage tests effectively, even in dynamic
  * environments.
@@ -95,15 +97,6 @@ export type LogLevel = "info" | "detail" | "success" | "warn" | "error";
  * @param {string | string[]} [options.watchForRemoval] - Selector(s) to watch for removal and trigger reapplication
  * @param {string | string[]} [options.removeOnPageChange] - Selector(s) for elements to remove when page changes
  * @param {string | string[]} [options.removedNode] - Name of node to watch for being removed on SPA reset
- *
- *   Key Features:
- *
- *   - Automatically applies the test when initialized and ensures it only runs once
- *   - Validates the test setup, including required parameters like `apply` and `pageMatch`
- *   - Watches for specific DOM element removal and re-applies the test if necessary
- *   - Listens for page changes in SPAs and ensures the test is applied or reset as needed
- *   - Integrates with mutation observers for reliable DOM monitoring
- *   - Provides cleanup methods to prevent memory leaks
  *
  *   Usage:
  *
