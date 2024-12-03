@@ -42,18 +42,6 @@ export interface JfObserver {
 }
 
 /**
- * Extends the `Window` interface to include a globally scoped array of `JfObserverObject` instances.
- *
- * This global array (`window.jfObservers`) is used to track all active observers, allowing for centralized management
- * and cleanup of observers across the application.
- */
-declare global {
-  interface Window {
-    jfObservers: JfObserverObject[];
-  }
-}
-
-/**
  * Scoped MutationObserver wrapper that prevents duplicate observers and manages them globally to avoid memory leaks.
  *
  * This utility creates and manages a `MutationObserver` scoped to a specific ID. It uses a globally scoped

@@ -1,17 +1,8 @@
 import { insertStyle } from "./insertStyle";
-import { JfObserver, useMutationObserver } from "./useMutationObserver";
+import { useMutationObserver } from "./useMutationObserver";
 import { waitForElement } from "./waitForElement";
 
-declare global {
-  interface Window {
-    jfSPA: {
-      tests: SPAState[];
-      reapplyListener?: JfObserver;
-      pageListener?: JfObserver;
-      pagePath?: string;
-    };
-  }
-}
+const isSPAType = (toCheck: unknown): toCheck is SPA => toCheck instanceof Object && "details" in toCheck;
 
 /**
  * TODO:
@@ -50,7 +41,7 @@ export type SPAState = {
     removedNode?: string;
   };
   loopCount: number;
-  details: {
+  details?: {
     isRunning: boolean;
     id?: string;
   };
@@ -217,8 +208,10 @@ export class SPA {
       this.state.details.id = id;
 
       // Check if this test is already setup
-      window.jfSPA = window.jfSPA || { tests: [] };
-      this.state.details.isRunning = !!window.jfSPA.tests.find((test) => test.details.id == id);
+      window.jfTests = window.jfTests || { tests: [] };
+      this.state.details.isRunning = !!window.jfTests.tests.find(
+        (test) => isSPAType(test) && test.details && test.details.id == id
+      );
       if (this.state.details.isRunning) {
         this.log(`Test already setup`, "warn");
         this.init = () => null;
@@ -264,7 +257,7 @@ export class SPA {
 
       // Push this test to global object and mark it as running
       this.state.details.isRunning = true;
-      window.jfSPA.tests.push(this.state);
+      window.jfTests.tests.push(this);
     } catch (e) {
       this.throwError(e);
     }
@@ -319,7 +312,7 @@ export class SPA {
    */
   private bindMainRemovalListener = () => {
     // Abort if we've already added this listener as we only need one
-    if (!!window.jfSPA.reapplyListener) return;
+    if (!!window.jfTests.reapplyListener) return;
     try {
       const target = document.querySelector("html");
       if (!!!target) throw new Error("no target");
@@ -342,8 +335,8 @@ export class SPA {
         });
       };
 
-      window.jfSPA.reapplyListener = useMutationObserver("ReapplyListener");
-      window.jfSPA.reapplyListener.observe(target, config, callback);
+      window.jfTests.reapplyListener = useMutationObserver("ReapplyListener");
+      window.jfTests.reapplyListener.observe(target, config, callback);
     } catch (e) {
       this.throwError(e);
     }
@@ -358,7 +351,7 @@ export class SPA {
    */
   private bindPageChangeListener = () => {
     // Abort if we've already added this listener as we only need one
-    if (!!window.jfSPA.pageListener) return;
+    if (!!window.jfTests.pageListener) return;
     try {
       // bind to html
       const target = document.querySelector("html");
@@ -369,21 +362,22 @@ export class SPA {
         const linkElement =
           document.querySelector('meta[name="description"]') || document.querySelector('link[rel="canonical"]');
 
-        if (!!!linkElement || !!!window.jfSPA.pagePath || window.location.pathname === window.jfSPA.pagePath) return;
+        if (!!!linkElement || !!!window.jfTests.pagePath || window.location.pathname === window.jfTests.pagePath)
+          return;
 
         // Update the current path
-        window.jfSPA.pagePath = window.location.pathname;
+        window.jfTests.pagePath = window.location.pathname;
 
         // Dispatch an event
         window.dispatchEvent(new Event("wt-pagechange"));
       };
 
       // Create the observer
-      window.jfSPA.pageListener = useMutationObserver("PageListener");
-      window.jfSPA.pageListener.observe(target, config, callback);
+      window.jfTests.pageListener = useMutationObserver("PageListener");
+      window.jfTests.pageListener.observe(target, config, callback);
 
       // Set the current path initially
-      window.jfSPA.pagePath = window.location.pathname || "";
+      window.jfTests.pagePath = window.location.pathname || "";
     } catch (e) {
       this.throwError(e);
     }
@@ -458,7 +452,9 @@ export class SPA {
     // wipe the test
     this.state.details.isRunning = false;
     // delete it from our records
-    window.jfSPA.tests = window.jfSPA.tests.filter((test) => test.details.id !== this.state.details.id);
+    window.jfTests.tests = window.jfTests.tests.filter(
+      (test) => isSPAType(test) && test.details.id !== this.state.details.id
+    );
   }
 
   /**
@@ -810,3 +806,8 @@ export class SPA {
     }
   };
 }
+
+const Test = new SPA("test", {
+  apply: () => {},
+  pageMatch: "",
+});

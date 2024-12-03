@@ -1,19 +1,8 @@
 import { insertStyle } from "./insertStyle";
-import { JfObserver, useMutationObserver } from "./useMutationObserver";
+import { useMutationObserver } from "./useMutationObserver";
 import { waitForElement } from "./waitForElement";
 
-declare global {
-  interface Window {
-    jfTests: {
-      tests: RBTest[];
-      reapplyListener?: JfObserver;
-      pageListener?: JfObserver;
-      pagePath?: string;
-    };
-  }
-}
-
-// declare global window.jfTests = {}
+const isRBTestType = (toCheck: unknown): toCheck is RBTest => toCheck instanceof Object && !("details" in toCheck);
 
 /**
  * Class framework to create and manage A/B tests on Russell & Bromley websites.
@@ -145,7 +134,7 @@ export class RBTest {
       this.id = id;
 
       window.jfTests = window.jfTests || { tests: [] };
-      this.isRunning = !!window.jfTests.tests.find((test) => test.id == id);
+      this.isRunning = !!window.jfTests.tests.find((test) => isRBTestType(test) && test.id == id);
       if (this.isRunning) {
         console.log(`%cTest ${id} already setup`, "background: orange; color: #fff; padding: 2px 5px;");
         // change our init function so it does nothing as this version of the test doesn't need to run

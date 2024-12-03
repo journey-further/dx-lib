@@ -1,11 +1,16 @@
 import { useMutationObserver } from "./useMutationObserver";
 import { waitFor } from "./waitFor";
 
-declare global {
-  interface Element {
-    ready: string[] | null;
-  }
-}
+/**
+ * TODO:
+ *
+ * - Update this to also write to the jfTests window object to create an `elementListener` observer.
+ * - That observer should bind to the html, listen for ALL changes (and only listen once)
+ * - We can then use that observer to check each time a new node is added to see whether it matches our ready state
+ * - Use the "ready" binding on Element to determine if it's already been marked as ready
+ * - We can then create an "unReady" or "elementRemoved" function that watches all "removedNodes" and matches against our
+ *   "ready" state
+ */
 
 /**
  * Detects when an element matching a specific CSS selector is added to the DOM and executes a callback.
