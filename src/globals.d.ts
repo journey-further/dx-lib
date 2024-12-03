@@ -1,10 +1,10 @@
-import { RBTest, SPA, JfObserver, JfObserverObject } from "./modules";
+import { RBTest, JfSPA, JfObserver, JfObserverObject } from "./modules";
 
 declare global {
   interface Window {
     // Add RBTest/SPA to the Window object
     jfTests: {
-      tests: (RBTest | SPA)[];
+      tests: (RBTest | JfSPA)[];
       reapplyListener?: JfObserver;
       pageListener?: JfObserver;
       elementListener?: JfObserver;

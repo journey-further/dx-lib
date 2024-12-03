@@ -7,36 +7,18 @@ const isRBTestType = (toCheck: unknown): toCheck is RBTest => toCheck instanceof
 /**
  * Class framework to create and manage A/B tests on Russell & Bromley websites.
  *
- * The `RBTest` class provides a structured way to implement tests with features such as:
+ * The `RBTest` class provides a structured way to implement tests with the following features:
  *
- * - Applying test-specific styles and functions.
- * - Watching for element removal and reapplying the test automatically.
- * - Handling page changes in Single Page Applications (SPAs).
- * - Cleaning up resources to prevent memory leaks or unintended side effects.
+ * - Automatically applies the test when initialized and ensures it only runs once.
+ * - Validates the test setup, including required parameters like `apply` and `pageRegex`.
+ * - Watches for specific DOM element removal and re-applies the test if necessary.
+ * - Listens for page changes in SPAs and ensures the test is applied or reset as needed.
+ * - Integrates with `useMutationObserver` and `waitForElement` utilities for DOM observation.
  *
  * The class integrates with globally scoped listeners and observers to manage tests effectively, even in dynamic
  * environments.
  *
- * @param {string} id - The unique identifier for the test.
- * @param {object} options - Configuration options for the test setup.
- * @param {() => void} options.apply - The function to execute when the test is applied (required).
- * @param {() => void} [options.reset] - The function to reset the test (optional).
- * @param {string} [options.style] - The CSS styles to apply during the test (optional).
- * @param {RegExp} options.pageRegex - A regular expression to match the pages where the test should run (required).
- * @param {string} [options.watchForRemoval] - A CSS selector for elements to monitor for removal and trigger
- *   reapplication (optional).
- *
- *   Key Features:
- *
- *   - Automatically applies the test when initialized and ensures it only runs once.
- *   - Validates the test setup, including required parameters like `apply` and `pageRegex`.
- *   - Watches for specific DOM element removal and re-applies the test if necessary.
- *   - Listens for page changes in SPAs and ensures the test is applied or reset as needed.
- *   - Integrates with `useMutationObserver` and `waitForElement` utilities for DOM observation.
- *
- *   Usage:
- *
- *   ```typescript
+ * @example
  *   const test = new RBTest("TestID", {
  *     apply: () => {
  *       console.log("Test applied");
@@ -49,9 +31,16 @@ const isRBTestType = (toCheck: unknown): toCheck is RBTest => toCheck instanceof
  *     watchForRemoval: "#test-element",
  *   });
  *   test.init();
- *   ```
+ *
+ * @param {string} id - The unique identifier for the test.
+ * @param {object} options - Configuration options for the test setup.
+ * @param {() => void} options.apply - The function to execute when the test is applied (required).
+ * @param {() => void} [options.reset] - The function to reset the test (optional).
+ * @param {string} [options.style] - The CSS styles to apply during the test (optional).
+ * @param {RegExp} options.pageRegex - A regular expression to match the pages where the test should run (required).
+ * @param {string} [options.watchForRemoval] - A CSS selector for elements to monitor for removal and trigger
+ *   reapplication (optional).
  */
-
 export class RBTest {
   isRunning = false;
 
@@ -74,36 +63,18 @@ export class RBTest {
   /**
    * Class framework to create and manage A/B tests on Russell & Bromley websites.
    *
-   * The `RBTest` class provides a structured way to implement tests with features such as:
+   * The `RBTest` class provides a structured way to implement tests with the following features:
    *
-   * - Applying test-specific styles and functions.
-   * - Watching for element removal and reapplying the test automatically.
-   * - Handling page changes in Single Page Applications (SPAs).
-   * - Cleaning up resources to prevent memory leaks or unintended side effects.
+   * - Automatically applies the test when initialized and ensures it only runs once.
+   * - Validates the test setup, including required parameters like `apply` and `pageRegex`.
+   * - Watches for specific DOM element removal and re-applies the test if necessary.
+   * - Listens for page changes in SPAs and ensures the test is applied or reset as needed.
+   * - Integrates with `useMutationObserver` and `waitForElement` utilities for DOM observation.
    *
    * The class integrates with globally scoped listeners and observers to manage tests effectively, even in dynamic
    * environments.
    *
-   * @param {string} id - The unique identifier for the test.
-   * @param {object} options - Configuration options for the test setup.
-   * @param {() => void} options.apply - The function to execute when the test is applied. _(Required)_
-   * @param {() => void} [options.reset] - The function to reset the test.
-   * @param {string} [options.style] - The CSS styles to apply during the test.
-   * @param {RegExp} options.pageRegex - A regular expression to match the pages where the test should run. _(Required)_
-   * @param {string} [options.watchForRemoval] - A CSS selector for elements to monitor for removal and trigger
-   *   reapplication.
-   *
-   *   Key Features:
-   *
-   *   - Automatically applies the test when initialized and ensures it only runs once.
-   *   - Validates the test setup, including required parameters like `apply` and `pageRegex`.
-   *   - Watches for specific DOM element removal and re-applies the test if necessary.
-   *   - Listens for page changes in SPAs and ensures the test is applied or reset as needed.
-   *   - Integrates with `useMutationObserver` and `waitForElement` utilities for DOM observation.
-   *
-   *   Usage:
-   *
-   *   ```javascript
+   * @example
    *   const test = new RBTest("TestID", {
    *     apply: () => {
    *       console.log("Test applied");
@@ -116,9 +87,16 @@ export class RBTest {
    *     watchForRemoval: "#test-element",
    *   });
    *   test.init();
-   *   ```
+   *
+   * @param {string} id - The unique identifier for the test.
+   * @param {object} options - Configuration options for the test setup.
+   * @param {() => void} options.apply - The function to execute when the test is applied (required).
+   * @param {() => void} [options.reset] - The function to reset the test (optional).
+   * @param {string} [options.style] - The CSS styles to apply during the test (optional).
+   * @param {RegExp} options.pageRegex - A regular expression to match the pages where the test should run (required).
+   * @param {string} [options.watchForRemoval] - A CSS selector for elements to monitor for removal and trigger
+   *   reapplication (optional).
    */
-
   constructor(
     id: string,
     options: {
