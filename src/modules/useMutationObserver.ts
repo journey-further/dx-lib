@@ -8,8 +8,11 @@
  * - `ticketId`: A unique identifier for the observer, used to manage multiple observers globally.
  */
 export interface JfObserverObject {
+  /** The active `MutationObserver` instance, or `undefined` if no observer is currently active. */
   observer: MutationObserver | undefined;
+  /** A flag indicating whether the observer is currently observing changes. */
   isObserving: boolean;
+  /** A unique identifier for the observer, used to manage multiple observers globally. */
   ticketId: string;
 }
 
@@ -36,8 +39,57 @@ export type JfObserveFunction = (target: Node, config: MutationObserverInit, cal
  * - `observe`: A method to start observing a target node for mutations.
  */
 export interface JfObserver {
+  /**
+   * Get details of the observer
+   *
+   * @example
+   *   if(STATE.observer.details.isObserving) ...
+   *
+   * @param {MutationObserver | undefined} observer The active `MutationObserver` instance, or `undefined` if no
+   *   observer is currently active.
+   * @param {boolean} isObserving A flag indicating whether the observer is currently observing changes.
+   * @param {string} ticketId A unique identifier for the observer, used to manage multiple observers globally.
+   */
   details: JfObserverObject;
+  /**
+   * Disconnect the observer, removing it from the DOM
+   *
+   * @example
+   *   if (STATE.observer.details.isObserving) STATE.observer.disconnect();
+   */
   disconnect: () => void;
+  /**
+   * Bind the observer to an element and start watching for changes. If no target exists, or the target fails to match,
+   * this will error out
+   *
+   * @example
+   *   const watchForChanges = () => {
+   *     // Get a target
+   *     const target = document.querySelector(".some--class");
+   *     if (!!!target) return;
+   *
+   *     // Setup the config
+   *     const config = { childList: true };
+   *
+   *     // Create a callback
+   *     const callback = (mutations) => {
+   *       mutations.forEach((mutation) => {
+   *         // do something
+   *       });
+   *     };
+   *
+   *     // Start observing
+   *     STATE.observer.observe(target, config, callback);
+   *   };
+   *
+   * @param {Node} target The target to bind the mutation observer to
+   * @param {MutationObserverInit} config The
+   *   [`MutationObserverInit`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver/observe#options)
+   *   config to apply to the observer
+   * @param {MutationCallback} config The
+   *   [`MutationCallback`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver/MutationObserver#callback)
+   *   callback to run when a mutation is detected
+   */
   observe: JfObserveFunction;
 }
 
@@ -51,18 +103,17 @@ export interface JfObserver {
  * To use, define an observer within a `STATE` object to init the observer, and then bind it's functionality (target,
  * config and callback) in your code.
  *
- * ```javascript
- * const STATE = {
- *   observer: useMutationObserver("ABC_123456"),
- * };
- *
- * STATE.observer.observe(target, { childList: true }, () => {});
- * ```
- *
  * The returned object provides methods to:
  *
  * - Start observing a DOM node with specific configurations (`observe`).
  * - Stop observing and clean up resources (`disconnect`).
+ *
+ * @example
+ *   const STATE = {
+ *     observer: useMutationObserver("ABC_123456"),
+ *   };
+ *
+ *   STATE.observer.observe(target, { childList: true }, () => {});
  *
  * @param {string} id - The unique ID for the observer.
  * @returns {JfObserver} An object containing details of the observer, and functions to manage its lifecycle.
