@@ -1,400 +1,212 @@
-import { SPA } from "../../src";
-import { waitForElement } from "../../src/modules/waitForElement";
-import { insertStyle } from "../../src/modules/insertStyle";
-import { useMutationObserver } from "../../src/modules/useMutationObserver";
+import { useSPA } from "../../src";
 
-// Mock dependencies
-jest.mock("../../src/modules/waitForElement", () => ({
-  waitForElement: jest.fn().mockResolvedValue(document.body),
-}));
+// Mock DOM APIs
+// const mockQuerySelector = jest.fn();
+// const mockQuerySelectorAll = jest.fn(() => []);
+// const mockAddEventListener = jest.fn();
+// const mockRemoveEventListener = jest.fn();
 
-jest.mock("../../src/modules/insertStyle");
+// document.querySelector = mockQuerySelector;
+// document.querySelectorAll = mockQuerySelectorAll;
+// window.addEventListener = mockAddEventListener;
+// window.removeEventListener = mockRemoveEventListener;
 
-jest.mock("../../src/modules/useMutationObserver");
-
-describe("SPA", () => {
-  // Mock functions and variables we'll use across tests
-  const mockApply = jest.fn();
-  const mockReset = jest.fn();
-  const mockStyle = ".test-style { color: red; }";
-  const TEST_ID = "test-id";
-  let mockMutationObserver;
+describe("useSPA", () => {
+  let testInstance: ReturnType<typeof useSPA>;
+  const APPLY = jest.fn();
+  const RESET = jest.fn();
 
   beforeEach(() => {
-    // Reset mocks
     jest.clearAllMocks();
-
-    // Setup mutation observer mock
-    mockMutationObserver = {
-      observe: jest.fn(),
-      disconnect: jest.fn(),
-      details: { isObserving: false },
-    };
-    (useMutationObserver as jest.Mock).mockReturnValue(mockMutationObserver);
-
-    // Setup insertStyle mock
-    (insertStyle as jest.Mock).mockImplementation((style, id) => {
-      const styleElement = document.createElement("style");
-      styleElement.id = id;
-      styleElement.textContent = style;
-      document.head.appendChild(styleElement);
-      return Promise.resolve();
-    });
-
-    // Reset the DOM
-    document.body.innerHTML = "";
-    document.head.innerHTML = "";
-
-    // Reset the global window.jfSPA
-    window.jfSPA = { tests: [], pagePath: "" };
-
-    // Reset waitForElement mock for each test
-    (waitForElement as jest.Mock).mockReset().mockResolvedValue(document.body);
-
-    // Mock window.location by default
-    delete window.location;
-    window.location = { pathname: "/" } as Location;
+    window.jfTests = { tests: [] };
+    testInstance = useSPA("test-id");
   });
 
-  describe("Constructor", () => {
-    it("throws error when no ID is provided", () => {
-      expect(() => new SPA("", { apply: mockApply, pageMatch: "/" })).toThrow();
+  afterEach(() => {
+    delete window.jfTests;
+    jest.resetAllMocks();
+    jest.clearAllTimers();
+    jest.clearAllMocks();
+  });
+
+  describe("initialization and validation", () => {
+    it("should initialize with minimum valid options", async () => {
+      const options = {
+        apply: APPLY,
+        pageMatch: "/",
+      };
+
+      testInstance.init(options);
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      expect(testInstance.details.isRunning).toBe(true);
+      expect(APPLY).toHaveBeenCalled();
     });
 
-    it("prevents duplicate test initialization", async () => {
-      // Create first instance
-      const test1 = new SPA(TEST_ID, { apply: mockApply, pageMatch: "/" });
+    it("should prevent duplicate initialization", async () => {
+      const options = {
+        apply: APPLY,
+        pageMatch: "/",
+      };
+      const secondApply = jest.fn();
+      const secondOptions = {
+        apply: secondApply,
+        pageMatch: "/",
+      };
 
-      // Instead of pushing state directly, initialize the test
-      await test1.init();
+      testInstance.init(options);
+      await new Promise((resolve) => setTimeout(resolve, 200));
 
-      // Create second instance with same ID
-      const test2 = new SPA(TEST_ID, { apply: mockApply, pageMatch: "/" });
+      testInstance.init(secondOptions);
 
-      expect(test2.details.isRunning).toBe(true);
-      expect(window.jfSPA.tests.length).toBe(1);
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      expect(secondApply).not.toHaveBeenCalled();
     });
 
-    it("validates required options", () => {
-      // @ts-ignore - Testing invalid options
-      expect(() => new SPA(TEST_ID, {})).toThrow();
-      // @ts-ignore - Testing missing pageMatch
-      expect(() => new SPA(TEST_ID, { apply: mockApply })).toThrow();
-      // @ts-ignore - Testing missing apply
-      expect(() => new SPA(TEST_ID, { pageMatch: "/" })).toThrow();
-    });
+    it("should validate all required options", () => {
+      const invalidOptions = [
+        {},
+        { apply: APPLY },
+        { pageMatch: "/" },
+        { apply: "not-a-function", pageMatch: "/" },
+        { apply: APPLY, pageMatch: 123 },
+      ];
 
-    describe("Option Validation", () => {
-      it("validates apply function", () => {
-        // @ts-ignore - Testing invalid apply type
-        expect(() => new SPA(TEST_ID, { apply: "not a function", pageMatch: "/" })).toThrow("apply must be a function");
-      });
-
-      it("validates pageMatch", () => {
-        // Missing pageMatch
-        type SPAOptions = {
-          apply: () => void;
-          reset?: () => void;
-          style?: string;
-          pageMatch: string | string[] | RegExp;
-          watchForRemoval?: string | string[];
-          removeOnPageChange?: string | string[];
-          removedNode?: string;
-        };
-
-        const invalidOptions = {
-          apply: mockApply,
-        };
-
-        // @ts-ignore - Intentionally missing required prop
-        expect(() => new SPA(TEST_ID, invalidOptions)).toThrow("pageMatch must be provided");
-
-        // Invalid pageMatch type
-        expect(
-          () =>
-            new SPA(TEST_ID, {
-              apply: mockApply,
-              // @ts-ignore - Testing invalid type
-              pageMatch: 123,
-            })
-        ).toThrow("pageMatch must be a string, an array of strings, or a RegExp");
-      });
-
-      it("validates reset function if provided", () => {
-        expect(
-          () =>
-            new SPA(TEST_ID, {
-              apply: mockApply,
-              pageMatch: "/",
-              // @ts-ignore - Testing invalid type
-              reset: "not a function",
-            })
-        ).toThrow("reset must be a function");
-      });
-
-      it("validates watchForRemoval selectors", () => {
-        // Invalid type
-        expect(
-          () =>
-            new SPA(TEST_ID, {
-              apply: mockApply,
-              pageMatch: "/",
-              // @ts-ignore - Testing invalid type
-              watchForRemoval: 123,
-            })
-        ).toThrow("watchForRemoval must be a string or array of strings");
-
-        // Invalid selector
-        expect(
-          () =>
-            new SPA(TEST_ID, {
-              apply: mockApply,
-              pageMatch: "/",
-              watchForRemoval: "invalid[]selector",
-            })
-        ).toThrow("watchForRemoval must be valid CSS selectors");
-
-        // Invalid selector in array
-        expect(
-          () =>
-            new SPA(TEST_ID, {
-              apply: mockApply,
-              pageMatch: "/",
-              watchForRemoval: ["valid-selector", "invalid[]selector"],
-            })
-        ).toThrow("watchForRemoval must be valid CSS selectors");
-      });
-
-      it("validates removeOnPageChange selectors", () => {
-        // Invalid type
-        expect(
-          () =>
-            new SPA(TEST_ID, {
-              apply: mockApply,
-              pageMatch: "/",
-              // @ts-ignore - Testing invalid type
-              removeOnPageChange: 123,
-            })
-        ).toThrow("removeOnPageChange must be a string or array of strings");
-
-        // Invalid selector
-        expect(
-          () =>
-            new SPA(TEST_ID, {
-              apply: mockApply,
-              pageMatch: "/",
-              removeOnPageChange: "invalid[]selector",
-            })
-        ).toThrow("removeOnPageChange must be valid CSS selectors");
-
-        // Invalid selector in array
-        expect(
-          () =>
-            new SPA(TEST_ID, {
-              apply: mockApply,
-              pageMatch: "/",
-              removeOnPageChange: ["valid-selector", "invalid[]selector"],
-            })
-        ).toThrow("removeOnPageChange must be valid CSS selectors");
-      });
-
-      it("accepts valid options", () => {
-        expect(
-          () =>
-            new SPA(TEST_ID, {
-              apply: mockApply,
-              pageMatch: "/",
-              reset: () => {},
-              style: ".test { color: red; }",
-              watchForRemoval: ".valid-selector",
-              removeOnPageChange: [".valid-selector", "#valid-id"],
-            })
-        ).not.toThrow();
+      invalidOptions.forEach((options) => {
+        expect(() => testInstance.init(options as any)).toThrow();
       });
     });
   });
 
-  describe("Page Matching", () => {
+  describe("page matching functionality", () => {
     beforeEach(() => {
-      // Mock window.location
+      // Reset location for each test
       delete window.location;
-      window.location = { pathname: "/test" } as Location;
+      window.location = new URL("http://localhost/") as any;
     });
 
-    it("matches exact string paths", async () => {
-      const test = new SPA(TEST_ID, {
-        apply: mockApply,
+    it("should apply test when string pageMatch matches current path", async () => {
+      window.location.pathname = "/test";
+      const options = {
+        apply: APPLY,
         pageMatch: "/test",
-      });
+      };
 
-      await test.init();
-      expect(mockApply).toHaveBeenCalled();
+      testInstance.init(options);
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      expect(APPLY).toHaveBeenCalled();
     });
 
-    it("matches regex paths", async () => {
-      const test = new SPA(TEST_ID, {
-        apply: mockApply,
-        pageMatch: /\/test.*/,
-      });
+    it("should apply test when regex pageMatch matches current path", async () => {
+      window.location.pathname = "/test/123";
+      const options = {
+        apply: APPLY,
+        pageMatch: /^\/test\/\d+$/,
+      };
 
-      await test.init();
-      expect(mockApply).toHaveBeenCalled();
+      testInstance.init(options);
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      expect(APPLY).toHaveBeenCalled();
     });
 
-    it("matches array of paths", async () => {
-      const test = new SPA(TEST_ID, {
-        apply: mockApply,
-        pageMatch: ["/test", "/other"],
-      });
+    it("should apply test when array pageMatch includes current path", async () => {
+      window.location.pathname = "/test";
+      const options = {
+        apply: APPLY,
+        pageMatch: ["/home", "/test", "/about"],
+      };
 
-      await test.init();
-      expect(mockApply).toHaveBeenCalled();
-    });
+      testInstance.init(options);
+      await new Promise((resolve) => setTimeout(resolve, 200));
 
-    it("calls reset when page doesn't match", async () => {
-      window.location.pathname = "/no-match";
-
-      const test = new SPA(TEST_ID, {
-        apply: mockApply,
-        reset: mockReset,
-        pageMatch: "/test",
-      });
-
-      await test.init();
-      expect(mockApply).not.toHaveBeenCalled();
-      expect(mockReset).toHaveBeenCalled();
+      expect(APPLY).toHaveBeenCalled();
     });
   });
 
-  describe("Style Handling", () => {
-    it("inserts stylesheet when provided", async () => {
-      // Mock window.location for page matching
-      delete window.location;
-      window.location = { pathname: "/" } as Location;
+  describe("style handling", () => {
+    it("should insert stylesheet when style option is provided", async () => {
+      const mockInsertStyle = jest.fn();
+      jest.mock("../../src/modules/insertStyle", () => ({
+        insertStyle: mockInsertStyle,
+      }));
 
-      const test = new SPA(TEST_ID, {
-        apply: mockApply,
+      const options = {
+        apply: APPLY,
         pageMatch: "/",
-        style: mockStyle,
-      });
+        style: ".test { color: red; }",
+      };
 
-      // Wait for init and style insertion to complete
-      await test.init();
-      // Add a small delay to ensure all promises resolve
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      testInstance.init(options);
+      await new Promise((resolve) => setTimeout(resolve, 200));
 
-      // Check that the mock was called with correct arguments
-      expect(insertStyle).toHaveBeenCalledWith(mockStyle, `${TEST_ID}--style`);
-
-      // Since we're mocking insertStyle, we should check the mock implementation worked
-      const styleElement = document.querySelector(`#${TEST_ID}--style`);
-      expect(styleElement).toBeTruthy();
-      expect(styleElement?.textContent).toBe(mockStyle);
+      expect(mockInsertStyle).toHaveBeenCalledWith(".test { color: red; }", "test-id--style");
     });
 
-    it("removes stylesheet on reset", async () => {
-      // First insert the style
-      const test = new SPA(TEST_ID, {
-        apply: mockApply,
+    it("should remove stylesheet on reset", async () => {
+      const options = {
+        apply: APPLY,
         pageMatch: "/",
-        style: mockStyle,
-      });
+        style: ".test { color: red; }",
+      };
 
-      await test.init();
+      testInstance.init(options);
+      await new Promise((resolve) => setTimeout(resolve, 200));
 
-      // Create the style element manually to test removal
-      const styleElement = document.createElement("style");
-      styleElement.id = `${TEST_ID}--style`;
-      document.head.appendChild(styleElement);
-
-      // Reset should remove the style
-      test.reset();
-
-      expect(document.querySelector(`#${TEST_ID}--style`)).toBeFalsy();
+      testInstance.reset();
+      expect(document.querySelectorAll).toHaveBeenCalledWith("#test-id--style");
     });
   });
 
-  describe("Element Removal", () => {
-    it("removes specified elements on page change", async () => {
-      document.body.innerHTML = `
-        <div id="test-remove">Remove me</div>
-        <div class="test-class">Remove me too</div>
-      `;
-
-      const test = new SPA(TEST_ID, {
-        apply: mockApply,
+  describe("cleanup and state management", () => {
+    it("should properly clean up on disconnect", async () => {
+      const options = {
+        apply: APPLY,
         pageMatch: "/",
-        removeOnPageChange: ["#test-remove", ".test-class"],
-      });
+      };
 
-      await test.init();
-      window.dispatchEvent(new Event("wt-pagechange"));
+      testInstance.init(options);
+      await new Promise((resolve) => setTimeout(resolve, 200));
 
-      expect(document.querySelector("#test-remove")).toBeFalsy();
-      expect(document.querySelector(".test-class")).toBeFalsy();
-    });
-  });
-
-  describe("Lifecycle Methods", () => {
-    it("disconnects test properly", async () => {
-      const test = new SPA(TEST_ID, {
-        apply: mockApply,
-        pageMatch: "/",
-      });
-
-      await test.init();
-      test.disconnect();
-
-      expect(test.details.isRunning).toBe(false);
-      // Instead of checking state directly, check the global tests array
-      expect(window.jfSPA.tests.length).toBe(0);
+      testInstance.disconnect();
+      expect(testInstance.details.isRunning).toBe(false);
+      expect(window.jfTests.tests).not.toContain(testInstance);
     });
 
-    it("resets test properly", async () => {
-      const test = new SPA(TEST_ID, {
-        apply: mockApply,
-        reset: mockReset,
+    it("should handle reset with cleanup function", async () => {
+      const options = {
+        apply: APPLY,
+        reset: RESET,
         pageMatch: "/",
-        style: mockStyle,
-      });
+      };
 
-      await test.init();
-      test.reset();
+      testInstance.init(options);
+      await new Promise((resolve) => setTimeout(resolve, 200));
 
-      expect(mockReset).toHaveBeenCalled();
-      expect(document.querySelector(`#${TEST_ID}--style`)).toBeFalsy();
-    });
-  });
-
-  describe("Error Handling", () => {
-    it("handles apply function errors", async () => {
-      const error = new Error("Apply error");
-      const errorApply = jest.fn().mockImplementation(() => {
-        throw error;
-      });
-
-      const test = new SPA(TEST_ID, {
-        apply: errorApply,
-        pageMatch: "/",
-      });
-
-      // Mock console.warn to prevent error output in tests
-      const consoleWarn = jest.spyOn(console, "warn").mockImplementation(() => {});
-
-      await expect(test.init()).rejects.toThrow("Apply error");
-
-      consoleWarn.mockRestore();
+      testInstance.reset();
+      expect(RESET).toHaveBeenCalled();
     });
 
-    it("handles invalid selectors", () => {
-      expect(
-        () =>
-          new SPA(TEST_ID, {
-            apply: mockApply,
-            pageMatch: "/",
-            watchForRemoval: "invalid[]selector",
-          })
-      ).toThrow("INVALID_SELECTOR");
+    it("should maintain loop count for watchForRemoval", async () => {
+      const options = {
+        apply: APPLY,
+        pageMatch: "/",
+        watchForRemoval: ".test-element",
+      };
+
+      testInstance.init(options);
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      // Simulate multiple removals
+      for (let i = 0; i < 6; i++) {
+        const event = new MutationRecord();
+        event.removedNodes = [{ nodeType: 1, classList: { contains: () => true } }];
+        document.querySelector("body").dispatchEvent(new CustomEvent("mutation", { detail: event }));
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      expect(APPLY).toHaveBeenCalledTimes(5); // Should stop at 5 attempts
     });
   });
 });

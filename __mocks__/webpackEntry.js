@@ -1,4 +1,10 @@
-import { SPA } from "../dist";
+// eslint-ignore-next-line
+import { useMutationObserver, useSPA } from "../dist";
+
+const STATE = {
+  test: useSPA("123"),
+  observer: useMutationObserver("xyz"),
+};
 
 const applyChanges = () => {
   console.log("APPLYING!");
@@ -9,7 +15,7 @@ const applyChanges = () => {
   document.querySelector("main").insertAdjacentHTML("afterbegin", `<div class="test--element"></div>`);
 };
 
-const Test = new SPA("GHD_123456", {
+STATE.test.init({
   apply: applyChanges,
   style: ".test--element { background:red;height:100px;width:100vw;}",
   pageMatch: /ghd-duet/g,
@@ -17,4 +23,4 @@ const Test = new SPA("GHD_123456", {
   removeOnPageChange: ".test--element",
 });
 
-Test.init();
+STATE.observer.observe();
