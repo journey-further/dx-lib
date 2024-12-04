@@ -81,7 +81,7 @@ export interface JfSPA {
    * @param {string | string[]} [options.removeOnPageChange] - Selector(s) for elements to remove when page changes
    * @param {string | string[]} [options.removedNode] - Name of node to watch for being removed on SPA reset
    */
-  init: (options: JfSPAOptions) => void;
+  init: (options: JfSPAOptions) => unknown;
 }
 
 /**
@@ -259,15 +259,15 @@ export const useSPA = (id: string): JfSPA => {
       );
       if (STATE.details.isRunning) {
         log(`Test already setup`, "warn");
-        initTest = () => null;
-        return;
+        // initTest = () => null;
+        return false;
       }
 
       log(`Creating Test`, "info");
 
       const hasValidOptions = validateOptions(options);
       if (!hasValidOptions) {
-        return;
+        return false;
       }
 
       // Add required options
@@ -303,8 +303,10 @@ export const useSPA = (id: string): JfSPA => {
       // Push this test to global object and mark it as running
       STATE.details.isRunning = true;
       window.jfTests.tests.push(this);
+      return true;
     } catch (e) {
       throwError(e);
+      return false;
     }
   };
 
@@ -534,6 +536,11 @@ export const useSPA = (id: string): JfSPA => {
           }
         : error;
 
+    // If it's already a formatted error, throw as-is
+    if (error.message.includes(`[${STATE.details.id}]`)) {
+      throw error;
+    }
+    // Otherwise, format the error
     throw new Error(`[${STATE.details.id}] ${errorObj.code}: ${errorObj.message}`, errorObj.details);
   };
 
@@ -864,7 +871,8 @@ export const useSPA = (id: string): JfSPA => {
     init: (options: JfSPAOptions) => {
       try {
         // set up the test
-        setupTest(options);
+        const isSetup = setupTest(options);
+        if (!!!isSetup) return;
         // run the init function
         initTest();
       } catch (error) {
