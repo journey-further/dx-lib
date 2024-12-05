@@ -353,7 +353,7 @@ export class RBTest {
     // Abort if we've already added this listener as we only need one
     if (!!window.jfTests.reapplyListener) return;
     try {
-      const target = document.querySelector("html");
+      const target = document;
       if (!!!target) throw new Error("no target");
 
       const config: MutationObserverInit = { childList: true, subtree: true };
