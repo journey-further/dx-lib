@@ -360,6 +360,7 @@ export class RBTest {
 
       const callback: MutationCallback = (mutations) => {
         mutations.forEach((mutation) => {
+          if (/qa_mode=true/.test(document.cookie)) console.log(mutation);
           if (mutation.addedNodes.length === 0) return;
           mutation.addedNodes.forEach(async (node) => {
             try {
