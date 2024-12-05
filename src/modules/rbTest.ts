@@ -205,6 +205,11 @@ export class RBTest {
       console.log(`\t%cBinding Page Change`, "background: purple; color: #fff; padding: 2px 5px;");
       window.removeEventListener("wt-pagechange", this.#handlePageChange);
       window.addEventListener("wt-pagechange", this.#handlePageChange);
+
+      // Bind an event to handle the re-init
+      console.log(`\t%cBinding Re-Init`, "background: purple; color: #fff; padding: 2px 5px;");
+      window.removeEventListener("jf-reinit", this.#handleReInit);
+      window.addEventListener("jf-reinit", this.#handleReInit);
     } catch (e) {
       this.#error(e);
     }
@@ -242,6 +247,15 @@ export class RBTest {
   #handlePageChange = async () => {
     try {
       console.log(`%cPage changed`, "background: #199bd7; color: #fff; padding: 2px 5px;");
+      await this.init();
+    } catch (e) {
+      this.#error(e);
+    }
+  };
+
+  #handleReInit = async () => {
+    try {
+      console.log(`%cSPA changed`, "background: #199bd7; color: #fff; padding: 2px 5px;");
       await this.init();
     } catch (e) {
       this.#error(e);
@@ -353,14 +367,13 @@ export class RBTest {
     // Abort if we've already added this listener as we only need one
     if (!!window.jfTests.reapplyListener) return;
     try {
-      const target = document;
+      const target = document.querySelector("html");
       if (!!!target) throw new Error("no target");
 
       const config: MutationObserverInit = { childList: true, subtree: true };
 
       const callback: MutationCallback = (mutations) => {
         mutations.forEach((mutation) => {
-          if (/qa_mode=true/.test(document.cookie)) console.log(mutation);
           if (mutation.addedNodes.length === 0) return;
           mutation.addedNodes.forEach(async (node) => {
             try {
@@ -370,7 +383,8 @@ export class RBTest {
                 `%cMain element re-added, restarting test`,
                 "background: green; color: #fff; padding: 2px 5px;"
               );
-              await this.init();
+              // await this.init();
+              window.dispatchEvent(new Event("jf-reinit"));
             } catch (e) {
               this.#error(e);
             }
