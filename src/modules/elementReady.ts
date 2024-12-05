@@ -10,6 +10,10 @@ import { waitFor } from "./waitFor";
  * - Use the "ready" binding on Element to determine if it's already been marked as ready
  * - We can then create an "unReady" or "elementRemoved" function that watches all "removedNodes" and matches against our
  *   "ready" state
+ * - Push to array of elements to check: [{selector: ".some_class", id: "RAB_010996--ready"}]
+ * - Then use the single mutation observer to check the array and run through to detect them on every change?
+ * - Can check if an elementReady is already bound using that id
+ * - Could also take an array of `selector`
  */
 
 /**

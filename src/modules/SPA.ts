@@ -297,8 +297,13 @@ export const useSPA = (id: string): JfSPA => {
 
       // Bind an event to handle the page change
       log(`+ Binding Page Change`, "detail");
-      window.removeEventListener("wt-pagechange", handlePageChange);
-      window.addEventListener("wt-pagechange", handlePageChange);
+      window.removeEventListener("jf-pagechange", handlePageChange);
+      window.addEventListener("jf-pagechange", handlePageChange);
+
+      // Bind an event to handle the page change
+      log(`+ Binding SPA Re-init`, "detail");
+      window.removeEventListener("jf-reinit", handleReInit);
+      window.addEventListener("jf-reinit", handleReInit);
 
       // Push this test to global object and mark it as running
       STATE.details.isRunning = true;
@@ -372,9 +377,8 @@ export const useSPA = (id: string): JfSPA => {
           mutation.addedNodes.forEach(async (node) => {
             try {
               if (node.nodeName !== STATE.options.removedNode) return;
-              // the MAIN element has been re-added, so re-init this test
-              log(`Main element re-added, restarting test`, "warn");
-              await initTest();
+              // the MAIN element has been re-added, so dispatch an event
+              window.dispatchEvent(new Event("jf-reinit"));
             } catch (e) {
               throwError(e);
             }
@@ -398,7 +402,7 @@ export const useSPA = (id: string): JfSPA => {
    */
   const bindPageChangeListener = () => {
     // Abort if we've already added this listener as we only need one
-    if (!!window.jfTests.pageListener) return;
+    if (!!window.jfTests.pageChangeListener) return;
     try {
       // bind to html
       const target = document.querySelector("html");
@@ -416,12 +420,12 @@ export const useSPA = (id: string): JfSPA => {
         window.jfTests.pagePath = window.location.pathname;
 
         // Dispatch an event
-        window.dispatchEvent(new Event("wt-pagechange"));
+        window.dispatchEvent(new Event("jf-pagechange"));
       };
 
       // Create the observer
-      window.jfTests.pageListener = useMutationObserver("PageListener");
-      window.jfTests.pageListener.observe(target, config, callback);
+      window.jfTests.pageChangeListener = useMutationObserver("PageChangeListener");
+      window.jfTests.pageChangeListener.observe(target, config, callback);
 
       // Set the current path initially
       window.jfTests.pagePath = window.location.pathname || "";
@@ -436,7 +440,7 @@ export const useSPA = (id: string): JfSPA => {
    * @returns {Promise<void>}
    * @throws {Error} If initialization fails
    */
-  let initTest = async (): Promise<void> => {
+  const initTest = async (): Promise<void> => {
     try {
       // If we have pageMatch, then check that first before we run anything
       if (!!STATE.options.pageMatch) {
@@ -687,6 +691,21 @@ export const useSPA = (id: string): JfSPA => {
     try {
       log(`Page changed`, "info");
       if (!!STATE.options.removeOnPageChange) handleRemoveOnPageChange();
+      await initTest();
+    } catch (e) {
+      throwError(e);
+    }
+  };
+
+  /**
+   * Handles SPA reset events when the entire DOM is reset, restarting the test
+   *
+   * @returns {Promise<void>}
+   * @throws {Error} If SPA reinit handling fails
+   */
+  const handleReInit = async () => {
+    try {
+      log(`SPA reset, restarting test`, "warn");
       await initTest();
     } catch (e) {
       throwError(e);

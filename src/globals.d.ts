@@ -7,6 +7,7 @@ declare global {
       tests: (RBTest | JfSPA)[];
       reapplyListener?: JfObserver;
       pageListener?: JfObserver;
+      pageChangeListener?: JfObserver;
       elementListener?: JfObserver;
       pagePath?: string;
     };
