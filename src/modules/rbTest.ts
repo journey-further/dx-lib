@@ -1,23 +1,26 @@
 import { insertStyle } from "./insertStyle";
+import { useSPA } from "./SPA";
 import { useMutationObserver } from "./useMutationObserver";
 import { waitForElement } from "./waitForElement";
 
 const isRBTestType = (toCheck: unknown): toCheck is RBTest => toCheck instanceof Object && !("details" in toCheck);
 
 /**
- * Class framework to create and manage A/B tests on Russell & Bromley websites.
+ * @deprecated ❌ This function is no longer in use, please see {@link useSPA} ❌
  *
- * The `RBTest` class provides a structured way to implement tests with the following features:
+ *   -_-_-_-_-_-_-_-_-_-_-
  *
- * - Automatically applies the test when initialized and ensures it only runs once.
- * - Validates the test setup, including required parameters like `apply` and `pageRegex`.
- * - Watches for specific DOM element removal and re-applies the test if necessary.
- * - Listens for page changes in SPAs and ensures the test is applied or reset as needed.
- * - Integrates with `useMutationObserver` and `waitForElement` utilities for DOM observation.
+ *   Class framework to create and manage A/B tests on Russell & Bromley websites. The `RBTest` class provides a
+ *   structured way to implement tests with the following features:
  *
- * The class integrates with globally scoped listeners and observers to manage tests effectively, even in dynamic
- * environments.
+ *   - Automatically applies the test when initialized and ensures it only runs once.
+ *   - Validates the test setup, including required parameters like `apply` and `pageRegex`.
+ *   - Watches for specific DOM element removal and re-applies the test if necessary.
+ *   - Listens for page changes in SPAs and ensures the test is applied or reset as needed.
+ *   - Integrates with `useMutationObserver` and `waitForElement` utilities for DOM observation.
  *
+ *   The class integrates with globally scoped listeners and observers to manage tests effectively, even in dynamic
+ *   environments.
  * @example
  *   const test = new RBTest("TestID", {
  *     apply: () => {
@@ -61,19 +64,22 @@ export class RBTest {
   id: string;
 
   /**
-   * Class framework to create and manage A/B tests on Russell & Bromley websites.
+   * @deprecated ❌ This function is no longer in use, please see {@link useSPA} ❌
    *
-   * The `RBTest` class provides a structured way to implement tests with the following features:
+   *   -_-_-_-_-_-_-_-_-_-_-
    *
-   * - Automatically applies the test when initialized and ensures it only runs once.
-   * - Validates the test setup, including required parameters like `apply` and `pageRegex`.
-   * - Watches for specific DOM element removal and re-applies the test if necessary.
-   * - Listens for page changes in SPAs and ensures the test is applied or reset as needed.
-   * - Integrates with `useMutationObserver` and `waitForElement` utilities for DOM observation.
+   *   Class framework to create and manage A/B tests on Russell & Bromley websites.
    *
-   * The class integrates with globally scoped listeners and observers to manage tests effectively, even in dynamic
-   * environments.
+   *   The `RBTest` class provides a structured way to implement tests with the following features:
    *
+   *   - Automatically applies the test when initialized and ensures it only runs once.
+   *   - Validates the test setup, including required parameters like `apply` and `pageRegex`.
+   *   - Watches for specific DOM element removal and re-applies the test if necessary.
+   *   - Listens for page changes in SPAs and ensures the test is applied or reset as needed.
+   *   - Integrates with `useMutationObserver` and `waitForElement` utilities for DOM observation.
+   *
+   *   The class integrates with globally scoped listeners and observers to manage tests effectively, even in dynamic
+   *   environments.
    * @example
    *   const test = new RBTest("TestID", {
    *     apply: () => {
