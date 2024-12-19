@@ -1,14 +1,47 @@
 import { insertStyle } from "./insertStyle";
 import { useMutationObserver } from "./useMutationObserver";
 import { waitForElement } from "./waitForElement";
+import {
+  log as _log,
+  isDebug,
+  isFunction,
+  isNumber,
+  isString,
+  isStringArray,
+  isRegExp,
+  LogLevel,
+  validateSelectors,
+  isObject,
+} from "../helpers";
+import { debounce } from "./debounce";
+
+const PAGE_CHANGE_VERSION = "1.0";
+const REINIT_VERSION = "1.0";
+const LIB_INIT = {
+  pagePath: window.location.pathname,
+  experiments: [],
+};
+
+// TODO: add screenSize and add a window resize listener
 
 /**
- * Type guard to check if an unknown value is a JfSPA instance
+ * Type guard to check if an unknown value is a JfSPAPageOptions instance
  *
- * @param {unknown} toCheck - Value to check
- * @returns {boolean} True if value is a JfSPA instance
+ * @param {unknown} value - Value to check
+ * @returns {boolean} True if value is a JfSPAPageOptions instance
  */
-export const isSPAType = (toCheck: unknown): toCheck is JfSPA => toCheck instanceof Object && "details" in toCheck;
+export const isLocationObject = (value: unknown): value is JfSPAPageOptions =>
+  value instanceof Object && "match" in value;
+
+/**
+ * Type guard to check if a value is matches one of "pathname", "hostname", "href", "hash", "search"
+ *
+ * @param {unknown} value - Value to check
+ * @returns {boolean} True if the value is one of: "pathname", "hostname", "href", "hash", "search"
+ */
+export const isPageObjectType = (value: unknown): value is "pathname" | "hostname" | "href" | "hash" | "search" =>
+  typeof value === "string" &&
+  (value == "pathname" || value == "hostname" || value == "href" || value == "hash" || value == "search");
 
 /**
  * Details about the current state of a SPA test
@@ -25,12 +58,12 @@ export interface JfSPADetails {
 }
 
 /**
- * Main interface for a SPA test instance
+ * Interface for an useSPA return instance
  *
- * @property {JfSPADetails} details Provides details of the running test
- * @property {() => void} disconnect Completely removes the test and cleans up any registered listeners
- * @property {() => void} reset Resets the test by removing styles and executing the reset function if provided
- * @property {(options: JfSPAOptions) => void} init Start the test using the options provided
+ * - `details` Provides details of the running test
+ * - `destroy` Completely removes the test and cleans up any registered listeners
+ * - `reset` Resets the test by removing styles and executing the reset function if provided
+ * - `init` Start the test using the options provided
  */
 export interface JfSPA {
   /**
@@ -44,9 +77,9 @@ export interface JfSPA {
    * Completely removes the test and cleans up any registered listeners
    *
    * @example
-   *   Test.disconnect();
+   *   Test.destroy();
    */
-  disconnect: () => void;
+  destroy: () => void;
   /**
    * Resets the test by removing styles and executing the reset function if provided
    *
@@ -66,17 +99,18 @@ export interface JfSPA {
    *       console.log("Test reset");
    *     },
    *     style: ".my-test { color: red; }",
-   *     pageMatch: "/test-page", // or ["/page1", "/page2"] or /\/test-./
+   *     location: "/test-page", // or ["/page1", "/page2"] or /\/test-./
    *     watchForRemoval: "#test-element",
    *     removeOnPageChange: [".test-class", "#test-id"],
    *   });
    *
    * @param {object} options - Configuration options for the test setup
-   * @param {Function} options.apply - Function to execute when applying the test. _(Required)_
+   * @param {Function} options.apply - Function to execute when applying the test. _(required)_
    * @param {Function} [options.reset] - Function to execute when resetting the test
    * @param {string} [options.style] - CSS styles to apply during the test
-   * @param {string | string[] | RegExp} options.pageMatch - Pattern(s) to match the current page against. _(Required)_
-   *   Can be a string for exact match, array of strings for multiple matches, or RegExp for pattern matching
+   * @param {string | string[] | RegExp | JfSPAOptions} options.location - Pattern(s) to match the current page against.
+   *   _(required)_ Can be a string for exact match, array of strings for multiple matches, or RegExp for pattern
+   *   matching
    * @param {string | string[]} [options.watchForRemoval] - Selector(s) to watch for removal and trigger reapplication
    * @param {string | string[]} [options.removeOnPageChange] - Selector(s) for elements to remove when page changes
    * @param {string | string[]} [options.removedNode] - Name of node to watch for being removed on SPA reset
@@ -113,43 +147,54 @@ export type JfSPAError = {
 };
 
 /**
- * Log level types for internal logging
- *
- * @typedef {"info" | "detail" | "success" | "warn" | "error"} SPALogLevel
- */
-export type SPALogLevel = "info" | "detail" | "success" | "warn" | "error";
-
-/**
  * Configuration options for SPA test initialization
  *
  * @property {() => void} apply - Function to execute when applying the test
  * @property {() => void} [reset] - Optional function to execute when resetting the test
  * @property {string} [style] - Optional CSS styles to apply
- * @property {string | string[] | RegExp} pageMatch - Pattern(s) to match the current page URL
+ * @property {string | string[] | RegExp | JfSPAPageOptions} location - Pattern(s) to match the current page URL
  * @property {string | string[]} [watchForRemoval] - Selector(s) to watch for removal
  * @property {string | string[]} [removeOnPageChange] - Selector(s) for elements to remove on page change
  * @property {string} [removedNode] - Name of node to watch for removal
  * @interface JfSPAOptions
  */
 export interface JfSPAOptions {
-  /** Function to execute when applying the test. _(Required)_ */
+  /** Function to execute when applying the test. _(required)_ */
   apply: () => unknown;
   /** Function to execute when resetting the test */
   reset?: () => unknown;
   /** CSS styles to apply during the test. Will apply only once, using the test's `id` as a unique identifier */
   style?: string;
   /**
-   * Pattern(s) to match the current page against. _(Required)_
+   * Pattern(s) to match the current page against. _(required)_
+   *
+   * If passing just a string, array of strings, or regex pattern, this will be matched against the page path.
+   * Alternatively, if passing an options object, you can include:
+   *
+   * - `match` A string, array of strings, or regex pattern to match _(required)_
+   * - `type` The location scope to match against - can be any of: pathname, hostname, href, hash, search _(default:
+   *   pathname)_
+   * - `condition` A function that returns `true` or `false` to determine if the page is the correct one. Will poll every
+   *   50ms until the `timeout` is reached
+   * - `timeout` How long in ms to wait before declaring the page condition not matched _(default: 2000)_
    *
    * @example
    *   // match pages with a regex string
-   *   pageMatch: /product/;
+   *   location: /product/";
    *   // match a page with a string (string == window.location.pathname)
-   *   pageMatch: "/";
+   *   location: "/";
    *   // match multiple pages (same as above)
-   *   pageMatch: ["/", "/home"];
+   *   location: ["/", "/home"];
+   *
+   * @example
+   *   // match using an advanced options object
+   *   location: {
+   *   match: "https://www.",
+   *   type: "href",
+   *   condition: () => !!document.querySelector(".product")
+   *   }
    */
-  pageMatch: string | string[] | RegExp;
+  location: string | string[] | RegExp | JfSPAPageOptions;
   /**
    * Selector(s) to watch for removal and trigger reapplication. Useful when an SPA detects incorrect content in the DOM
    * and removes it
@@ -179,6 +224,42 @@ export interface JfSPAOptions {
    * Only required if this SPA does not have a `<main>` element
    */
   removedNode?: string;
+  /**
+   * Whether to run the reset function on every page change, rather than only when the page does not match _(default:
+   * false)_
+   */
+  alwaysReset?: boolean;
+  /**
+   * Whether to limit the test to only run on specific screen sizes. Will add a resize listener to the page, and run the
+   * `reset` and `apply` functions if the page falls outside/inside the given bounds.
+   *
+   * One or both of `minWidth` and `maxWidth` can be provided
+   *
+   * @example
+   *   // This will only run on screens between 601px and 1023px
+   *   screen: {
+   *   minWidth: 601,
+   *   maxWidth: 1023
+   *   }
+   *
+   *   // This will run on any screen smaller than 767px
+   *   screen: {
+   *   maxWidth: 767
+   *   }
+   */
+  screen?: {
+    /** The minimum screen width to apply the test. Screens **smaller** than this will be excluded */
+    minWidth?: number;
+    /** The maximum screen width to apply the test. Screens **larger** than this will be excluded */
+    maxWidth?: number;
+  };
+}
+
+export interface JfSPAPageOptions {
+  match: string | string[] | RegExp;
+  type?: "pathname" | "hostname" | "href" | "hash" | "search";
+  condition?: () => boolean;
+  timeout?: number;
 }
 
 /**
@@ -187,7 +268,7 @@ export interface JfSPAOptions {
  * Function provides a structured way to implement tests with the following features:
  *
  * - Automatically applies the test when initialized and ensures it only runs once
- * - Validates the test setup, including required parameters like `apply` and `pageMatch`
+ * - Validates the test setup, including required parameters like `apply` and `location`
  * - Watches for specific DOM element removal and re-applies the test if necessary
  * - Listens for page changes in SPAs and ensures the test is applied or reset as needed
  * - Integrates with mutation observers for reliable DOM monitoring
@@ -197,7 +278,7 @@ export interface JfSPAOptions {
  *
  * - Start running a test (`init`)
  * - Reset a test (`reset`)
- * - Completely remove a test (`disconnect`)
+ * - Completely remove a test (`destroy`)
  *
  * @example
  *   const STATE = {
@@ -213,7 +294,7 @@ export interface JfSPAOptions {
  *       console.log("Test reset");
  *     },
  *     style: ".my-test { color: red; }",
- *     pageMatch: "/test-page", // or ["/page1", "/page2"] or /\/test-./
+ *     location: "/test-page", // or ["/page1", "/page2"] or /.*?/
  *     watchForRemoval: "#test-element",
  *     removeOnPageChange: [".test-class", "#test-id"],
  *   });
@@ -222,7 +303,7 @@ export interface JfSPAOptions {
  *   Test.reset();
  *
  *   // Remove the test completely
- *   Test.disconnect();
+ *   Test.destroy();
  *
  * @param {string} id Unique identifier for the test - will prevent the test from being run multiple times
  */
@@ -231,7 +312,11 @@ export const useSPA = (id: string): JfSPA => {
   const STATE: JfSPAState = {
     options: {
       apply: () => null,
-      pageMatch: /.*?/g,
+      location: {
+        match: /.*?/g,
+        type: "pathname",
+      },
+      alwaysReset: false,
       removedNode: "MAIN",
     },
     loopCount: 0,
@@ -240,6 +325,7 @@ export const useSPA = (id: string): JfSPA => {
       id: null,
     },
   };
+  const log = (msg: string, lvl: LogLevel, data?: unknown) => _log(msg, lvl, `useSPA: ${id}`, data);
   /**
    * Sets up the SPA test with provided options
    *
@@ -253,99 +339,98 @@ export const useSPA = (id: string): JfSPA => {
       STATE.details.id = id;
 
       // Check if this test is already setup
-      window.jfTests = window.jfTests || { tests: [] };
-      STATE.details.isRunning = !!window.jfTests.tests.find(
-        (test) => isSPAType(test) && test.details && test.details.id == id
-      );
+      window.jfLib = window.jfLib || LIB_INIT;
+      STATE.details.isRunning = !!window.jfLib.experiments.find((test) => test.details && test.details.id == id);
       if (STATE.details.isRunning) {
         log(`Test already setup`, "warn");
         // initTest = () => null;
         return false;
       }
 
-      log(`Creating Test`, "info");
+      log(`Creating Test`, "success", isDebug() ? options : null);
 
       const hasValidOptions = validateOptions(options);
       if (!hasValidOptions) {
         return false;
       }
 
+      const { apply, location, reset, style, watchForRemoval, removeOnPageChange, removedNode, alwaysReset } = options;
+
       // Add required options
-      STATE.options.apply = options.apply;
-      STATE.options.pageMatch = options.pageMatch;
+      STATE.options.apply = apply;
+
+      // If location is JfSPAPageOptions then just pass it along
+      if (isLocationObject(location)) {
+        // Setup options
+        const pageOptions: JfSPAPageOptions = {
+          match: location.match,
+          type: location.type || "pathname",
+        };
+        // If we have a condition, add that
+        if (!!location.condition) {
+          pageOptions.condition = location.condition;
+          pageOptions.timeout = location.timeout || 2000;
+        }
+        // Push it to options
+        STATE.options.location = pageOptions;
+      } else {
+        // Otherwise, we presume it's just a string/string[]/RegExp on the path, so pass
+        STATE.options.location = {
+          match: location,
+          type: "pathname",
+        };
+      }
 
       // Add reset function
-      if (!!options.reset) STATE.options.reset = options.reset;
+      if (!!reset) STATE.options.reset = reset;
 
       // Add style sheet
-      if (!!options.style) STATE.options.style = options.style;
+      if (!!style) STATE.options.style = style;
 
       // Define whether we should watch for removal of an element to re-init
-      if (!!options.watchForRemoval) STATE.options.watchForRemoval = options.watchForRemoval;
+      if (!!watchForRemoval) STATE.options.watchForRemoval = watchForRemoval;
 
       // Define whether to remove specific elements on page change
-      if (!!options.removeOnPageChange) STATE.options.removeOnPageChange = options.removeOnPageChange;
+      if (!!removeOnPageChange) STATE.options.removeOnPageChange = removeOnPageChange;
 
       // Overwrite the nodeName used to detect if SPA has been wiped
-      if (!!options.removedNode) STATE.options.removedNode = options.removedNode.toUpperCase();
+      if (!!removedNode) STATE.options.removedNode = removedNode.toUpperCase();
+
+      // Set whether to run the reset function on each page change
+      if (!!alwaysReset) STATE.options.alwaysReset = alwaysReset;
 
       // Add our page change listener
       bindPageChangeListener();
 
       // Add our main element removal listener
-      bindMainRemovalListener();
+      bindReInitListener();
 
       // Bind an event to handle the page change
-      log(`+ Binding Page Change`, "detail");
-      window.removeEventListener("jf-pagechange", handlePageChange);
-      window.addEventListener("jf-pagechange", handlePageChange);
+      if (isDebug()) log(`+ Binding Page Change Listener`, "detail");
+      window.removeEventListener(`jf-pagechange-${PAGE_CHANGE_VERSION}`, handlePageChange);
+      window.addEventListener(`jf-pagechange-${PAGE_CHANGE_VERSION}`, handlePageChange);
 
       // Bind an event to handle the page change
-      log(`+ Binding SPA Re-init`, "detail");
-      window.removeEventListener("jf-reinit", handleReInit);
-      window.addEventListener("jf-reinit", handleReInit);
+      if (isDebug()) log(`+ Binding SPA Re-init Listener`, "detail");
+      window.removeEventListener(`jf-reinit-${REINIT_VERSION}`, handleReInit);
+      window.addEventListener(`jf-reinit-${REINIT_VERSION}`, handleReInit);
+
+      if (!!STATE.options.screen) {
+        // Bind an event to handle the page change
+        if (isDebug()) log(`+ Binding Resize Listener`, "detail");
+        window.removeEventListener(`resize`, handleResize);
+        window.addEventListener(`resize`, handleResize);
+      }
 
       // Push this test to global object and mark it as running
       STATE.details.isRunning = true;
-      window.jfTests.tests.push(this);
+      window.jfLib.experiments.push(this);
       return true;
     } catch (e) {
       throwError(e);
       return false;
     }
   };
-
-  /**
-   * Checks if a value is a regular expression
-   *
-   * @param {unknown} value - The value to check
-   * @returns {boolean} True if the value is a RegExp instance
-   */
-  const isRegExp = (value: unknown) => value instanceof RegExp;
-
-  /**
-   * Checks if a value is an array containing only strings
-   *
-   * @param {unknown} value - The value to check
-   * @returns {boolean} True if the value is an array where every item is a string
-   */
-  const isStringArray = (value: unknown) => Array.isArray(value) && value.every((item) => typeof item === "string");
-
-  /**
-   * Checks if a value is a string
-   *
-   * @param {unknown} value - The value to check
-   * @returns {boolean} True if the value is a string
-   */
-  const isString = (value: unknown) => typeof value === "string";
-
-  /**
-   * Checks if a value is a function
-   *
-   * @param {unknown} value - The value to check
-   * @returns {boolean} True if the value is a function
-   */
-  const isFunction = (value: unknown) => typeof value === "function";
 
   /**
    * Removes the leading dot or hash from a CSS selector
@@ -362,13 +447,14 @@ export const useSPA = (id: string): JfSPA => {
    *
    * @throws {Error} If the HTML element cannot be found
    */
-  const bindMainRemovalListener = () => {
+  const bindReInitListener = () => {
+    window.jfLib.reInit = window.jfLib.reInit || {};
     // Abort if we've already added this listener as we only need one
-    if (!!window.jfTests.reapplyListener) return;
+    if (!!window.jfLib.reInit[REINIT_VERSION]) return;
     try {
       const target = document.querySelector("html");
       if (!!!target) throw new Error("no target");
-
+      window.jfLib.reInit = {};
       const config: MutationObserverInit = { childList: true, subtree: true };
 
       const callback: MutationCallback = (mutations) => {
@@ -378,7 +464,7 @@ export const useSPA = (id: string): JfSPA => {
             try {
               if (node.nodeName !== STATE.options.removedNode) return;
               // the MAIN element has been re-added, so dispatch an event
-              window.dispatchEvent(new Event("jf-reinit"));
+              window.dispatchEvent(new Event(`jf-reinit-${REINIT_VERSION}`));
             } catch (e) {
               throwError(e);
             }
@@ -386,9 +472,12 @@ export const useSPA = (id: string): JfSPA => {
         });
       };
 
-      window.jfTests.reapplyListener = useMutationObserver("ReapplyListener");
-      window.jfTests.reapplyListener.observe(target, config, callback);
+      // Setup the reInit observer
+
+      window.jfLib.reInit[REINIT_VERSION] = { observer: useMutationObserver(`reInit-${REINIT_VERSION}`) };
+      window.jfLib.reInit[REINIT_VERSION].observer.observe(target, config, callback);
     } catch (e) {
+      console.log("reinit error");
       throwError(e);
     }
   };
@@ -401,8 +490,9 @@ export const useSPA = (id: string): JfSPA => {
    * @throws {Error} If observer setup fails
    */
   const bindPageChangeListener = () => {
+    window.jfLib.pageChange = window.jfLib.pageChange || {};
     // Abort if we've already added this listener as we only need one
-    if (!!window.jfTests.pageChangeListener) return;
+    if (!!window.jfLib.pageChange[PAGE_CHANGE_VERSION]) return;
     try {
       // bind to html
       const target = document.querySelector("html");
@@ -413,24 +503,103 @@ export const useSPA = (id: string): JfSPA => {
         const linkElement =
           document.querySelector('meta[name="description"]') || document.querySelector('link[rel="canonical"]');
 
-        if (!!!linkElement || !!!window.jfTests.pagePath || window.location.pathname === window.jfTests.pagePath)
-          return;
+        if (!!!linkElement || !!!window.jfLib.pagePath || window.location.pathname === window.jfLib.pagePath) return;
 
         // Update the current path
-        window.jfTests.pagePath = window.location.pathname;
+        window.jfLib.pagePath = window.location.pathname;
 
         // Dispatch an event
-        window.dispatchEvent(new Event("jf-pagechange"));
+        window.dispatchEvent(new Event(`jf-pagechange-${PAGE_CHANGE_VERSION}`));
       };
 
-      // Create the observer
-      window.jfTests.pageChangeListener = useMutationObserver("PageChangeListener");
-      window.jfTests.pageChangeListener.observe(target, config, callback);
+      // Setup the reInit observer
+      window.jfLib.pageChange[PAGE_CHANGE_VERSION] = {
+        observer: useMutationObserver(`pageChange-${PAGE_CHANGE_VERSION}`),
+      };
+      window.jfLib.pageChange[PAGE_CHANGE_VERSION].observer.observe(target, config, callback);
 
       // Set the current path initially
-      window.jfTests.pagePath = window.location.pathname || "";
+      window.jfLib.pagePath = window.location.pathname || "";
     } catch (e) {
+      console.log("page change error");
       throwError(e);
+    }
+  };
+
+  const checkPageUrl = () => {
+    try {
+      const { match, type } = isLocationObject(STATE.options.location) && STATE.options.location;
+      if (isDebug()) log(`Checking URL`, "info", isDebug() ? `type: ${type}, match: ${match}` : null);
+
+      // Check if it's regex
+      if (isRegExp(match)) {
+        // It's regex
+        const regex = new RegExp(match, "gi");
+        if (!regex.test(window.location[type])) {
+          return false;
+        }
+      }
+
+      // Check if it's an array of strings
+      if (isStringArray(match)) {
+        // It's an array, so filter to find the ones that match
+        const findMatch = match.filter((u) => window.location[type] == u).length == 0;
+
+        // if none of the pages matched, quit out
+        if (!findMatch) {
+          return false;
+        }
+      }
+
+      // Check if it's a string
+      if (isString(match)) {
+        // It's a string, so check if url matches
+        if (window.location[type] !== match) {
+          return false;
+        }
+      }
+
+      if (isDebug()) log(`+ URL matched`, "success");
+      return true;
+    } catch (error) {
+      throwError(error);
+      return false;
+    }
+  };
+
+  const checkPageCondition = async () => {
+    try {
+      const { condition, timeout } = isLocationObject(STATE.options.location) && STATE.options.location;
+      if (condition == null) return true;
+      if (isDebug()) log(`Checking page condition`, "info", isDebug() ? `timeout: ${timeout}ms` : null);
+
+      const conditionMatched = await new Promise((resolve) => {
+        let totalTime = 0;
+        const interval = setInterval(() => {
+          // Update our timer log
+          totalTime += 50;
+
+          // Abort if we're over the timeout
+          if (totalTime >= timeout) {
+            clearTimeout(interval);
+            log(`Timeout (${timeout}ms) exceeded for page match condition`, "error");
+            resolve(false);
+          }
+
+          // Run our condition check, and if its true, then return a true value and stop polling
+          if (isFunction(condition) && condition() == true) {
+            clearTimeout(interval);
+            if (isDebug()) log(`+ Condition matched`, "success");
+            resolve(true);
+          }
+        }, 50);
+      });
+
+      if (!conditionMatched) return false;
+      return true;
+    } catch (error) {
+      throwError(error);
+      return false;
     }
   };
 
@@ -442,55 +611,32 @@ export const useSPA = (id: string): JfSPA => {
    */
   const initTest = async (): Promise<void> => {
     try {
-      // If we have pageMatch, then check that first before we run anything
-      if (!!STATE.options.pageMatch) {
-        const pageNotMatched = () => {
-          // Not the right page
-          log("Page not matched", "error");
-          // Reset the test
-          resetTest();
-        };
+      // Check if the URL matches
+      const urlMatched = checkPageUrl();
+      if (!urlMatched) {
+        // Not the right page
+        log("Page URL not matched", "error");
+        // Reset the test
+        resetTest();
+        // quit
+        return;
+      }
 
-        // Check if it's regex
-        if (isRegExp(STATE.options.pageMatch)) {
-          // It's regex
-          const regex = new RegExp(STATE.options.pageMatch, "gi");
-          if (!regex.test(window.location.pathname)) {
-            pageNotMatched();
-            return;
-          }
-        }
-
-        // Check if it's an array of strings
-        if (isStringArray(STATE.options.pageMatch)) {
-          // It's an array, so loop it and check each one
-          let matched = false;
-          for (let i = 0; i < STATE.options.pageMatch.length; i++) {
-            // if this page matches, update the value to true
-            if (window.location.pathname == STATE.options.pageMatch[i]) matched = true;
-          }
-
-          // if none of the pages matched, quit out
-          if (!!!matched) {
-            pageNotMatched();
-            return;
-          }
-        }
-
-        // Check if it's a string
-        if (isString(STATE.options.pageMatch)) {
-          // It's a string, so check if pathname matches
-          if (window.location.pathname !== STATE.options.pageMatch) {
-            pageNotMatched();
-            return;
-          }
-        }
+      // Check if the page conditions match
+      const conditionMatched = await checkPageCondition();
+      if (!conditionMatched) {
+        // Reset the test
+        resetTest();
+        // quit
+        return;
       }
 
       log(`Page matched!`, "success");
 
       // Wait for the body to exist to avoid issues
       await waitForElement("body");
+
+      // Apply the test
       applyTest();
     } catch (e) {
       throwError(e);
@@ -519,9 +665,7 @@ export const useSPA = (id: string): JfSPA => {
     // wipe the test
     STATE.details.isRunning = false;
     // delete it from our records
-    window.jfTests.tests = window.jfTests.tests.filter(
-      (test) => isSPAType(test) && test.details.id !== STATE.details.id
-    );
+    window.jfLib.experiments = window.jfLib.experiments.filter((test) => test.details.id !== STATE.details.id);
   };
 
   /**
@@ -549,29 +693,6 @@ export const useSPA = (id: string): JfSPA => {
   };
 
   /**
-   * Logs messages to the console with consistent formatting and color coding
-   *
-   * @param {string} message - The message to log
-   * @param {SPALogLevel} level - The log level (info, detail, success, warn, error)
-   * @param {unknown} [data] - Optional data to log alongside the message
-   */
-  const log = (message: string, level: SPALogLevel = "info", data?: unknown) => {
-    const styles = {
-      info: "background: #61afef; color: #fff; padding: 2px 5px;",
-      detail: "background: #c162de; color: #fff; padding: 2px 5px;",
-      success: "background: #8cc265; color: #fff; padding: 2px 5px;",
-      warn: "background: #f0a45d; color: #fff; padding: 2px 5px;",
-      error: "background: #ff616e; color: #fff; padding: 2px 5px;",
-    };
-
-    if (!!data) {
-      console.log(`${STATE.details.id} %c${message}`, styles[level], data);
-    } else {
-      console.log(`${STATE.details.id} %c${message}`, styles[level]);
-    }
-  };
-
-  /**
    * Validates the options passed to the constructor Checks for required options and validates types and CSS selectors
    *
    * @param {object} options - The options to validate
@@ -579,55 +700,105 @@ export const useSPA = (id: string): JfSPA => {
    * @throws {JfSPAError} If any validation fails
    */
   const validateOptions = (options: JfSPAOptions): boolean => {
-    // Validate required
-    if (!options.apply) {
+    const { apply, location, reset, watchForRemoval, removeOnPageChange, removedNode, screen } = options;
+
+    // -- VALIDATE REQUIRED OPTIONS --
+    // Check we have 'apply'
+    if (!apply) {
       throwError({
         code: "MISSING_OPTION",
         message: "apply must be provided",
       });
       return false;
     }
-    if (!options.pageMatch) {
+    // Check we have 'location'
+    if (!location) {
       throwError({
         code: "MISSING_OPTION",
-        message: "pageMatch must be provided",
+        message: "location must be provided",
       });
       return false;
     }
+    // If we've been passed an object for 'location', check it has a 'match' property
+    if (isLocationObject(location)) {
+      if (!!!location.match) {
+        throwError({
+          code: "MISSING_OPTION",
+          message: "location.match must be provided",
+        });
+        return false;
+      }
+    }
 
-    // validate types
-    if (!isFunction(options.apply)) {
+    // -- VALIDATE TYPES --
+    // Check 'apply' is a function
+    if (!isFunction(apply)) {
       throwError({
         code: "INVALID_TYPE",
         message: "apply must be a function",
       });
       return false;
     }
-    if (!(isRegExp(options.pageMatch) || isStringArray(options.pageMatch) || isString(options.pageMatch))) {
+    // Check 'location' is string|string[]|RegExp|JfSPAPageObject
+    if (!(isRegExp(location) || isStringArray(location) || isString(location) || isLocationObject(location))) {
       throwError({
         code: "INVALID_TYPE",
-        message: "pageMatch must be a string, an array of strings, or a RegExp",
+        message: "location must be a string, an array of strings, a RegExp match, or an options object",
       });
       return false;
     }
-    if (options.reset && !isFunction(options.reset)) {
+    // If 'location' is JfSPAPageObject
+    if (isLocationObject(location)) {
+      const { match, type, condition, timeout } = location;
+      // Check 'match' is string|string[]|RegExp
+      if (!(isRegExp(match) || isStringArray(match) || isString(match))) {
+        throwError({
+          code: "INVALID_TYPE",
+          message: "location.match must be a string, an array of strings, a RegExp match",
+        });
+        return false;
+      }
+      // Check 'type' is path or href
+      if (type && !isPageObjectType(type)) {
+        throwError({
+          code: "INVALID_TYPE",
+          message: "location.type must be one of: pathname, hostname, href, hash, search",
+        });
+        return false;
+      }
+      // Check 'condition' is path or href
+      if (condition && !isFunction(condition)) {
+        throwError({
+          code: "INVALID_TYPE",
+          message: "location.condition must be a function",
+        });
+        return false;
+      }
+      // Check 'type' is path or href
+      if (timeout && !isNumber(timeout)) {
+        throwError({
+          code: "INVALID_TYPE",
+          message: "location.timeout must be a number",
+        });
+        return false;
+      }
+    }
+
+    if (reset && !isFunction(reset)) {
       throwError({
         code: "INVALID_TYPE",
         message: "reset must be a function",
       });
       return false;
     }
-    if (options.watchForRemoval && !(isString(options.watchForRemoval) || isStringArray(options.watchForRemoval))) {
+    if (watchForRemoval && !(isString(watchForRemoval) || isStringArray(watchForRemoval))) {
       throwError({
         code: "INVALID_SELECTOR",
         message: "watchForRemoval must be a string or array of strings",
       });
       return false;
     }
-    if (
-      options.removeOnPageChange &&
-      !(isString(options.removeOnPageChange) || isStringArray(options.removeOnPageChange))
-    ) {
+    if (removeOnPageChange && !(isString(removeOnPageChange) || isStringArray(removeOnPageChange))) {
       throwError({
         code: "INVALID_SELECTOR",
         message: "removeOnPageChange must be a string or array of strings",
@@ -636,14 +807,14 @@ export const useSPA = (id: string): JfSPA => {
     }
 
     // validate css strings
-    if (options.watchForRemoval && !validateSelectors(options.watchForRemoval)) {
+    if (watchForRemoval && !validateSelectors(watchForRemoval)) {
       throwError({
         code: "INVALID_SELECTOR",
         message: "watchForRemoval must be valid CSS selectors",
       });
       return false;
     }
-    if (options.removeOnPageChange && !validateSelectors(options.removeOnPageChange)) {
+    if (removeOnPageChange && !validateSelectors(removeOnPageChange)) {
       throwError({
         code: "INVALID_SELECTOR",
         message: "removeOnPageChange must be valid CSS selectors",
@@ -651,34 +822,41 @@ export const useSPA = (id: string): JfSPA => {
       return false;
     }
 
-    return true;
-  };
-
-  /**
-   * Validates if a CSS selector string is syntactically valid Tests the selector by attempting to use it in a
-   * querySelector call
-   *
-   * @param {string} selector - The CSS selector to validate
-   * @returns {boolean} True if the selector can be used in querySelector
-   */
-  const isSelectorValid = (selector: string): boolean => {
-    try {
-      document.createDocumentFragment().querySelector(selector);
-      return true;
-    } catch {
+    if (removedNode && !isString(removedNode)) {
+      throwError({
+        code: "INVALID_TYPE",
+        message: "removedNode must be a string",
+      });
       return false;
     }
-  };
 
-  /**
-   * Validates an array of CSS selectors or a single selector
-   *
-   * @param {string | string[]} selectors - The selector(s) to validate
-   * @returns {boolean} True if all selectors are valid
-   */
-  const validateSelectors = (selectors: string | string[]): boolean => {
-    const toValidate = Array.isArray(selectors) ? selectors : [selectors];
-    return toValidate.every(isSelectorValid.bind(this));
+    if (screen) {
+      // If screen isn't an object, or doesn't contain one of minWidth/maxWidth, throw error
+      if (!isObject(screen) || (!screen.minWidth && !screen.maxWidth)) {
+        throwError({
+          code: "INVALID_TYPE",
+          message: "screen must be an object containing one of: minWidth, maxWidth",
+        });
+        return false;
+      }
+      if (!!screen.minWidth && !isNumber(screen.minWidth)) {
+        throwError({
+          code: "INVALID_TYPE",
+          message: "minWidth must be a number",
+        });
+        return false;
+      }
+      if (!!screen.maxWidth && !isNumber(screen.maxWidth)) {
+        throwError({
+          code: "INVALID_TYPE",
+          message: "maxWidth must be a number",
+        });
+        return false;
+      }
+      // TODO: need some error checking if the passed value is 0 as this may cause issues (and the minimum should be greater than this anyway)
+    }
+
+    return true;
   };
 
   /**
@@ -713,6 +891,48 @@ export const useSPA = (id: string): JfSPA => {
   };
 
   /**
+   * Handles window resize events, using the `minWidth` and/or `maxWidth` passed in the `screen` options
+   *
+   * @returns {Promise<void>}
+   * @throws {Error} If resize handling fails
+   */
+  const handleResize = debounce(async () => {
+    log("Screen resized", "info");
+    try {
+      const { minWidth, maxWidth } = STATE.options.screen;
+
+      /**
+       * TODO:
+       *
+       * - Need to check both so that we don't always fire if its above the minwWidth
+       */
+
+      if (!!minWidth && !!maxWidth) {
+      }
+
+      // Check for min width
+      if (minWidth) {
+        if (window.innerWidth < minWidth) {
+          log("Screen is smaller than minWidth, resetting", "warn", minWidth);
+          // screen is smaller, reset
+          resetTest();
+        }
+      } else {
+        log("Screen is larger than minWidth, resetting", "warn", minWidth);
+        // screen is smaller, reset
+        resetTest();
+      }
+      if (maxWidth) {
+        // minWidth only
+      }
+      // log(`Screen resized, restarting test`, "warn");
+      // await initTest();
+    } catch (e) {
+      throwError(e);
+    }
+  }, 100);
+
+  /**
    * Removes elements specified in removeOnPageChange when a page change occurs For each selector:
    *
    * - Removes matching elements from the DOM
@@ -723,6 +943,7 @@ export const useSPA = (id: string): JfSPA => {
    */
   const handleRemoveOnPageChange = () => {
     log(`- Removing elements`, "detail");
+    const { removeOnPageChange } = STATE.options;
     const searchAndRemove = (selector: string) => {
       document.querySelectorAll(selector).forEach((el: Element) => {
         // remove class or id
@@ -736,14 +957,14 @@ export const useSPA = (id: string): JfSPA => {
       });
     };
 
-    if (isString(STATE.options.removeOnPageChange)) {
+    if (isString(removeOnPageChange)) {
       // it's a string, just search for it
-      searchAndRemove(STATE.options.removeOnPageChange as string);
+      searchAndRemove(removeOnPageChange as string);
       return;
     }
 
     // otherwise it's an array, so loop and remove each
-    (STATE.options.removeOnPageChange as string[]).forEach((selector) => {
+    (removeOnPageChange as string[]).forEach((selector) => {
       searchAndRemove(selector);
     });
   };
@@ -759,8 +980,12 @@ export const useSPA = (id: string): JfSPA => {
    */
   const applyTest = () => {
     try {
+      // If we have specified to always reset, then run the reset function here
+      if (!!STATE.options.alwaysReset) resetTest();
       log(`Applying Test`, "info");
-      insertStyleSheet();
+      // Insert our stylesheet (if we have it)
+      if (!!STATE.options.style) insertStyleSheet();
+      //
       bindWatchForRemoval();
       STATE.options.apply();
     } catch (e) {
@@ -776,7 +1001,8 @@ export const useSPA = (id: string): JfSPA => {
    */
   const bindWatchForRemoval = () => {
     try {
-      if (!!!STATE.options.watchForRemoval) return;
+      const { watchForRemoval } = STATE.options;
+      if (!!!watchForRemoval) return;
       log(`+ Binding Removal Watcher`, "detail");
 
       // Create a new observer
@@ -802,18 +1028,9 @@ export const useSPA = (id: string): JfSPA => {
                 if (STATE.loopCount >= 6) return;
 
                 // Define a function that checks if the element matches
-                const checkElementMatches = async (string: string) => {
+                const checkElementMatches = async (selector: string) => {
                   try {
-                    const match = removeClassAndId(string);
-                    // Check if it's an id or not
-                    const isId = /^#/.test(string);
-                    let isMatched = false;
-                    // If it's an id and the removed node matches
-                    if (isId && (node as Element)?.id == match) isMatched = true;
-                    // If it's a class and the removed node matches
-                    if (!isId && (node as Element)?.classList.contains(match)) isMatched = true;
-                    // If we have a match, re-init
-                    if (isMatched) {
+                    if ((node as Element).matches(selector)) {
                       log(`Element was removed, re-init`, "warn");
                       if (STATE.loopCount >= 5) {
                         log(`Max loop count reached, aborting`, "error");
@@ -887,18 +1104,18 @@ export const useSPA = (id: string): JfSPA => {
   // Return our functions to call
   return {
     details: STATE.details,
-    init: (options: JfSPAOptions) => {
+    init: async (options: JfSPAOptions) => {
       try {
         // set up the test
         const isSetup = setupTest(options);
         if (!!!isSetup) return;
         // run the init function
-        initTest();
+        await initTest();
       } catch (error) {
         throwError(error);
       }
     },
     reset: resetTest,
-    disconnect: removeTest,
+    destroy: removeTest,
   };
 };
