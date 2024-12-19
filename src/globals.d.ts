@@ -1,75 +1,77 @@
-import { RBTest, JfSPA, JfObserver, JfObserverObject, ReadyObject } from "./modules";
+import { RBTest, JfSPA, JfObserver, JfObserverObject, JfReadyObject } from "./modules";
 
 /**
- * FIXME:
+ * Global library interface for managing DOM observers and experiments
  *
- * - If we use versioning, we'll end up with multiple events firing. If those events don't also change, then they'll be
- *   picked up by all tests - e.g. wt-pagechange will fire TWICE if there are 2 versions of the pageChange observer
- * - We'll either need to version the events we dispatch, or find a simpler way
+ * @interface
  */
-
-declare global {
-  interface Window {
-    jfLib: {
-      pageChange?: {
-        [version: string]: {
-          observer: JfObserver;
-        };
-      };
-      reInit?: {
-        [version: string]: {
-          observer: JfObserver;
-        };
-      };
-      elementReady?: {
-        [version: string]: {
-          observer: JfObserver;
-          callbacks: (ReadyObject | null)[];
-        };
-      };
-      // elementRemoved?: {
-      //   [version: string]: {
-      //     observer: JfObserver;
-      //     callbacks: unknown[];
-      //   };
-      // }[];
-      // elementUpdated?: {
-      //   [version: string]: {
-      //     observer: JfObserver;
-      //     callbacks: unknown[];
-      //   };
-      // }[];
-      pagePath?: string;
-      experiments?: JfSPA[];
+export interface JfLib {
+  /** Observer for page change events */
+  pageChange?: {
+    [version: string]: {
+      observer: JfObserver;
     };
-  }
+  };
+  /** Observer for re-initialization events */
+  reInit?: {
+    [version: string]: {
+      observer: JfObserver;
+    };
+  };
+  /** Observer for element ready events */
+  elementReady?: {
+    [version: string]: {
+      observer: JfObserver;
+      callbacks: (JfReadyObject | null)[];
+    };
+  };
+  /** Observer for element removal events */
+  elementRemoved?: {
+    [version: string]: {
+      observer: JfObserver;
+      callbacks: (JfReadyObject | null)[];
+    };
+  };
+  /** Observer for element update events */
+  elementUpdated?: {
+    [version: string]: {
+      observer: JfObserver;
+      callbacks: (JfReadyObject | null)[];
+    };
+  };
+  /** Current page path */
+  pagePath?: string;
+  /** Active experiments */
+  experiments?: JfSPA[];
+}
+
+/**
+ * Global interface for managing tests
+ *
+ * @interface
+ */
+export interface JfTests {
+  /** Array of active tests */
+  tests: RBTest[];
+  /** Observer for test reapplication */
+  reapplyListener?: JfObserver;
+  /** Observer for page changes */
+  pageListener?: JfObserver;
+  /** Current page path */
+  pagePath?: string;
 }
 
 declare global {
   interface Window {
-    // jfObservers object
+    jfLib: JfLib;
+    jfTests: JfTests;
     jfObservers: JfObserverObject[];
-  }
-}
-
-declare global {
-  interface Window {
-    // Add RBTest to the Window object
-    jfTests: {
-      tests: RBTest[];
-      reapplyListener?: JfObserver;
-      pageListener?: JfObserver;
-      pagePath?: string;
-    };
   }
 }
 
 declare global {
   // Add 'ready' to an Element
   interface Element {
-    ready: string[] | null;
-  }
-  interface Node {
-    ready: string[] | null;
+    ready?: string[];
   }
 }

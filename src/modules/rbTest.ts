@@ -1,5 +1,5 @@
 import { insertStyle } from "./insertStyle";
-import { useSPA } from "./SPA";
+import { useSPA } from "./useSPA";
 import { useMutationObserver } from "./useMutationObserver";
 import { waitForElement } from "./waitForElement";
 

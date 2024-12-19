@@ -1,4 +1,4 @@
-export * from "./SPA";
+export * from "./useSPA";
 export * from "./createElement";
 export * from "./debounce";
 export * from "./docReady";

@@ -3,7 +3,7 @@
  *
  * @typedef {"info" | "detail" | "success" | "warn" | "error"} LogLevel
  */
-export type LogLevel = "info" | "detail" | "success" | "warn" | "error";
+export type LogLevel = "info" | "detail" | "success" | "warn" | "error" | "none";
 
 /**
  * Logs messages to the console with consistent formatting and color coding
@@ -20,6 +20,7 @@ export const log = (message: string, level: LogLevel = "info", id: string = "", 
     success: "background: #8cc265; color: #fff; padding: 2px 5px;",
     warn: "background: #f0a45d; color: #fff; padding: 2px 5px;",
     error: "background: #ff616e; color: #fff; padding: 2px 5px;",
+    none: "background: #fff; color: #fff; padding: 2px 5px;",
   };
 
   if (!!data) {

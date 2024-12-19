@@ -38,3 +38,11 @@ export const isNumber = (value: unknown): value is number => typeof value === "n
  * @returns {boolean} True if the value is a function
  */
 export const isFunction = (value: unknown): value is Function => typeof value === "function";
+
+/**
+ * Checks if a value is an object
+ *
+ * @param {unknown} value - The value to check
+ * @returns {boolean} True if the value is an object
+ */
+export const isObject = (value: unknown): value is object => typeof value === "object";
