@@ -1,3 +1,5 @@
+import { isDebug, isNodeArray, isNodeList, LogLevel, log as _log } from "../helpers";
+
 /**
  * An object with information relating to a mutation observer applied by `useMutationObserver`.
  *
@@ -21,13 +23,17 @@ export interface JfObserverObject {
  *
  * This function starts observing a target node for DOM changes based on the provided configuration and callback.
  *
- * - `target`: The DOM node to observe.
+ * - `target`: The DOM node or nodes to observe.
  * - `config`: The configuration object specifying which mutations to observe (e.g., child list, attributes).
  * - `callback`: The function to execute when mutations are detected.
  *
  * @returns {boolean} `true` if the observer started successfully, or `false` if it is already observing.
  */
-export type JfObserveFunction = (target: Node, config: MutationObserverInit, callback: MutationCallback) => boolean;
+export type JfObserveFunction = (
+  target: Node | Node[] | NodeList,
+  config: MutationObserverInit,
+  callback: MutationCallback
+) => boolean;
 
 /**
  * The object returned by the `useMutationObserver` function.
@@ -82,7 +88,7 @@ export interface JfObserver {
    *     STATE.observer.observe(target, config, callback);
    *   };
    *
-   * @param {Node} target The target to bind the mutation observer to
+   * @param {Node | Node[] | NodeList<Node>} target The target(s) to bind the mutation observer to
    * @param {MutationObserverInit} config The
    *   [`MutationObserverInit`](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver/observe#options)
    *   config to apply to the observer
@@ -129,23 +135,28 @@ export interface JfObserver {
  */
 
 export const useMutationObserver = (id: string): JfObserver => {
+  const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
+    if (!debug && isDebug()) return;
+    _log(msg, lvl, `[${id}] useMutationObserver`, data);
+  };
+
   // Get the current observer array
   window.jfObservers = window.jfObservers || [];
   // Get the current observer object
-  let observerObject: JfObserverObject | undefined = window.jfObservers.find(
-    (obs: JfObserverObject) => obs.ticketId === id
-  );
-  // No current object in global array
-  if (!observerObject) {
-    // Make one
-    observerObject = {
-      observer: undefined,
-      isObserving: false,
-      ticketId: id,
-    };
-    // Push this instance to the global array
-    window.jfObservers.push(observerObject);
+  const observerExists = !!window.jfObservers.find((obs: JfObserverObject) => obs.ticketId === id);
+  if (observerExists) {
+    log("Observer with this id is already bound", "error");
+    throw new Error();
   }
+
+  const observerObject = {
+    observer: undefined,
+    isObserving: false,
+    ticketId: id,
+  };
+  log("Created observer", "info");
+  // Push this instance to the global array
+  window.jfObservers.push(observerObject);
 
   const wrappedObserve: JfObserveFunction = (target, config, callback) => {
     // Check if we are already observing
@@ -154,8 +165,17 @@ export const useMutationObserver = (id: string): JfObserver => {
     }
     // Observe if not
     observerObject.observer = new MutationObserver(callback);
-    observerObject.observer.observe(target, config);
+    // if we've got an array of targets, add an observer to each one
+    if (isNodeArray(target) || isNodeList(target)) {
+      target.forEach((node: Node) => {
+        observerObject.observer.observe(node, config);
+      });
+    } else {
+      observerObject.observer.observe(target, config);
+    }
+
     observerObject.isObserving = true;
+    log("Observing", "success");
     return true;
   };
 
@@ -166,6 +186,7 @@ export const useMutationObserver = (id: string): JfObserver => {
     observerObject.isObserving = false;
     // Remove this instance from the global array
     window.jfObservers = window.jfObservers.filter((obs: JfObserverObject) => obs.ticketId !== id);
+    log("Disconnected observer", "error");
   };
 
   return {
