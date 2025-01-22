@@ -46,3 +46,21 @@ export const isFunction = (value: unknown): value is Function => typeof value ==
  * @returns {boolean} True if the value is an object
  */
 export const isObject = (value: unknown): value is object => typeof value === "object";
+
+/**
+ * Checks if a value is an array of elements
+ *
+ * @param {unknown} value - The value to check
+ * @returns {boolean} True if the value is an array where every item is a string
+ */
+export const isNodeArray = (value: unknown): value is Node[] =>
+  Array.isArray(value) && value.every((item) => item instanceof Node);
+
+/**
+ * Checks if a value is an nodelist of elements
+ *
+ * @param {unknown} value - The value to check
+ * @returns {boolean} True if the value is an array where every item is a string
+ */
+export const isNodeList = (value: unknown): value is NodeListOf<Node> =>
+  value instanceof NodeList && [...value].every((item) => item instanceof Node);
