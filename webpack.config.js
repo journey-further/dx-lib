@@ -15,7 +15,7 @@ export default {
   mode: "development",
   plugins: [
     new JfCroHmr({
-      previewUrl: "https://www.ghdhair.com/wet-to-dry/ghd-duet-style-black-p-612",
+      previewUrl: "https://www.devere.co.uk",
       previewModule: "variantA",
       playwrightOptions: {
         channel: "chromium",

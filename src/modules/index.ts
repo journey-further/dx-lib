@@ -4,6 +4,8 @@ export * from "./debounce";
 export * from "./docReady";
 export * from "./elementInView";
 export * from "./elementReady";
+export * from "./elementRemoved";
+export * from "./elementUpdated";
 export * from "./emitEvent";
 export * from "./emptyElem";
 export * from "./enableScroll";
