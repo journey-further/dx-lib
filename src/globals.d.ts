@@ -1,4 +1,5 @@
-import { RBTest, JfSPA, JfObserver, JfObserverObject, JfReadyObject } from "./modules";
+import { RBTest, JfSPA, JfObserver, JfObserverObject, JfReadyObject, JfRemovedObject } from "./modules";
+import { JfUpdatedObject } from "./modules/elementUpdated";
 
 /**
  * Global library interface for managing DOM observers and experiments
@@ -29,14 +30,14 @@ export interface JfLib {
   elementRemoved?: {
     [version: string]: {
       observer: JfObserver;
-      callbacks: (JfReadyObject | null)[];
+      callbacks: (JfRemovedObject | null)[];
     };
   };
   /** Observer for element update events */
   elementUpdated?: {
     [version: string]: {
       observer: JfObserver;
-      callbacks: (JfReadyObject | null)[];
+      callbacks: (JfUpdatedObject | null)[];
     };
   };
   /** Current page path */
@@ -72,6 +73,8 @@ declare global {
 declare global {
   // Add 'ready' to an Element
   interface Element {
-    ready?: string[];
+    jfReady?: string[];
+    jfRemoved?: string[];
+    jfUpdated?: string[];
   }
 }
