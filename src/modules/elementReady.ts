@@ -8,14 +8,14 @@ const VERSION: string = "1.0";
  *
  * - `init` Start listening for the requested element to be ready again
  * - `pause` Pause the listener
- * - `disconnect` Remove the listener completely
+ * - `destroy` Remove the listener completely
  */
 export interface JfReady {
   /**
    * Start listening for the requested element to be ready again
    *
    * _Note: this function is only required if you want to re-listen once the elementReady listener is stopped or
-   * disconnected. Running it whilst the listener is already bound will just error out due to the same id being used_
+   * destroyed. Running it whilst the listener is already bound will just error out due to the same id being used_
    *
    * @returns
    */
@@ -33,12 +33,12 @@ export interface JfReady {
   /**
    * Completely remove this elementReady listener. Will stop listening for any future elements to be
    *
-   * _Note: running `init` after `disconnect` will restart the listener, and will treat all existing elements as **NOT**
+   * _Note: running `init` after `destroy` will restart the listener, and will treat all existing elements as **NOT**
    * found, so the callback will re-trigger for these elements_
    *
    * @returns
    */
-  disconnect: (delay?: number) => void;
+  destroy: (delay?: number) => void;
 }
 
 /**
@@ -107,8 +107,8 @@ const getObserver = () => {
  *   function that returns `true` for the callback to execute.
  * @returns
  *
- *   - `init` Function to re-init the listener once disconnected
- *   - `disconnect` Function to completely remove this listener
+ *   - `init` Function to re-init the listener once destroyed
+ *   - `destroy` Function to completely remove this listener
  */
 
 export const elementReady = (
@@ -132,41 +132,41 @@ export const elementReady = (
     // -- VALIDATE SELECTOR --
     if (!!!selector) {
       log("selector is not defined", "error");
-      throw new Error("Setup failed");
+      throw new Error("elementReady setup failed");
     }
     if (!isString(selector)) {
       log("selector must be a string", "error");
-      throw new Error("Setup failed");
+      throw new Error("elementReady setup failed");
     }
     if (!validateSelectors(selector)) {
       log("selector must be a valid css selector", "error");
-      throw new Error("Setup failed");
+      throw new Error("elementReady setup failed");
     }
 
     // -- VALIDATE CALLBACK --
     if (!!!callback) {
       log("callback is not defined", "error");
-      throw new Error("Setup failed");
+      throw new Error("elementReady setup failed");
     }
     if (!isFunction(callback)) {
       log("callback must be a function", "error");
-      throw new Error("Setup failed");
+      throw new Error("elementReady setup failed");
     }
 
     // -- VALIDATE ID --
     if (!!!id) {
       log("id is not defined", "error");
-      throw new Error("Setup failed");
+      throw new Error("elementReady setup failed");
     }
     if (!isString(id)) {
       log("id must be a string", "error");
-      throw new Error("Setup failed");
+      throw new Error("elementReady setup failed");
     }
 
     // -- VALIDATE CONDITIONS --
     if (conditions && !isFunction(conditions)) {
       log("conditions must be a function", "error");
-      throw new Error("Setup failed");
+      throw new Error("elementReady setup failed");
     }
 
     return true;
@@ -334,7 +334,7 @@ export const elementReady = (
    * @param delay - Optional delay before cleanup _(default: 50ms)_
    * @returns Promise that resolves when cleanup is complete
    */
-  const disconnect = async (delay: number = 50) => {
+  const destroy = async (delay: number = 50) => {
     if (!!!getObserver().callbacks) return;
 
     try {
@@ -375,6 +375,6 @@ export const elementReady = (
   return {
     init,
     pause,
-    disconnect,
+    destroy,
   };
 };

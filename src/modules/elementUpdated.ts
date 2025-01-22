@@ -16,14 +16,14 @@ const VERSION: string = "1.0";
  * Interface for elementUpdated return instance
  *
  * - `init` Start listening for the requested element to be removed again
- * - `disconnect` Remove the listener completely
+ * - `destroy` Remove the listener completely
  */
 export interface JfUpdated {
   /**
    * Start listening for the requested element to be removed again
    *
    * _Note: this function is only required if you want to re-listen once the elementUpdated listener is stopped or
-   * disconnected. Running it whilst the listener is already bound will just error out due to the same id being used_
+   * destroyed. Running it whilst the listener is already bound will just error out due to the same id being used_
    *
    * @returns
    */
@@ -31,12 +31,12 @@ export interface JfUpdated {
   /**
    * Completely remove this elementUpdated listener. Will stop listening for any future elements to be
    *
-   * _Note: running `init` after `disconnect` will restart the listener, and will treat all existing elements as **NOT**
+   * _Note: running `init` after `destroy` will restart the listener, and will treat all existing elements as **NOT**
    * found, so the callback will re-trigger for these elements_
    *
    * @returns
    */
-  disconnect: (delay?: number) => void;
+  destroy: (delay?: number) => void;
 }
 
 /**
@@ -120,8 +120,8 @@ const getObserver = () => {
  *   a function that returns `true` for the callback to execute.
  * @returns
  *
- *   - `init` Function to re-init the listener once disconnected
- *   - `disconnect` Function to completely remove this listener
+ *   - `init` Function to re-init the listener once destroyed
+ *   - `destroy` Function to completely remove this listener
  */
 export const elementUpdated = (
   selector: string,
@@ -376,7 +376,7 @@ export const elementUpdated = (
    * @param delay - Optional delay before cleanup _(default: 50ms)_
    * @returns Promise that resolves when cleanup is complete
    */
-  const disconnect = async (delay: number = 50) => {
+  const destroy = async (delay: number = 50) => {
     if (!!!getObserver().callbacks) return;
 
     try {
@@ -400,6 +400,6 @@ export const elementUpdated = (
   // Return the exposed functions
   return {
     init,
-    disconnect,
+    destroy,
   };
 };

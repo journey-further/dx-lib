@@ -327,7 +327,7 @@ export const useSPA = (id: string): JfSPA => {
   };
   const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
     if (!debug && isDebug()) return;
-    _log(msg, lvl, `useSPA [${id}]`, data);
+    _log(msg, lvl, `[${id}] useSPA`, data);
   };
   /**
    * Sets up the SPA test with provided options
@@ -692,7 +692,7 @@ export const useSPA = (id: string): JfSPA => {
       throw error;
     }
     // Otherwise, format the error
-    throw new Error(`[${STATE.details.id}] ${errorObj.code}: ${errorObj.message}`, errorObj.details);
+    throw new Error(`[${STATE.details.id}] ${errorObj.code}: ${errorObj.message}`, errorObj?.details);
   };
 
   /**
