@@ -64,3 +64,11 @@ export const isNodeArray = (value: unknown): value is Node[] =>
  */
 export const isNodeList = (value: unknown): value is NodeListOf<Node> =>
   value instanceof NodeList && [...value].every((item) => item instanceof Node);
+
+/**
+ * Checks if a node is also an element
+ *
+ * @param {Node} value - The value to check
+ * @returns {Element} True if the value is an Element
+ */
+export const isNodeAsElement = (value: Node): value is Element => value.nodeType === 1 && value instanceof Element;

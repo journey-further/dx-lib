@@ -1,5 +1,5 @@
 import { useMutationObserver } from "./useMutationObserver";
-import { validateSelectors, log as _log, isDebug, LogLevel, isFunction, isString } from "../helpers";
+import { validateSelectors, log as _log, isDebug, LogLevel, isFunction, isString, isNodeAsElement } from "../helpers";
 
 const VERSION: string = "1.0";
 
@@ -210,7 +210,7 @@ export const elementRemoved = (
 
             // Grab all the callbacks from our callbacks array and run them each
             getObserver().callbacks.forEach((cb) => {
-              if (typeof cb.callback == "function") cb.callback(node as Element);
+              if (isFunction(cb.callback) && isNodeAsElement(node)) cb.callback(node);
             });
           });
         });

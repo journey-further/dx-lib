@@ -2,6 +2,7 @@ import { insertStyle } from "./insertStyle";
 import { useSPA } from "./useSPA";
 import { useMutationObserver } from "./useMutationObserver";
 import { waitForElement } from "./waitForElement";
+import { isNodeAsElement } from "../helpers";
 
 const isRBTestType = (toCheck: unknown): toCheck is RBTest => toCheck instanceof Object && !("details" in toCheck);
 
@@ -268,7 +269,7 @@ export class RBTest {
             if (mutation.removedNodes.length == 0) return;
             mutation.removedNodes.forEach(async (node) => {
               try {
-                if (node.nodeType !== 1) return;
+                if (!isNodeAsElement(node)) return;
                 // Clean up the string
                 const match = this.#watchForRemoval.replace(/^(\.|#)/, "");
                 // Check if it's an id or not
@@ -276,9 +277,9 @@ export class RBTest {
                 let isMatched = false;
                 // If it's an id and the removed node matches
 
-                if (isId && (node as Element)?.id == match) isMatched = true;
+                if (isId && node?.id == match) isMatched = true;
                 // If it's a class and the removed node matches
-                if (!isId && (node as Element)?.classList.contains(match)) isMatched = true;
+                if (!isId && node?.classList.contains(match)) isMatched = true;
                 // If we have a match, re-init
                 if (isMatched) {
                   console.log(`%cElement was removed, re-init`, "background: orange; color: #fff; padding: 2px 5px;");

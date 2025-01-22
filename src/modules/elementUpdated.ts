@@ -8,6 +8,7 @@ import {
   isString,
   isObject,
   isStringArray,
+  isNodeAsElement,
 } from "../helpers";
 
 const VERSION: string = "1.0";
@@ -315,10 +316,9 @@ export const elementUpdated = (
 
       const mutationCallback: MutationCallback = (mutations) => {
         mutations.forEach((mutation) => {
-          if (mutation.target.nodeType !== 1) return;
           // Grab all the callbacks from our callbacks array and run them each
           getObserver().callbacks.forEach((cb) => {
-            if (typeof cb.callback == "function") cb.callback(mutation);
+            if (isFunction(cb.callback)) cb.callback(mutation);
           });
         });
       };
@@ -353,7 +353,8 @@ export const elementUpdated = (
     getObserver()?.callbacks.push({
       id: id,
       callback: (mutation) => {
-        const target = mutation.target as Element;
+        const { target } = mutation;
+        if (!isNodeAsElement(target)) return;
 
         // check whether this element matches the selector
         if (!target.matches(selector)) return;

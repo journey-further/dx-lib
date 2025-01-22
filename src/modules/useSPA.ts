@@ -12,6 +12,7 @@ import {
   LogLevel,
   validateSelectors,
   isObject,
+  isNodeAsElement,
 } from "../helpers";
 import { debounce } from "./debounce";
 
@@ -103,17 +104,6 @@ export interface JfSPA {
    *     watchForRemoval: "#test-element",
    *     removeOnPageChange: [".test-class", "#test-id"],
    *   });
-   *
-   * @param {object} options - Configuration options for the test setup
-   * @param {Function} options.apply - Function to execute when applying the test. _(required)_
-   * @param {Function} [options.reset] - Function to execute when resetting the test
-   * @param {string} [options.style] - CSS styles to apply during the test
-   * @param {string | string[] | RegExp | JfSPAOptions} options.location - Pattern(s) to match the current page against.
-   *   _(required)_ Can be a string for exact match, array of strings for multiple matches, or RegExp for pattern
-   *   matching
-   * @param {string | string[]} [options.watchForRemoval] - Selector(s) to watch for removal and trigger reapplication
-   * @param {string | string[]} [options.removeOnPageChange] - Selector(s) for elements to remove when page changes
-   * @param {string | string[]} [options.removedNode] - Name of node to watch for being removed on SPA reset
    */
   init: (options: JfSPAOptions) => unknown;
 }
@@ -1033,7 +1023,8 @@ export const useSPA = (id: string): JfSPA => {
                 // Define a function that checks if the element matches
                 const checkElementMatches = async (selector: string) => {
                   try {
-                    if ((node as Element).matches(selector)) {
+                    if (!isNodeAsElement(node)) return;
+                    if (node.matches(selector)) {
                       log(`Element was removed, re-init`, "warn");
                       if (STATE.loopCount >= 5) {
                         log(`Max loop count reached, aborting`, "error");
