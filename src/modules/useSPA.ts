@@ -325,7 +325,10 @@ export const useSPA = (id: string): JfSPA => {
       id: null,
     },
   };
-  const log = (msg: string, lvl: LogLevel, data?: unknown) => _log(msg, lvl, `useSPA: ${id}`, data);
+  const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
+    if (!debug && isDebug()) return;
+    _log(msg, lvl, `useSPA [${id}]`, data);
+  };
   /**
    * Sets up the SPA test with provided options
    *
@@ -347,7 +350,7 @@ export const useSPA = (id: string): JfSPA => {
         return false;
       }
 
-      log(`Creating Test`, "success", isDebug() ? options : null);
+      log(`Creating Test`, "success", false, isDebug() ? options : null);
 
       const hasValidOptions = validateOptions(options);
       if (!hasValidOptions) {
@@ -406,18 +409,18 @@ export const useSPA = (id: string): JfSPA => {
       bindReInitListener();
 
       // Bind an event to handle the page change
-      if (isDebug()) log(`+ Binding Page Change Listener`, "detail");
+      log(`+ Binding Page Change Listener`, "detail", true);
       window.removeEventListener(`jf-pagechange-${PAGE_CHANGE_VERSION}`, handlePageChange);
       window.addEventListener(`jf-pagechange-${PAGE_CHANGE_VERSION}`, handlePageChange);
 
       // Bind an event to handle the page change
-      if (isDebug()) log(`+ Binding SPA Re-init Listener`, "detail");
+      log(`+ Binding SPA Re-init Listener`, "detail", true);
       window.removeEventListener(`jf-reinit-${REINIT_VERSION}`, handleReInit);
       window.addEventListener(`jf-reinit-${REINIT_VERSION}`, handleReInit);
 
       if (!!STATE.options.screen) {
         // Bind an event to handle the page change
-        if (isDebug()) log(`+ Binding Resize Listener`, "detail");
+        log(`+ Binding Resize Listener`, "detail", true);
         window.removeEventListener(`resize`, handleResize);
         window.addEventListener(`resize`, handleResize);
       }
@@ -529,7 +532,7 @@ export const useSPA = (id: string): JfSPA => {
   const checkPageUrl = () => {
     try {
       const { match, type } = isLocationObject(STATE.options.location) && STATE.options.location;
-      if (isDebug()) log(`Checking URL`, "info", isDebug() ? `type: ${type}, match: ${match}` : null);
+      log(`Checking URL`, "info", true, `type: ${type}, match: ${match}`);
 
       // Check if it's regex
       if (isRegExp(match)) {
@@ -559,7 +562,7 @@ export const useSPA = (id: string): JfSPA => {
         }
       }
 
-      if (isDebug()) log(`+ URL matched`, "success");
+      log(`+ URL matched`, "success", true);
       return true;
     } catch (error) {
       throwError(error);
@@ -571,7 +574,7 @@ export const useSPA = (id: string): JfSPA => {
     try {
       const { condition, timeout } = isLocationObject(STATE.options.location) && STATE.options.location;
       if (condition == null) return true;
-      if (isDebug()) log(`Checking page condition`, "info", isDebug() ? `timeout: ${timeout}ms` : null);
+      log(`Checking page condition`, "info", true, `timeout: ${timeout}ms`);
 
       const conditionMatched = await new Promise((resolve) => {
         let totalTime = 0;
@@ -589,7 +592,7 @@ export const useSPA = (id: string): JfSPA => {
           // Run our condition check, and if its true, then return a true value and stop polling
           if (isFunction(condition) && condition() == true) {
             clearTimeout(interval);
-            if (isDebug()) log(`+ Condition matched`, "success");
+            log(`+ Condition matched`, "success", true);
             resolve(true);
           }
         }, 50);
@@ -913,12 +916,12 @@ export const useSPA = (id: string): JfSPA => {
       // Check for min width
       if (minWidth) {
         if (window.innerWidth < minWidth) {
-          log("Screen is smaller than minWidth, resetting", "warn", minWidth);
+          log("Screen is smaller than minWidth, resetting", "warn", false, minWidth);
           // screen is smaller, reset
           resetTest();
         }
       } else {
-        log("Screen is larger than minWidth, resetting", "warn", minWidth);
+        log("Screen is larger than minWidth, resetting", "warn", false, minWidth);
         // screen is smaller, reset
         resetTest();
       }
