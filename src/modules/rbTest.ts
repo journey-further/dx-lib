@@ -1,43 +1,17 @@
 import { insertStyle } from "./insertStyle";
-import { JfObserver, useMutationObserver } from "./useMutationObserver";
+import { useSPA } from "./useSPA";
+import { useMutationObserver } from "./useMutationObserver";
 import { waitForElement } from "./waitForElement";
 
-declare global {
-  interface Window {
-    jfTests: {
-      tests: RBTest[];
-      reapplyListener?: JfObserver;
-      pageListener?: JfObserver;
-      pagePath?: string;
-    };
-  }
-}
-
-// declare global window.jfTests = {}
+const isRBTestType = (toCheck: unknown): toCheck is RBTest => toCheck instanceof Object && !("details" in toCheck);
 
 /**
- * Class framework to create and manage A/B tests on Russell & Bromley websites.
+ * @deprecated ❌ This function is no longer in use, please see {@link useSPA} ❌
  *
- * The `RBTest` class provides a structured way to implement tests with features such as:
+ *   -_-_-_-_-_-_-_-_-_-_-
  *
- * - Applying test-specific styles and functions.
- * - Watching for element removal and reapplying the test automatically.
- * - Handling page changes in Single Page Applications (SPAs).
- * - Cleaning up resources to prevent memory leaks or unintended side effects.
- *
- * The class integrates with globally scoped listeners and observers to manage tests effectively, even in dynamic
- * environments.
- *
- * @param {string} id - The unique identifier for the test.
- * @param {object} options - Configuration options for the test setup.
- * @param {() => void} options.apply - The function to execute when the test is applied (required).
- * @param {() => void} [options.reset] - The function to reset the test (optional).
- * @param {string} [options.style] - The CSS styles to apply during the test (optional).
- * @param {RegExp} options.pageRegex - A regular expression to match the pages where the test should run (required).
- * @param {string} [options.watchForRemoval] - A CSS selector for elements to monitor for removal and trigger
- *   reapplication (optional).
- *
- *   Key Features:
+ *   Class framework to create and manage A/B tests on Russell & Bromley websites. The `RBTest` class provides a
+ *   structured way to implement tests with the following features:
  *
  *   - Automatically applies the test when initialized and ensures it only runs once.
  *   - Validates the test setup, including required parameters like `apply` and `pageRegex`.
@@ -45,9 +19,9 @@ declare global {
  *   - Listens for page changes in SPAs and ensures the test is applied or reset as needed.
  *   - Integrates with `useMutationObserver` and `waitForElement` utilities for DOM observation.
  *
- *   Usage:
- *
- *   ```typescript
+ *   The class integrates with globally scoped listeners and observers to manage tests effectively, even in dynamic
+ *   environments.
+ * @example
  *   const test = new RBTest("TestID", {
  *     apply: () => {
  *       console.log("Test applied");
@@ -60,9 +34,16 @@ declare global {
  *     watchForRemoval: "#test-element",
  *   });
  *   test.init();
- *   ```
+ *
+ * @param {string} id - The unique identifier for the test.
+ * @param {object} options - Configuration options for the test setup.
+ * @param {() => void} options.apply - The function to execute when the test is applied (required).
+ * @param {() => void} [options.reset] - The function to reset the test (optional).
+ * @param {string} [options.style] - The CSS styles to apply during the test (optional).
+ * @param {RegExp} options.pageRegex - A regular expression to match the pages where the test should run (required).
+ * @param {string} [options.watchForRemoval] - A CSS selector for elements to monitor for removal and trigger
+ *   reapplication (optional).
  */
-
 export class RBTest {
   isRunning = false;
 
@@ -83,28 +64,13 @@ export class RBTest {
   id: string;
 
   /**
-   * Class framework to create and manage A/B tests on Russell & Bromley websites.
+   * @deprecated ❌ This function is no longer in use, please see {@link useSPA} ❌
    *
-   * The `RBTest` class provides a structured way to implement tests with features such as:
+   *   -_-_-_-_-_-_-_-_-_-_-
    *
-   * - Applying test-specific styles and functions.
-   * - Watching for element removal and reapplying the test automatically.
-   * - Handling page changes in Single Page Applications (SPAs).
-   * - Cleaning up resources to prevent memory leaks or unintended side effects.
+   *   Class framework to create and manage A/B tests on Russell & Bromley websites.
    *
-   * The class integrates with globally scoped listeners and observers to manage tests effectively, even in dynamic
-   * environments.
-   *
-   * @param {string} id - The unique identifier for the test.
-   * @param {object} options - Configuration options for the test setup.
-   * @param {() => void} options.apply - The function to execute when the test is applied. _(Required)_
-   * @param {() => void} [options.reset] - The function to reset the test.
-   * @param {string} [options.style] - The CSS styles to apply during the test.
-   * @param {RegExp} options.pageRegex - A regular expression to match the pages where the test should run. _(Required)_
-   * @param {string} [options.watchForRemoval] - A CSS selector for elements to monitor for removal and trigger
-   *   reapplication.
-   *
-   *   Key Features:
+   *   The `RBTest` class provides a structured way to implement tests with the following features:
    *
    *   - Automatically applies the test when initialized and ensures it only runs once.
    *   - Validates the test setup, including required parameters like `apply` and `pageRegex`.
@@ -112,9 +78,9 @@ export class RBTest {
    *   - Listens for page changes in SPAs and ensures the test is applied or reset as needed.
    *   - Integrates with `useMutationObserver` and `waitForElement` utilities for DOM observation.
    *
-   *   Usage:
-   *
-   *   ```javascript
+   *   The class integrates with globally scoped listeners and observers to manage tests effectively, even in dynamic
+   *   environments.
+   * @example
    *   const test = new RBTest("TestID", {
    *     apply: () => {
    *       console.log("Test applied");
@@ -127,9 +93,16 @@ export class RBTest {
    *     watchForRemoval: "#test-element",
    *   });
    *   test.init();
-   *   ```
+   *
+   * @param {string} id - The unique identifier for the test.
+   * @param {object} options - Configuration options for the test setup.
+   * @param {() => void} options.apply - The function to execute when the test is applied (required).
+   * @param {() => void} [options.reset] - The function to reset the test (optional).
+   * @param {string} [options.style] - The CSS styles to apply during the test (optional).
+   * @param {RegExp} options.pageRegex - A regular expression to match the pages where the test should run (required).
+   * @param {string} [options.watchForRemoval] - A CSS selector for elements to monitor for removal and trigger
+   *   reapplication (optional).
    */
-
   constructor(
     id: string,
     options: {
@@ -145,7 +118,7 @@ export class RBTest {
       this.id = id;
 
       window.jfTests = window.jfTests || { tests: [] };
-      this.isRunning = !!window.jfTests.tests.find((test) => test.id == id);
+      this.isRunning = !!window.jfTests.tests.find((test) => isRBTestType(test) && test.id == id);
       if (this.isRunning) {
         console.log(`%cTest ${id} already setup`, "background: orange; color: #fff; padding: 2px 5px;");
         // change our init function so it does nothing as this version of the test doesn't need to run

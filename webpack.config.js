@@ -15,7 +15,7 @@ export default {
   mode: "development",
   plugins: [
     new JfCroHmr({
-      previewUrl: "https://www.bookshop.org/books",
+      previewUrl: "https://www.devere.co.uk",
       previewModule: "variantA",
       playwrightOptions: {
         channel: "chromium",

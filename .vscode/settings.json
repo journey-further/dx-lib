@@ -57,5 +57,6 @@
   "editor.formatOnPaste": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
-  }
+  },
+  "typescript.validate.enable": true
 }

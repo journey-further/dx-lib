@@ -15,42 +15,112 @@
   // 	],
   // 	"description": "Log output to console"
   // },
-
+  // SCSS mixins
+  "SM mixin": {
+    "scope": "scss",
+    "prefix": "sm",
+    "body": [
+      "@mixin sm {",
+      "\t@media screen and (max-width: $1){",
+      "\t\t@content;",
+      "\t}",
+      "}"
+    ],
+    "description": "Adds a mixin for small screens"
+  },
+  "SM use": {
+    "scope": "scss",
+    "prefix": "smm",
+    "body": [
+      "@include sm {",
+      "\t$1",
+      "}"
+    ],
+    "description": "Use the mixin for small screens"
+  },
+  "MD mixin": {
+    "scope": "scss",
+    "prefix": "md",
+    "body": [
+      "@mixin md {",
+      "\t@media screen and (min-width: $1){",
+      "\t\t@content;",
+      "\t}",
+      "}"
+    ],
+    "description": "Adds a mixin for medium screens"
+  },
+  "MD use": {
+    "scope": "scss",
+    "prefix": "mdd",
+    "body": [
+      "@include md {",
+      "\t$1",
+      "}"
+    ],
+    "description": "Use the mixin for medium screens"
+  },
+  "LG mixin": {
+    "scope": "scss",
+    "prefix": "lg",
+    "body": [
+      "@mixin lg {",
+      "\t@media screen and (min-width: $1){",
+      "\t\t@content;",
+      "\t}",
+      "}"
+    ],
+    "description": "Adds a mixin for large screens"
+  },
+  "LG use": {
+    "scope": "scss",
+    "prefix": "lgg",
+    "body": [
+      "@include lg {",
+      "\t$1",
+      "}"
+    ],
+    "description": "Use the mixin for large screens"
+  },
   // Generic Helpers
   "Self-Executing Function": {
-    "scope": "javascript,html",
+    "scope": "javascript",
     "prefix": "selfFn",
-    "body": ["(function(){", "\t${1:// do something}", "})()"],
+    "body": [
+      "(function(){",
+      "\t${1:// do something}",
+      "})()"
+    ],
     "description": "Self-Executing Function"
   },
-
   "Add init function": {
     "scope": "javascript",
     "prefix": "init",
     "body": [
-      "(function init () {",
-      "  try {",
-      "    $0",
-      "  } catch (e) {",
-      "    console.warn(e);",
-      "  } finally {",
-      "    window.dataLayer = window.dataLayer || [];",
-      "    window.dataLayer.push({",
-      "      event: \"Optimize-View\",",
-      "      eventAction: \"_JFXXX_XXXX\",",
-      "      eventLabel: \"_\",",
-      "    });",
-      "  }",
+      "(async () => {",
+      "\ttry {",
+      "\t\t$1",
+      "\t} catch (e) {",
+      "\t\tconsole.warn(e);",
+      "\t}",
       "})();"
     ],
     "description": "Add an init function"
   },
-
+  "Import Style": {
+    "scope": "javascript",
+    "prefix": "style",
+    "body": "import { insertStyle } from \"jf-lib\";import style from \"./style.scss\";",
+    "description": "Import default stylesheet"
+  },
   "Empty innerHTML import": {
     "prefix": "emp",
     "body": "import {emptyElem} from \"../../../modules/lib/dist\""
   },
-
+  "Emit Error Import": {
+    "prefix": "emError",
+    "body": "const emitError = (error) => emitEvent('error', jfExperiment, error.message);"
+  },
   "Element In View": {
     "prefix": "elemInView",
     "body": [
@@ -77,40 +147,42 @@
     "prefix": "jqc",
     "body": "[class*=\"$1\"]"
   },
-
   // Useful JS functions
   "Query Selector": {
-    "scope": "javascript,html",
+    "scope": "javascript",
     "prefix": "qs",
-    "body": "document.querySelector(\"${1:selector}\")"
+    "body": "document.querySelector(\"$1\")"
   },
-
   "Query Selector All": {
-    "scope": "javascript,html",
+    "scope": "javascript",
     "prefix": "qsa",
-    "body": "document.querySelectorAll(\"${1:selector}\")"
+    "body": "document.querySelectorAll(\"${1:}\")"
   },
-
   "Query Selector Array": {
-    "scope": "javascript,html",
+    "scope": "javascript",
     "prefix": "qsaa",
-    "body": "Array.from(document.querySelectorAll(\"${1:selector}\"))"
+    "body": "[...document.querySelectorAll(\"${1:}\")]"
   },
-
   "Insert Style": {
     "scope": "javascript, html",
     "prefix": "styleInsert",
-    "body": ["import { insertStyle } from 'jf-lib';"]
+    "body": [
+      "import { insertStyle } from 'jf-lib';"
+    ]
   },
-
   "Insert CSS": {
-    "scope": "javascript,html",
+    "scope": "javascript",
     "prefix": "insertCSS",
-    "body": ["document.body.insertAdjacentHTML(\"beforeend\",`", "  <style>", "    $2", "  </style>", "`);"]
+    "body": [
+      "document.body.insertAdjacentHTML(\"beforeend\",`",
+      "  <style>",
+      "    $2",
+      "  </style>",
+      "`);"
+    ]
   },
-
   "Append": {
-    "scope": "javascript,html",
+    "scope": "javascript",
     "prefix": "append",
     "body": [
       "var e = document.createElement('$1');",
@@ -120,9 +192,8 @@
     ],
     "description": ""
   },
-
   "Prepend": {
-    "scope": "javascript,html",
+    "scope": "javascript",
     "prefix": "prepend",
     "body": [
       "var e = document.createElement(\"$1\");",
@@ -132,9 +203,8 @@
     ],
     "description": ""
   },
-
   "Insert Before": {
-    "scope": "javascript,html",
+    "scope": "javascript",
     "prefix": "insertBefore",
     "body": [
       "var e = document.createElement(\"$1\");",
@@ -144,9 +214,8 @@
     ],
     "description": ""
   },
-
   "Insert After": {
-    "scope": "javascript,html",
+    "scope": "javascript",
     "prefix": "insertAfter",
     "body": [
       "var e = document.createElement(\"$1\");",
@@ -156,61 +225,57 @@
     ],
     "description": ""
   },
-
   "Add Class": {
-    "scope": "javascript,html",
+    "scope": "javascript",
     "prefix": "addClass",
     "body": "document.querySelector(\"${1:selector}\").classList.add(\"${2:class}\");"
   },
-
   "Remove Class": {
-    "scope": "javascript,html",
+    "scope": "javascript",
     "prefix": "removeClass",
     "body": "document.querySelector(\"${1:selector}\").classList.remove(\"${2:class}\");"
   },
-
   "Toggle Class": {
-    "scope": "javascript,html",
+    "scope": "javascript",
     "prefix": "toggleClass",
     "body": "document.querySelector(\"${1:selector}\").classList.toggle(\"${2:class}\");"
   },
-
   "scrollTo": {
-    "scope": "javascript,html",
+    "scope": "javascript",
     "prefix": "scrollto",
     "body": "document.querySelector(\"${1:selector}\").scrollIntoView({ behavior: \"smooth\", block: \"start\"});"
   },
-
   "Check Body for class": {
-    "scope": "javascript,html",
+    "scope": "javascript",
     "prefix": "bodyClass",
     "body": "document.querySelector(\"body\").classList.contains(\"${1:selector}\");"
   },
-
   "Check URL": {
-    "scope": "javascript,html",
+    "scope": "javascript",
     "prefix": "urlMatch",
-    "body": "/$1/i.test(window.location.href)"
+    "body": "/$1/i.test(window.location.pathname)"
   },
-
   // Regex Snippets
   "Match Anything": {
     "prefix": "match",
     "body": "(?:(?:.|\\n)*?)"
   },
-
+  // SVG Psudeo
+  "SVG Psudeo": {
+    "prefix": "svp",
+    "body": "url('data:image/svg+xml,');"
+  },
   "Negative Match": {
     "prefix": "neg",
     "body": "(?!.*dont_match)match"
   },
-
   "End of URL": {
     "prefix": "end",
-    "body": "(\\/?)(\\?|$)"
+    "body": "\\/?(\\?|$)"
   },
-
   // Mutation Observers
   "Ready Function JS": {
+    "scope": "javascript",
     "prefix": "mo",
     "body": [
       "// prettier-ignore",
@@ -218,13 +283,17 @@
       "!function(e){var t,r=[],n=e.document,o=e.MutationObserver||e.WebKitMutationObserver;function c(){for(var e,t,o=0,c=r.length;o<c;o++){e=r[o];for(var l,s=0,u=(t=n.querySelectorAll(e.selector)).length;s<u;s++)(l=t[s]).ready||(l.ready=!0,e.fn.call(l,l))}}e.ready=function(e,l){r.push({selector:e,fn:l}),t||(t=new o(c)).observe(n.documentElement,{childList:!0,subtree:!0}),c()}}(window);"
     ]
   },
-
   "Ready Function": {
+    "scope": "javascript",
     "prefix": "er",
-    "body": ["ready(\"${1:selector}\", function(el) {", "  ${2:// do something}", "});"]
+    "body": [
+      "ready(\"${1:selector}\", (el) => {",
+      "  ${2:// do something}",
+      "});"
+    ]
   },
-
   "Always listening MO": {
+    "scope": "javascript",
     "prefix": "ko",
     "body": [
       "var target = document.querySelector(\"${1:selector}\")",
@@ -237,35 +306,62 @@
       "observer.observe(target, config);"
     ]
   },
-
   // WebTrends
   "GA dataLayer Tracking": {
+    "scope": "javascript",
     "prefix": "dl",
     "body": [
       "window.dataLayer = window.dataLayer || [];",
-      "dataLayer.push({",
-      "  \"event\":\"Optimize-View\",",
-      "  \"eventAction\":\"$1\",",
-      "  \"eventLabel\":\"$2\"",
+      "window.dataLayer.push({",
+      "  event: \"Optimize-View\",",
+      "  eventAction: `${1:${jfExperiment.ticketId\\}}`,",
+      "  eventLabel: \"$2\"",
       "});"
     ]
   },
-
+  "Mixpanel Tracking": {
+    "scope": "javascript",
+    "prefix": "mp",
+    "body": [
+      "if (!!window.mixpanel && !!window.mixpanel.track) {",
+      "  window.mixpanel.track(\"WTO Experiment\", {",
+      "    experimentId: \"$1\",",
+      "    variantId: \"$2\",",
+      "  });",
+      "}",
+      ""
+    ],
+  },
   "WTO Data": {
+    "scope": "javascript",
     "prefix": "wtdata",
     "body": "WT.optimizeModule.prototype.wtConfigObj.data"
   },
-
   "WTO Click": {
+    "scope": "javascript",
     "prefix": "wtclick",
-    "body": "WT.click({ testAlias: 'ta_JFLBA_0094', conversionPoint: 'dead_click' });"
+    "body": [
+      "WT.click({",
+      "  testAlias: 'ta_TEST_ID',",
+      "  conversionPoint: '$2',",
+      "  data: {",
+      "    key: value",
+      "  }",
+      "});"
+    ]
   },
-
   "opt_data Event tracking": {
+    "scope": "javascript",
     "prefix": "opt_data",
-    "body": ["window.opt_data = window.opt_data || [];", "window.opt_data.push({", "\t\"event\" : \"$1\"", "})"]
+    "body": [
+      "window.opt_data = window.opt_data || [];",
+      "window.opt_data.push({",
+      "\t\"event\" : \"$1\"",
+      "})"
+    ]
   },
   "OBF pollAndExecute": {
+    "scope": "javascript",
     "prefix": "pollAndExecute",
     "body": [
       "Test.pageview.suspend(\"waiting for page\");",
@@ -273,10 +369,10 @@
       "",
       "    if( $1 ){",
       "      // Conditions met, proceed",
-      "      WT.helpers.bdebug.log(\"%cConditions met\", \"background: #199bd7; color: #fff; padding: 2px 5px;\")",
+      "      WT.helpers.bdebug.log(`%c${Config.testAlias}: Conditions met`, \"background: #199bd7; color: #fff; padding: 2px 5px;\")",
       "    } else {",
       "      // Conditions not met, halt the test and show the page",
-      "      WT.helpers.bdebug.log(\"%cConditions not met\", \"background: #c00; color: #fff; padding: 2px 5px;\");",
+      "      WT.helpers.bdebug.log(`%c${Config.testAlias}: Conditions not met`, \"background: #c00; color: #fff; padding: 2px 5px;\");",
       "      Test.showHidePage(Config.showPage);",
       "      return false;",
       "    }",
@@ -292,7 +388,7 @@
       "        // Then run the following callback",
       "        then: function()",
       "        {",
-      "            WT.helpers.bdebug.log(\"%cSuccess!\", \"background: #0dc05f; color: #fff; padding: 2px 5px;\")",
+      "            WT.helpers.bdebug.log(`%c${Config.testAlias}: Success!`, \"background: #0dc05f; color: #fff; padding: 2px 5px;\")",
       "            Test.pageview.track();",
       "            Test.start(\"Rendering\", Test.Render);",
       "            Test.start(\"Tracking\", Test.Tracking);",
@@ -313,9 +409,9 @@
       "});"
     ]
   },
-
   // SiteSpect
   "Dynamic Modify": {
+    "scope": "javascript",
     "prefix": "domvar",
     "body": [
       "try {",
@@ -331,8 +427,8 @@
       "} catch(err) {}"
     ]
   },
-
   "Get element by Xpath": {
+    "scope": "javascript",
     "prefix": "xpathGet",
     "body": [
       "function getElementByXpath(path) {",
@@ -340,23 +436,15 @@
       "}"
     ]
   },
-
   "XPath contains text": {
+    "scope": "javascript",
     "prefix": "xpathContainsText",
-    "body": ["//div[contains(string(), 'Elangovan')]"]
-  },
-  "Push to GA": {
-    "prefix": "pushToDL",
     "body": [
-      "window.dataLayer = window.dataLayer || [];",
-      "window.dataLayer.push({",
-      "  event: \"Optimize-View\",",
-      "  eventAction: \"_JFXXX_XXXX\",",
-      "  eventLabel: \"_\"",
-      "});"
+      "//div[contains(string(), 'Elangovan')]"
     ]
   },
   "Get parent": {
+    "scope": "javascript",
     "prefix": "pa",
     "body": [
       "function getParents(el, parent){",
@@ -370,13 +458,25 @@
       "}"
     ]
   },
-
   "GHD OneTrustActiveGroups Cookie check": {
+    "scope": "javascript",
     "prefix": "otag",
     "body": " && !!window.OnetrustActiveGroups && /C0002/.test(OnetrustActiveGroups)"
   },
-
+  "Try/Catch": {
+    "scope": "javascript",
+    "prefix": "trycatch",
+    "body": [
+      "try {",
+      "\t$1",
+      "} catch(e){",
+      "\temitEvent('error', jfExperiment, e);",
+      "}"
+    ],
+    "description": "Insert a try...catch...finally including the DataLayer push"
+  },
   "Try/Catch/Finally": {
+    "scope": "javascript",
     "prefix": "tcf",
     "body": [
       "try {",
@@ -393,5 +493,158 @@
       "}"
     ],
     "description": "Insert a try...catch...finally including the DataLayer push"
+  },
+  "Try/Catch With Error Emitter": {
+    "scope": "javascript",
+    "prefix": "tce",
+    "body": [
+      "try {",
+      "\t$1",
+      "} catch (e) {",
+      "\tconsole.warn(`TICKET_ID: ${e.message}`);",
+      "\twindow.dispatchEvent(",
+      "\t\tnew CustomEvent(\"jf-wx-err\", {",
+      "\t\t\tdetail: {",
+      "\t\t\t\tticket: \"TICKET_ID\",\n\t\t\t\tmessage: e.message,\n\t\t\t}\n\t\t})\n\t);\n}"
+    ]
+  },
+  "Load Script": {
+    "scope": "javascript",
+    "prefix": "loadScript",
+    "body": [
+      "const scr = document.createElement(\"script\");",
+      "const head = document.head || document.getElementsByTagName(\"head\")[0];",
+      "scr.src = \"$1\";",
+      "scr.async = false; // optionally",
+      "scr.onload = () => {",
+      "\t// run something when the script has finished loading",
+      "\t$2",
+      "}",
+      "head.insertBefore(scr, head.firstChild);"
+    ]
+  },
+  "Experiment Skeleton": {
+    "scope": "javascript",
+    "prefix": "skel",
+    "body": [
+      "const STATE = {",
+      "  isObserving: false,",
+      "  observer: undefined,",
+      "  ticketId: \"\",",
+      "  variant: \"\",",
+      "};",
+      "\n",
+      "const watchForDomChanges = () => {",
+      "  if (STATE.isObserving) return;",
+      "  const target = document.querySelector(\"\");",
+      "  const config = {",
+      "    childList: true,",
+      "    subtree: true,",
+      "  };",
+      "  const callback = () => {",
+      "    disconnectObserver();",
+      "    applyChanges();",
+      "  };",
+      "  if (!STATE.observer) {",
+      "    STATE.observer = new MutationObserver(callback);",
+      "  }",
+      "  STATE.observer.observe(target, config);",
+      "  STATE.isObserving = true;",
+      "};",
+      "\n",
+      "const disconnectObserver = () => {",
+      "  STATE.observer?.disconnect();",
+      "  STATE.observer = undefined;",
+      "  STATE.isObserving = false;",
+      "};",
+      "\n",
+      "const applyChanges = () => {",
+      "  watchForDomChanges();",
+      "};",
+      "\n",
+      "(() => {",
+      "  try {",
+      "  } catch (e) {",
+      "    console.warn(e);",
+      "  } finally {",
+      "    window.dataLayer = window.dataLayer || [];",
+      "    window.dataLayer.push({",
+      "      event: \"Optimize-View\",",
+      "      eventAction: `_${STATE.ticketId}`,",
+      "      eventLabel: \"_\",",
+      "    });",
+      "  }",
+      "})();"
+    ]
+  },
+  "watchForChanges": {
+    "scope": "javascript",
+    "prefix": "watch",
+    "body": [
+      "const watchForChanges = () => {",
+      "  if (!!STATE.observer.details.isObserving) return;",
+      "  console.log(\"watching for changes\")",
+      "  /** @type {Element} The target element to listen for changes to */",
+      "  const target = document.querySelector(\"$1\");",
+      "  if(!!!target) {",
+      "  \tconsole.log(\"no watch target\");",
+      "  \treturn;",
+      "  };",
+      "",
+      "  /** @type {MutationObserverInit} The MutationObserver options */",
+      "  const config = { childList: true };",
+      "",
+      "\t/** @type {MutationCallback} The callback */",
+      "\tconst callback = (mutations) => {",
+      "\t\tmutations.forEach((mutation) => {",
+      "\t\t\t// Add your conditions to check the mutation",
+      "\t\t\t$2",
+      "\t\t})",
+      "\t}",
+      "",
+      "\t/** Trigger the observer */",
+      "\tSTATE.observer.observe(target, config, callback)",
+      "}"
+    ],
+    "description": "Wrapper for useMutationObserver"
+  },
+  "Console Log": {
+    "scope": "javascript",
+    "prefix": "clg",
+    "body": "console.log($1);"
+  },
+  "Console Warn": {
+    "scope": "javascript",
+    "prefix": "cwa",
+    "body": "console.warn($1);"
+  },
+  "Console Error": {
+    "scope": "javascript",
+    "prefix": "cer",
+    "body": "console.error($1);"
+  },
+  "Hide scrollbar": {
+    "scope": "scss",
+    "prefix": "scrollbar",
+    "body": [
+      "-ms-overflow-style: none;  /* IE and Edge */",
+      "scrollbar-width: none;  /* Firefox */",
+      "",
+      "&::-webkit-scrollbar {",
+      "\tdisplay:none; /* Chrome, Safari and Opera */",
+      "}"
+    ],
+    "description": "Hide the scrollbar in SCSS"
+  },
+  "Line Clamp": {
+    "prefix": "clamp",
+    "body": [
+      "display: -webkit-box;",
+      "-webkit-line-clamp: ${1:3};",
+      "-webkit-box-orient: vertical;",
+      "overflow: hidden;",
+      "text-overflow: hidden;"
+    ],
+    "description": "Add truncated text with line clamping"
   }
 }

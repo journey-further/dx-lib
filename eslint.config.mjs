@@ -147,7 +147,7 @@ export default [
       "no-continue": "off",
       "import/no-unresolved": "off",
       "spaced-comment": "off",
-
+      "@typescript-eslint/no-unsafe-function-type": "off",
       "node/no-unsupported-features/es-syntax": [
         "error",
         {
