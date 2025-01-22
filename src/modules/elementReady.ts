@@ -7,15 +7,15 @@ const VERSION: string = "1.0";
  * Interface for elementReady return instance
  *
  * - `init` Start listening for the requested element to be ready again
- * - `stop` Pause the listener
- * - `destroy` Remove the listener completely
+ * - `pause` Pause the listener
+ * - `disconnect` Remove the listener completely
  */
 export interface JfReady {
   /**
    * Start listening for the requested element to be ready again
    *
    * _Note: this function is only required if you want to re-listen once the elementReady listener is stopped or
-   * destroyed. Running it whilst the listener is already bound will just error out due to the same id being used_
+   * disconnected. Running it whilst the listener is already bound will just error out due to the same id being used_
    *
    * @returns
    */
@@ -29,16 +29,16 @@ export interface JfReady {
    *
    * @returns
    */
-  stop: () => void;
+  pause: () => void;
   /**
    * Completely remove this elementReady listener. Will stop listening for any future elements to be
    *
-   * _Note: running `init` after `destroy` will restart the listener, and will treat all existing elements as **NOT**
+   * _Note: running `init` after `disconnect` will restart the listener, and will treat all existing elements as **NOT**
    * found, so the callback will re-trigger for these elements_
    *
    * @returns
    */
-  destroy: (delay?: number) => void;
+  disconnect: (delay?: number) => void;
 }
 
 /**
@@ -65,7 +65,7 @@ const initializeJFLib = () => {
  * Creates a new mutation observer instance for the current version Initializes the observer and callbacks array in the
  * global state
  */
-const createReadyObserver = () => {
+const createObserver = () => {
   window.jfLib.elementReady[VERSION] = {
     observer: useMutationObserver(`elementReady-${VERSION}`),
     callbacks: [],
@@ -77,7 +77,7 @@ const createReadyObserver = () => {
  *
  * @returns The observer instance and callbacks for the current version, or undefined if not initialized
  */
-const getReadyObserver = () => {
+const getObserver = () => {
   return window.jfLib.elementReady?.[VERSION];
 };
 
@@ -107,8 +107,8 @@ const getReadyObserver = () => {
  *   function that returns `true` for the callback to execute.
  * @returns
  *
- *   - `init` Function to re-init the listener once destroyed
- *   - `destroy` Function to completely remove this listener
+ *   - `init` Function to re-init the listener once disconnected
+ *   - `disconnect` Function to completely remove this listener
  */
 
 export const elementReady = (
@@ -117,7 +117,10 @@ export const elementReady = (
   id: string,
   conditions?: (el: Element) => boolean
 ): JfReady => {
-  const log = (msg: string, lvl: LogLevel, data?: unknown) => _log(msg, lvl, `elementReady [${id}]`, data);
+  const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
+    if (!debug && isDebug()) return;
+    _log(msg, lvl, `[${id}] elementReady`, data);
+  };
 
   /**
    * Validates all input parameters for the elementReady function
@@ -172,6 +175,25 @@ export const elementReady = (
   /**
    * Checks the element for readiness
    *
+   * - Checks if extra conditions were provided, and if so, checks them against the target
+   *
+   * @param {Element} target - DOM element to check
+   * @returns {boolean} True if passed conditions
+   */
+  const checkConditions = (target: Element) => {
+    // check if it also matches the conditions
+    if (!!conditions && typeof conditions == "function") {
+      if (conditions(target) !== true) {
+        log("Ignored: conditions not matched", "warn", true, target);
+        return false;
+      }
+    }
+    return true;
+  };
+
+  /**
+   * Checks the element for readiness
+   *
    * - Validates that it hasn't already been marked as ready
    * - Checks if extra conditions were provided, and if so, checks them against the target
    * - Marks the element as having been ready
@@ -181,26 +203,21 @@ export const elementReady = (
    */
   const checkElement = (target: Element) => {
     // if it's already been marked as ready, then skip this
-    if (target?.ready?.includes(id)) {
-      if (isDebug()) log("Element found, but already marked as ready", "warn", target);
+    if (target?.jfReady?.includes(id)) {
+      log("Ignored: Already marked as ready", "warn", true, target);
       return;
     }
 
     // check if it also matches the conditions
-    if (!!conditions && typeof conditions == "function") {
-      if (conditions(target) !== true) {
-        if (isDebug()) log("Element found, but conditions not matched", "warn", target);
-        return;
-      }
-    }
+    if (!checkConditions(target)) return;
 
     // mark it as ready
-    target.ready = target.ready || [];
-    target.ready.push(id);
+    target.jfReady = target.jfReady || [];
+    target.jfReady.push(id);
     target.setAttribute("jf-ready", "");
 
     // then run our callback
-    if (isDebug()) log("Element found", "info");
+    log("Element found", "info", true);
     callback(target);
   };
 
@@ -209,7 +226,7 @@ export const elementReady = (
    * handled yet
    */
   const checkExistingElements = () => {
-    if (isDebug()) log("Checking existing elements in DOM", "info");
+    log("Checking existing elements", "info", true);
     const elements = document.querySelectorAll(selector);
     elements.forEach((element) => {
       checkElement(element);
@@ -224,12 +241,12 @@ export const elementReady = (
     // Setup lib
     initializeJFLib();
     // Abort if we've already added this listener as we only need one
-    if (!!getReadyObserver()) {
-      if (isDebug()) log("Observer already bound", "warn");
+    if (!!getObserver()) {
+      log("Global observer exists", "warn", true);
       return;
     }
 
-    if (isDebug()) log("+ Binding observer", "detail");
+    log("Binding observer", "detail", true);
 
     try {
       // bind to html
@@ -246,7 +263,7 @@ export const elementReady = (
             if (node.nodeType !== 1) return;
 
             // Grab all the callbacks from our callbacks array and run them each
-            getReadyObserver().callbacks.forEach((cb) => {
+            getObserver().callbacks.forEach((cb) => {
               if (typeof cb.callback == "function") cb.callback(node as Element);
             });
           });
@@ -254,9 +271,9 @@ export const elementReady = (
       };
 
       // Setup the observer
-      createReadyObserver();
+      createObserver();
       // Start it
-      getReadyObserver().observer.observe(target, config, mutationCallback);
+      getObserver().observer.observe(target, config, mutationCallback);
     } catch (err) {
       log(err, "error");
     }
@@ -264,6 +281,8 @@ export const elementReady = (
 
   /** Initializes the element ready functionality. Sets up observers and processes existing elements */
   const initFunctionality = () => {
+    log("Creating listener", "info", true);
+
     // 1. Check if we've already bound this callback with matching id
     const hasCallback = window.jfLib?.elementReady?.[VERSION]?.callbacks?.find((cb) => cb.id == id);
     if (hasCallback) {
@@ -271,19 +290,19 @@ export const elementReady = (
       return;
     }
 
-    log("Listening", "success");
-
     // 2. Bind the elementReady observer to listen for any future changes
     bindObserver();
 
     // 3. Push our callback into the array
-    getReadyObserver()?.callbacks.push({
+    getObserver()?.callbacks.push({
       id: id,
-      callback: (e) => {
-        if (!e.matches(selector)) return;
-        checkElement(e);
+      callback: (target) => {
+        if (!target.matches(selector)) return;
+        checkElement(target);
       },
     });
+
+    log("Listening", "success");
 
     // 4. Loop the dom initially to find any that already exist
     checkExistingElements();
@@ -295,15 +314,15 @@ export const elementReady = (
    * @param delay - Optional delay before cleanup _(default: 50ms)_
    * @returns Promise that resolves when cleanup is complete
    */
-  const stop = async (delay: number = 50) => {
-    if (!!!getReadyObserver().callbacks) return;
+  const pause = async (delay: number = 50) => {
+    if (!!!getObserver().callbacks) return;
 
     try {
       // wait a small delay
       await new Promise((resolve) => setTimeout(resolve, delay));
       // remove the listener
       log("Pausing listener", "warn");
-      getReadyObserver().callbacks = getReadyObserver().callbacks.filter((cb) => cb.id !== id);
+      getObserver().callbacks = getObserver().callbacks.filter((cb) => cb.id !== id);
     } catch (error) {
       log(error, "error");
     }
@@ -315,28 +334,28 @@ export const elementReady = (
    * @param delay - Optional delay before cleanup _(default: 50ms)_
    * @returns Promise that resolves when cleanup is complete
    */
-  const destroy = async (delay: number = 50) => {
-    if (!!!getReadyObserver().callbacks) return;
+  const disconnect = async (delay: number = 50) => {
+    if (!!!getObserver().callbacks) return;
 
     try {
       // wait a small delay
       await new Promise((resolve) => setTimeout(resolve, delay));
       // remove the listener
-      log("Removing listener", "warn");
-      getReadyObserver().callbacks = getReadyObserver().callbacks.filter((cb) => cb.id !== id);
+      log("Removing listener", "error");
+      getObserver().callbacks = getObserver().callbacks.filter((cb) => cb.id !== id);
       // also search the dom for any current elements and mark them as no longer ready
       document.querySelectorAll(`[jf-ready]`).forEach((el) => {
         // Ignore if we don't have a ready
-        if (!el.ready) return;
+        if (!el.jfReady) return;
         // Ignore if ready doesn't include this id
-        if (!el.ready.includes(id)) return;
+        if (!el.jfReady.includes(id)) return;
 
         // Replace the ready array with one without this id
-        el.ready = el.ready.filter((e) => e != id);
+        el.jfReady = el.jfReady.filter((e) => e != id);
 
         // If we've got no more ready objects, then remove the jf-ready flag on this element
-        if (el.ready.length == 0) {
-          el.ready = undefined;
+        if (el.jfReady.length == 0) {
+          el.jfReady = undefined;
           el.removeAttribute("jf-ready");
         }
       });
@@ -355,7 +374,7 @@ export const elementReady = (
   // Return the exposed functions
   return {
     init,
-    stop,
-    destroy,
+    pause,
+    disconnect,
   };
 };
