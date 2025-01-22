@@ -178,6 +178,11 @@ export class RBTest {
       console.log(`\t%cBinding Page Change`, "background: purple; color: #fff; padding: 2px 5px;");
       window.removeEventListener("wt-pagechange", this.#handlePageChange);
       window.addEventListener("wt-pagechange", this.#handlePageChange);
+
+      // Bind an event to handle the re-init
+      console.log(`\t%cBinding Re-Init`, "background: purple; color: #fff; padding: 2px 5px;");
+      window.removeEventListener("jf-reinit", this.#handleReInit);
+      window.addEventListener("jf-reinit", this.#handleReInit);
     } catch (e) {
       this.#error(e);
     }
@@ -215,6 +220,15 @@ export class RBTest {
   #handlePageChange = async () => {
     try {
       console.log(`%cPage changed`, "background: #199bd7; color: #fff; padding: 2px 5px;");
+      await this.init();
+    } catch (e) {
+      this.#error(e);
+    }
+  };
+
+  #handleReInit = async () => {
+    try {
+      console.log(`%cSPA changed`, "background: #199bd7; color: #fff; padding: 2px 5px;");
       await this.init();
     } catch (e) {
       this.#error(e);
@@ -342,7 +356,8 @@ export class RBTest {
                 `%cMain element re-added, restarting test`,
                 "background: green; color: #fff; padding: 2px 5px;"
               );
-              await this.init();
+              // await this.init();
+              window.dispatchEvent(new Event("jf-reinit"));
             } catch (e) {
               this.#error(e);
             }
