@@ -71,7 +71,7 @@ export interface JfObserver {
    * @example
    *   const watchForChanges = () => {
    *     // Get a target
-   *     const target = document.querySelector(".some--class");
+   *     const target = document.querySelector(".some--class"); // can also use document.querySelectorAll(...)
    *     if (!!!target) return;
    *
    *     // Setup the config

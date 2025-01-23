@@ -76,23 +76,34 @@ const getObserver = () => {
  * This function monitors the DOM for elements matching the given selector being removed. Once a matching element is
  * found and satisfies optional conditions, the callback function is executed.
  *
+ * The returned object provides methods to:
+ *
+ * - Completely remove the listener (destroy)
+ * - Restart the listener (init)
+ *
  * @example
- *   elementRemoved(
+ *   const e = elementRemoved(
  *     ".some_class",
  *     (el) => {
  *       console.log("it's removed!");
  *       // do something
  *     },
  *     "some_unique_id",
- *     () => true // optional condition check
+ *     (el) => true // optional condition check on the matched element
  *   );
+ *
+ *   // kill the listener
+ *   e.destroy();
+ *
+ *   // restart the listener
+ *   e.init();
  *
  * @param {string} selector - A CSS selector string used to identify the target element. _(required)_
  * @param {Function} callback - A function to execute when the element is removed. _(required)_
  * @param {string} id - A unique identifier to track elements that have already triggered the callback. _(required)_
  * @param {Function} conditions - Optional conditions to validate the element before triggering the callback. Must be a
  *   function that returns `true` for the callback to execute.
- * @returns
+ * @returns Functions:
  *
  *   - `init` Function to re-init the listener once destroyed
  *   - `destroy` Function to completely remove this listener

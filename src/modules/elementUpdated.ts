@@ -96,30 +96,45 @@ const getObserver = () => {
 };
 
 /**
- * Detects when an element matching a specific CSS selector is updated from the DOM and executes a callback.
+ * Detects when an element matching a specific CSS selector is updated in the DOM and executes a callback.
  *
  * This function monitors the DOM for elements matching the given selector being removed. Once a matching element is
  * found and satisfies optional conditions, the callback function is executed.
  *
+ * By default, only **class attribute changes and textContent** updates are listened to - this can be overridden by
+ * passing an _options_ param
+ *
+ * The returned object provides methods to:
+ *
+ * - Completely remove the listener (destroy)
+ * - Restart the listener (init)
+ *
  * @example
- *   elementUpdated(
+ *   const e = elementUpdated(
  *     ".some_class",
  *     (el) => {
  *       console.log("it's updated!");
  *       // do something
  *     },
  *     "some_unique_id",
- *     () => true // optional condition check
+ *     { attributes: true, textContent: true, attributesFilter: ["class"] }, // optional filters for which updates are
+ *     (el) => true // optional condition check on the matched element
  *   );
+ *
+ *   // kill the listener
+ *   e.destroy();
+ *
+ *   // restart the listener
+ *   e.init();
  *
  * @param {string} selector - A CSS selector string used to identify the target element. _(required)_
  * @param {Function} callback - A function to execute when the element is removed. _(required)_
  * @param {string} id - A unique identifier to track elements that have already triggered the callback. _(required)_
  * @param {JfUpdatedOptions} options - Optional object to filter by specific updates _(defaults to only listen for class
- *   changes)_
+ *   and textContent changes)_
  * @param {Function} [conditions] - Optional conditions to validate the element before triggering the callback. Must be
  *   a function that returns `true` for the callback to execute.
- * @returns
+ * @returns Functions:
  *
  *   - `init` Function to re-init the listener once destroyed
  *   - `destroy` Function to completely remove this listener
