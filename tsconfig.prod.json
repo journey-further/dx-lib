@@ -4,7 +4,7 @@
     "rootDir": "src",
     "declarationDir": "dist/declarations"
   },
-  "include": ["src/index.ts"],
+  "include": ["src/globals.d.ts", "src/index.ts"],
   "exclude": ["eslint.config.mjs"],
   "tsc-alias": {
     "resolveFullPaths": true

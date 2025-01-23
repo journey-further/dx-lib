@@ -1,6 +1,6 @@
 {
   "name": "jf-lib",
-  "version": "1.5.9",
+  "version": "2.0.0-staging.1",
   "main": "dist/index.js",
   "repository": "https://github.com/jf-conversion/jf-lib",
   "author": "Paul Singh",
@@ -12,10 +12,10 @@
     "dev": "webpack --watch",
     "dev:build": "yarn prepare --watch",
     "prepare": "yarn --silent build",
-    "test": "jest",
+    "test": "jest --silent",
     "lint": "eslint src --fix",
     "prettier": "prettier src --write",
-    "build": "rm -rf dist && tsc -p tsconfig.prod.json && tsc-alias -p tsconfig.prod.json",
+    "build": "rm -rf dist && tsc-alias -p tsconfig.prod.json && tsc -p tsconfig.prod.json",
     "release:dry": "node-env-run --exec \"semantic-release --dry-run --debug --no-ci --repositoryUrl \"$(git remote get-url origin | tr -d '\n')\"\"",
     "docs": "yarn index && typedoc",
     "index": "npx run-func ./generateIndex.js init"
