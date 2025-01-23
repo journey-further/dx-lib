@@ -103,6 +103,7 @@ export interface JfSPA {
    *     location: "/test-page", // or ["/page1", "/page2"] or /\/test-./
    *     watchForRemoval: "#test-element",
    *     removeOnPageChange: [".test-class", "#test-id"],
+   *     alwaysReset: true,
    *   });
    */
   init: (options: JfSPAOptions) => unknown;
@@ -269,33 +270,51 @@ export interface JfSPAPageOptions {
  * - Start running a test (`init`)
  * - Reset a test (`reset`)
  * - Completely remove a test (`destroy`)
+ * - Get details of the test (`details`)
  *
  * @example
  *   const STATE = {
  *     Test: useSPA("TestID"),
  *   };
  *
- *   // Start the test
- *   Test.init({
- *     apply: () => {
- *       console.log("Test applied");
- *     },
- *     reset: () => {
- *       console.log("Test reset");
- *     },
- *     style: ".my-test { color: red; }",
- *     location: "/test-page", // or ["/page1", "/page2"] or /.*?/
- *     watchForRemoval: "#test-element",
- *     removeOnPageChange: [".test-class", "#test-id"],
- *   });
+ *   const resetChanges = () => {
+ *     // undo something
+ *   };
  *
- *   // Reset the test
- *   Test.reset();
+ *   const applyChanges = () => {
+ *     // do something
+ *   };
  *
- *   // Remove the test completely
- *   Test.destroy();
+ *   (() => {
+ *     try {
+ *       // Start the test
+ *       Test.init({
+ *         apply: applyChanges,
+ *         reset: resetChanges,
+ *         style: ".my-test { color: red; }",
+ *         location: "/test-page", // or ["/page1", "/page2"] or /.*?/
+ *         watchForRemoval: "#test-element",
+ *         removeOnPageChange: [".test-class", "#test-id"],
+ *         alwaysReset: true,
+ *       });
+ *
+ *       // Reset the test
+ *       Test.reset();
+ *
+ *       // Remove the test completely
+ *       Test.destroy();
+ *     } catch (e) {
+ *       // ...
+ *     }
+ *   })();
  *
  * @param {string} id Unique identifier for the test - will prevent the test from being run multiple times
+ * @returns Functions:
+ *
+ *   - `details` Get details of the test
+ *   - `init` Function to start the test
+ *   - `reset` Function to reset the test, using the passed `reset` function
+ *   - `destroy` Function to completely remove this test
  */
 export const useSPA = (id: string): JfSPA => {
   // Setup initial state

@@ -88,16 +88,31 @@ const getObserver = () => {
  * satisfies optional conditions, the callback function is executed. Each element is marked as "ready" after the
  * callback has run, preventing duplicate executions.
  *
+ * The returned object provides methods to:
+ *
+ * - Pause the listener (pause)
+ * - Completely remove the listener (destroy)
+ * - Restart the listener (init)
+ *
  * @example
- *   elementReady(
+ *   const e = elementReady(
  *     ".some_class",
  *     (el) => {
  *       console.log("it's ready!");
  *       // do something
  *     },
  *     "some_unique_id",
- *     () => true // optional condition check
+ *     () => true // optional condition check on the matched element
  *   );
+ *
+ *   // pause the listener - stops future listening but keeps all currently "ready" elements
+ *   e.pause();
+ *
+ *   // kill the listener - stops future listening and unmarks everything as not ready
+ *   e.destroy();
+ *
+ *   // restart the listener
+ *   e.init();
  *
  * @param {string} selector - A CSS selector string used to identify the target element. _(required)_
  * @param {Function} callback - A function to execute when the element is found. Receives the element as its parameter.
@@ -105,10 +120,11 @@ const getObserver = () => {
  * @param {string} id - A unique identifier to track elements that have already triggered the callback. _(required)_
  * @param {Function} conditions - Optional conditions to validate the element before triggering the callback. Must be a
  *   function that returns `true` for the callback to execute.
- * @returns
+ * @returns Functions:
  *
  *   - `init` Function to re-init the listener once destroyed
- *   - `destroy` Function to completely remove this listener
+ *   - `pause` Function to remove the listener, but keep everything currently found as 'ready'
+ *   - `destroy` Function to completely remove this listener, and unmark everything found as 'ready'
  */
 
 export const elementReady = (
