@@ -136,7 +136,7 @@ export interface JfObserver {
 
 export const useMutationObserver = (id: string): JfObserver => {
   const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
-    if (!debug && isDebug()) return;
+    if (!!debug && !isDebug()) return;
     _log(msg, lvl, `[${id}] useMutationObserver`, data);
   };
 
@@ -146,7 +146,7 @@ export const useMutationObserver = (id: string): JfObserver => {
   const observerExists = !!window.jfObservers.find((obs: JfObserverObject) => obs.ticketId === id);
   if (observerExists) {
     log("Observer with this id is already bound", "error");
-    throw new Error();
+    return;
   }
 
   const observerObject = {

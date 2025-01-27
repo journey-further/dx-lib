@@ -116,7 +116,7 @@ export const elementRemoved = (
   conditions?: (el: Element) => boolean
 ): JfRemoved => {
   const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
-    if (!debug && isDebug()) return;
+    if (!!debug && !isDebug()) return;
     _log(msg, lvl, `[${id}] elementRemoved`, data);
   };
 
