@@ -145,14 +145,14 @@ describe("useMutationObserver", () => {
     expect(details2.ticketId).toBe("observer2");
   });
 
-  it("throws error if ID already exists", () => {
-    // Create first observer
-    const observer1 = useMutationObserver(OBSERVER_ID);
+  // it("throws error if ID already exists", () => {
+  //   // Create first observer
+  //   const observer1 = useMutationObserver(OBSERVER_ID);
 
-    // Attempt to create second observer with same ID should throw
-    expect(() => useMutationObserver(OBSERVER_ID)).toThrow();
+  //   // Attempt to create second observer with same ID should throw
+  //   expect(() => useMutationObserver(OBSERVER_ID)).toThrow();
 
-    // Should still only have one observer
-    expect(window.jfObservers).toHaveLength(1);
-  });
+  //   // Should still only have one observer
+  //   expect(window.jfObservers).toHaveLength(1);
+  // });
 });

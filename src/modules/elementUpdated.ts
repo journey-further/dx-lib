@@ -147,7 +147,7 @@ export const elementUpdated = (
   conditions?: (el: Element) => boolean
 ): JfUpdated => {
   const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
-    if (!debug && isDebug()) return;
+    if (!!debug && !isDebug()) return;
     _log(msg, lvl, `[${id}] elementUpdated`, data);
   };
 
