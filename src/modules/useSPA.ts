@@ -23,8 +23,6 @@ const LIB_INIT = {
   experiments: [],
 };
 
-// TODO: add screenSize and add a window resize listener
-
 /**
  * Type guard to check if an unknown value is a JfSPAPageOptions instance
  *
@@ -273,10 +271,6 @@ export interface JfSPAPageOptions {
  * - Get details of the test (`details`)
  *
  * @example
- *   const STATE = {
- *     Test: useSPA("TestID"),
- *   };
- *
  *   const resetChanges = () => {
  *     // undo something
  *   };
@@ -287,6 +281,8 @@ export interface JfSPAPageOptions {
  *
  *   (() => {
  *     try {
+ *       const Test = useSPA("TestID");
+ *
  *       // Start the test
  *       Test.init({
  *         apply: applyChanges,
@@ -303,6 +299,9 @@ export interface JfSPAPageOptions {
  *
  *       // Remove the test completely
  *       Test.destroy();
+ *
+ *       // Store the test for later use
+ *       STATE.Test = Test;
  *     } catch (e) {
  *       // ...
  *     }

@@ -15,11 +15,10 @@ export default {
   mode: "development",
   plugins: [
     new JfCroHmr({
-      previewUrl: "https://www.devere.co.uk",
+      previewUrl: "https://www.ghdhair.com/discover-ghd-duet-blowdry",
       previewModule: "variantA",
-      playwrightOptions: {
-        channel: "chromium",
-      },
+      disableTag: false,
+      useStealth: false,
     }),
   ],
   devServer: {

@@ -134,7 +134,7 @@ export const elementReady = (
   conditions?: (el: Element) => boolean
 ): JfReady => {
   const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
-    if (!debug && isDebug()) return;
+    if (!!debug && !isDebug()) return;
     _log(msg, lvl, `[${id}] elementReady`, data);
   };
 
@@ -241,7 +241,7 @@ export const elementReady = (
    * Searches the existing DOM for elements matching the selector Processes any matching elements that haven't been
    * handled yet
    */
-  const checkExistingElements = () => {
+  const checkDOMElements = () => {
     log("Checking existing elements", "info", true);
     const elements = document.querySelectorAll(selector);
     elements.forEach((element) => {
@@ -280,7 +280,9 @@ export const elementReady = (
 
             // Grab all the callbacks from our callbacks array and run them each
             getObserver().callbacks.forEach((cb) => {
-              if (isFunction(cb.callback) && isNodeAsElement(node)) cb.callback(node);
+              if (isFunction(cb.callback) && isNodeAsElement(node)) {
+                cb.callback(node);
+              }
             });
           });
         });
@@ -297,31 +299,41 @@ export const elementReady = (
 
   /** Initializes the element ready functionality. Sets up observers and processes existing elements */
   const initFunctionality = () => {
-    log("Creating listener", "info", true);
+    try {
+      log("Creating listener", "info", true);
 
-    // 1. Check if we've already bound this callback with matching id
-    const hasCallback = window.jfLib?.elementReady?.[VERSION]?.callbacks?.find((cb) => cb.id == id);
-    if (hasCallback) {
-      log("Function with this id is already bound", "error");
-      return;
+      // 1. Check if we've already bound this callback with matching id
+      const hasCallback = window.jfLib?.elementReady?.[VERSION]?.callbacks?.find((cb) => cb.id == id);
+      if (hasCallback) {
+        log("ID already bound", "error");
+        return;
+        // await destroy(0);
+      }
+
+      // 2. Bind the elementReady observer to listen for any future changes
+      bindObserver();
+
+      // 3. Push our callback into the array
+      getObserver()?.callbacks.push({
+        id: id,
+        callback: (target) => {
+          // check whether this element matches the selector, or a child element of this element matches the selector
+          if (!target.matches(selector) && !target.querySelector(selector)) {
+            return;
+          }
+
+          // Loop the dom again to find any elements
+          checkDOMElements();
+        },
+      });
+
+      log("Listening", "success");
+
+      // 4. Loop the dom initially to find any that already exist
+      checkDOMElements();
+    } catch (err) {
+      log(err, "error");
     }
-
-    // 2. Bind the elementReady observer to listen for any future changes
-    bindObserver();
-
-    // 3. Push our callback into the array
-    getObserver()?.callbacks.push({
-      id: id,
-      callback: (target) => {
-        if (!target.matches(selector)) return;
-        checkElement(target);
-      },
-    });
-
-    log("Listening", "success");
-
-    // 4. Loop the dom initially to find any that already exist
-    checkExistingElements();
   };
 
   /**
@@ -344,6 +356,14 @@ export const elementReady = (
     }
   };
 
+  /** Remove our callback from the callback array */
+  const removeCallback = () => {
+    if (!window?.jfLib?.elementReady?.[VERSION]) return;
+    window.jfLib.elementReady[VERSION].callbacks = window.jfLib.elementReady[VERSION].callbacks.filter(
+      (cb) => cb.id !== id
+    );
+  };
+
   /**
    * Completely removes the elementReady functionality
    *
@@ -358,7 +378,7 @@ export const elementReady = (
       await new Promise((resolve) => setTimeout(resolve, delay));
       // remove the listener
       log("Removing listener", "error");
-      getObserver().callbacks = getObserver().callbacks.filter((cb) => cb.id !== id);
+      removeCallback();
       // also search the dom for any current elements and mark them as no longer ready
       document.querySelectorAll(`[jf-ready]`).forEach((el) => {
         // Ignore if we don't have a ready
