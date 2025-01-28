@@ -334,7 +334,7 @@ export const useSPA = (id: string): JfSPA => {
     },
   };
   const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
-    if (!debug && isDebug()) return;
+    if (!!debug && !isDebug()) return;
     _log(msg, lvl, `[${id}] useSPA`, data);
   };
   /**
@@ -346,12 +346,18 @@ export const useSPA = (id: string): JfSPA => {
   const setupTest = (options: JfSPAOptions) => {
     try {
       // Check an id has been provided
-      if (!!!id) throw new Error("You must provide a Test ID");
+      if (!!!id) {
+        throw new Error("You must provide a Test ID");
+      }
+      STATE.details = STATE.details || {
+        isRunning: false,
+        id: null,
+      };
       STATE.details.id = id;
 
       // Check if this test is already setup
       window.jfLib = window.jfLib || LIB_INIT;
-      STATE.details.isRunning = !!window.jfLib.experiments.find((test) => test.details && test.details.id == id);
+      STATE.details.isRunning = !!window.jfLib.experiments.find((test) => test?.details && test?.details?.id == id);
       if (STATE.details.isRunning) {
         log(`Test already setup`, "warn");
         // initTest = () => null;
@@ -438,8 +444,10 @@ export const useSPA = (id: string): JfSPA => {
       window.jfLib.experiments.push(this);
       return true;
     } catch (e) {
-      throwError(e);
-      return false;
+      console.log(STATE);
+      throw new Error(e);
+      // throwError(e);
+      // return false;
     }
   };
 

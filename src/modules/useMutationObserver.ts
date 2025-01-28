@@ -133,7 +133,6 @@ export interface JfObserver {
  * - disconnect: A function to disconnect and clean up the observer.
  * - observe: A function to start observing a target node with specific configurations and a callback.
  */
-
 export const useMutationObserver = (id: string): JfObserver => {
   const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
     if (!!debug && !isDebug()) return;
@@ -146,7 +145,7 @@ export const useMutationObserver = (id: string): JfObserver => {
   const observerExists = !!window.jfObservers.find((obs: JfObserverObject) => obs.ticketId === id);
   if (observerExists) {
     log("Observer with this id is already bound", "error");
-    return;
+    return null;
   }
 
   const observerObject = {
