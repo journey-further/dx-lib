@@ -334,7 +334,7 @@ export const useSPA = (id: string): JfSPA => {
     },
   };
   const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
-    if (!debug && isDebug()) return;
+    if (!!debug && !isDebug()) return;
     _log(msg, lvl, `[${id}] useSPA`, data);
   };
   /**
