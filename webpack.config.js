@@ -15,7 +15,7 @@ export default {
   mode: "development",
   plugins: [
     new JfCroHmr({
-      previewUrl: "https://www.ghdhair.com/discover-ghd-duet-blowdry",
+      previewUrl: "https://www.toolstation.com/dewalt-dcs356-18v-xr-multi-tool-3-speed/p59706",
       previewModule: "variantA",
       disableTag: false,
       useStealth: false,
