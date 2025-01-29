@@ -1,4 +1,4 @@
-import { RBTest, JfSPA, JfObserver, JfObserverObject, JfReadyObject, JfRemovedObject } from "./modules";
+import { RBTest, JfObserver, JfObserverObject, JfReadyObject, JfRemovedObject, JfSPAState } from "./modules";
 import { JfUpdatedObject } from "./modules/elementUpdated";
 
 /**
@@ -43,7 +43,7 @@ export interface JfLib {
   /** Current page path */
   pagePath?: string;
   /** Active experiments */
-  experiments?: JfSPA[];
+  experiments?: JfSPAState[];
 }
 
 /**

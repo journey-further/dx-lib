@@ -15,9 +15,9 @@ export default {
   mode: "development",
   plugins: [
     new JfCroHmr({
-      previewUrl: "https://www.toolstation.com/dewalt-dcs356-18v-xr-multi-tool-3-speed/p59706",
+      previewUrl: "https://www.allsaints.com/men/shirts/hawthorne-ramskull-stretch-fit-shirt/5063320197435.html",
       previewModule: "variantA",
-      disableTag: false,
+      disableTag: true,
       useStealth: false,
     }),
   ],

@@ -37,7 +37,7 @@ export interface JfUpdated {
    *
    * @returns
    */
-  destroy: (delay?: number) => void;
+  destroy: (delay?: number) => Promise<void>;
 }
 
 /**
