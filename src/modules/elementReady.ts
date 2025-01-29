@@ -29,7 +29,7 @@ export interface JfReady {
    *
    * @returns
    */
-  pause: () => void;
+  pause: () => Promise<void>;
   /**
    * Completely remove this elementReady listener. Will stop listening for any future elements to be
    *
@@ -38,7 +38,7 @@ export interface JfReady {
    *
    * @returns
    */
-  destroy: (delay?: number) => void;
+  destroy: (delay?: number) => Promise<void>;
 }
 
 /**

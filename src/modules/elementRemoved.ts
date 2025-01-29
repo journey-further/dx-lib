@@ -27,7 +27,7 @@ export interface JfRemoved {
    *
    * @returns
    */
-  destroy: (delay?: number) => void;
+  destroy: (delay?: number) => Promise<void>;
 }
 
 /**
