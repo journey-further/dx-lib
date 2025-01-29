@@ -83,7 +83,10 @@ const swapZoomModal = () => {
     `.b-product_gallery-thumbs_track > .b-product_gallery-thumb:nth-child(1)[class*="m-current"], .b-product_gallery-thumbs_track > .b-product_gallery-thumb:nth-child(2)[class*="m-current"]`
   );
 
-  if (!firstOrSecondActive) return;
+  if (!firstOrSecondActive) {
+    console.log("not first or second");
+    return;
+  }
 
   const firstTarget = document.querySelector(".pswp__container > .pswp__item:nth-child(2)");
   const secondTarget = document.querySelector(".pswp__container > .pswp__item:nth-child(3)");
@@ -138,6 +141,7 @@ const swapFirstAndSecond = (firstTarget, secondTarget) => {
 
 const swapCarouselImg = () => {
   if (!isPDP()) return;
+  console.log("swap carousel img");
 
   const firstTarget = document.querySelector(
     ".b-product_slider-track > .b-product_slider-item:nth-of-type(1) > picture.b-product_image"
@@ -195,9 +199,9 @@ const applyChanges = async () => {
 
 const reset = async () => {
   try {
-    await STATE.ready1?.destroy(0);
-    await STATE.ready2?.destroy(0);
-    await STATE.ready3?.destroy(0);
+    await STATE.ready1?.destroy();
+    await STATE.ready2?.destroy();
+    await STATE.ready3?.destroy();
   } catch (e) {
     emitEvent("error", jfExperiment, e);
   }

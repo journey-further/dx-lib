@@ -380,7 +380,7 @@ export const elementReady = (
       log("Removing listener", "error");
       removeCallback();
       // also search the dom for any current elements and mark them as no longer ready
-      document.querySelectorAll(`[jf-ready]`).forEach((el) => {
+      document.querySelectorAll("body *").forEach((el) => {
         // Ignore if we don't have a ready
         if (!el.jfReady) return;
         // Ignore if ready doesn't include this id
