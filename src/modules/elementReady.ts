@@ -230,7 +230,7 @@ export const elementReady = (
     // mark it as ready
     target.jfReady = target.jfReady || [];
     target.jfReady.push(id);
-    target.setAttribute("jf-ready", "");
+    // target.setAttribute("jf-ready", "");
 
     // then run our callback
     log("Element found", "info", true);
@@ -380,7 +380,7 @@ export const elementReady = (
       log("Removing listener", "error");
       removeCallback();
       // also search the dom for any current elements and mark them as no longer ready
-      document.querySelectorAll("body *").forEach((el) => {
+      document.querySelectorAll(selector).forEach((el) => {
         // Ignore if we don't have a ready
         if (!el.jfReady) return;
         // Ignore if ready doesn't include this id
@@ -392,7 +392,7 @@ export const elementReady = (
         // If we've got no more ready objects, then remove the jf-ready flag on this element
         if (el.jfReady.length == 0) {
           el.jfReady = undefined;
-          el.removeAttribute("jf-ready");
+          // el.removeAttribute("jf-ready");
         }
       });
     } catch (error) {
