@@ -85,7 +85,7 @@ export interface JfSPA {
    * @example
    *   Test.reset();
    */
-  reset: () => void;
+  reset: () => Promise<void>;
   /**
    * Start the test using the options provided
    *
@@ -151,7 +151,7 @@ export interface JfSPAOptions {
   /** Function to execute when applying the test. _(required)_ */
   apply: () => unknown;
   /** Function to execute when resetting the test */
-  reset?: () => unknown;
+  reset?: () => unknown | Promise<unknown>;
   /** CSS styles to apply during the test. Will apply only once, using the test's `id` as a unique identifier */
   style?: string;
   /**
@@ -441,7 +441,7 @@ export const useSPA = (id: string): JfSPA => {
 
       // Push this test to global object and mark it as running
       STATE.details.isRunning = true;
-      window.jfLib.experiments.push(this);
+      window.jfLib.experiments.push(STATE);
       return true;
     } catch (e) {
       console.log(STATE);
@@ -665,14 +665,14 @@ export const useSPA = (id: string): JfSPA => {
   /**
    * Resets the test by removing styles and executing the reset function if provided
    *
-   * @returns {void}
+   * @returns {Promise<void>}
    */
-  const resetTest = (): void => {
+  const resetTest = async (): Promise<void> => {
     log(`Resetting Test`, "info");
     // Remove the inserted stylesheet
     removeStyleSheet();
     // Run the reset function
-    if (isFunction(STATE.options.reset)) STATE.options.reset();
+    if (isFunction(STATE.options.reset)) await STATE.options.reset();
   };
 
   /**
@@ -997,10 +997,10 @@ export const useSPA = (id: string): JfSPA => {
    *
    * @throws {Error} If any step of the application process fails
    */
-  const applyTest = () => {
+  const applyTest = async () => {
     try {
       // If we have specified to always reset, then run the reset function here
-      if (!!STATE.options.alwaysReset) resetTest();
+      if (!!STATE.options.alwaysReset) await resetTest();
       log(`Applying Test`, "info");
       // Insert our stylesheet (if we have it)
       if (!!STATE.options.style) insertStyleSheet();
