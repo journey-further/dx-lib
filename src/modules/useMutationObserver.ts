@@ -139,6 +139,8 @@ export const useMutationObserver = (id: string): JfObserver => {
     _log(msg, lvl, `[${id}] useMutationObserver`, data);
   };
 
+  const isCoreFn = /pageChange|reInit|element(Ready|Updated|Removed)/.test(id);
+
   // Get the current observer array
   window.jfObservers = window.jfObservers || [];
   // Get the current observer object
@@ -154,10 +156,10 @@ export const useMutationObserver = (id: string): JfObserver => {
     };
     // Push new instance to the global array
     window.jfObservers.push(observerObject);
-    log("Created observer", "info");
+    log("Created observer", "info", isCoreFn);
   } else {
     // Warn the user it's already been bound
-    log("ID is already bound", "warn");
+    log("ID is already bound", "warn", isCoreFn);
   }
 
   const wrappedObserve: JfObserveFunction = (target, config, callback) => {
@@ -177,7 +179,7 @@ export const useMutationObserver = (id: string): JfObserver => {
     }
 
     observerObject.isObserving = true;
-    log("Observing", "success");
+    log("Observing", "success", isCoreFn);
     return true;
   };
 
