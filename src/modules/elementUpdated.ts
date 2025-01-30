@@ -101,9 +101,6 @@ const getObserver = () => {
  * This function monitors the DOM for elements matching the given selector being removed. Once a matching element is
  * found and satisfies optional conditions, the callback function is executed.
  *
- * By default, only **class attribute changes and textContent** updates are listened to - this can be overridden by
- * passing an _options_ param
- *
  * The returned object provides methods to:
  *
  * - Completely remove the listener (destroy)
@@ -363,7 +360,9 @@ export const elementUpdated = (
     getObserver()?.callbacks.push({
       id: id,
       callback: (mutation) => {
-        const { target } = mutation;
+        // If this is characterData, then we want to grab the parent of the text node being changed
+        const target = mutation.type == "characterData" ? mutation.target.parentElement : mutation.target;
+
         if (!isNodeAsElement(target)) return;
 
         // check whether this element matches the selector
