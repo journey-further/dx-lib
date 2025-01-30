@@ -130,8 +130,7 @@ const getObserver = () => {
  * @param {string} selector - A CSS selector string used to identify the target element. _(required)_
  * @param {Function} callback - A function to execute when the element is removed. _(required)_
  * @param {string} id - A unique identifier to track elements that have already triggered the callback. _(required)_
- * @param {JfUpdatedOptions} options - Optional object to filter by specific updates _(defaults to only listen for class
- *   and textContent changes)_
+ * @param {JfUpdatedOptions} options - Object to filter by specific updates _(required)_
  * @param {Function} [conditions] - Optional conditions to validate the element before triggering the callback. Must be
  *   a function that returns `true` for the callback to execute.
  * @returns Functions:
@@ -143,7 +142,7 @@ export const elementUpdated = (
   selector: string,
   callback: (el: Element) => void,
   id: string,
-  options?: JfUpdatedOptions,
+  options: JfUpdatedOptions,
   conditions?: (el: Element) => boolean
 ): JfUpdated => {
   const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
@@ -193,32 +192,28 @@ export const elementUpdated = (
     }
 
     // -- VALIDATE OPTIONS --
-    if (options) {
-      if (!isObject(options)) {
-        log("options must be an object", "error");
+    if (!!!options) {
+      log("options is not defined", "error");
+      throw new Error("elementUpdated setup failed");
+    }
+    if (!isObject(options)) {
+      log("options must be an object", "error");
+      throw new Error("elementUpdated setup failed");
+    }
+    if (!options.attributes && !options.characterData && !options.textContent) {
+      log("At least one of the following must be provided in options: attributes, characterData, textContent", "error");
+      throw new Error("elementUpdated setup failed");
+    }
+    if (options.attributeFilter) {
+      if (!isString(options.attributeFilter) && !isStringArray(options.attributeFilter)) {
+        log("attributeFilter must be a string, or array of strings", "error");
         throw new Error("elementUpdated setup failed");
       }
-      if (!options.attributes && !options.characterData && !options.textContent) {
-        log(
-          "At least one of the following must be provided in options: attributes, characterData, textContent",
-          "error"
-        );
+      if (isString(options.attributeFilter)) options.attributeFilter = [options.attributeFilter];
+      if (options.attributeFilter.length == 0) {
+        log("attributeFilter should not be empty", "error");
         throw new Error("elementUpdated setup failed");
       }
-      if (options.attributeFilter) {
-        if (!isString(options.attributeFilter) && !isStringArray(options.attributeFilter)) {
-          log("attributeFilter must be a string, or array of strings", "error");
-          throw new Error("elementUpdated setup failed");
-        }
-        if (isString(options.attributeFilter)) options.attributeFilter = [options.attributeFilter];
-        if (options.attributeFilter.length == 0) {
-          log("attributeFilter should not be empty", "error");
-          throw new Error("elementUpdated setup failed");
-        }
-      }
-    } else {
-      // Set default
-      options = { attributes: true, textContent: true, attributeFilter: ["class"] };
     }
 
     // -- VALIDATE CONDITIONS --
