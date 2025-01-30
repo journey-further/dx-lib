@@ -142,20 +142,23 @@ export const useMutationObserver = (id: string): JfObserver => {
   // Get the current observer array
   window.jfObservers = window.jfObservers || [];
   // Get the current observer object
-  const observerExists = !!window.jfObservers.find((obs: JfObserverObject) => obs.ticketId === id);
-  if (observerExists) {
-    log("Observer with this id is already bound", "error");
-    return null;
-  }
+  let observerObject: JfObserverObject | undefined = window.jfObservers.find(
+    (obs: JfObserverObject) => obs.ticketId === id
+  );
 
-  const observerObject = {
-    observer: undefined,
-    isObserving: false,
-    ticketId: id,
-  };
-  log("Created observer", "info");
-  // Push this instance to the global array
-  window.jfObservers.push(observerObject);
+  if (!observerObject) {
+    observerObject = {
+      observer: undefined,
+      isObserving: false,
+      ticketId: id,
+    };
+    // Push new instance to the global array
+    window.jfObservers.push(observerObject);
+    log("Created observer", "info");
+  } else {
+    // Warn the user it's already been bound
+    log("ID is already bound", "warn");
+  }
 
   const wrappedObserve: JfObserveFunction = (target, config, callback) => {
     // Check if we are already observing
