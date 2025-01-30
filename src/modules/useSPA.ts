@@ -444,7 +444,7 @@ export const useSPA = (id: string): JfSPA => {
       window.jfLib.experiments.push(STATE);
       return true;
     } catch (e) {
-      console.log(STATE);
+      log("Setup Error", "error", false, STATE);
       throw new Error(e);
       // throwError(e);
       // return false;
@@ -496,7 +496,7 @@ export const useSPA = (id: string): JfSPA => {
       window.jfLib.reInit[REINIT_VERSION] = { observer: useMutationObserver(`reInit-${REINIT_VERSION}`) };
       window.jfLib.reInit[REINIT_VERSION].observer.observe(target, config, callback);
     } catch (e) {
-      console.log("reinit error");
+      log("Re-Init Error", "error");
       throwError(e);
     }
   };
@@ -540,7 +540,7 @@ export const useSPA = (id: string): JfSPA => {
       // Set the current path initially
       window.jfLib.pagePath = window.location.pathname || "";
     } catch (e) {
-      console.log("page change error");
+      log("Page Change Error", "error");
       throwError(e);
     }
   };
@@ -1101,7 +1101,7 @@ export const useSPA = (id: string): JfSPA => {
       // Abort if we don't have a stylesheet
       if (!!!STATE.options.style) return;
       // Insert our stylesheet
-      log(`+ Inserting Stylesheet`, "detail");
+      log(`+ Inserting styles`, "detail");
       insertStyle(STATE.options.style, `${STATE.details.id}--style`);
     } catch (e) {
       throwError(e);
@@ -1115,6 +1115,7 @@ export const useSPA = (id: string): JfSPA => {
    */
   const removeStyleSheet = () => {
     try {
+      log(`- Removing styles`, "detail");
       document.querySelectorAll(`#${STATE.details.id}--style`).forEach((el) => el.remove());
     } catch (e) {
       throwError(e);
