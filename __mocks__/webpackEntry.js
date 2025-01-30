@@ -1,221 +1,114 @@
-import { elementReady, emitEvent, useMutationObserver, useSPA } from "../dist";
-import style from "./style.scss";
+import { elementReady, elementUpdated, emitEvent, useSPA } from "../dist";
+// import { runScript } from "./common";
 
-const jfExperiment = {
-  ticketId: "ALL_011184",
-  variant: "A",
+// import style from "./styles/variantA.scss";
+
+const runScript = () => {
+  console.log("RUNNING SCRIPT!");
 };
 
 const STATE = {
-  observer: useMutationObserver(jfExperiment.ticketId),
-  ready1: null,
-  ready2: null,
-  ready3: null,
-  // observer2: useMutationObserver(`${jfExperiment.ticketId}-pdp`),
+  mensApiURL:
+    "https://www.russellandbromley.co.uk/ccstore/v1/assembler/pages/Default/services/guidedsearch/ccstoreui/v1/search?N=2053886397&Ns=&No=0&Nr=AND%28product.active%3A1%2CNOT%28record.type%3AStore%29%29&Nrpp=2&Ntt=&Nf=",
+  womensApiURL:
+    "https://www.russellandbromley.co.uk/ccstore/v1/assembler/pages/Default/services/guidedsearch/ccstoreui/v1/search?N=2148360829&Ns=&No=0&Nr=AND%28product.active%3A1%2CNOT%28record.type%3AStore%29%29&Nrpp=2&Ntt=&Nf=",
+  // observer: useMutationObserver("RAB_011160---search-container"),
+};
+const jfExperiment = {
+  ticketId: "RAB_011160",
+  variant: "A",
 };
 
-const isPDP = () => !!window.contexts?.includes("pdp");
-const isPLP = () => !!window.contexts?.includes("plp");
+// const waitForSearchContainerChange = () => {
+//   if (!!STATE.observer.details.isObserving) STATE.observer.disconnect();
+//   console.log("watching for changes");
+//   /** @type {Element} The target element to listen for changes to */
+//   const target = document.querySelector(".CategoryHeading");
+//   if (!!!target) {
+//     console.log("no watch target");
+//     return;
+//   }
 
-const swapPlpImages = () => {
-  if (!isPLP()) return;
-  const productTiles = document.querySelectorAll(".b-product_tile-image_link");
+//   /** @type {MutationObserverInit} The MutationObserver options */
+//   const config = { childList: true, subtree: true };
 
-  if (productTiles.length === 0) return;
-  console.log({ productTiles });
-  productTiles.forEach((tile) => {
-    const mainImage = tile.querySelector(".b-product_tile-image.b-product_tile_alt_view-item");
-    const secondImage = tile.querySelector(".b-product_tile_alt_view-item.m-alt.b-product_tile-image");
+//   /** @type {MutationCallback} The callback */
+//   const callback = (mutations) => {
+//     mutations.forEach((mutation) => {
+//       // Add your conditions to check the mutation
+//       // console.log("mutation: ", mutation);
+//       // if (mutation.addedNodes.length == 0) return;
+//       console.log(mutation);
+//       applyChanges();
+//     });
+//   };
 
-    if (!mainImage || !secondImage) {
-      return;
-    }
-
-    if (
-      secondImage.classList.contains("ALL_011184--new-first-img") ||
-      mainImage.classList.contains("ALL_011184--new-first-img")
-    ) {
-      return;
-    }
-    try {
-      const mainImageClass = mainImage.className;
-      const secondImageClass = secondImage.className;
-
-      mainImage.className = secondImageClass;
-      secondImage.className = mainImageClass;
-
-      secondImage.classList.add("ALL_011184--new-first-img");
-
-      const mainImageParent = mainImage.parentNode;
-      const secondImageParent = secondImage.parentNode;
-      const mainImagePlaceholder = document.createElement("div");
-      const secondImagePlaceholder = document.createElement("div");
-
-      mainImageParent.replaceChild(mainImagePlaceholder, mainImage);
-      secondImageParent.replaceChild(secondImagePlaceholder, secondImage);
-      mainImageParent.replaceChild(secondImage, mainImagePlaceholder);
-      secondImageParent.replaceChild(mainImage, secondImagePlaceholder);
-    } catch (e) {
-      emitEvent("error", jfExperiment, e);
-    }
-  });
-};
-
-const swapThumbnails = () => {
-  if (!isPDP()) return;
-  console.log("swapping thumbnails");
-
-  const firstTarget = document.querySelector(
-    ".b-product_gallery-thumbs_track > .b-product_gallery-thumb:nth-of-type(1) > picture"
-  );
-  const secondTarget = document.querySelector(
-    ".b-product_gallery-thumbs_track > .b-product_gallery-thumb:nth-of-type(2) > picture"
-  );
-
-  swapFirstAndSecond(firstTarget, secondTarget);
-};
-
-const swapZoomModal = () => {
-  if (!isPDP()) return;
-  console.log("swapping zoom modal");
-
-  const firstOrSecondActive = !!document.querySelector(
-    `.b-product_gallery-thumbs_track > .b-product_gallery-thumb:nth-child(1)[class*="m-current"], .b-product_gallery-thumbs_track > .b-product_gallery-thumb:nth-child(2)[class*="m-current"]`
-  );
-
-  if (!firstOrSecondActive) {
-    console.log("not first or second");
-    return;
-  }
-
-  const firstTarget = document.querySelector(".pswp__container > .pswp__item:nth-child(2)");
-  const secondTarget = document.querySelector(".pswp__container > .pswp__item:nth-child(3)");
-
-  swapFirstAndSecond(firstTarget, secondTarget);
-};
-
-const swapFirstAndSecond = (firstTarget, secondTarget) => {
-  if (!!!firstTarget || !!!secondTarget) {
-    console.log("no first or second target");
-    return;
-  }
-
-  const firstSources = firstTarget.querySelectorAll("source");
-  const secondSources = secondTarget.querySelectorAll("source");
-
-  const firstSourcesArray = [...firstSources].map((source) => source.getAttribute("srcset"));
-  const secondSourcesArray = [...secondSources].map((source) => source.getAttribute("srcset"));
-
-  firstSources.forEach((source, i) => {
-    if (!source.classList.contains("swapped")) {
-      source.setAttribute("srcset", secondSourcesArray[i]);
-      source.classList.add("swapped");
-    }
-  });
-  secondSources.forEach((source, i) => {
-    if (!source.classList.contains("swapped")) {
-      source.setAttribute("srcset", firstSourcesArray[i]);
-      source.classList.add("swapped");
-    }
-  });
-
-  const firstImages = firstTarget.querySelectorAll("img");
-  const secondImages = secondTarget.querySelectorAll("img");
-
-  const firstImagesArray = [...firstImages].map((img) => img.getAttribute("src"));
-  const secondImagesArray = [...secondImages].map((img) => img.getAttribute("src"));
-
-  firstImages.forEach((img, i) => {
-    if (!img.classList.contains("swapped")) {
-      img.setAttribute("src", secondImagesArray[i]);
-      img.classList.add("swapped");
-    }
-  });
-  secondImages.forEach((img, i) => {
-    if (!img.classList.contains("swapped")) {
-      img.setAttribute("src", firstImagesArray[i]);
-      img.classList.add("swapped");
-    }
-  });
-};
-
-const swapCarouselImg = () => {
-  if (!isPDP()) return;
-  console.log("swap carousel img");
-
-  const firstTarget = document.querySelector(
-    ".b-product_slider-track > .b-product_slider-item:nth-of-type(1) > picture.b-product_image"
-  );
-  const secondTarget = document.querySelector(
-    ".b-product_slider-track > .b-product_slider-item:nth-of-type(2) > picture.b-product_image"
-  );
-
-  swapFirstAndSecond(firstTarget, secondTarget);
-};
-
-const watchForChanges = () => {
-  if (!isPLP()) return;
-  // console.log(STATE.observer.details.isObserving, "observing");
-  if (!!STATE.observer.details.isObserving) return;
-  console.log("watching for changes PLP");
-  /** @type {Element} The Target element to listen for changes to */
-  const target = document.querySelector("body");
-  if (!!!target) {
-    console.log("no watch target PLP");
-    return;
-  }
-
-  /** @type {MutationObserverInit} The MutationObserver options */
-  const config = { childList: true, subtree: true, attributes: true };
-
-  /** @type {MutationCallback} The Callback */
-  const callback = (mutations) => {
-    mutations.forEach((mutation) => {
-      mutation.addedNodes.forEach((node) => {
-        if (node.nodeType === 1) {
-          console.log(node.nodeType);
-          swapPlpImages();
-        }
-      });
-    });
-  };
-
-  /** Trigger the observer */
-  STATE.observer.observe(target, config, callback);
-};
+//   /** Trigger the observer */
+//   STATE.observer.observe(target, config, callback);
+// };
 
 const applyChanges = async () => {
   try {
-    // await reset();
-    swapPlpImages();
-    watchForChanges();
-    STATE.ready1 = elementReady(".b-product_image", swapCarouselImg, "ALL_011184--carousel_img");
-    STATE.ready2 = elementReady(".b-product_gallery-thumb picture", swapThumbnails, "ALL_011184--thumb_img");
-    STATE.ready3 = elementReady(".pswp__container img", swapZoomModal, "ALL_011184--zoom_img");
+    document.querySelectorAll(".RAB_011160---trending-product-container").forEach((element) => element?.remove());
+
+    elementUpdated(
+      "h1.CategoryHeading__SearchText span",
+      () => {
+        runScript(jfExperiment, STATE);
+      },
+      "RAB_011160--updated"
+    );
+
+    if (document.querySelector(".ProductListingSummaryInformation__Container")) {
+      // waitForSearchContainerChange();
+
+      console.log("Search product found!!");
+      reset();
+
+      return;
+    }
+
+    await runScript(jfExperiment, STATE);
   } catch (e) {
     emitEvent("error", jfExperiment, e);
   }
 };
 
-const reset = async () => {
-  try {
-    await STATE.ready1?.destroy();
-    await STATE.ready2?.destroy();
-    await STATE.ready3?.destroy();
-  } catch (e) {
-    emitEvent("error", jfExperiment, e);
-  }
+const reset = () => {
+  console.log("RESEEEET");
+  document.querySelector(".RAB_011160---trending-product-container")?.remove();
 };
 
-(() => {
+(async () => {
   try {
-    const Test = useSPA(jfExperiment.ticketId);
+    // const domLoaded = await waitForElement(".CategoryHeading");
+
+    // if (!domLoaded) {
+    //   console.log("Search container not loaded!!");
+
+    //   return;
+    // }
+
+    const Test = useSPA("RAB_011160");
+
     Test.init({
       apply: applyChanges,
-      reset,
-      location: /\/men(\/ramskull|)\/(shirts|knitwear)/gi,
-      alwaysReset: true,
+      // style: style,
+      reset: reset,
+      location: /search/,
     });
+
+    STATE.Test = Test;
+
+    // waitForSearchContainerChange();
+
+    // Reset the test
+    // Test.reset();
+
+    // Remove the test completely
+    // Test.destroy();
+
+    // Store the test for later use
   } catch (e) {
     emitEvent("error", jfExperiment, e);
   }

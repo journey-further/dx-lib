@@ -15,7 +15,8 @@ export default {
   mode: "development",
   plugins: [
     new JfCroHmr({
-      previewUrl: "https://www.allsaints.com/men/shirts/hawthorne-ramskull-stretch-fit-shirt/5063320197435.html",
+      previewUrl:
+        "https://www.russellandbromley.co.uk/search?N=&Ns=&No=0&Nr=AND(product.active:1,NOT(record.type:Store))&Nrpp=20&Ntt=chestersada&Nf=",
       previewModule: "variantA",
       disableTag: true,
       useStealth: false,
