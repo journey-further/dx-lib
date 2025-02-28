@@ -1,67 +1,118 @@
-.ssr-carousel-slide {
-  .touch-pan-y.touch-pan-x {
-    picture {
-      transform: scale(1) !important;
-    }
-  }
-}
+.RAB_011160---trending-product-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+  padding: 0 8px;
 
-.TOS_008738--gallery {
-  opacity: 0;
-  visibility: hidden;
-
-  &.open {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .modal-default {
-    --tw-bg-opacity: 1;
-
-    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-    display: flex;
+  @media (max-width: 768px) {
     flex-direction: column;
-    max-height: calc(100vh - 4rem);
-    max-width: 90vw;
-    text-align: center;
-    width: 100%;
-    z-index: 30;
-
-    .modal-default-header {
-      --tw-text-opacity: 1;
-      --tw-bg-opacity: 1;
-
-      color: rgb(6 92 171 / var(--tw-text-opacity));
-      font-family: Gilroy, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-        "Segoe UI Symbol", "Noto Color Emoji";
-      font-size: 2rem;
-      font-weight: 700;
-      line-height: 2.7rem;
-      padding: 12px 16px;
-      position: relative;
-      text-align: left;
-      width: 100%;
-      background-color: rgb(254 226 0 / var(--tw-bg-opacity));
-
-      h2 {
-        opacity: 0;
-        visibility: hidden;
-      }
-    }
-
-    .close-modal {
-      svg {
-        height: 32px;
-        width: 32px;
-      }
-    }
+    align-items: center;
+    gap: 16px;
   }
 
-  .swiper {
-    .swiper-wrapper {
-      .swiper-slide {
-        picture {
-          max-width: unset !important;
+  .RAB_011160---product-container {
+    display: flex;
+    flex: 0 0 calc(50% - 4px);
+    flex-direction: column;
+    justify-content: center;
+    max-width: calc(50% - 4px);
+    gap: 32px 8px;
+
+    @media (max-width: 768px) {
+      flex: 0 0 100%;
+      max-width: 100%;
+      gap: 16px 8px;
+    }
+
+    .RAB_011160---header {
+      color: #000;
+      text-align: center;
+      font-family: "Playfair Display";
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 33.6px;
+    }
+
+    .RAB_011160---products {
+      display: flex;
+      overflow: hidden;
+      gap: 8px;
+
+      .swiper-wrapper {
+        display: flex;
+        gap: 8px;
+      }
+
+      .RAB_011160---product {
+        display: flex;
+        flex-direction: column;
+        flex: 0 0 50%;
+        max-width: 50%;
+        align-items: baseline;
+        gap: 8px 0;
+
+        .RAB_011160---product-image img {
+          width: 460px;
+          min-height: 100%;
+          max-width: calc(100% - 4px);
+        }
+
+        .RAB_011160---product-title h2 {
+          color: #000;
+          font-family: "Source Sans Pro";
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 22.4px;
+          margin: 0;
+        }
+
+        .RAB_011160---product-desc {
+          color: #000;
+          font-family: "Source Sans Pro";
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 22.4px; /* 140% */
+        }
+
+        .RAB_011160---product-price {
+          color: #000;
+          font-family: "Source Sans Pro";
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 22.4px; /* 140% */
+        }
+      }
+    }
+
+    .RAB_011160---all-button-container {
+      display: flex;
+      min-height: 36px;
+      justify-content: center;
+
+      @media (max-width: 768px) {
+        margin-left: 50%;
+        transform: translateX(-50%);
+      }
+
+      a {
+        border-radius: 4px;
+        border: 1px solid #000;
+        padding: 8px 62.524px 8px 62.88px;
+        color: #000;
+        font-family: "Source Sans Pro";
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+        background: #fff;
+
+        @media (max-width: 768px) {
+          padding: 8px 48px;
         }
       }
     }
