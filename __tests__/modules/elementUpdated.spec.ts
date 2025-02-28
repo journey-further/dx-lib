@@ -10,14 +10,20 @@ describe("elementUpdated", () => {
   });
 
   it("validates input parameters", () => {
-    expect(() => elementUpdated("", jest.fn(), "test-id")).toThrow("elementUpdated setup failed");
-    expect(() => elementUpdated(".test", null as any, "test-id")).toThrow("elementUpdated setup failed");
-    expect(() => elementUpdated(".test", jest.fn(), "")).toThrow("elementUpdated setup failed");
+    expect(() => elementUpdated("", jest.fn(), "test-id", { attributes: true })).toThrow("elementUpdated setup failed");
+    expect(() => elementUpdated(".test", null as any, "test-id", { attributes: true })).toThrow(
+      "elementUpdated setup failed"
+    );
+    expect(() => elementUpdated(".test", jest.fn(), "", { attributes: true })).toThrow("elementUpdated setup failed");
   });
 
   it("validates selector format", () => {
-    expect(() => elementUpdated(123 as any, jest.fn(), "test-id")).toThrow("elementUpdated setup failed");
-    expect(() => elementUpdated(">>>>>>", jest.fn(), "test-id")).toThrow("elementUpdated setup failed");
+    expect(() => elementUpdated(123 as any, jest.fn(), "test-id", { attributes: true })).toThrow(
+      "elementUpdated setup failed"
+    );
+    expect(() => elementUpdated(">>>>>>", jest.fn(), "test-id", { attributes: true })).toThrow(
+      "elementUpdated setup failed"
+    );
   });
 
   it("validates options parameter", () => {
@@ -35,7 +41,7 @@ describe("elementUpdated", () => {
   });
 
   it("validates conditions parameter", () => {
-    expect(() => elementUpdated(".test", jest.fn(), "test-id", undefined, "not-a-function" as any)).toThrow(
+    expect(() => elementUpdated(".test", jest.fn(), "test-id", { attributes: true }, "not-a-function" as any)).toThrow(
       "elementUpdated setup failed"
     );
   });
@@ -134,25 +140,6 @@ describe("elementUpdated", () => {
     }, 100);
   });
 
-  it("uses default options when none provided", (done) => {
-    const callback = jest.fn();
-    const div = document.createElement("div");
-    div.className = "test";
-    document.body.appendChild(div);
-
-    elementUpdated(".test", callback, "test-id");
-    div.className = "test updated";
-
-    setTimeout(() => {
-      try {
-        expect(callback).toHaveBeenCalledWith(expect.any(Element));
-        done();
-      } catch (error) {
-        done(error);
-      }
-    }, 100);
-  });
-
   it("respects conditions", (done) => {
     const callback = jest.fn();
     document.body.innerHTML = `
@@ -187,7 +174,7 @@ describe("elementUpdated", () => {
     div.className = "test";
     document.body.appendChild(div);
 
-    const { destroy } = elementUpdated(".test", callback, "test-id");
+    const { destroy } = elementUpdated(".test", callback, "test-id", { attributes: true });
 
     // Wait for observer to be initialized
     await new Promise((resolve) => setTimeout(resolve, 100));
