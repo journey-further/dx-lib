@@ -349,16 +349,13 @@ export const useSPA = (id: string): JfSPA => {
       if (!!!id) {
         throw new Error("You must provide a Test ID");
       }
-      STATE.details = STATE.details || {
-        isRunning: false,
-        id: null,
-      };
+      // Push the id
       STATE.details.id = id;
 
       // Check if this test is already setup
       window.jfLib = window.jfLib || LIB_INIT;
-      STATE.details.isRunning = !!window.jfLib.experiments.find((test) => test?.details && test?.details?.id == id);
-      if (STATE.details.isRunning) {
+      const alreadyRunning = !!window.jfLib.experiments.find((test) => test?.details && test?.details?.id == id);
+      if (alreadyRunning) {
         log(`Test already setup`, "warn");
         // initTest = () => null;
         return false;
@@ -371,7 +368,8 @@ export const useSPA = (id: string): JfSPA => {
         return false;
       }
 
-      const { apply, location, reset, style, watchForRemoval, removeOnPageChange, removedNode, alwaysReset } = options;
+      const { apply, location, reset, style, watchForRemoval, removeOnPageChange, removedNode, alwaysReset, screen } =
+        options;
 
       // Add required options
       STATE.options.apply = apply;
@@ -432,11 +430,24 @@ export const useSPA = (id: string): JfSPA => {
       window.removeEventListener(`jf-reinit-${REINIT_VERSION}`, handleReInit);
       window.addEventListener(`jf-reinit-${REINIT_VERSION}`, handleReInit);
 
-      if (!!STATE.options.screen) {
+      if (!!screen) {
+        STATE.options.screen = screen;
+        // set default min/max if not provided
+        if (screen.maxWidth === undefined) STATE.options.screen.maxWidth = 99999;
+        if (screen.minWidth === undefined) STATE.options.screen.minWidth = 0;
         // Bind an event to handle the page change
         log(`+ Binding Resize Listener`, "detail", true);
         window.removeEventListener(`resize`, handleResize);
         window.addEventListener(`resize`, handleResize);
+        // check it now and abort if it's not within the params
+        if (window.innerWidth < screen.minWidth) {
+          log(`Screen is smaller than minWidth`, "warn", false, screen.minWidth);
+          return false;
+        }
+        if (window.innerWidth > screen.maxWidth) {
+          log(`Screen is larger than maxWidth`, "warn", false, screen.maxWidth);
+          return false;
+        }
       }
 
       // Push this test to global object and mark it as running
@@ -446,8 +457,6 @@ export const useSPA = (id: string): JfSPA => {
     } catch (e) {
       log("Setup Error", "error", false, STATE);
       throw new Error(e);
-      // throwError(e);
-      // return false;
     }
   };
 
@@ -704,11 +713,11 @@ export const useSPA = (id: string): JfSPA => {
         : error;
 
     // If it's already a formatted error, throw as-is
-    if (error.message.includes(`[${STATE.details.id}]`)) {
+    if (error.message.includes(`[${STATE?.details?.id}]`)) {
       throw error;
     }
     // Otherwise, format the error
-    throw new Error(`[${STATE.details.id}] ${errorObj.code}: ${errorObj.message}`, errorObj?.details);
+    throw new Error(`[${STATE?.details?.id}] ${errorObj.code}: ${errorObj.message}`, errorObj?.details);
   };
 
   /**
@@ -851,7 +860,7 @@ export const useSPA = (id: string): JfSPA => {
 
     if (screen) {
       // If screen isn't an object, or doesn't contain one of minWidth/maxWidth, throw error
-      if (!isObject(screen) || (!screen.minWidth && !screen.maxWidth)) {
+      if (!isObject(screen) || (screen.minWidth === undefined && screen.maxWidth === undefined)) {
         throwError({
           code: "INVALID_TYPE",
           message: "screen must be an object containing one of: minWidth, maxWidth",
@@ -920,32 +929,27 @@ export const useSPA = (id: string): JfSPA => {
     try {
       const { minWidth, maxWidth } = STATE.options.screen;
 
-      /**
-       * TODO:
-       *
-       * - Need to check both so that we don't always fire if its above the minwWidth
-       */
-
-      if (!!minWidth && !!maxWidth) {
+      // Check if the screen is within the min/max
+      if (window.innerWidth > minWidth && window.innerWidth < maxWidth) {
+        log("Screen is correct size", "info", false);
+        await initTest();
+        return;
       }
 
-      // Check for min width
-      if (minWidth) {
-        if (window.innerWidth < minWidth) {
-          log("Screen is smaller than minWidth, resetting", "warn", false, minWidth);
-          // screen is smaller, reset
-          resetTest();
-        }
-      } else {
-        log("Screen is larger than minWidth, resetting", "warn", false, minWidth);
+      // Check if screen is SMALLER than minWidth
+      if (window.innerWidth < minWidth) {
+        log("Screen is smaller than minWidth, resetting", "warn", false, minWidth);
+        // screen is smaller, reset
+        resetTest();
+        return;
+      }
+
+      // Check if screen is LARGER than maxWidth
+      if (window.innerWidth > maxWidth) {
+        log("Screen is larger than maxWidth, resetting", "warn", false, minWidth);
         // screen is smaller, reset
         resetTest();
       }
-      if (maxWidth) {
-        // minWidth only
-      }
-      // log(`Screen resized, restarting test`, "warn");
-      // await initTest();
     } catch (e) {
       throwError(e);
     }

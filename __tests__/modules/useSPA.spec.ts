@@ -163,4 +163,189 @@ describe("useSPA", () => {
     spa.reset();
     expect(reset).toHaveBeenCalled();
   });
+
+  describe("screen size handling", () => {
+    let originalDispatchEvent: typeof window.dispatchEvent;
+    let originalAddEventListener: typeof window.addEventListener;
+    let resizeCallback: (e: Event) => void;
+
+    beforeEach(() => {
+      // Store original window methods
+      originalDispatchEvent = window.dispatchEvent;
+      originalAddEventListener = window.addEventListener;
+
+      // Set initial window width
+      window.innerWidth = 1024;
+
+      // Mock addEventListener to capture resize callback
+      window.addEventListener = jest.fn((event, callback) => {
+        if (event === "resize") {
+          resizeCallback = callback as (e: Event) => void;
+        }
+        return originalAddEventListener.call(window, event, callback);
+      });
+
+      // Mock dispatchEvent to actually trigger the callback
+      window.dispatchEvent = jest.fn((event) => {
+        if (event.type === "resize" && resizeCallback) {
+          resizeCallback(event);
+        }
+        return true;
+      });
+    });
+
+    afterEach(() => {
+      // Restore original window methods
+      window.dispatchEvent = originalDispatchEvent;
+      window.addEventListener = originalAddEventListener;
+    });
+
+    it("should initialize when screen width is within bounds", async () => {
+      const spa = useSPA(TEST_ID);
+      await spa.init({
+        ...defaultOptions,
+        screen: { minWidth: 768, maxWidth: 1200 },
+      });
+
+      expect(defaultOptions.apply).toHaveBeenCalled();
+    });
+
+    it("should not initialize when screen width is below minWidth", async () => {
+      window.innerWidth = 500;
+      const spa = useSPA(TEST_ID);
+
+      await spa.init({
+        ...defaultOptions,
+        screen: { minWidth: 768, maxWidth: 1200 },
+      });
+
+      expect(defaultOptions.apply).not.toHaveBeenCalled();
+    });
+
+    it("should not initialize when screen width is above maxWidth", async () => {
+      window.innerWidth = 1500;
+      const spa = useSPA(TEST_ID);
+
+      await spa.init({
+        ...defaultOptions,
+        screen: { minWidth: 768, maxWidth: 1200 },
+      });
+
+      expect(defaultOptions.apply).not.toHaveBeenCalled();
+    });
+
+    it("should reset when window resizes below minWidth", async () => {
+      const reset = jest.fn();
+      const spa = useSPA(TEST_ID);
+
+      // Start with valid width
+      window.innerWidth = 1024;
+
+      await spa.init({
+        ...defaultOptions,
+        screen: { minWidth: 768, maxWidth: 1200 },
+        reset,
+      });
+
+      // Clear any initial calls
+      reset.mockClear();
+      defaultOptions.apply.mockClear();
+
+      // Simulate resize to smaller width
+      window.innerWidth = 500;
+      window.dispatchEvent(new Event("resize"));
+
+      // Wait for debounce
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      expect(reset).toHaveBeenCalled();
+      expect(defaultOptions.apply).not.toHaveBeenCalled(); // Should not reapply when outside bounds
+    });
+
+    it("should reset when window resizes above maxWidth", async () => {
+      const reset = jest.fn();
+      const spa = useSPA(TEST_ID);
+
+      // Start with valid width
+      window.innerWidth = 1024;
+
+      await spa.init({
+        ...defaultOptions,
+        screen: { minWidth: 768, maxWidth: 1200 },
+        reset,
+      });
+
+      // Clear any initial calls
+      reset.mockClear();
+      defaultOptions.apply.mockClear();
+
+      // Simulate resize to larger width
+      window.innerWidth = 1500;
+      window.dispatchEvent(new Event("resize"));
+
+      // Wait for debounce
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      expect(reset).toHaveBeenCalled();
+      expect(defaultOptions.apply).not.toHaveBeenCalled(); // Should not reapply when outside bounds
+    });
+
+    it("should reapply when window resizes back within bounds", async () => {
+      const reset = jest.fn();
+      const spa = useSPA(TEST_ID);
+
+      // Start with valid width
+      window.innerWidth = 1024;
+
+      await spa.init({
+        ...defaultOptions,
+        screen: { minWidth: 768, maxWidth: 1200 },
+        reset,
+      });
+
+      // Clear initial apply call
+      defaultOptions.apply.mockClear();
+
+      // Simulate resize outside bounds
+      window.innerWidth = 1500;
+      window.dispatchEvent(new Event("resize"));
+
+      // Wait for debounce
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      // Clear any calls from first resize
+      defaultOptions.apply.mockClear();
+
+      // Simulate resize back within bounds
+      window.innerWidth = 1000;
+      window.dispatchEvent(new Event("resize"));
+
+      // Wait for debounce
+      await new Promise((resolve) => setTimeout(resolve, 150));
+
+      expect(defaultOptions.apply).toHaveBeenCalled(); // Should reapply when back in bounds
+    });
+
+    it("should work with only minWidth specified", async () => {
+      const spa = useSPA(TEST_ID);
+
+      await spa.init({
+        ...defaultOptions,
+        screen: { minWidth: 768 },
+      });
+
+      expect(defaultOptions.apply).toHaveBeenCalled();
+    });
+
+    it("should work with only maxWidth specified", async () => {
+      const spa = useSPA(TEST_ID);
+
+      await spa.init({
+        ...defaultOptions,
+        screen: { maxWidth: 1200 },
+      });
+
+      expect(defaultOptions.apply).toHaveBeenCalled();
+    });
+  });
 });
