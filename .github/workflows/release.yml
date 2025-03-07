@@ -15,28 +15,30 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.ACCESS_TOKEN }}
-      - name: Use Node.js 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      # - name: Use Node.js 20
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 20
+      # - name: Setup SSH
+      #   uses: webfactory/ssh-agent@v0.9.0
+      #   with:
+      #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Setup Git
         run: |
           git config user.name "CRO Bot"
           git config user.email "conversion@journeyfurther.com"
-      - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+      # - name: Install Dependencies
+      #   run: yarn install --frozen-lockfile
       - name: Release
+        uses: cycjimmy/semantic-release-action@v4
+        with:
+          semantic_version: 24.2.3
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           GIT_COMMITTER_NAME: ${{ vars.GIT_COMMITTER_NAME }}
           GIT_COMMITTER_EMAIL: ${{ vars.GIT_COMMITTER_EMAIL }}
           GIT_AUTHOR_EMAIL: ${{ vars.GIT_AUTHOR_EMAIL }}
           GIT_AUTHOR_NAME: ${{ vars.GIT_AUTHOR_NAME }}
-        run: npx semantic-release
         # Merge the updated version back
       - name: Merge to Staging
         run: git pull && git checkout staging && git merge main && git push -u origin staging
