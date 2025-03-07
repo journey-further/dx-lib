@@ -354,6 +354,7 @@ export const useSPA = (id: string): JfSPA => {
 
       // Check if this test is already setup
       window.jfLib = window.jfLib || LIB_INIT;
+      window.jfLib.experiments = window.jfLib.experiments || [];
       const alreadyRunning = !!window.jfLib.experiments.find((test) => test?.details && test?.details?.id == id);
       if (alreadyRunning) {
         log(`Test already setup`, "warn");
