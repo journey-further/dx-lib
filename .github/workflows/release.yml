@@ -5,30 +5,37 @@ on:
     branches:
       - main
       - staging
+
+# Add concurrency to prevent multiple releases running
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    outputs:
+      new_release_published: ${{ steps.semantic.outputs.new_release_published }}
+      new_release_version: ${{ steps.semantic.outputs.new_release_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.ACCESS_TOKEN }}
-      # - name: Use Node.js 20
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: 20
-      # - name: Setup SSH
-      #   uses: webfactory/ssh-agent@v0.9.0
-      #   with:
-      #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
       - name: Setup Git
         run: |
           git config user.name "CRO Bot"
           git config user.email "conversion@journeyfurther.com"
-      # - name: Install Dependencies
-      #   run: yarn install --frozen-lockfile
+          git config --global --add safe.directory /github/workspace
+
       - name: Release
         uses: cycjimmy/semantic-release-action@v4
         with:
@@ -41,6 +48,55 @@ jobs:
           GIT_COMMITTER_EMAIL: ${{ vars.GIT_COMMITTER_EMAIL }}
           GIT_AUTHOR_EMAIL: ${{ vars.GIT_AUTHOR_EMAIL }}
           GIT_AUTHOR_NAME: ${{ vars.GIT_AUTHOR_NAME }}
-        # Merge the updated version back
-      - name: Merge to Staging
-        run: git pull && git checkout staging && git merge main && git push -u origin staging
+
+      # Merge the updated version back
+      - name: Merge back to Staging
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git fetch origin staging
+          git checkout staging
+          git merge main --no-ff -m "Merge main into staging"
+          git push origin staging
+
+  generate-badge:
+    name: Generate Release Badge
+    needs: release
+    runs-on: ubuntu-latest
+    if: |
+      github.ref == 'refs/heads/main' && 
+      github.event_name == 'push'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+
+      - name: Ensure Badges Directory
+        run: mkdir -p .github/badges
+
+      - name: Get Current Version
+        id: version
+        run: |
+          if [ "${{ needs.release.outputs.new_release_published }}" == "true" ] && [ -n "${{ needs.release.outputs.new_release_version }}" ]; then
+            echo "version=${{ needs.release.outputs.new_release_version }}" >> $GITHUB_OUTPUT
+          else
+            CURRENT_VERSION=$(node -p "require('./package.json').version")
+            echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate Release Badge
+        uses: emibcn/badge-action@v2.0.3
+        with:
+          label: "Latest Release"
+          status: ${{ steps.version.outputs.version }}
+          color: "green,blue"
+          style: "flat"
+          path: ".github/badges/latest-release.svg"
+
+      - name: Commit Badge
+        run: |
+          git config user.name "CRO Bot"
+          git config user.email "conversion@journeyfurther.com"
+          git add .github/badges/latest-release.svg
+          git commit -m "Update latest release badge to ${{ steps.version.outputs.version }}" || exit 0
+          git push

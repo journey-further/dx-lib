@@ -18,7 +18,8 @@
     "build": "rm -rf dist && tsc-alias -p tsconfig.prod.json && tsc -p tsconfig.prod.json",
     "release:dry": "node-env-run --exec \"semantic-release --dry-run --debug --no-ci --repositoryUrl \"$(git remote get-url origin | tr -d '\n')\"\"",
     "docs": "yarn index && typedoc",
-    "index": "npx run-func ./generateIndex.js init"
+    "index": "npx run-func ./generateIndex.js init",
+    "audit:security": "audit-ci --config ./audit-ci.jsonc"
   },
   "devDependencies": {
     "@eslint/compat": "^1.1.1",
