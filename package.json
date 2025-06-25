@@ -10,7 +10,7 @@
   "types": "dist/declarations/index.d.ts",
   "scripts": {
     "dev": "yarn rspack --watch",
-    "dev:build": "yarn prepare --watch",
+    "build:dev": "yarn prepare --watch",
     "prepare": "yarn --silent build",
     "test": "jest --silent",
     "lint": "eslint src --fix",
