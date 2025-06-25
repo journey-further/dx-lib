@@ -39,11 +39,6 @@ export default {
         exclude: (filePath) => /node_modules/.test(filePath) && !/node_modules\/(jf-lib)/.test(filePath),
         use: {
           loader: "swc-loader",
-          options: {
-            env: {
-              include: ["transform-async-to-generator", "transform-regenerator"],
-            },
-          },
         },
         resolve: {
           fullySpecified: false,
