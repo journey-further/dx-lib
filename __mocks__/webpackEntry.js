@@ -39,11 +39,7 @@ export const applyChanges = async () => {
       apply: applyChanges,
       style: style,
       reset: reset,
-      location: /search/,
-      screen: {
-        minWidth: 0,
-        maxWidth: 768,
-      },
+      location: ["/search", "/home"],
     });
 
     // waitForSearchContainerChange();

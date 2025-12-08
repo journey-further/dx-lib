@@ -572,7 +572,7 @@ export const useSPA = (id: string): JfSPA => {
       // Check if it's an array of strings
       if (isStringArray(match)) {
         // It's an array, so filter to find the ones that match
-        const findMatch = match.filter((u) => window.location[type] == u).length == 0;
+        const findMatch = match.filter((u) => window.location[type] == u).length != 0;
 
         // if none of the pages matched, quit out
         if (!findMatch) {
