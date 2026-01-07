@@ -1,5 +1,5 @@
 import path, { dirname } from "path";
-import JfCroHmr from "jf-cro-webpack-hmr";
+import JfCroHmr from "dx-webpack-hmr";
 import { defaultMinimizerOptions } from "html-loader";
 import { fileURLToPath } from "url";
 
@@ -39,11 +39,6 @@ export default {
         exclude: (filePath) => /node_modules/.test(filePath) && !/node_modules\/(jf-lib)/.test(filePath),
         use: {
           loader: "swc-loader",
-          options: {
-            env: {
-              include: ["transform-async-to-generator", "transform-regenerator"],
-            },
-          },
         },
         resolve: {
           fullySpecified: false,

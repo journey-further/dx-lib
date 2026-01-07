@@ -141,10 +141,9 @@ describe("useSPA", () => {
     window.jfLib.experiments = [
       {
         details: { id: TEST_ID, isRunning: true },
-        destroy: jest.fn(),
-        reset: jest.fn(),
-        init: jest.fn(),
-      },
+        options: defaultOptions,
+        loopCount: 0,
+      } as any,
     ];
 
     spa.destroy();
@@ -249,7 +248,7 @@ describe("useSPA", () => {
 
       // Clear any initial calls
       reset.mockClear();
-      defaultOptions.apply.mockClear();
+      (defaultOptions.apply as jest.Mock).mockClear();
 
       // Simulate resize to smaller width
       window.innerWidth = 500;
@@ -277,7 +276,7 @@ describe("useSPA", () => {
 
       // Clear any initial calls
       reset.mockClear();
-      defaultOptions.apply.mockClear();
+      (defaultOptions.apply as jest.Mock).mockClear();
 
       // Simulate resize to larger width
       window.innerWidth = 1500;
@@ -304,7 +303,7 @@ describe("useSPA", () => {
       });
 
       // Clear initial apply call
-      defaultOptions.apply.mockClear();
+      (defaultOptions.apply as jest.Mock).mockClear();
 
       // Simulate resize outside bounds
       window.innerWidth = 1500;
@@ -314,7 +313,7 @@ describe("useSPA", () => {
       await new Promise((resolve) => setTimeout(resolve, 150));
 
       // Clear any calls from first resize
-      defaultOptions.apply.mockClear();
+      (defaultOptions.apply as jest.Mock).mockClear();
 
       // Simulate resize back within bounds
       window.innerWidth = 1000;
