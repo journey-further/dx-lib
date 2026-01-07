@@ -1,5 +1,5 @@
-![Tests](https://github.com/jf-conversion/jf-lib/actions/workflows/tests.yml/badge.svg)
-![Build](https://github.com/jf-conversion/jf-lib/actions/workflows/build.yml/badge.svg)
+![Tests](https://github.com/journey-further/dx-lib/actions/workflows/tests.yml/badge.svg)
+![Build](https://github.com/journey-further/dx-lib/actions/workflows/build.yml/badge.svg)
 
 # Journey Further Helper Library
 
@@ -11,13 +11,13 @@ Further DX dev team.
 This repo can be added to any node based JS/TS project by adding a git ssh
 dependency to your `package.json` as follows:
 
-`"jf-lib": "git+ssh://git@github.com:jf-conversion/jf-lib.git"`
+`"jf-lib": "github:journey-further/dx-lib.git"`
 
 After you have added the repo to your project you can use it as you would any
 other `ESM` library: `import { someFunc } from "jf-lib";`.
 
 For a full list of available functions and documentation please visit:
-[https://jf-conversion.github.io/jf-lib/](https://jf-conversion.github.io/jf-lib/)
+[https://journey-further.github.io/dx-lib/](https://journey-further.github.io/dx-lib/)
 
 ### Reporting bugs
 
@@ -35,7 +35,7 @@ If you can replicate it, please include the exact steps which are required in
 order for another dev to do so
 
 To raise a bug ticket please use the following link:
-https://github.com/jf-conversion/jf-lib/issues
+https://github.com/journey-further/dx-lib/issues
 
 ### Feature requests
 
@@ -43,7 +43,7 @@ Got a cool idea? Found a pain point which can be solved with some code? Thought
 of an addition to an existing script? Raise a feature request!
 
 If you would like to raise a feature request use the link below to do so on the
-_jf-lib_ repo. When doing please be sure to add the _enhancement_ label to
+_dx-lib_ repo. When doing please be sure to add the _enhancement_ label to
 the issue and include as much information as possible.
 
 A good starting point/template is to answer the following questions within your
@@ -63,7 +63,7 @@ https://github.com/jf-conversion/jf-lib/issues
 
 ## Contribution Guidelines
 
-If you would like to contribute to the `jf-lib` library please use the following
+If you would like to contribute to the `dx-lib` library please use the following
 guidelines.
 
 We are operating with a 1 file = 1 function rule throughout this repository and
