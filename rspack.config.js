@@ -1,5 +1,5 @@
 import path, { dirname } from "path";
-import JfCroHmr from "jf-cro-webpack-hmr";
+import JfCroHmr from "dx-webpack-hmr";
 import { defaultMinimizerOptions } from "html-loader";
 import { fileURLToPath } from "url";
 
