@@ -2,7 +2,7 @@
   "name": "jf-lib",
   "version": "2.0.10-staging.1",
   "main": "dist/index.js",
-  "repository": "https://github.com/jf-conversion/jf-lib",
+  "repository": "https://github.com/journey-further/dx-lib",
   "author": "Paul Singh",
   "license": "MIT",
   "private": true,
