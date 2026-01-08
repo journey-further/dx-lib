@@ -1,7 +1,32 @@
 {
-  "entryPoints": ["./src/index.ts"],
+  // "entryPoints": ["./src/index.ts"],
+  "entryPoints": ["./src/**/*.ts"],
   "out": "docs",
   "githubPages": true,
-  "readme": "none",
-  "plugin": ["typedoc-github-theme"]
+  "readme": "README.md",
+  "plugin": ["typedoc-github-theme"],
+  "entryPointStrategy": "expand",
+  "excludeNotDocumented": false,
+  "excludePrivate": false,
+  "excludeProtected": false,
+  "excludeInternal": false,
+  "categorizeByGroup": true,
+  "defaultCategory": "Other",
+  "categoryOrder": ["Modules", "Helpers", "Types", "*"],
+  "navigation": {
+    "includeCategories": true
+  },
+  "searchInComments": true,
+  "includeVersion": false,
+  "name": "DX Lib",
+  "gitRevision": "main",
+  "gitRemote": "origin",
+  "validation": {
+    "invalidLink": true,
+    "notDocumented": false
+  },
+  "treatWarningsAsErrors": false,
+  "logLevel": "Verbose",
+  "sort": ["source-order"],
+  "exclude": ["**/index.ts"]
 }
