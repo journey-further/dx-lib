@@ -1,5 +1,7 @@
-![Tests](https://github.com/journey-further/dx-lib/actions/workflows/tests.yml/badge.svg)
-![Build](https://github.com/journey-further/dx-lib/actions/workflows/build.yml/badge.svg)
+[![semantic-release: eslint](https://img.shields.io/badge/semantic--release-eslint-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
+![Release](https://github.com/journey-further/dx-lib/actions/workflows/release.yml/badge.svg)
+![CI](https://github.com/journey-further/dx-lib/actions/workflows/main.yml/badge.svg)
+[![Latest Release](https://github.com/journey-further/dx-lib/raw/main/.github/badges/latest-release.svg)](https://github.com/journey-further/dx-lib/releases)
 
 # Journey Further Helper Library
 
