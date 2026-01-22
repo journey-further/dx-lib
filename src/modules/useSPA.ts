@@ -330,7 +330,7 @@ export const useSPA = (id: string): JfSPA => {
     loopCount: 0,
     details: {
       isRunning: false,
-      id: null,
+      id: "",
     },
   };
   const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
@@ -441,14 +441,14 @@ export const useSPA = (id: string): JfSPA => {
         window.removeEventListener(`resize`, handleResize);
         window.addEventListener(`resize`, handleResize);
         // check it now and abort if it's not within the params
-        if (window.innerWidth < screen.minWidth) {
-          log(`Screen is smaller than minWidth`, "warn", false, screen.minWidth);
-          return false;
-        }
-        if (window.innerWidth > screen.maxWidth) {
-          log(`Screen is larger than maxWidth`, "warn", false, screen.maxWidth);
-          return false;
-        }
+        // if (window.innerWidth < screen.minWidth) {
+        //   log(`Screen is smaller than minWidth`, "warn", false, screen.minWidth);
+        //   // return false;
+        // }
+        // if (window.innerWidth > screen.maxWidth) {
+        //   log(`Screen is larger than maxWidth`, "warn", false, screen.maxWidth);
+        //   // return false;
+        // }
       }
 
       // Push this test to global object and mark it as running
@@ -557,7 +557,9 @@ export const useSPA = (id: string): JfSPA => {
 
   const checkPageUrl = () => {
     try {
-      const { match, type } = isLocationObject(STATE.options.location) && STATE.options.location;
+      // After setupTest, location is always a JfSPAPageOptions object
+      const locationObj = STATE.options.location as JfSPAPageOptions;
+      const { match, type } = locationObj;
       log(`Checking URL`, "info", true, `type: ${type}, match: ${match}`);
 
       // Check if it's regex
@@ -598,7 +600,9 @@ export const useSPA = (id: string): JfSPA => {
 
   const checkPageCondition = async () => {
     try {
-      const { condition, timeout } = isLocationObject(STATE.options.location) && STATE.options.location;
+      // After setupTest, location is always a JfSPAPageOptions object
+      const locationObj = STATE.options.location as JfSPAPageOptions;
+      const { condition, timeout } = locationObj;
       if (condition == null) return true;
       log(`Checking page condition`, "info", true, `timeout: ${timeout}ms`);
 
@@ -640,6 +644,28 @@ export const useSPA = (id: string): JfSPA => {
    */
   const initTest = async (): Promise<void> => {
     try {
+      // NOTE: check screen size here if options for screen is passed and resetTest is wrong size
+      if (!!STATE.options.screen) {
+        const { minWidth, maxWidth } = STATE.options.screen;
+        // Check if screen is SMALLER than minWidth
+        if (window.innerWidth < minWidth) {
+          log("Screen is smaller than minWidth, resetting", "warn", false, minWidth);
+          // screen is smaller, reset
+          resetTest();
+          return;
+        }
+
+        // Check if screen is LARGER than maxWidth
+        if (window.innerWidth > maxWidth) {
+          log("Screen is larger than maxWidth, resetting", "warn", false, minWidth);
+          // screen is smaller, reset
+          resetTest();
+          return;
+        }
+
+        log("Screen is correct size, proceeding", "info", false);
+      }
+
       // Check if the URL matches
       const urlMatched = checkPageUrl();
       if (!urlMatched) {
@@ -666,7 +692,7 @@ export const useSPA = (id: string): JfSPA => {
       await waitForElement("body");
 
       // Apply the test
-      applyTest();
+      await applyTest();
     } catch (e) {
       throwError(e);
     }
@@ -925,8 +951,8 @@ export const useSPA = (id: string): JfSPA => {
    * @returns {Promise<void>}
    * @throws {Error} If resize handling fails
    */
-  const handleResize = debounce(async () => {
-    log("Screen resized", "info");
+  const handleResizeDebounced = debounce(async () => {
+    // log("Screen resized", "info");
     try {
       const { minWidth, maxWidth } = STATE.options.screen;
 
@@ -955,6 +981,9 @@ export const useSPA = (id: string): JfSPA => {
       throwError(e);
     }
   }, 100);
+
+  // Create handler wrapper for resize to maintain reference for cleanup
+  const handleResize = handleResizeDebounced;
 
   /**
    * Removes elements specified in removeOnPageChange when a page change occurs For each selector:
@@ -1072,14 +1101,15 @@ export const useSPA = (id: string): JfSPA => {
 
                 // First check if it's an array or a string
                 if (Array.isArray(STATE.options.watchForRemoval)) {
-                  (STATE.options.watchForRemoval as string[]).forEach((string) => {
-                    checkElementMatches(string);
-                  });
+                  // Use for...of to properly await async operations
+                  for (const string of STATE.options.watchForRemoval as string[]) {
+                    await checkElementMatches(string);
+                  }
                   return;
                 }
 
                 // Otherwise its a string, so just pass it
-                checkElementMatches(STATE.options.watchForRemoval as string);
+                await checkElementMatches(STATE.options.watchForRemoval as string);
               } catch (e) {
                 throwError(e);
               }
