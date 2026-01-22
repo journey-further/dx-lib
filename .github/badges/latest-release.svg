@@ -1,5 +1,5 @@
-<svg width="136.2" height="20" viewBox="0 0 1362 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Latest Release: 2.0.10">
-  <title>Latest Release: 2.0.10</title>
+<svg width="136.2" height="20" viewBox="0 0 1362 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Latest Release: 2.0.11">
+  <title>Latest Release: 2.0.11</title>
   <g>
     <rect fill="#555" width="902" height="200"/>
     <rect fill="url(#x)" x="902" width="460" height="200"/>
@@ -7,8 +7,8 @@
   <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
     <text x="60" y="148" textLength="802" fill="#000" opacity="0.1">Latest Release</text>
     <text x="50" y="138" textLength="802">Latest Release</text>
-    <text x="957" y="148" textLength="360" fill="#000" opacity="0.1">2.0.10</text>
-    <text x="947" y="138" textLength="360">2.0.10</text>
+    <text x="957" y="148" textLength="360" fill="#000" opacity="0.1">2.0.11</text>
+    <text x="947" y="138" textLength="360">2.0.11</text>
   </g>
   
   <linearGradient id="x" x1="0%" y1="0%" x2="100%" y2="0%">
