@@ -14,7 +14,9 @@
   "defaultCategory": "Other",
   "categoryOrder": ["Modules", "Helpers", "Types", "*"],
   "navigation": {
-    "includeCategories": true
+    "includeCategories": false,
+    "includeGroups": false,
+    "includeFolders": true
   },
   "searchInComments": true,
   "includeVersion": false,

@@ -1,6 +1,6 @@
 {
   "name": "jf-lib",
-  "version": "2.0.10",
+  "version": "2.0.11-staging.1",
   "main": "dist/index.js",
   "repository": "https://github.com/journey-further/dx-lib",
   "author": "Paul Singh",
@@ -80,7 +80,7 @@
     "ts-node": "^10.9.1",
     "tsc-alias": "^1.7.0",
     "tslib": "^2.4.0",
-    "typedoc": "^0.28.15",
+    "typedoc": "^0.26.11",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.0.0",
     "yarn": "^1.22.19"
