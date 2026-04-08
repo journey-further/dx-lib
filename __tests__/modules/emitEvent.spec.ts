@@ -34,7 +34,7 @@ describe("emitEvent", () => {
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("will throw an error if there is no fully formed jfExperiment object in the global scope", () => {
@@ -67,7 +67,7 @@ describe("emitEvent", () => {
   });
 
   it("will dispatch the correct event with the correct detail", () => {
-    jest.spyOn(console, "warn").mockImplementationOnce(() => {});
+    vi.spyOn(console, "warn").mockImplementationOnce(() => {});
     // @ts-ignore
     emitEvent(
       "error",
@@ -90,7 +90,7 @@ describe("emitEvent", () => {
   });
 
   it("will log the stack trace and error cause if an error object is passed to it", () => {
-    jest.spyOn(console, "warn").mockImplementationOnce(() => {});
+    vi.spyOn(console, "warn").mockImplementationOnce(() => {});
     emitEvent(
       "error",
       {

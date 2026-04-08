@@ -8,12 +8,12 @@ const IPHONE_USER_AGENT =
 describe("enableScroll", () => {
   beforeEach(() => {
     preventScroll();
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   it("will remove a style element from the document", () => {
     // mock the scrollTo function so it doesn't cause errors
-    jest.spyOn(window, "scrollTo").mockImplementation(() => {});
+    vi.spyOn(window, "scrollTo").mockImplementation(() => {});
     enableScroll();
     expect(!!document.querySelector(STYLE_ELEMENT_ID)).toBe(false);
   });
@@ -37,7 +37,7 @@ describe("enableScroll", () => {
     // Set top value on body -- enable scroll should remove this
     document.body.style.setProperty("top", `${MOCK_SCROLL_Y}px`);
     // Spy scroll to
-    const spy = jest.spyOn(window, "scrollTo").mockImplementation(() => {});
+    const spy = vi.spyOn(window, "scrollTo").mockImplementation(() => {});
     enableScroll();
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(0, MOCK_SCROLL_Y);

@@ -13,13 +13,13 @@ describe("elementInView", () => {
 
   // Allow us to set the values returned regarding the element's position and size within the DOM
   const setupTest = (element: HTMLDivElement, height: number, top: number, bottom: number) => {
-    return jest.spyOn(element, "getBoundingClientRect").mockReturnValue({ height, top, bottom } as any);
+    return vi.spyOn(element, "getBoundingClientRect").mockReturnValue({ height, top, bottom } as any);
   };
 
   // Tidy up after each test
   afterEach(() => {
     document.body.innerHTML = "";
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("will throw the correct errors", () => {

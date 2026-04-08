@@ -2,52 +2,52 @@ import { elementUpdated } from "../../src/modules/elementUpdated";
 
 describe("elementUpdated", () => {
   beforeEach(() => {
-    document.body.innerHTML = "";
-    window.jfLib = { elementUpdated: {} };
-    // Clear any existing observers
+    // Disconnect observers BEFORE resetting state to prevent stale callbacks
     window.jfObservers?.forEach((obs) => obs.observer?.disconnect());
     window.jfObservers = [];
+    window.jfLib = { elementUpdated: {} };
+    document.body.innerHTML = "";
   });
 
   it("validates input parameters", () => {
-    expect(() => elementUpdated("", jest.fn(), "test-id", { attributes: true })).toThrow("elementUpdated setup failed");
+    expect(() => elementUpdated("", vi.fn(), "test-id", { attributes: true })).toThrow("elementUpdated setup failed");
     expect(() => elementUpdated(".test", null as any, "test-id", { attributes: true })).toThrow(
       "elementUpdated setup failed"
     );
-    expect(() => elementUpdated(".test", jest.fn(), "", { attributes: true })).toThrow("elementUpdated setup failed");
+    expect(() => elementUpdated(".test", vi.fn(), "", { attributes: true })).toThrow("elementUpdated setup failed");
   });
 
   it("validates selector format", () => {
-    expect(() => elementUpdated(123 as any, jest.fn(), "test-id", { attributes: true })).toThrow(
+    expect(() => elementUpdated(123 as any, vi.fn(), "test-id", { attributes: true })).toThrow(
       "elementUpdated setup failed"
     );
-    expect(() => elementUpdated(">>>>>>", jest.fn(), "test-id", { attributes: true })).toThrow(
+    expect(() => elementUpdated(">>>>>>", vi.fn(), "test-id", { attributes: true })).toThrow(
       "elementUpdated setup failed"
     );
   });
 
   it("validates options parameter", () => {
     expect(() =>
-      elementUpdated(".test", jest.fn(), "test-id", { attributes: false, characterData: false, textContent: false })
+      elementUpdated(".test", vi.fn(), "test-id", { attributes: false, characterData: false, textContent: false })
     ).toThrow("elementUpdated setup failed");
 
-    expect(() => elementUpdated(".test", jest.fn(), "test-id", { attributeFilter: [] } as any)).toThrow(
+    expect(() => elementUpdated(".test", vi.fn(), "test-id", { attributeFilter: [] } as any)).toThrow(
       "elementUpdated setup failed"
     );
 
-    expect(() => elementUpdated(".test", jest.fn(), "test-id", { attributeFilter: 123 } as any)).toThrow(
+    expect(() => elementUpdated(".test", vi.fn(), "test-id", { attributeFilter: 123 } as any)).toThrow(
       "elementUpdated setup failed"
     );
   });
 
   it("validates conditions parameter", () => {
-    expect(() => elementUpdated(".test", jest.fn(), "test-id", { attributes: true }, "not-a-function" as any)).toThrow(
+    expect(() => elementUpdated(".test", vi.fn(), "test-id", { attributes: true }, "not-a-function" as any)).toThrow(
       "elementUpdated setup failed"
     );
   });
 
-  it("detects attribute changes", (done) => {
-    const callback = jest.fn();
+  it("detects attribute changes", async () => {
+    const callback = vi.fn();
     const div = document.createElement("div");
     div.className = "test";
     document.body.appendChild(div);
@@ -55,18 +55,12 @@ describe("elementUpdated", () => {
     elementUpdated(".test", callback, "test-id", { attributes: true, attributeFilter: ["data-test"] });
     div.setAttribute("data-test", "value");
 
-    setTimeout(() => {
-      try {
-        expect(callback).toHaveBeenCalledWith(expect.any(Element));
-        done();
-      } catch (error) {
-        done(error);
-      }
-    }, 100);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).toHaveBeenCalledWith(expect.any(Element));
   });
 
-  it("respects attribute filter", (done) => {
-    const callback = jest.fn();
+  it("respects attribute filter", async () => {
+    const callback = vi.fn();
     const div = document.createElement("div");
     div.className = "test";
     document.body.appendChild(div);
@@ -79,18 +73,12 @@ describe("elementUpdated", () => {
     // This should trigger the callback
     div.setAttribute("data-test", "value");
 
-    setTimeout(() => {
-      try {
-        expect(callback).toHaveBeenCalledTimes(1);
-        done();
-      } catch (error) {
-        done(error);
-      }
-    }, 100);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  it("detects text content changes", (done) => {
-    const callback = jest.fn();
+  it("detects text content changes", async () => {
+    const callback = vi.fn();
     const div = document.createElement("div");
     div.className = "test";
     document.body.appendChild(div);
@@ -98,18 +86,12 @@ describe("elementUpdated", () => {
     elementUpdated(".test", callback, "test-id", { textContent: true });
     div.textContent = "New content";
 
-    setTimeout(() => {
-      try {
-        expect(callback).toHaveBeenCalledWith(expect.any(Element));
-        done();
-      } catch (error) {
-        done(error);
-      }
-    }, 100);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).toHaveBeenCalledWith(expect.any(Element));
   });
 
-  it("detects character data changes", (done) => {
-    const callback = jest.fn();
+  it("detects character data changes", async () => {
+    const callback = vi.fn();
     const div = document.createElement("div");
     div.className = "test";
     document.body.appendChild(div);
@@ -118,30 +100,23 @@ describe("elementUpdated", () => {
     elementUpdated(".test", callback, "test-id", { characterData: true });
 
     // Wait for observer to be initialized
-    setTimeout(() => {
-      // Create and add text node after observer is initialized
-      const text = document.createTextNode("Initial text");
-      div.appendChild(text);
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
-      // Wait a bit then change the text
-      setTimeout(() => {
-        text.data = "Updated text";
+    // Create and add text node after observer is initialized
+    const text = document.createTextNode("Initial text");
+    div.appendChild(text);
 
-        // Check the result
-        setTimeout(() => {
-          try {
-            expect(callback).toHaveBeenCalledWith(expect.any(Element));
-            done();
-          } catch (error) {
-            done(error);
-          }
-        }, 100);
-      }, 100);
-    }, 100);
+    // Wait a bit then change the text
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    text.data = "Updated text";
+
+    // Check the result
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).toHaveBeenCalledWith(expect.any(Element));
   });
 
-  it("respects conditions", (done) => {
-    const callback = jest.fn();
+  it("respects conditions", async () => {
+    const callback = vi.fn();
     document.body.innerHTML = `
       <div class="test" data-update="true"></div>
       <div class="test" data-update="false"></div>
@@ -158,18 +133,12 @@ describe("elementUpdated", () => {
     const elements = document.querySelectorAll(".test");
     elements.forEach((el) => el.setAttribute("data-test", "value"));
 
-    setTimeout(() => {
-      try {
-        expect(callback).toHaveBeenCalledTimes(1);
-        done();
-      } catch (error) {
-        done(error);
-      }
-    }, 100);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).toHaveBeenCalledTimes(1);
   });
 
   it("can be destroyed", async () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     const div = document.createElement("div");
     div.className = "test";
     document.body.appendChild(div);
@@ -188,7 +157,7 @@ describe("elementUpdated", () => {
   });
 
   it("can be reinitialized after destruction", async () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     const div = document.createElement("div");
     div.className = "test";
     document.body.appendChild(div);
@@ -214,8 +183,8 @@ describe("elementUpdated", () => {
     expect(callback).toHaveBeenCalledWith(expect.any(Element));
   });
 
-  it("handles multiple updates to same element", (done) => {
-    const callback = jest.fn();
+  it("handles multiple updates to same element", async () => {
+    const callback = vi.fn();
     const div = document.createElement("div");
     div.className = "test";
     document.body.appendChild(div);
@@ -226,13 +195,7 @@ describe("elementUpdated", () => {
     div.setAttribute("data-test2", "value2");
     div.setAttribute("data-test3", "value3");
 
-    setTimeout(() => {
-      try {
-        expect(callback).toHaveBeenCalledTimes(3);
-        done();
-      } catch (error) {
-        done(error);
-      }
-    }, 100);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).toHaveBeenCalledTimes(3);
   });
 });

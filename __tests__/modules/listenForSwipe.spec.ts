@@ -1,7 +1,7 @@
 import { listenForSwipe } from "../../src";
 
-const LEFT_CALLBACK = jest.fn();
-const RIGHT_CALLBACK = jest.fn();
+const LEFT_CALLBACK = vi.fn();
+const RIGHT_CALLBACK = vi.fn();
 
 //class mouseEvent extends MouseEvent {
 //  mouseType: string;
@@ -18,7 +18,7 @@ const RIGHT_CALLBACK = jest.fn();
 
 describe("listenForSwipe", () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   it("will call the correct callback when the user swipes right with mouse events", () => {

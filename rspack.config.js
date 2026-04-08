@@ -1,5 +1,4 @@
 import path, { dirname } from "path";
-import JfCroHmr from "dx-webpack-hmr";
 import { defaultMinimizerOptions } from "html-loader";
 import { fileURLToPath } from "url";
 
@@ -13,15 +12,7 @@ export default {
   output: { path: path.resolve(process.cwd(), "__dist__") },
   devtool: "eval-cheap-module-source-map",
   mode: "development",
-  plugins: [
-    new JfCroHmr({
-      previewUrl:
-        "https://www.russellandbromley.co.uk/search?N=&Ns=&No=0&Nr=AND(product.active:1,NOT(record.type:Store))&Nrpp=20&Ntt=chestersada&Nf=",
-      previewModule: "variantA",
-      disableTag: true,
-      useStealth: false,
-    }),
-  ],
+  plugins: [],
   devServer: {
     historyApiFallback: true,
     static: path.resolve(__dirname, "dist"),
