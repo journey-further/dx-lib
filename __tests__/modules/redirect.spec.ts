@@ -6,7 +6,7 @@ describe("redirect", () => {
   const mockWindow = () => {
     const origin = { ...window.location };
     delete window.location;
-    const spy = jest.fn();
+    const spy = vi.fn();
     window.location = { ...origin, assign: spy };
     return spy;
   };

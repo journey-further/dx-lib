@@ -4,10 +4,6 @@ import { queryAll } from "../../src";
 
 const MOCK_QUERY = ".mock";
 
-// We need to mock our timers
-jest.useFakeTimers({ advanceTimers: true });
-jest.spyOn(global, "setTimeout");
-
 describe("queryAll", () => {
   it("will return a true array", () => {
     const result = queryAll(MOCK_QUERY);
@@ -16,7 +12,7 @@ describe("queryAll", () => {
   });
 
   it("will call querySelectorAll with the provided argument", () => {
-    const spy = jest.spyOn(document, "querySelectorAll");
+    const spy = vi.spyOn(document, "querySelectorAll");
     queryAll(MOCK_QUERY);
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(MOCK_QUERY);

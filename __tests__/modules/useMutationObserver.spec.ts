@@ -12,7 +12,7 @@ describe("useMutationObserver", () => {
     observer: undefined,
     isObserving: false,
   };
-  const CALLBACK = jest.fn();
+  const CALLBACK = vi.fn();
 
   beforeEach(() => {
     // Setup fresh DOM for each test
@@ -31,9 +31,9 @@ describe("useMutationObserver", () => {
       observer: undefined,
       isObserving: false,
     };
-    jest.resetAllMocks();
-    jest.clearAllTimers();
-    jest.clearAllMocks();
+    vi.resetAllMocks();
+    vi.clearAllTimers();
+    vi.clearAllMocks();
   });
 
   it("creates an observer object in the global observer array", () => {
@@ -55,29 +55,31 @@ describe("useMutationObserver", () => {
     expect(CALLBACK).not.toHaveBeenCalled();
   });
 
-  it("detects DOM mutations and calls callback", (done) => {
-    const node = document.createElement("div");
-    node.id = OBSERVER_ID;
-    document.body.appendChild(node);
+  it("detects DOM mutations and calls callback", () => {
+    return new Promise<void>((resolve, reject) => {
+      const node = document.createElement("div");
+      node.id = OBSERVER_ID;
+      document.body.appendChild(node);
 
-    const { observe } = useMutationObserver(OBSERVER_ID);
-    observe(node, CONFIG, (mutations) => {
-      try {
-        expect(mutations[0]).toMatchObject({
-          type: "childList",
-          addedNodes: expect.any(NodeList),
-          target: node,
-        });
-        expect(mutations[0].addedNodes[0]).toBe(child);
-        done();
-      } catch (error) {
-        done(error);
-      }
+      const { observe } = useMutationObserver(OBSERVER_ID);
+      observe(node, CONFIG, (mutations) => {
+        try {
+          expect(mutations[0]).toMatchObject({
+            type: "childList",
+            addedNodes: expect.any(NodeList),
+            target: node,
+          });
+          expect(mutations[0].addedNodes[0]).toBe(child);
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      });
+
+      // Add new element
+      const child = document.createElement("div");
+      node.appendChild(child);
     });
-
-    // Add new element
-    const child = document.createElement("div");
-    node.appendChild(child);
   });
 
   it("handles multiple target nodes", () => {

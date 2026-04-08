@@ -1,3 +1,4 @@
+import type { Mock } from "vitest";
 import { useSPA } from "../../src";
 import { JfSPAOptions } from "../../src/modules/useSPA";
 import { JfLib } from "../../src/globals";
@@ -5,8 +6,8 @@ import { JfLib } from "../../src/globals";
 // Mock Error constructor
 const originalError = Error;
 global.Error = Object.assign(
-  jest.fn((message?: string) => new originalError(message)),
-  { captureStackTrace: jest.fn(), stackTraceLimit: 10 }
+  vi.fn((message?: string) => new originalError(message)),
+  { captureStackTrace: vi.fn(), stackTraceLimit: 10 }
 ) as unknown as typeof Error;
 
 describe("useSPA", () => {
@@ -29,8 +30,8 @@ describe("useSPA", () => {
               isObserving: false,
               ticketId: "pageChange-1.0",
             },
-            observe: jest.fn().mockReturnValue(true),
-            disconnect: jest.fn(),
+            observe: vi.fn().mockReturnValue(true),
+            disconnect: vi.fn(),
           },
         },
       },
@@ -42,8 +43,8 @@ describe("useSPA", () => {
               isObserving: false,
               ticketId: "reInit-1.0",
             },
-            observe: jest.fn().mockReturnValue(true),
-            disconnect: jest.fn(),
+            observe: vi.fn().mockReturnValue(true),
+            disconnect: vi.fn(),
           },
         },
       },
@@ -51,7 +52,7 @@ describe("useSPA", () => {
 
     // Setup default options
     defaultOptions = {
-      apply: jest.fn(),
+      apply: vi.fn(),
       location: "/test",
     };
 
@@ -65,8 +66,8 @@ describe("useSPA", () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
-    jest.clearAllTimers();
+    vi.resetAllMocks();
+    vi.clearAllTimers();
   });
 
   it("should initialize with valid options", async () => {
@@ -114,7 +115,7 @@ describe("useSPA", () => {
   // it("should reset when screen size conditions not met", async () => {
   //   window.innerWidth = 1500;
   //   const spa = useSPA(TEST_ID);
-  //   const reset = jest.fn();
+  //   const reset = vi.fn();
 
   //   await spa.init({
   //     ...defaultOptions,
@@ -151,7 +152,7 @@ describe("useSPA", () => {
   });
 
   it("should execute reset function", async () => {
-    const reset = jest.fn();
+    const reset = vi.fn();
     const spa = useSPA(TEST_ID);
 
     await spa.init({
@@ -177,7 +178,7 @@ describe("useSPA", () => {
       window.innerWidth = 1024;
 
       // Mock addEventListener to capture resize callback
-      window.addEventListener = jest.fn((event, callback) => {
+      window.addEventListener = vi.fn((event, callback) => {
         if (event === "resize") {
           resizeCallback = callback as (e: Event) => void;
         }
@@ -185,7 +186,7 @@ describe("useSPA", () => {
       });
 
       // Mock dispatchEvent to actually trigger the callback
-      window.dispatchEvent = jest.fn((event) => {
+      window.dispatchEvent = vi.fn((event) => {
         if (event.type === "resize" && resizeCallback) {
           resizeCallback(event);
         }
@@ -234,7 +235,7 @@ describe("useSPA", () => {
     });
 
     it("should reset when window resizes below minWidth", async () => {
-      const reset = jest.fn();
+      const reset = vi.fn();
       const spa = useSPA(TEST_ID);
 
       // Start with valid width
@@ -248,7 +249,7 @@ describe("useSPA", () => {
 
       // Clear any initial calls
       reset.mockClear();
-      (defaultOptions.apply as jest.Mock).mockClear();
+      (defaultOptions.apply as Mock).mockClear();
 
       // Simulate resize to smaller width
       window.innerWidth = 500;
@@ -262,7 +263,7 @@ describe("useSPA", () => {
     });
 
     it("should reset when window resizes above maxWidth", async () => {
-      const reset = jest.fn();
+      const reset = vi.fn();
       const spa = useSPA(TEST_ID);
 
       // Start with valid width
@@ -276,7 +277,7 @@ describe("useSPA", () => {
 
       // Clear any initial calls
       reset.mockClear();
-      (defaultOptions.apply as jest.Mock).mockClear();
+      (defaultOptions.apply as Mock).mockClear();
 
       // Simulate resize to larger width
       window.innerWidth = 1500;
@@ -290,7 +291,7 @@ describe("useSPA", () => {
     });
 
     it("should reapply when window resizes back within bounds", async () => {
-      const reset = jest.fn();
+      const reset = vi.fn();
       const spa = useSPA(TEST_ID);
 
       // Start with valid width
@@ -303,7 +304,7 @@ describe("useSPA", () => {
       });
 
       // Clear initial apply call
-      (defaultOptions.apply as jest.Mock).mockClear();
+      (defaultOptions.apply as Mock).mockClear();
 
       // Simulate resize outside bounds
       window.innerWidth = 1500;
@@ -313,7 +314,7 @@ describe("useSPA", () => {
       await new Promise((resolve) => setTimeout(resolve, 150));
 
       // Clear any calls from first resize
-      (defaultOptions.apply as jest.Mock).mockClear();
+      (defaultOptions.apply as Mock).mockClear();
 
       // Simulate resize back within bounds
       window.innerWidth = 1000;

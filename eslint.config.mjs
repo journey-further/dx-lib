@@ -1,5 +1,4 @@
 import { fixupConfigRules } from "@eslint/compat";
-import base from "eslint-config-jf-base";
 import jsdoc from "eslint-plugin-jsdoc";
 import globals from "globals";
 import tseslint from "typescript-eslint";
@@ -17,13 +16,13 @@ const compat = new FlatCompat({
 });
 
 export default [
+  js.configs.recommended,
   ...fixupConfigRules(compat.extends("plugin:import-x/recommended", "plugin:import-x/typescript")),
   jsdoc.configs["flat/recommended"],
   ...tseslint.configs.recommended,
-  ...base,
   {
     ignores: [
-      "**/jest.config.ts",
+      "**/vitest.config.ts",
       "**/__tests__",
       "**/dist",
       "**/rollup.config.ts",
@@ -41,7 +40,6 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.node,
-        ...globals.jest,
         Test: true,
         jQuery: true,
         $: true,
@@ -59,7 +57,7 @@ export default [
         Shopify: true,
       },
 
-      ecmaVersion: 2021,
+      ecmaVersion: 2022,
       sourceType: "module",
 
       parserOptions: {
@@ -91,19 +89,8 @@ export default [
     },
 
     rules: {
+      // Core rules
       "no-promise-executor-return": "off",
-      "@typescript-eslint/default-param-last": ["off"],
-      "import/prefer-default-export": "off",
-      "node/no-missing-import": "off",
-      "import-x/no-unresolved": [2, { commonjs: true, amd: true }],
-      "import/extensions": "off",
-      "@typescript-eslint/no-misused-promises": [
-        "error",
-        {
-          checksVoidReturn: false,
-        },
-      ],
-
       "no-restricted-imports": ["error", "waitFor"],
       semi: "warn",
       "no-undef": "error",
@@ -116,21 +103,13 @@ export default [
       "prefer-arrow-callback": "warn",
       quotes: "off",
       "vars-on-top": "off",
-      "prettier/prettier": "warn",
       "no-console": "off",
       "func-names": "off",
       "no-process-exit": "off",
       "object-shorthand": "off",
       "class-methods-use-this": "off",
-      "node/no-unpublished-require": "off",
-      "import/no-extraneous-dependencies": "off",
       "prefer-regex-literals": "off",
       "no-param-reassign": "off",
-      "jsdoc/require-param-type": "off",
-      "jsdoc/require-returns-type": "off",
-      "jsdoc/require-returns": "off",
-      "jsdoc/require-param": "off",
-      "jsdoc/tag-lines": "off",
       eqeqeq: "off",
       "no-underscore-dangle": "warn",
       "no-restricted-syntax": "off",
@@ -143,17 +122,43 @@ export default [
         },
       ],
       "default-param-last": "off",
-      "node/no-unpublished-import": "off",
       "no-continue": "off",
-      "import/no-unresolved": "off",
       "spaced-comment": "off",
+
+      // TypeScript rules
+      "@typescript-eslint/default-param-last": ["off"],
+      "@typescript-eslint/no-misused-promises": [
+        "error",
+        {
+          checksVoidReturn: false,
+        },
+      ],
       "@typescript-eslint/no-unsafe-function-type": "off",
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
+
+      // Import rules
+      "import/prefer-default-export": "off",
+      "import/extensions": "off",
+      "import/no-extraneous-dependencies": "off",
+      "import/no-unresolved": "off",
+      "import-x/no-unresolved": [2, { commonjs: true, amd: true }],
+      "node/no-missing-import": "off",
+      "node/no-unpublished-require": "off",
+      "node/no-unpublished-import": "off",
       "node/no-unsupported-features/es-syntax": [
         "error",
         {
           ignores: ["modules"],
         },
       ],
+
+      // JSDoc rules
+      "jsdoc/require-param-type": "off",
+      "jsdoc/require-returns-type": "off",
+      "jsdoc/require-returns": "off",
+      "jsdoc/require-param": "off",
+      "jsdoc/tag-lines": "off",
       "jsdoc/no-defaults": "off",
     },
   },
