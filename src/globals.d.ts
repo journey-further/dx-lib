@@ -62,11 +62,18 @@ export interface JfTests {
   pagePath?: string;
 }
 
+export interface NuxtInstance {
+  $store?: Record<string, unknown>;
+  $nextTick?: (callback?: () => void) => Promise<void>;
+  [key: string]: unknown;
+}
+
 declare global {
   interface Window {
     jfLib: JfLib;
     jfTests: JfTests;
     jfObservers: JfObserverObject[];
+    $nuxt?: NuxtInstance;
   }
 }
 
