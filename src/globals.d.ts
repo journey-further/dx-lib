@@ -44,6 +44,12 @@ export interface JfLib {
   pagePath?: string;
   /** Active experiments */
   experiments?: JfSPAState[];
+  /** Custom event buses, keyed by version then experiment ID */
+  customEvents?: {
+    [version: string]: {
+      bus: EventTarget;
+    };
+  };
 }
 
 /**

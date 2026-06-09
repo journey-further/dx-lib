@@ -1,22 +1,68 @@
-// Tiny event-bus to decouple modules (prevents sidebar<->map import cycles)
-// Usage:
-//   emit('hotel:selected', { hotelId: 'latimer-estate' })
-//   on('hotel:selected', (detail) => { ... })
+const VERSION = "1.0";
 
-const BUS = new EventTarget();
+type Detail = { [key: string]: any };
 
-export const emit = (type: string, detail: unknown = {}): void => {
-  BUS.dispatchEvent(new CustomEvent(type, { detail }));
+const initBus = () => {
+  window.jfLib = window.jfLib || {};
+  window.jfLib.customEvents = window.jfLib.customEvents || {};
+  if (!window.jfLib.customEvents[VERSION]) {
+    window.jfLib.customEvents[VERSION] = { bus: new EventTarget() };
+  }
 };
 
-export const on = (type: string, handler: (detail: unknown) => void): (() => void) => {
-  const listener = (e: Event): void => {
-    const customEvent = e as CustomEvent;
-    handler(customEvent.detail);
+const getBus = (): EventTarget => window.jfLib.customEvents[VERSION].bus;
+
+/**
+ * Per-experiment event bus, scoped to the provided experiment ID.
+ *
+ * Events are namespaced internally as `${id}:${type}` so experiments cannot accidentally cross-contaminate each other.
+ * Cross-experiment listening is supported via the optional `fromId` argument on `on`.
+ *
+ * The underlying `EventTarget` is shared on `window.jfLib.customEvents["1.0"].bus` so it persists across module
+ * boundaries without import cycles.
+ *
+ * @param {string} id - The experiment ID (e.g. "TIK_123456"). Used to namespace all emitted events.
+ * @returns {{ emit, on }} Event bus scoped to this experiment.
+ * @example
+ *   const { emit, on } = customEvents("TIK_123456");
+ *
+ *   const unsubscribe = on("hotel:selected", (detail) => {
+ *     console.log(detail.hotelId);
+ *   });
+ *
+ *   emit("hotel:selected", { hotelId: "latimer-estate" });
+ *
+ *   unsubscribe(); // remove listener
+ */
+export const customEvents = (id: string) => {
+  initBus();
+
+  /**
+   * Emit an event on this experiment's bus.
+   *
+   * @param {string} type - Event name.
+   * @param {Detail} detail - Optional payload object.
+   */
+  const emit = (type: string, detail: Detail = {}): void => {
+    getBus().dispatchEvent(new CustomEvent(`${id}:${type}`, { detail }));
   };
 
-  BUS.addEventListener(type, listener);
+  /**
+   * Subscribe to an event on this experiment's bus, or another experiment's bus via `fromId`.
+   *
+   * @param {string} type - Event name.
+   * @param {Function} handler - Callback receiving the event detail.
+   * @param {string} [fromId] - Source experiment ID when listening cross-experiment.
+   * @returns {Function} Unsubscribe function.
+   */
+  const on = (type: string, handler: (detail: Detail) => void, fromId?: string): (() => void) => {
+    const namespace = fromId ?? id;
+    const listener = (e: Event): void => {
+      handler((e as CustomEvent<Detail>).detail);
+    };
+    getBus().addEventListener(`${namespace}:${type}`, listener);
+    return () => getBus().removeEventListener(`${namespace}:${type}`, listener);
+  };
 
-  // Return unsubscribe for convenience (not required)
-  return () => BUS.removeEventListener(type, listener);
+  return { emit, on };
 };

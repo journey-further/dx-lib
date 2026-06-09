@@ -1,4 +1,5 @@
 export * from "./createElement"
+export * from "./customEvents"
 export * from "./debounce"
 export * from "./docReady"
 export * from "./elementInView"
