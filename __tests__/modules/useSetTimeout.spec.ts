@@ -1,15 +1,19 @@
 import { useSetTimeout } from "modules/useSetTimeout";
 
-jest.useFakeTimers();
 describe("useSetTimeout", () => {
   beforeEach(() => {
-    jest.clearAllTimers();
-    jest.clearAllMocks();
+    vi.useFakeTimers();
+    vi.clearAllTimers();
+    vi.clearAllMocks();
     delete window.jfTimers;
   });
 
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   const TIMEOUT_ID = "HEY";
-  const CALLBACK = jest.fn();
+  const CALLBACK = vi.fn();
 
   it("will throw the correct errors if args are missing", () => {
     // @ts-ignore
@@ -40,21 +44,21 @@ describe("useSetTimeout", () => {
     useSetTimeout(CALLBACK, 100, TIMEOUT_ID);
     useSetTimeout(CALLBACK, 100, TIMEOUT_ID);
     expect(window.jfTimers.length).toBe(1);
-    jest.runAllTimers();
+    vi.runAllTimers();
     expect(CALLBACK).toBeCalledTimes(1);
   });
 
   it("will call the provided callback when timeout is exceeded", () => {
     expect(CALLBACK).toBeCalledTimes(0);
     useSetTimeout(CALLBACK, 100, TIMEOUT_ID);
-    jest.runAllTimers();
+    vi.runAllTimers();
     expect(CALLBACK).toBeCalledTimes(1);
   });
 
   it("will remove the timerObject from the window array when the timeout is exceeded", () => {
     expect(CALLBACK).toBeCalledTimes(0);
     useSetTimeout(CALLBACK, 100, TIMEOUT_ID);
-    jest.runAllTimers();
+    vi.runAllTimers();
     expect(CALLBACK).toBeCalledTimes(1);
     const objFromWindow = window.jfTimers.find((timer) => timer.id === TIMEOUT_ID);
     expect(objFromWindow).not.toBeDefined();
@@ -66,7 +70,7 @@ describe("useSetTimeout", () => {
     expect(obj.id).toBe(TIMEOUT_ID);
     expect(obj.handler).toBe(CALLBACK);
     expect(obj.timeout).toBe(200);
-    expect(typeof obj.timer).toBe("number");
+    expect(obj.timer).toBeDefined(); // Node.js returns Timeout object; browsers return number
     expect(typeof obj.disconnect).toBe("function");
   });
 });

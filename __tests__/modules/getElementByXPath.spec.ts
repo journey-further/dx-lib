@@ -4,7 +4,7 @@ import { getElementByXPath } from "../../src";
 
 describe("getElementByXPath", () => {
   beforeAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("Will return a html element", async () => {

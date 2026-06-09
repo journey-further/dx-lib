@@ -1,0 +1,1 @@
+{"nodes": [{"id": "replace_html_fn", "label": "replaceHTML", "type": "function", "source_file": "src/modules/replaceHTML.ts", "source_location": "replaceHTML.ts:12", "confidence": "EXTRACTED", "properties": {"signature": "(elem: HTMLElement, html: string) => void", "description": "Replaces HTML content of an element"}}], "edges": [], "hyperedges": []}

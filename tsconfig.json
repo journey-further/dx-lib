@@ -14,5 +14,6 @@
     "downlevelIteration": true,
     "lib": ["DOM", "ES2022", "dom.iterable"],
     "skipLibCheck": true
-  }
+  },
+  "exclude": ["__tests__", "node_modules", "dist"]
 }

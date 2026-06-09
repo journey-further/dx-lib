@@ -4,7 +4,7 @@ import { findParents } from "../../src";
 
 describe("findParents", () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     document.body.innerHTML = "";
   });
 

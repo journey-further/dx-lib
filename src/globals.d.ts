@@ -1,4 +1,4 @@
-import { RBTest, JfObserver, JfObserverObject, JfReadyObject, JfRemovedObject, JfSPAState } from "./modules";
+import { RBTest, JfObserver, JfObserverObject, JfReadyObject, JfRemovedObject, JfSPA } from "./modules";
 import { JfUpdatedObject } from "./modules/elementUpdated";
 
 /**
@@ -68,11 +68,18 @@ export interface JfTests {
   pagePath?: string;
 }
 
+export interface NuxtInstance {
+  $store?: Record<string, unknown>;
+  $nextTick?: (callback?: () => void) => Promise<void>;
+  [key: string]: unknown;
+}
+
 declare global {
   interface Window {
     jfLib: JfLib;
     jfTests: JfTests;
     jfObservers: JfObserverObject[];
+    $nuxt?: NuxtInstance;
   }
 }
 

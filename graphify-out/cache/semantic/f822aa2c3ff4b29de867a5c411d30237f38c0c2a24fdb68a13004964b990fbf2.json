@@ -1,0 +1,1 @@
+{"nodes": [{"id": "query_all_fn", "label": "queryAll", "type": "function", "source_file": "src/modules/queryAll.ts", "source_location": "queryAll.ts:11", "confidence": "EXTRACTED", "properties": {"signature": "(selector: string) => HTMLElement[]", "description": "Returns array of HTML elements matching CSS selector"}}], "edges": [], "hyperedges": []}
