@@ -164,6 +164,92 @@ describe("useSPA", () => {
     expect(reset).toHaveBeenCalled();
   });
 
+  // #99 — enhanced details
+  it("should set details.pageMatched when page matches", async () => {
+    const spa = useSPA(TEST_ID);
+    await spa.init(defaultOptions);
+    expect(spa.details.pageMatched).toBe(true);
+  });
+
+  it("should set details.isApplied after apply runs", async () => {
+    const spa = useSPA(TEST_ID);
+    await spa.init(defaultOptions);
+    expect(spa.details.isApplied).toBe(true);
+  });
+
+  it("should set details.isReset and clear isApplied after reset runs", async () => {
+    const spa = useSPA(TEST_ID);
+    await spa.init(defaultOptions);
+    await spa.reset();
+    expect(spa.details.isReset).toBe(true);
+    expect(spa.details.isApplied).toBe(false);
+    expect(spa.details.pageMatched).toBe(false);
+  });
+
+  it("should not set details.pageMatched when page does not match", async () => {
+    window.location.pathname = "/no-match";
+    const spa = useSPA(TEST_ID);
+    await spa.init(defaultOptions);
+    expect(spa.details.pageMatched).toBe(false);
+  });
+
+  // #105 — public API in jfLib.experiments
+  it("should expose public API in jfLib.experiments", async () => {
+    const spa = useSPA(TEST_ID);
+    await spa.init(defaultOptions);
+    const exp = window.jfLib.experiments[0];
+    expect(typeof exp.init).toBe("function");
+    expect(typeof exp.reset).toBe("function");
+    expect(typeof exp.destroy).toBe("function");
+    expect(exp.details.id).toBe(TEST_ID);
+  });
+
+  it("should allow calling reset on the experiment from jfLib.experiments", async () => {
+    const reset = vi.fn();
+    useSPA(TEST_ID);
+    // Re-init with a different id since TEST_ID is now registered
+    const spa = useSPA(`${TEST_ID}_2`);
+    await spa.init({ ...defaultOptions, reset });
+    await window.jfLib.experiments[0].reset();
+    expect(reset).toHaveBeenCalled();
+  });
+
+  // #107 — observer cleanup on reset
+  it("should clean up elementReady callbacks with test ID prefix on reset", async () => {
+    window.jfLib.elementReady = {
+      "1.0": {
+        observer: { details: { observer: new MutationObserver(() => {}), isObserving: false, ticketId: "er-1.0" }, observe: vi.fn(), disconnect: vi.fn() },
+        callbacks: [
+          { id: `${TEST_ID}--my-element`, callback: vi.fn() },
+          { id: "OTHER_TEST--some-element", callback: vi.fn() },
+        ],
+      },
+    };
+    const spa = useSPA(TEST_ID);
+    await spa.init(defaultOptions);
+    await spa.reset();
+    expect(window.jfLib.elementReady["1.0"].callbacks).toHaveLength(1);
+    expect(window.jfLib.elementReady["1.0"].callbacks[0].id).toBe("OTHER_TEST--some-element");
+  });
+
+  it("should not remove callbacks from other tests with a similar ID prefix", async () => {
+    window.jfLib.elementReady = {
+      "1.0": {
+        observer: { details: { observer: new MutationObserver(() => {}), isObserving: false, ticketId: "er-1.0" }, observe: vi.fn(), disconnect: vi.fn() },
+        callbacks: [
+          { id: `${TEST_ID}--element`, callback: vi.fn() },
+          { id: `${TEST_ID}_EXTRA--element`, callback: vi.fn() },
+        ],
+      },
+    };
+    const spa = useSPA(TEST_ID);
+    await spa.init(defaultOptions);
+    await spa.reset();
+    // TEST_ID_EXTRA--element should NOT be removed (different prefix)
+    expect(window.jfLib.elementReady["1.0"].callbacks).toHaveLength(1);
+    expect(window.jfLib.elementReady["1.0"].callbacks[0].id).toBe(`${TEST_ID}_EXTRA--element`);
+  });
+
   describe("screen size handling", () => {
     let originalDispatchEvent: typeof window.dispatchEvent;
     let originalAddEventListener: typeof window.addEventListener;
