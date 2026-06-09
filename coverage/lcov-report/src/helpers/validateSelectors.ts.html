@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/modules/getElementFromHtmlString.ts</title>
+    <title>Code coverage report for src/helpers/validateSelectors.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/modules</a> getElementFromHtmlString.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/helpers</a> validateSelectors.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -79,7 +79,25 @@
 <a name='L14'></a><a href='#L14'>14</a>
 <a name='L15'></a><a href='#L15'>15</a>
 <a name='L16'></a><a href='#L16'>16</a>
-<a name='L17'></a><a href='#L17'>17</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">47x</span>
+<span class="cline-any cline-yes">47x</span>
+<span class="cline-any cline-yes">47x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -89,27 +107,39 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">37x</span>
+<span class="cline-any cline-yes">47x</span>
+<span class="cline-any cline-yes">47x</span>
+<span class="cline-any cline-yes">44x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">34x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
- * Extracts an HTML element from a provided HTML string by matching a CSS selector.
+ * Validates an array of CSS selectors or a single selector
  *
- * This function parses the given HTML string into a DOM structure and searches for the first element that matches the
- * specified CSS selector.
- *
- * @param {string} html - The HTML string to be parsed.
- * @param {string} selector - The CSS selector to match the desired element.
- * @returns {HTMLElement | null} The matched HTML element, or `null` if no match is found.
+ * @param {string | string[]} selectors - The selector(s) to validate
+ * @returns {boolean} True if all selectors are valid
  */
+export const validateSelectors = (selectors: string | string[]): boolean =&gt; {
+  const toValidate = Array.isArray(selectors) ? <span class="branch-0 cbranch-no" title="branch not covered" >selectors : [</span>selectors];
+  return toValidate.every(isSelectorValid.bind(this));
+};
 &nbsp;
-export const getElementFromHtmlString = (html: string, selector: string): HTMLElement | null =&gt; {
-  const parser = new DOMParser();
-  const dom = parser.parseFromString(html, "text/html");
-  return dom.querySelector(selector) || <span class="branch-1 cbranch-no" title="branch not covered" >null;</span>
+/**
+ * Validates if a CSS selector string is syntactically valid Tests the selector by attempting to use it in a
+ * querySelector call
+ *
+ * @param {string} selector - The CSS selector to validate
+ * @returns {boolean} True if the selector can be used in querySelector
+ */
+const isSelectorValid = (selector: string): boolean =&gt; {
+  try {
+    document.createDocumentFragment().querySelector(selector);
+    return true;
+  } catch {
+    return false;
+  }
 };
 &nbsp;</pre></td></tr></table></pre>
 
