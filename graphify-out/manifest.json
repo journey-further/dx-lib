@@ -1,0 +1,1207 @@
+{
+  "/Users/samrenfrew/Documents/Work/dx-lib/.releaserc.json": {
+    "mtime": 1781008988.5294518,
+    "ast_hash": "f3ad00f962e84d475d9d33939a913db9",
+    "semantic_hash": "f3ad00f962e84d475d9d33939a913db9"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/.vscode/launch.json": {
+    "mtime": 1704301304.1593947,
+    "ast_hash": "c400d0c7063fa11e5daa8f8f8fff4db9",
+    "semantic_hash": "c400d0c7063fa11e5daa8f8f8fff4db9"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/.vscode/settings.json": {
+    "mtime": 1737564226.3206375,
+    "ast_hash": "fc453725990e1a2dd1c50bc37bb59cb2",
+    "semantic_hash": "fc453725990e1a2dd1c50bc37bb59cb2"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__mocks__/common.js": {
+    "mtime": 1767797932.8479211,
+    "ast_hash": "b10d53ecfd568c88c5ab3b3e78d8bc07",
+    "semantic_hash": "b10d53ecfd568c88c5ab3b3e78d8bc07"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__mocks__/webpackEntry.js": {
+    "mtime": 1769080167.564912,
+    "ast_hash": "f3a1d7d421a4354d78a9f7adb4aeaeb8",
+    "semantic_hash": "f3a1d7d421a4354d78a9f7adb4aeaeb8"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/createElement.spec.ts": {
+    "mtime": 1780571072.140467,
+    "ast_hash": "e64d6a86b25cd26b16d0df1f973f30fb",
+    "semantic_hash": "e64d6a86b25cd26b16d0df1f973f30fb"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/debounce.spec.ts": {
+    "mtime": 1780571128.8358788,
+    "ast_hash": "8c6d2a46cdee54245a8477b0a34aeecd",
+    "semantic_hash": "8c6d2a46cdee54245a8477b0a34aeecd"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/docReady.spec.ts": {
+    "mtime": 1775639883.2337732,
+    "ast_hash": "4563c27816a5c7e4943908af063f2c35",
+    "semantic_hash": "4563c27816a5c7e4943908af063f2c35"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/elementIsInView.spec.ts": {
+    "mtime": 1775639883.2341557,
+    "ast_hash": "3c17ab7150c1b9a2231a9873775f73b4",
+    "semantic_hash": "3c17ab7150c1b9a2231a9873775f73b4"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/elementReady.spec.ts": {
+    "mtime": 1775639883.2345884,
+    "ast_hash": "6bc62e16d2a079240156c9a690fa64ea",
+    "semantic_hash": "6bc62e16d2a079240156c9a690fa64ea"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/elementRemoved.spec.ts": {
+    "mtime": 1775639883.2351391,
+    "ast_hash": "3106f006b99c6c0864f47681f81b0d4e",
+    "semantic_hash": "3106f006b99c6c0864f47681f81b0d4e"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/elementUpdated.spec.ts": {
+    "mtime": 1775639883.2355423,
+    "ast_hash": "fe3e51d480e964edab83c6f49b7c0b66",
+    "semantic_hash": "fe3e51d480e964edab83c6f49b7c0b66"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/emitEvent.spec.ts": {
+    "mtime": 1775639883.2360559,
+    "ast_hash": "38a1adf567e8a8d21c4a4885e04a80c8",
+    "semantic_hash": "38a1adf567e8a8d21c4a4885e04a80c8"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/emptyElem.spec.ts": {
+    "mtime": 1775631842.7289925,
+    "ast_hash": "129bb3fe5845c2c83f92027075f29cdb",
+    "semantic_hash": "129bb3fe5845c2c83f92027075f29cdb"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/enableScroll.spec.ts": {
+    "mtime": 1775639883.2363837,
+    "ast_hash": "1050c999357a3ffd4f46000060b7787b",
+    "semantic_hash": "1050c999357a3ffd4f46000060b7787b"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/findParents.spec.ts": {
+    "mtime": 1775639883.236788,
+    "ast_hash": "920e04ae6c279923af5b4d89f59931d3",
+    "semantic_hash": "920e04ae6c279923af5b4d89f59931d3"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/generateId.spec.ts": {
+    "mtime": 1775639883.237159,
+    "ast_hash": "8d99d0c7b66ffa66ee0bbc40aaafdecf",
+    "semantic_hash": "8d99d0c7b66ffa66ee0bbc40aaafdecf"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/getElementByText.spec.ts": {
+    "mtime": 1775631842.7314548,
+    "ast_hash": "9bdf7424ee20202089897f1c4b0d78e2",
+    "semantic_hash": "9bdf7424ee20202089897f1c4b0d78e2"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/getElementByXPath.spec.ts": {
+    "mtime": 1775639883.237492,
+    "ast_hash": "63ca8e079d12032873c6acf07bc2d70e",
+    "semantic_hash": "63ca8e079d12032873c6acf07bc2d70e"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/getElementFromHtmlString.spec.ts": {
+    "mtime": 1775631842.7297642,
+    "ast_hash": "c0b0b5ecfdb90dcc4bffd33b41392ce3",
+    "semantic_hash": "c0b0b5ecfdb90dcc4bffd33b41392ce3"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/getLocaleFromUrl.spec.ts": {
+    "mtime": 1775631842.730871,
+    "ast_hash": "ef2df0e20461a11d00537376591404ad",
+    "semantic_hash": "ef2df0e20461a11d00537376591404ad"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/getTimeTo.spec.ts": {
+    "mtime": 1775639883.2378306,
+    "ast_hash": "6d6e8b126bbed52e3eb4731026f02eef",
+    "semantic_hash": "6d6e8b126bbed52e3eb4731026f02eef"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/insertHTML.spec.ts": {
+    "mtime": 1775631842.7387886,
+    "ast_hash": "6a239f36301fdeafbc7b5d9122961a5c",
+    "semantic_hash": "6a239f36301fdeafbc7b5d9122961a5c"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/insertStyle.spec.ts": {
+    "mtime": 1775631842.7395577,
+    "ast_hash": "0dd1e817774903c9e577d435e04492d6",
+    "semantic_hash": "0dd1e817774903c9e577d435e04492d6"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/isInDom.spec.ts": {
+    "mtime": 1775631842.7391324,
+    "ast_hash": "47420feb551476a36e93f2c572bf4503",
+    "semantic_hash": "47420feb551476a36e93f2c572bf4503"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/isIphone.spec.ts": {
+    "mtime": 1775631842.7491918,
+    "ast_hash": "7fd6b53859608d8663238b38d9046572",
+    "semantic_hash": "7fd6b53859608d8663238b38d9046572"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/isMobile.spec.ts": {
+    "mtime": 1775631842.7426715,
+    "ast_hash": "f2ecd78210641345c8f558359dfda3d8",
+    "semantic_hash": "f2ecd78210641345c8f558359dfda3d8"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/isOldSafari.spec.ts": {
+    "mtime": 1775631842.736685,
+    "ast_hash": "4b68af3cf332788fad2392d4fe17324a",
+    "semantic_hash": "4b68af3cf332788fad2392d4fe17324a"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/isTouchDevice.spec.ts": {
+    "mtime": 1775639883.2381716,
+    "ast_hash": "f737936a3002c94324abf1b2c1a532ce",
+    "semantic_hash": "f737936a3002c94324abf1b2c1a532ce"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/isWtoPreview.spec.ts": {
+    "mtime": 1775631842.7457724,
+    "ast_hash": "0401855ef192c88614451aea3b93b35c",
+    "semantic_hash": "0401855ef192c88614451aea3b93b35c"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/listenForSwipe.spec.ts": {
+    "mtime": 1775639883.2385619,
+    "ast_hash": "1104b8cdc242f28873b9f5e17f83f0ec",
+    "semantic_hash": "1104b8cdc242f28873b9f5e17f83f0ec"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/parseToFormData.spec.ts": {
+    "mtime": 1775639883.239137,
+    "ast_hash": "31de02ec6ec6ce367fb2b9a5208222c5",
+    "semantic_hash": "31de02ec6ec6ce367fb2b9a5208222c5"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/preventScroll.spec.ts": {
+    "mtime": 1775631842.733712,
+    "ast_hash": "17a3400c0af299d814cdaaa68fb75899",
+    "semantic_hash": "17a3400c0af299d814cdaaa68fb75899"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/pushToDL.spec.ts": {
+    "mtime": 1775631842.7486072,
+    "ast_hash": "d933bfd95e0f87af7447cdd012d10bb4",
+    "semantic_hash": "d933bfd95e0f87af7447cdd012d10bb4"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/queryAll.spec.ts": {
+    "mtime": 1775639883.239575,
+    "ast_hash": "8b6d216a47daa03adacd36cd9ef6406c",
+    "semantic_hash": "8b6d216a47daa03adacd36cd9ef6406c"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/redirect.spec.ts": {
+    "mtime": 1775639883.2400393,
+    "ast_hash": "ab811a3bf5abfa0fa2ffde7f2d227ca7",
+    "semantic_hash": "ab811a3bf5abfa0fa2ffde7f2d227ca7"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/replaceHTML.spec.ts": {
+    "mtime": 1775631842.7497187,
+    "ast_hash": "f18b81d5b597ce60eeae44c894db1355",
+    "semantic_hash": "f18b81d5b597ce60eeae44c894db1355"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/useEventListener.spec.ts": {
+    "mtime": 1775639883.2404048,
+    "ast_hash": "eec22563fb62f214c368dee5db84fcfb",
+    "semantic_hash": "eec22563fb62f214c368dee5db84fcfb"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/useMutationObserver.spec.ts": {
+    "mtime": 1775639883.2408516,
+    "ast_hash": "6363f993ca1583a4d1229fcebe1d22a2",
+    "semantic_hash": "6363f993ca1583a4d1229fcebe1d22a2"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/useSPA.spec.ts": {
+    "mtime": 1780576592.3434083,
+    "ast_hash": "63a6eee9a706e645d26d3c07a31b7612",
+    "semantic_hash": "63a6eee9a706e645d26d3c07a31b7612"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/useSetTimeout.spec.ts": {
+    "mtime": 1775639883.2414982,
+    "ast_hash": "2f6cfed7b10838bac3791d3f73a90b47",
+    "semantic_hash": "2f6cfed7b10838bac3791d3f73a90b47"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/waitFor.spec.ts": {
+    "mtime": 1775639883.2418635,
+    "ast_hash": "da2db7abf1157dfa01174c6f2823f52f",
+    "semantic_hash": "da2db7abf1157dfa01174c6f2823f52f"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/waitForElement.spec.ts": {
+    "mtime": 1775639883.242253,
+    "ast_hash": "e9c0325098cb12207b182c4275014f3b",
+    "semantic_hash": "e9c0325098cb12207b182c4275014f3b"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/waitForNuxtStable.spec.ts": {
+    "mtime": 1780571202.5089755,
+    "ast_hash": "0742f882ff15187452f8873b64f3bef5",
+    "semantic_hash": "0742f882ff15187452f8873b64f3bef5"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/tsconfig.json": {
+    "mtime": 1780571064.6434233,
+    "ast_hash": "4b04d72f60a8d3725a56c78c4b316c76",
+    "semantic_hash": "4b04d72f60a8d3725a56c78c4b316c76"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/assets/icons.js": {
+    "mtime": 1775638749.6111252,
+    "ast_hash": "8f9d7b4778bd4ffe4929f0d6ed578cba",
+    "semantic_hash": "8f9d7b4778bd4ffe4929f0d6ed578cba"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/assets/main.js": {
+    "mtime": 1775638749.6122413,
+    "ast_hash": "1f8d88870eca4d2405707455cbc5aead",
+    "semantic_hash": "1f8d88870eca4d2405707455cbc5aead"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/assets/navigation.js": {
+    "mtime": 1775638749.6127825,
+    "ast_hash": "83868b4946dca4c4e454a2ae0ebafe6a",
+    "semantic_hash": "83868b4946dca4c4e454a2ae0ebafe6a"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/assets/search.js": {
+    "mtime": 1775638749.613678,
+    "ast_hash": "0eb8ec59284aba5a4dad9cae746e282b",
+    "semantic_hash": "0eb8ec59284aba5a4dad9cae746e282b"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/eslint.config.mjs": {
+    "mtime": 1775639883.2426393,
+    "ast_hash": "f606f53bb0efea788bc05d8f415a4d66",
+    "semantic_hash": "f606f53bb0efea788bc05d8f415a4d66"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/generateIndex.js": {
+    "mtime": 1721665627.0557158,
+    "ast_hash": "db7b6ece2097d8c3c8a29add653d840a",
+    "semantic_hash": "db7b6ece2097d8c3c8a29add653d840a"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/package.json": {
+    "mtime": 1775639883.2429407,
+    "ast_hash": "0a1066ff035cb7dc488724211c5a1173",
+    "semantic_hash": "0a1066ff035cb7dc488724211c5a1173"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/postcss.config.js": {
+    "mtime": 1738072426.3477523,
+    "ast_hash": "f58151bd86e3fce4d86a14d730f33f6c",
+    "semantic_hash": "f58151bd86e3fce4d86a14d730f33f6c"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/rspack.config.js": {
+    "mtime": 1775639883.2434313,
+    "ast_hash": "5bfefc3d7d84887f8029fc60aa84a7f2",
+    "semantic_hash": "5bfefc3d7d84887f8029fc60aa84a7f2"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/globals.d.ts": {
+    "mtime": 1780576572.7604249,
+    "ast_hash": "84755be5b1e8e094590e604a27d2d195",
+    "semantic_hash": "84755be5b1e8e094590e604a27d2d195"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/consoleLog.ts": {
+    "mtime": 1767889718.3229368,
+    "ast_hash": "aace44a9eb5e534d7e6e96f606a76d99",
+    "semantic_hash": "aace44a9eb5e534d7e6e96f606a76d99"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/index.ts": {
+    "mtime": 1737564226.33865,
+    "ast_hash": "450f8887b3007587d691600aba33ffcd",
+    "semantic_hash": "450f8887b3007587d691600aba33ffcd"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/isDebug.ts": {
+    "mtime": 1767889715.1829824,
+    "ast_hash": "a9372f3bc8c6622c8ec66f1505e07b18",
+    "semantic_hash": "a9372f3bc8c6622c8ec66f1505e07b18"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/typeGuards.ts": {
+    "mtime": 1762785970.3217154,
+    "ast_hash": "6dc1b4b7670b25e481ac9a43df7d71d5",
+    "semantic_hash": "6dc1b4b7670b25e481ac9a43df7d71d5"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/validateSelectors.ts": {
+    "mtime": 1737564226.339438,
+    "ast_hash": "163a52cfc1035a0a578b801c89c87f33",
+    "semantic_hash": "163a52cfc1035a0a578b801c89c87f33"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/index.ts": {
+    "mtime": 1733484120.4482403,
+    "ast_hash": "47f22aae6758f2dbf1c9bf0e15bfd906",
+    "semantic_hash": "47f22aae6758f2dbf1c9bf0e15bfd906"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/createElement.ts": {
+    "mtime": 1767887239.8419657,
+    "ast_hash": "bf7bedefab7b1a8a796be42bc06a8a71",
+    "semantic_hash": "bf7bedefab7b1a8a796be42bc06a8a71"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/debounce.ts": {
+    "mtime": 1767887257.8780453,
+    "ast_hash": "0ec5659cc9496811ad398debc7170cb3",
+    "semantic_hash": "0ec5659cc9496811ad398debc7170cb3"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/docReady.ts": {
+    "mtime": 1767887276.0515466,
+    "ast_hash": "e2d9ad7e179a35b743900cbdaf444fc7",
+    "semantic_hash": "e2d9ad7e179a35b743900cbdaf444fc7"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/elementInView.ts": {
+    "mtime": 1767887276.051553,
+    "ast_hash": "0ba1721599ae92b0d109c0bc01b0f557",
+    "semantic_hash": "0ba1721599ae92b0d109c0bc01b0f557"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/elementReady.ts": {
+    "mtime": 1767887276.0518768,
+    "ast_hash": "8b0b6c7ce18cd2685514303506f70c82",
+    "semantic_hash": "8b0b6c7ce18cd2685514303506f70c82"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/elementRemoved.ts": {
+    "mtime": 1772544028.4584458,
+    "ast_hash": "968f8be0868201682b802d8efbfed349",
+    "semantic_hash": "968f8be0868201682b802d8efbfed349"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/elementUpdated.ts": {
+    "mtime": 1767887276.0519555,
+    "ast_hash": "f4fc95b67b1b7f37d7194b5c6a863119",
+    "semantic_hash": "f4fc95b67b1b7f37d7194b5c6a863119"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/emitEvent.ts": {
+    "mtime": 1767887276.051664,
+    "ast_hash": "09a08c920fcd2c27895d1ca763a20a3d",
+    "semantic_hash": "09a08c920fcd2c27895d1ca763a20a3d"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/emptyElem.ts": {
+    "mtime": 1767887276.0518878,
+    "ast_hash": "32d39b2b2e3b69eca1264d6e9bd5df03",
+    "semantic_hash": "32d39b2b2e3b69eca1264d6e9bd5df03"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/enableScroll.ts": {
+    "mtime": 1767887276.0519826,
+    "ast_hash": "deca08e34e0026d48cc0c34cabd1bdf4",
+    "semantic_hash": "deca08e34e0026d48cc0c34cabd1bdf4"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/findParents.ts": {
+    "mtime": 1767887276.0519934,
+    "ast_hash": "79db10ff784e8749444ea5e2b73c4d05",
+    "semantic_hash": "79db10ff784e8749444ea5e2b73c4d05"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/generateId.ts": {
+    "mtime": 1767887276.0524247,
+    "ast_hash": "539bb80934ca91b3a6be8d80178dd768",
+    "semantic_hash": "539bb80934ca91b3a6be8d80178dd768"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/getElementByText.ts": {
+    "mtime": 1767887276.0520036,
+    "ast_hash": "e33c78399f52788bd2dd52dfdd9e0b89",
+    "semantic_hash": "e33c78399f52788bd2dd52dfdd9e0b89"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/getElementByXPath.ts": {
+    "mtime": 1767887276.0524135,
+    "ast_hash": "b6afee53ca6c807af5f05658006b4e80",
+    "semantic_hash": "b6afee53ca6c807af5f05658006b4e80"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/getElementFromHtmlString.ts": {
+    "mtime": 1767887276.0524313,
+    "ast_hash": "7aa0c3da3c8e57d759b7c0e8d17e3160",
+    "semantic_hash": "7aa0c3da3c8e57d759b7c0e8d17e3160"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/getLocaleFromUrl.ts": {
+    "mtime": 1767887276.052442,
+    "ast_hash": "b5f4ec25ed00d10296f90d226dcf7561",
+    "semantic_hash": "b5f4ec25ed00d10296f90d226dcf7561"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/getTimeTo.ts": {
+    "mtime": 1767887276.0525513,
+    "ast_hash": "2b1e7e2636be992f8d6496a1018feecb",
+    "semantic_hash": "2b1e7e2636be992f8d6496a1018feecb"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/index.ts": {
+    "mtime": 1780570520.2799494,
+    "ast_hash": "ecfa974916028119aa7984a88b2303fd",
+    "semantic_hash": "ecfa974916028119aa7984a88b2303fd"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/insertHTML.ts": {
+    "mtime": 1767887276.052534,
+    "ast_hash": "60e2733ecfeb1590fcaf442f2e575252",
+    "semantic_hash": "60e2733ecfeb1590fcaf442f2e575252"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/insertStyle.ts": {
+    "mtime": 1767887276.0525434,
+    "ast_hash": "99f920384b7437ee0bf6d29c3c0f5167",
+    "semantic_hash": "99f920384b7437ee0bf6d29c3c0f5167"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isInDom.ts": {
+    "mtime": 1767887276.0585296,
+    "ast_hash": "56a3d607be3e9d9370f62c3fdad095b4",
+    "semantic_hash": "56a3d607be3e9d9370f62c3fdad095b4"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isIphone.ts": {
+    "mtime": 1767887276.0646822,
+    "ast_hash": "b83be256fbaa5f859616e48ee71f32d6",
+    "semantic_hash": "b83be256fbaa5f859616e48ee71f32d6"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isMobile.ts": {
+    "mtime": 1767887276.051702,
+    "ast_hash": "ee4e10a29293fee34802b3b4e3988ab5",
+    "semantic_hash": "ee4e10a29293fee34802b3b4e3988ab5"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isOldSafari.ts": {
+    "mtime": 1767887276.0585415,
+    "ast_hash": "db4b82455bbc82897cf22c0745606296",
+    "semantic_hash": "db4b82455bbc82897cf22c0745606296"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isTouchDevice.ts": {
+    "mtime": 1767887361.4199247,
+    "ast_hash": "8a2b949b383bc73bdd061130cfb94fb5",
+    "semantic_hash": "8a2b949b383bc73bdd061130cfb94fb5"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isWtoPreview.ts": {
+    "mtime": 1767887276.0659363,
+    "ast_hash": "3fe12e853a1ec41f623f0ed47d3e3367",
+    "semantic_hash": "3fe12e853a1ec41f623f0ed47d3e3367"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/listenForSwipe.ts": {
+    "mtime": 1767887276.0726092,
+    "ast_hash": "84e67035c5753c58bf571d49ee27bfe5",
+    "semantic_hash": "84e67035c5753c58bf571d49ee27bfe5"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/parseJsonToFormData.ts": {
+    "mtime": 1767887276.0659363,
+    "ast_hash": "a5a698e3ae23711a56780dcd62f8ed02",
+    "semantic_hash": "a5a698e3ae23711a56780dcd62f8ed02"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/preventScroll.ts": {
+    "mtime": 1767887276.072531,
+    "ast_hash": "c05b058d67c2a8596ab126b719a6d3b0",
+    "semantic_hash": "c05b058d67c2a8596ab126b719a6d3b0"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/pushToDL.ts": {
+    "mtime": 1767887276.1052809,
+    "ast_hash": "11468dd64a57412795d6152b6bc2ecaf",
+    "semantic_hash": "11468dd64a57412795d6152b6bc2ecaf"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/queryAll.ts": {
+    "mtime": 1767887276.051556,
+    "ast_hash": "609a7e08d206bd8a7ffc82676f46689c",
+    "semantic_hash": "609a7e08d206bd8a7ffc82676f46689c"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/rbTest.ts": {
+    "mtime": 1772544028.4584548,
+    "ast_hash": "0c651d6edf40baa7591cb10294bfe77f",
+    "semantic_hash": "0c651d6edf40baa7591cb10294bfe77f"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/redirect.ts": {
+    "mtime": 1767887276.1216424,
+    "ast_hash": "a1d86b883c6d4fdd267534d7122ceb64",
+    "semantic_hash": "a1d86b883c6d4fdd267534d7122ceb64"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/replaceHTML.ts": {
+    "mtime": 1767887276.1216695,
+    "ast_hash": "e76100a3484bc4e6588c7bc442c81f72",
+    "semantic_hash": "e76100a3484bc4e6588c7bc442c81f72"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/useEventListener.ts": {
+    "mtime": 1767887276.0516493,
+    "ast_hash": "99f1791f46b46cdf01546ccf0b5089e6",
+    "semantic_hash": "99f1791f46b46cdf01546ccf0b5089e6"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/useMutationObserver.ts": {
+    "mtime": 1767887276.1216605,
+    "ast_hash": "042896a33bb192eba46ef6d3fafc5045",
+    "semantic_hash": "042896a33bb192eba46ef6d3fafc5045"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/useSPA.ts": {
+    "mtime": 1780576563.4785373,
+    "ast_hash": "81bb3488abc66e60f9acac94fb486616",
+    "semantic_hash": "81bb3488abc66e60f9acac94fb486616"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/useSetTimeout.ts": {
+    "mtime": 1767887276.121655,
+    "ast_hash": "6daf7f8cdf30391fd8d6fcfa2d539a53",
+    "semantic_hash": "6daf7f8cdf30391fd8d6fcfa2d539a53"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/waitFor.ts": {
+    "mtime": 1767887276.131681,
+    "ast_hash": "ec454b244df6d83f3b939578910f29e5",
+    "semantic_hash": "ec454b244df6d83f3b939578910f29e5"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/waitForElement.ts": {
+    "mtime": 1767887276.1401293,
+    "ast_hash": "2189d969c9bb518a9c1c300760197b9f",
+    "semantic_hash": "2189d969c9bb518a9c1c300760197b9f"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/waitForNuxtStable.ts": {
+    "mtime": 1780570516.068067,
+    "ast_hash": "f74ef63db5ec40b63a408e6f0fdd0dcd",
+    "semantic_hash": "f74ef63db5ec40b63a408e6f0fdd0dcd"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/tsconfig.json": {
+    "mtime": 1780571064.641082,
+    "ast_hash": "d6387dbc8a0b814d2af7e237d2de295e",
+    "semantic_hash": "d6387dbc8a0b814d2af7e237d2de295e"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/tsconfig.prod.json": {
+    "mtime": 1737564226.3416145,
+    "ast_hash": "60369b3b98a96429979f8fd14afa9c71",
+    "semantic_hash": "60369b3b98a96429979f8fd14afa9c71"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/tsconfig.test.json": {
+    "mtime": 1780571074.1028955,
+    "ast_hash": "2af039c6f6cab60f134a8d4e036d7ee9",
+    "semantic_hash": "2af039c6f6cab60f134a8d4e036d7ee9"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/typedoc.json": {
+    "mtime": 1775638749.6640346,
+    "ast_hash": "e264563411b18d6d0fedb83705da0c14",
+    "semantic_hash": "e264563411b18d6d0fedb83705da0c14"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/vitest.config.ts": {
+    "mtime": 1780571076.271469,
+    "ast_hash": "2de025019026d8639a4e82c4280c7273",
+    "semantic_hash": "2de025019026d8639a4e82c4280c7273"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/.github/workflows/main.yml": {
+    "mtime": 1775639892.42368,
+    "ast_hash": "e95e3d87207f847c901d040affe9a34d",
+    "semantic_hash": "e95e3d87207f847c901d040affe9a34d"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/.github/workflows/release.yml": {
+    "mtime": 1775639883.2323053,
+    "ast_hash": "d42677bcd6cf4b5dd29aebf7f8f529c1",
+    "semantic_hash": "d42677bcd6cf4b5dd29aebf7f8f529c1"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/CLAUDE.md": {
+    "mtime": 1780574328.4129002,
+    "ast_hash": "45c37e0d46245e42ef5b70f701b4615c",
+    "semantic_hash": "45c37e0d46245e42ef5b70f701b4615c"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/README.md": {
+    "mtime": 1767884573.4611237,
+    "ast_hash": "41c811b7a14a06409ec2e63ad9ba4230",
+    "semantic_hash": "41c811b7a14a06409ec2e63ad9ba4230"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/__mocks__/insert.html": {
+    "mtime": 1740740703.4284813,
+    "ast_hash": "834f2bd1fdb8ec572801f925b49a4979",
+    "semantic_hash": "834f2bd1fdb8ec572801f925b49a4979"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/classes/modules_rbTest.RBTest.html": {
+    "mtime": 1775638749.615888,
+    "ast_hash": "721292457bb8ba52297adab955c119ab",
+    "semantic_hash": "721292457bb8ba52297adab955c119ab"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/helpers_consoleLog.log.html": {
+    "mtime": 1775638749.6164477,
+    "ast_hash": "a32bc06a63300a2ddc49954e7ca07cea",
+    "semantic_hash": "a32bc06a63300a2ddc49954e7ca07cea"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/helpers_isDebug.isDebug.html": {
+    "mtime": 1775638749.6170456,
+    "ast_hash": "c03fdd8081f0da1dcf84ff699b775095",
+    "semantic_hash": "c03fdd8081f0da1dcf84ff699b775095"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/helpers_typeGuards.isFunction.html": {
+    "mtime": 1775638749.6174653,
+    "ast_hash": "4b8b5c73e55183587a8294d0edefc297",
+    "semantic_hash": "4b8b5c73e55183587a8294d0edefc297"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/helpers_typeGuards.isNodeArray.html": {
+    "mtime": 1775638749.6179032,
+    "ast_hash": "94f8ebc204b86f500e0ec93e8dc13e4a",
+    "semantic_hash": "94f8ebc204b86f500e0ec93e8dc13e4a"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/helpers_typeGuards.isNodeAsElement.html": {
+    "mtime": 1775638749.6183164,
+    "ast_hash": "95cc47e534af6c4a623cc2ec5d6c3a6f",
+    "semantic_hash": "95cc47e534af6c4a623cc2ec5d6c3a6f"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/helpers_typeGuards.isNodeList.html": {
+    "mtime": 1775638749.6187181,
+    "ast_hash": "3743d3d91c4d3ccca7bb799ca32f6714",
+    "semantic_hash": "3743d3d91c4d3ccca7bb799ca32f6714"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/helpers_typeGuards.isNumber.html": {
+    "mtime": 1775638749.619132,
+    "ast_hash": "d9be1d1b2e5c12782b9e494c4bcd05c3",
+    "semantic_hash": "d9be1d1b2e5c12782b9e494c4bcd05c3"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/helpers_typeGuards.isObject.html": {
+    "mtime": 1775638749.6195154,
+    "ast_hash": "ebaebb17ee2bd63baec5fd727e30b592",
+    "semantic_hash": "ebaebb17ee2bd63baec5fd727e30b592"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/helpers_typeGuards.isRegExp.html": {
+    "mtime": 1775638749.619926,
+    "ast_hash": "d5dc36d1b19763385538a9820ab597bf",
+    "semantic_hash": "d5dc36d1b19763385538a9820ab597bf"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/helpers_typeGuards.isString.html": {
+    "mtime": 1775638749.6203802,
+    "ast_hash": "8dc4168b945d35de8b25e3681817336d",
+    "semantic_hash": "8dc4168b945d35de8b25e3681817336d"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/helpers_typeGuards.isStringArray.html": {
+    "mtime": 1775638749.620841,
+    "ast_hash": "5e1347f776bd18319f7e2152f05c3de7",
+    "semantic_hash": "5e1347f776bd18319f7e2152f05c3de7"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/helpers_validateSelectors.validateSelectors.html": {
+    "mtime": 1775638749.6213744,
+    "ast_hash": "142f8e14a2de66b801b17a6b06bda1a8",
+    "semantic_hash": "142f8e14a2de66b801b17a6b06bda1a8"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_createElement.createElement.html": {
+    "mtime": 1775638749.6218045,
+    "ast_hash": "c7cdd2ca70d3d76869897e32c73592aa",
+    "semantic_hash": "c7cdd2ca70d3d76869897e32c73592aa"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_debounce.debounce.html": {
+    "mtime": 1775638749.6222296,
+    "ast_hash": "20648c1246b63ac6e156823b1730e0d7",
+    "semantic_hash": "20648c1246b63ac6e156823b1730e0d7"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_docReady.docReady.html": {
+    "mtime": 1775638749.6226354,
+    "ast_hash": "6189c0630279255f651e72b7d72fb164",
+    "semantic_hash": "6189c0630279255f651e72b7d72fb164"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_elementInView.elementInView.html": {
+    "mtime": 1775638749.6230762,
+    "ast_hash": "c2f77ad5a7278554e7793028f285b4d2",
+    "semantic_hash": "c2f77ad5a7278554e7793028f285b4d2"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_elementReady.elementReady.html": {
+    "mtime": 1775638749.623509,
+    "ast_hash": "4c97103166cdc06efe8ce2a5c410af4d",
+    "semantic_hash": "4c97103166cdc06efe8ce2a5c410af4d"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_elementRemoved.elementRemoved.html": {
+    "mtime": 1775638749.623967,
+    "ast_hash": "aacb91383660cf74653519277e0b2162",
+    "semantic_hash": "aacb91383660cf74653519277e0b2162"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_elementUpdated.elementUpdated.html": {
+    "mtime": 1775638749.624396,
+    "ast_hash": "04b207739ecee88b6f409f35bd5f568e",
+    "semantic_hash": "04b207739ecee88b6f409f35bd5f568e"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_emitEvent.emitEvent.html": {
+    "mtime": 1775638749.6248016,
+    "ast_hash": "2ac2ca792b208d501e3d31e26bb4fe7f",
+    "semantic_hash": "2ac2ca792b208d501e3d31e26bb4fe7f"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_emitEvent.isJfEvent.html": {
+    "mtime": 1775638749.6252422,
+    "ast_hash": "75e1cfc5bbc04e3739e1c8d4983d959d",
+    "semantic_hash": "75e1cfc5bbc04e3739e1c8d4983d959d"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_emptyElem.emptyElem.html": {
+    "mtime": 1775638749.6256561,
+    "ast_hash": "959c96c5cc0400a0a78b9e3c2ff86ae8",
+    "semantic_hash": "959c96c5cc0400a0a78b9e3c2ff86ae8"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_enableScroll.enableScroll.html": {
+    "mtime": 1775638749.626062,
+    "ast_hash": "83623ea69f30a5fea071add5c6b5cc03",
+    "semantic_hash": "83623ea69f30a5fea071add5c6b5cc03"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_findParents.findParents.html": {
+    "mtime": 1775638749.626458,
+    "ast_hash": "7acf68dea75b1fbdd200fd1d3733c0e0",
+    "semantic_hash": "7acf68dea75b1fbdd200fd1d3733c0e0"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_generateId.generateId.html": {
+    "mtime": 1775638749.6268528,
+    "ast_hash": "dde8c1cd12af68590d205128d37455d4",
+    "semantic_hash": "dde8c1cd12af68590d205128d37455d4"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_getElementByText.getElementByText.html": {
+    "mtime": 1775638749.6272273,
+    "ast_hash": "535939bd1660ba8572f91fa67b46fcff",
+    "semantic_hash": "535939bd1660ba8572f91fa67b46fcff"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_getElementByXPath.getElementByXPath.html": {
+    "mtime": 1775638749.6277654,
+    "ast_hash": "3f28388d1fa86c45f8283d55b012e1d3",
+    "semantic_hash": "3f28388d1fa86c45f8283d55b012e1d3"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_getElementFromHtmlString.getElementFromHtmlString.html": {
+    "mtime": 1775638749.6281524,
+    "ast_hash": "3b1d652e79c8c93e11b7099f1a2203aa",
+    "semantic_hash": "3b1d652e79c8c93e11b7099f1a2203aa"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_getLocaleFromUrl.getLocaleFromUrl.html": {
+    "mtime": 1775638749.628581,
+    "ast_hash": "279f5368a13dfc087299c6c9a11a6654",
+    "semantic_hash": "279f5368a13dfc087299c6c9a11a6654"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_getTimeTo.getTimeTo.html": {
+    "mtime": 1775638749.629012,
+    "ast_hash": "71369a608a72ffe7900558e6979c9470",
+    "semantic_hash": "71369a608a72ffe7900558e6979c9470"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_insertHTML.insertHTML.html": {
+    "mtime": 1775638749.6293976,
+    "ast_hash": "dbd6ec2038715395982afa768f9583fc",
+    "semantic_hash": "dbd6ec2038715395982afa768f9583fc"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_insertStyle.insertStyle.html": {
+    "mtime": 1775638749.6297429,
+    "ast_hash": "1bbcb6f2d07deced3c540ff03f22fd0b",
+    "semantic_hash": "1bbcb6f2d07deced3c540ff03f22fd0b"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_isInDom.isInDom.html": {
+    "mtime": 1775638749.6301453,
+    "ast_hash": "0dbf3f95d2c9020b4352fab383f00139",
+    "semantic_hash": "0dbf3f95d2c9020b4352fab383f00139"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_isIphone.isIphone.html": {
+    "mtime": 1775638749.630548,
+    "ast_hash": "8c29832fd096df232fac3d0bbd5445df",
+    "semantic_hash": "8c29832fd096df232fac3d0bbd5445df"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_isMobile.isMobile.html": {
+    "mtime": 1775638749.6309907,
+    "ast_hash": "fe8675fddf73ef8e7d6e80c84e276a8a",
+    "semantic_hash": "fe8675fddf73ef8e7d6e80c84e276a8a"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_isOldSafari.isOldSafari.html": {
+    "mtime": 1775638749.631435,
+    "ast_hash": "b86f63244cedb11c504c76a3fd01ba95",
+    "semantic_hash": "b86f63244cedb11c504c76a3fd01ba95"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_isTouchDevice.isTouchDevice.html": {
+    "mtime": 1775638749.6318464,
+    "ast_hash": "d93688182ecf53fd3faeb997a21a3823",
+    "semantic_hash": "d93688182ecf53fd3faeb997a21a3823"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_isWtoPreview.isWtoPreview.html": {
+    "mtime": 1775638749.6321826,
+    "ast_hash": "af5ea207e6a33d7a260a82e159516d3f",
+    "semantic_hash": "af5ea207e6a33d7a260a82e159516d3f"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_listenForSwipe.listenForSwipe.html": {
+    "mtime": 1775638749.632476,
+    "ast_hash": "218379f1815e0f45ebd4072541df147b",
+    "semantic_hash": "218379f1815e0f45ebd4072541df147b"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_parseJsonToFormData.parseJsonToFormData.html": {
+    "mtime": 1775638749.6327615,
+    "ast_hash": "4b4593704c860f48444b4899ba8ea915",
+    "semantic_hash": "4b4593704c860f48444b4899ba8ea915"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_preventScroll.preventScroll.html": {
+    "mtime": 1775638749.6330578,
+    "ast_hash": "aede85a5f55ac46c3be415a3451b9831",
+    "semantic_hash": "aede85a5f55ac46c3be415a3451b9831"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_pushToDL.pushToDL.html": {
+    "mtime": 1775638749.6333575,
+    "ast_hash": "27392e39d0c70006719103eface96c58",
+    "semantic_hash": "27392e39d0c70006719103eface96c58"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_queryAll.queryAll.html": {
+    "mtime": 1775638749.6336722,
+    "ast_hash": "aa3db2222825dae8ee5469b1cb67fad8",
+    "semantic_hash": "aa3db2222825dae8ee5469b1cb67fad8"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_redirect.redirect.html": {
+    "mtime": 1775638749.6339757,
+    "ast_hash": "26b3a73fb10f51239635aca5e3ff9d34",
+    "semantic_hash": "26b3a73fb10f51239635aca5e3ff9d34"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_replaceHTML.replaceHTML.html": {
+    "mtime": 1775638749.634276,
+    "ast_hash": "82bcd02cb32cd20e49dbd3ae749920f1",
+    "semantic_hash": "82bcd02cb32cd20e49dbd3ae749920f1"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_useEventListener.useEventListener.html": {
+    "mtime": 1775638749.6345873,
+    "ast_hash": "b6ae6a1a98205581348dd81d238bb120",
+    "semantic_hash": "b6ae6a1a98205581348dd81d238bb120"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_useMutationObserver.useMutationObserver.html": {
+    "mtime": 1775638749.6350434,
+    "ast_hash": "65ed21e5db2843257e5c10307fc36de9",
+    "semantic_hash": "65ed21e5db2843257e5c10307fc36de9"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_useSPA.isLocationObject.html": {
+    "mtime": 1775638749.6353543,
+    "ast_hash": "6d98102088b8efdc734cbf3fe423fecc",
+    "semantic_hash": "6d98102088b8efdc734cbf3fe423fecc"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_useSPA.isPageObjectType.html": {
+    "mtime": 1775638749.635646,
+    "ast_hash": "e09ef4873b0a6ac3ed052da6f041a9e4",
+    "semantic_hash": "e09ef4873b0a6ac3ed052da6f041a9e4"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_useSPA.useSPA.html": {
+    "mtime": 1775638749.6359842,
+    "ast_hash": "25c856c69859a39c9620dff13dcf7e65",
+    "semantic_hash": "25c856c69859a39c9620dff13dcf7e65"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_useSetTimeout.useSetTimeout.html": {
+    "mtime": 1775638749.6362622,
+    "ast_hash": "a9d699d25ef6121058f585db6db26fb4",
+    "semantic_hash": "a9d699d25ef6121058f585db6db26fb4"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_waitFor.waitFor.html": {
+    "mtime": 1775638749.6365397,
+    "ast_hash": "e206d0f7de08fd85a4848cb0ef1dc18c",
+    "semantic_hash": "e206d0f7de08fd85a4848cb0ef1dc18c"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_waitForElement.waitForElement.html": {
+    "mtime": 1775638749.6368058,
+    "ast_hash": "d8bfdad21554a72d3103d6afd3192124",
+    "semantic_hash": "d8bfdad21554a72d3103d6afd3192124"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/index.html": {
+    "mtime": 1775638749.637256,
+    "ast_hash": "3f6907843c3d130d43cbfbcf8aa02d45",
+    "semantic_hash": "3f6907843c3d130d43cbfbcf8aa02d45"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/interfaces/globals.JfLib.html": {
+    "mtime": 1775638749.6375313,
+    "ast_hash": "bcabc0961add1624011cf08250655313",
+    "semantic_hash": "bcabc0961add1624011cf08250655313"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/interfaces/globals.JfTests.html": {
+    "mtime": 1775638749.6378677,
+    "ast_hash": "f9fd6e63dc3cc1aad7993cab35f1fb90",
+    "semantic_hash": "f9fd6e63dc3cc1aad7993cab35f1fb90"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/interfaces/modules_createElement.CreateElementParams.html": {
+    "mtime": 1775638749.6381695,
+    "ast_hash": "c4f3ae598abaee395d88e8883796fef9",
+    "semantic_hash": "c4f3ae598abaee395d88e8883796fef9"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/interfaces/modules_elementReady.JfReady.html": {
+    "mtime": 1775638749.6384459,
+    "ast_hash": "ce306382b4dee5c4858e6cec50878f63",
+    "semantic_hash": "ce306382b4dee5c4858e6cec50878f63"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/interfaces/modules_elementRemoved.JfRemoved.html": {
+    "mtime": 1775638749.6387658,
+    "ast_hash": "07accb482139d3e98d82ba20fd75667d",
+    "semantic_hash": "07accb482139d3e98d82ba20fd75667d"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/interfaces/modules_elementUpdated.JfUpdated.html": {
+    "mtime": 1775638749.6390784,
+    "ast_hash": "abef231cb2cbdf1f168bda9a81c694a4",
+    "semantic_hash": "abef231cb2cbdf1f168bda9a81c694a4"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/interfaces/modules_elementUpdated.JfUpdatedOptions.html": {
+    "mtime": 1775638749.6394212,
+    "ast_hash": "830c2e12c3be6c677cf3e5e59cc813c4",
+    "semantic_hash": "830c2e12c3be6c677cf3e5e59cc813c4"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/interfaces/modules_emitEvent.JfExperiment.html": {
+    "mtime": 1775638749.6397574,
+    "ast_hash": "a0e323b050b635747b804ee5d24b8fb3",
+    "semantic_hash": "a0e323b050b635747b804ee5d24b8fb3"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/interfaces/modules_useMutationObserver.JfObserver.html": {
+    "mtime": 1775638749.640434,
+    "ast_hash": "cff1d1fc2a7de6be75753f5a12f1f13f",
+    "semantic_hash": "cff1d1fc2a7de6be75753f5a12f1f13f"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/interfaces/modules_useMutationObserver.JfObserverObject.html": {
+    "mtime": 1775638749.6407928,
+    "ast_hash": "14baf9ec60df56f3a2aca87dd2807739",
+    "semantic_hash": "14baf9ec60df56f3a2aca87dd2807739"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/interfaces/modules_useSPA.JfSPA.html": {
+    "mtime": 1775638749.6411242,
+    "ast_hash": "c389ffe56dc180e46436bec4ef41e8c1",
+    "semantic_hash": "c389ffe56dc180e46436bec4ef41e8c1"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/interfaces/modules_useSPA.JfSPADetails.html": {
+    "mtime": 1775638749.6414359,
+    "ast_hash": "b206539d9eb85bef789b37c39cf1e746",
+    "semantic_hash": "b206539d9eb85bef789b37c39cf1e746"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/interfaces/modules_useSPA.JfSPAOptions.html": {
+    "mtime": 1775638749.6418219,
+    "ast_hash": "24168d88ebcb11835c8e0d3a4ccd5ec9",
+    "semantic_hash": "24168d88ebcb11835c8e0d3a4ccd5ec9"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/interfaces/modules_useSPA.JfSPAPageOptions.html": {
+    "mtime": 1775638749.6421883,
+    "ast_hash": "3b6aba983e6662192fb1ee5464de5fe7",
+    "semantic_hash": "3b6aba983e6662192fb1ee5464de5fe7"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/interfaces/modules_useSPA.JfSPAState.html": {
+    "mtime": 1775638749.6424694,
+    "ast_hash": "05efe5637a6027bada10ddeb834fa800",
+    "semantic_hash": "05efe5637a6027bada10ddeb834fa800"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules.html": {
+    "mtime": 1775638749.6428013,
+    "ast_hash": "1dc37b281dadb0af5e6a01c73dcf4e85",
+    "semantic_hash": "1dc37b281dadb0af5e6a01c73dcf4e85"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/globals.html": {
+    "mtime": 1775638749.6431696,
+    "ast_hash": "342a444c2ca04b663f0cf9e76bb16a87",
+    "semantic_hash": "342a444c2ca04b663f0cf9e76bb16a87"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/helpers_consoleLog.html": {
+    "mtime": 1775638749.643539,
+    "ast_hash": "06516edfe7228f5756ec90bd1658cf81",
+    "semantic_hash": "06516edfe7228f5756ec90bd1658cf81"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/helpers_isDebug.html": {
+    "mtime": 1775638749.6439207,
+    "ast_hash": "50de69b65b7370e7c6b7d8b54ea9f602",
+    "semantic_hash": "50de69b65b7370e7c6b7d8b54ea9f602"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/helpers_typeGuards.html": {
+    "mtime": 1775638749.6442838,
+    "ast_hash": "14b12c35a64af2d100d768d2eb247868",
+    "semantic_hash": "14b12c35a64af2d100d768d2eb247868"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/helpers_validateSelectors.html": {
+    "mtime": 1775638749.6446395,
+    "ast_hash": "7b5e5ec5120235ee53141f31bdf0e33d",
+    "semantic_hash": "7b5e5ec5120235ee53141f31bdf0e33d"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_createElement.html": {
+    "mtime": 1775638749.6449752,
+    "ast_hash": "9f65f26c68dd9f52b4b561dfcb933320",
+    "semantic_hash": "9f65f26c68dd9f52b4b561dfcb933320"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_debounce.html": {
+    "mtime": 1775638749.6453226,
+    "ast_hash": "0b6180827781a1fc57f1dde573940b59",
+    "semantic_hash": "0b6180827781a1fc57f1dde573940b59"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_docReady.html": {
+    "mtime": 1775638749.6456678,
+    "ast_hash": "d22e94ca85a1186380add42a08088175",
+    "semantic_hash": "d22e94ca85a1186380add42a08088175"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_elementInView.html": {
+    "mtime": 1775638749.6460145,
+    "ast_hash": "47d622dc3bdb7e959c87e979dc635711",
+    "semantic_hash": "47d622dc3bdb7e959c87e979dc635711"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_elementReady.html": {
+    "mtime": 1775638749.6463602,
+    "ast_hash": "302386cda59f39673e0939b3c76fa432",
+    "semantic_hash": "302386cda59f39673e0939b3c76fa432"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_elementRemoved.html": {
+    "mtime": 1775638749.6467197,
+    "ast_hash": "4ee5542566bf9950761005b230757c7a",
+    "semantic_hash": "4ee5542566bf9950761005b230757c7a"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_elementUpdated.html": {
+    "mtime": 1775638749.6470587,
+    "ast_hash": "206c9130e6df74e418bfeefd690aa7a0",
+    "semantic_hash": "206c9130e6df74e418bfeefd690aa7a0"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_emitEvent.html": {
+    "mtime": 1775638749.6474001,
+    "ast_hash": "bbb8f6998de16a93d48d65bf7aaa8f73",
+    "semantic_hash": "bbb8f6998de16a93d48d65bf7aaa8f73"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_emptyElem.html": {
+    "mtime": 1775638749.6477592,
+    "ast_hash": "e64246611ab3283c9bb76a8ca097a4cb",
+    "semantic_hash": "e64246611ab3283c9bb76a8ca097a4cb"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_enableScroll.html": {
+    "mtime": 1775638749.648128,
+    "ast_hash": "dbcbae76e6adf662d8514e33c06658c7",
+    "semantic_hash": "dbcbae76e6adf662d8514e33c06658c7"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_findParents.html": {
+    "mtime": 1775638749.6485114,
+    "ast_hash": "21e057d09dc826f38421436450911500",
+    "semantic_hash": "21e057d09dc826f38421436450911500"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_generateId.html": {
+    "mtime": 1775638749.6488624,
+    "ast_hash": "6ee66c7928d8c1d097c2f1fc89a55079",
+    "semantic_hash": "6ee66c7928d8c1d097c2f1fc89a55079"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_getElementByText.html": {
+    "mtime": 1775638749.6492004,
+    "ast_hash": "2e8f3dd292976db7337954c4e799089f",
+    "semantic_hash": "2e8f3dd292976db7337954c4e799089f"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_getElementByXPath.html": {
+    "mtime": 1775638749.6495342,
+    "ast_hash": "5a4ddf07de5e6c19630653e12aacf206",
+    "semantic_hash": "5a4ddf07de5e6c19630653e12aacf206"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_getElementFromHtmlString.html": {
+    "mtime": 1775638749.6499283,
+    "ast_hash": "e743b433df36b653973cb84d71cd3027",
+    "semantic_hash": "e743b433df36b653973cb84d71cd3027"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_getLocaleFromUrl.html": {
+    "mtime": 1775638749.6502779,
+    "ast_hash": "5024d064b38579fa9b4c1617640d9653",
+    "semantic_hash": "5024d064b38579fa9b4c1617640d9653"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_getTimeTo.html": {
+    "mtime": 1775638749.6506128,
+    "ast_hash": "3f0a8a1b6c01816c2059ecb455d01cbb",
+    "semantic_hash": "3f0a8a1b6c01816c2059ecb455d01cbb"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_insertHTML.html": {
+    "mtime": 1775638749.6509454,
+    "ast_hash": "6f556d267d6ba7b70acdc3c2bc18b40e",
+    "semantic_hash": "6f556d267d6ba7b70acdc3c2bc18b40e"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_insertStyle.html": {
+    "mtime": 1775638749.6512964,
+    "ast_hash": "fed69a6a67e4891eb4cd979cf7b6b12c",
+    "semantic_hash": "fed69a6a67e4891eb4cd979cf7b6b12c"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_isInDom.html": {
+    "mtime": 1775638749.6516232,
+    "ast_hash": "9aa8884a633c531859bd1f8f417b745f",
+    "semantic_hash": "9aa8884a633c531859bd1f8f417b745f"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_isIphone.html": {
+    "mtime": 1775638749.6519809,
+    "ast_hash": "0b9c9ee6518fcdaca7e2615ff4e45c94",
+    "semantic_hash": "0b9c9ee6518fcdaca7e2615ff4e45c94"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_isMobile.html": {
+    "mtime": 1775638749.6523104,
+    "ast_hash": "852f3c9f76593f37e9306498a9cf003e",
+    "semantic_hash": "852f3c9f76593f37e9306498a9cf003e"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_isOldSafari.html": {
+    "mtime": 1775638749.652868,
+    "ast_hash": "ae1b15eb9f0d929f601c1d201ee65167",
+    "semantic_hash": "ae1b15eb9f0d929f601c1d201ee65167"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_isTouchDevice.html": {
+    "mtime": 1775638749.6532404,
+    "ast_hash": "921161d61acbce5d478afc8f762c51c3",
+    "semantic_hash": "921161d61acbce5d478afc8f762c51c3"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_isWtoPreview.html": {
+    "mtime": 1775638749.6535704,
+    "ast_hash": "9660fe74afd1fa75069fe3580e1bdd7a",
+    "semantic_hash": "9660fe74afd1fa75069fe3580e1bdd7a"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_listenForSwipe.html": {
+    "mtime": 1775638749.65386,
+    "ast_hash": "713ac71cd3e6180615a3537b86f5f317",
+    "semantic_hash": "713ac71cd3e6180615a3537b86f5f317"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_parseJsonToFormData.html": {
+    "mtime": 1775638749.6541522,
+    "ast_hash": "8d8c0c5bbd5eb70e119ff5294178ce27",
+    "semantic_hash": "8d8c0c5bbd5eb70e119ff5294178ce27"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_preventScroll.html": {
+    "mtime": 1775638749.6544547,
+    "ast_hash": "cc2e7dcb010e8084ce3ab70bb76d9ddb",
+    "semantic_hash": "cc2e7dcb010e8084ce3ab70bb76d9ddb"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_pushToDL.html": {
+    "mtime": 1775638749.6549037,
+    "ast_hash": "073904f2735613a3f5b13cbb900dfadb",
+    "semantic_hash": "073904f2735613a3f5b13cbb900dfadb"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_queryAll.html": {
+    "mtime": 1775638749.655208,
+    "ast_hash": "6dbeba410ba0ad75fd2ab97acac80145",
+    "semantic_hash": "6dbeba410ba0ad75fd2ab97acac80145"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_rbTest.html": {
+    "mtime": 1775638749.6555135,
+    "ast_hash": "28388dd035107bfd28e08442432f63ce",
+    "semantic_hash": "28388dd035107bfd28e08442432f63ce"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_redirect.html": {
+    "mtime": 1775638749.655835,
+    "ast_hash": "5a35031167ec906b5353ebf7100a7fc1",
+    "semantic_hash": "5a35031167ec906b5353ebf7100a7fc1"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_replaceHTML.html": {
+    "mtime": 1775638749.656141,
+    "ast_hash": "7d7dbe66d130469c213f6e0ec267cb97",
+    "semantic_hash": "7d7dbe66d130469c213f6e0ec267cb97"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useEventListener.html": {
+    "mtime": 1775638749.6564393,
+    "ast_hash": "b66527ad2caa6cf6f4d64c7d8ac91aec",
+    "semantic_hash": "b66527ad2caa6cf6f4d64c7d8ac91aec"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useMutationObserver.html": {
+    "mtime": 1775638749.6567726,
+    "ast_hash": "9ef9e637cf3c35c7e36ca373dc7b9860",
+    "semantic_hash": "9ef9e637cf3c35c7e36ca373dc7b9860"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useSPA.html": {
+    "mtime": 1775638749.657103,
+    "ast_hash": "5f3d46ac1c587b477027c244c1a05205",
+    "semantic_hash": "5f3d46ac1c587b477027c244c1a05205"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useSetTimeout.html": {
+    "mtime": 1775638749.6574159,
+    "ast_hash": "92bca5ea7514e381d14c6d10eb60a4fc",
+    "semantic_hash": "92bca5ea7514e381d14c6d10eb60a4fc"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_waitFor.html": {
+    "mtime": 1775638749.6577404,
+    "ast_hash": "7c557ebd5cfdbb51e8ab4dd8e6184e02",
+    "semantic_hash": "7c557ebd5cfdbb51e8ab4dd8e6184e02"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_waitForElement.html": {
+    "mtime": 1775638749.6580427,
+    "ast_hash": "67a4f14ed698764c296ad1ee96ee320d",
+    "semantic_hash": "67a4f14ed698764c296ad1ee96ee320d"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/types/helpers_consoleLog.LogLevel.html": {
+    "mtime": 1775638749.6583583,
+    "ast_hash": "ec99abaed79d59673ad642717da438cb",
+    "semantic_hash": "ec99abaed79d59673ad642717da438cb"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/types/modules_elementReady.JfReadyObject.html": {
+    "mtime": 1775638749.6586618,
+    "ast_hash": "041851c457de372ef88690c2afe12127",
+    "semantic_hash": "041851c457de372ef88690c2afe12127"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/types/modules_elementRemoved.JfRemovedObject.html": {
+    "mtime": 1775638749.659074,
+    "ast_hash": "02fedcd96f5e273fcfcf93f252280bb0",
+    "semantic_hash": "02fedcd96f5e273fcfcf93f252280bb0"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/types/modules_elementUpdated.JfUpdatedObject.html": {
+    "mtime": 1775638749.6595502,
+    "ast_hash": "b41f5fd8cec8c2c64c154cd79fca850d",
+    "semantic_hash": "b41f5fd8cec8c2c64c154cd79fca850d"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/types/modules_emitEvent.JfEvent.html": {
+    "mtime": 1775638749.659884,
+    "ast_hash": "0291156c21027cf6b746fd3dc9916dbe",
+    "semantic_hash": "0291156c21027cf6b746fd3dc9916dbe"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/types/modules_getTimeTo.ParsedTimeObject.html": {
+    "mtime": 1775638749.660249,
+    "ast_hash": "b15647edc1649f77d0a8c9b4ccbdcab7",
+    "semantic_hash": "b15647edc1649f77d0a8c9b4ccbdcab7"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/types/modules_listenForSwipe.FunctionWithArgs.html": {
+    "mtime": 1775638749.660552,
+    "ast_hash": "cf1b98f387a99aef8a3935f8c90b082a",
+    "semantic_hash": "cf1b98f387a99aef8a3935f8c90b082a"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/types/modules_useEventListener.JfListenerObject.html": {
+    "mtime": 1775638749.6608977,
+    "ast_hash": "036eb2e8337fb7c0a26b98601ae19db8",
+    "semantic_hash": "036eb2e8337fb7c0a26b98601ae19db8"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/types/modules_useMutationObserver.JfObserveFunction.html": {
+    "mtime": 1775638749.6611998,
+    "ast_hash": "6463799ddb7c9b23f6d0c3dcbe35b6cb",
+    "semantic_hash": "6463799ddb7c9b23f6d0c3dcbe35b6cb"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/types/modules_useSPA.JfSPAError.html": {
+    "mtime": 1775638749.6615183,
+    "ast_hash": "93b741cd0bda076462745f3ab1e12b01",
+    "semantic_hash": "93b741cd0bda076462745f3ab1e12b01"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/types/modules_useSetTimeout.JfTimerObject.html": {
+    "mtime": 1775638749.6618161,
+    "ast_hash": "25431bb324bea0e139fd3b2c87124d18",
+    "semantic_hash": "25431bb324bea0e139fd3b2c87124d18"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/variables/modules_emitEvent.jfEvents.html": {
+    "mtime": 1775638749.6621566,
+    "ast_hash": "b09fa4affe124504724191836ff50a3f",
+    "semantic_hash": "b09fa4affe124504724191836ff50a3f"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/.github/badges/latest-release.svg": {
+    "mtime": 1775630465.54101,
+    "ast_hash": "072e486505e828a440e34896b2a9de95",
+    "semantic_hash": "072e486505e828a440e34896b2a9de95"
+  },
+  "/Users/samrenfrew/Documents/Work/dx-lib/docs/assets/icons.svg": {
+    "mtime": 1775638749.6115887,
+    "ast_hash": "e2c2e52fb34309ec9cfed2962a0c67be",
+    "semantic_hash": "e2c2e52fb34309ec9cfed2962a0c67be"
+  }
+}
