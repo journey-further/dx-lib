@@ -1,0 +1,848 @@
+{
+  "nodes": [
+    {
+      "id": "create_element_spec_file",
+      "label": "createElement.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/createElement.spec.ts",
+      "source_location": "createElement.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 6 }
+    },
+    {
+      "id": "create_element_function",
+      "label": "createElement",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/createElement.spec.ts",
+      "source_location": "createElement.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "imported_from": "../../src", "returns": "HTMLElement" }
+    },
+    {
+      "id": "debounce_spec_file",
+      "label": "debounce.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/debounce.spec.ts",
+      "source_location": "debounce.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 2, "uses_fake_timers": true }
+    },
+    {
+      "id": "debounce_function",
+      "label": "debounce",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/debounce.spec.ts",
+      "source_location": "debounce.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "imported_from": "../../src", "default_delay": "unspecified", "accepts_callback": true }
+    },
+    {
+      "id": "doc_ready_spec_file",
+      "label": "docReady.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/docReady.spec.ts",
+      "source_location": "docReady.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 5, "uses_fake_timers": true }
+    },
+    {
+      "id": "doc_ready_function",
+      "label": "docReady",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/docReady.spec.ts",
+      "source_location": "docReady.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "../../src",
+        "default_attempts": 10,
+        "default_timeout_ms": 200,
+        "returns": "Promise<boolean>"
+      }
+    },
+    {
+      "id": "element_removed_spec_file",
+      "label": "elementRemoved.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/elementRemoved.spec.ts",
+      "source_location": "elementRemoved.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 8 }
+    },
+    {
+      "id": "element_removed_function",
+      "label": "elementRemoved",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/elementRemoved.spec.ts",
+      "source_location": "elementRemoved.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "../../src/modules/elementRemoved",
+        "params": ["selector", "callback", "id", "conditions?"],
+        "returns": "{ destroy, init }",
+        "uses_mutation_observer": true,
+        "uses_jf_observers": true
+      }
+    },
+    {
+      "id": "element_removed_jf_observers",
+      "label": "window.jfObservers",
+      "type": "variable",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/elementRemoved.spec.ts",
+      "source_location": "elementRemoved.spec.ts:8",
+      "confidence": "EXTRACTED",
+      "properties": { "global": true, "stores_observers": true }
+    },
+    {
+      "id": "element_removed_jf_lib_global",
+      "label": "window.jfLib.elementRemoved",
+      "type": "variable",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/elementRemoved.spec.ts",
+      "source_location": "elementRemoved.spec.ts:6",
+      "confidence": "EXTRACTED",
+      "properties": { "global": true }
+    },
+    {
+      "id": "emit_event_spec_file",
+      "label": "emitEvent.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/emitEvent.spec.ts",
+      "source_location": "emitEvent.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 3 }
+    },
+    {
+      "id": "emit_event_function",
+      "label": "emitEvent",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/emitEvent.spec.ts",
+      "source_location": "emitEvent.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "../../src",
+        "params": ["type", "jfExperiment", "message?"],
+        "dispatches_custom_events": true
+      }
+    },
+    {
+      "id": "jf_events_constant",
+      "label": "jfEvents",
+      "type": "variable",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/emitEvent.spec.ts",
+      "source_location": "emitEvent.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "imported_from": "../../src", "contains": ["error", "load", "track"] }
+    },
+    {
+      "id": "emit_event_jf_experiment",
+      "label": "jfExperiment Object",
+      "type": "data",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/emitEvent.spec.ts",
+      "source_location": "emitEvent.spec.ts:9",
+      "confidence": "EXTRACTED",
+      "properties": { "required_fields": ["ticketId", "variant"], "ticket_format": "XXX_000000", "variant_format": "single letter" }
+    },
+    {
+      "id": "empty_elem_spec_file",
+      "label": "emptyElem.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/emptyElem.spec.ts",
+      "source_location": "emptyElem.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 4 }
+    },
+    {
+      "id": "empty_elem_function",
+      "label": "emptyElem",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/emptyElem.spec.ts",
+      "source_location": "emptyElem.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "modules",
+        "params": ["element: HTMLElement"],
+        "removes_all_children": true,
+        "handles_text_nodes": true
+      }
+    },
+    {
+      "id": "find_parents_spec_file",
+      "label": "findParents.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/findParents.spec.ts",
+      "source_location": "findParents.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 3 }
+    },
+    {
+      "id": "find_parents_function",
+      "label": "findParents",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/findParents.spec.ts",
+      "source_location": "findParents.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "../../src",
+        "params": ["element", "selector"],
+        "returns": "HTMLElement | null"
+      }
+    },
+    {
+      "id": "generate_id_spec_file",
+      "label": "generateId.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/generateId.spec.ts",
+      "source_location": "generateId.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 3 }
+    },
+    {
+      "id": "generate_id_function",
+      "label": "generateId",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/generateId.spec.ts",
+      "source_location": "generateId.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "../../src",
+        "returns": "string",
+        "starts_with_letter": true,
+        "avoids_existing_dom_ids": true
+      }
+    },
+    {
+      "id": "get_element_by_text_spec_file",
+      "label": "getElementByText.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/getElementByText.spec.ts",
+      "source_location": "getElementByText.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 5 }
+    },
+    {
+      "id": "get_element_by_text_function",
+      "label": "getElementByText",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/getElementByText.spec.ts",
+      "source_location": "getElementByText.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "modules",
+        "params": ["tag", "query", "parentSelector?"],
+        "returns": "HTMLElement | null",
+        "supports_regex": true
+      }
+    },
+    {
+      "id": "get_element_by_xpath_spec_file",
+      "label": "getElementByXPath.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/getElementByXPath.spec.ts",
+      "source_location": "getElementByXPath.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 2 }
+    },
+    {
+      "id": "get_element_by_xpath_function",
+      "label": "getElementByXPath",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/getElementByXPath.spec.ts",
+      "source_location": "getElementByXPath.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "../../src",
+        "params": ["xpath: string"],
+        "returns": "HTMLElement | undefined"
+      }
+    },
+    {
+      "id": "get_element_from_html_string_spec_file",
+      "label": "getElementFromHtmlString.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/getElementFromHtmlString.spec.ts",
+      "source_location": "getElementFromHtmlString.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 1 }
+    },
+    {
+      "id": "get_element_from_html_string_function",
+      "label": "getElementFromHtmlString",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/getElementFromHtmlString.spec.ts",
+      "source_location": "getElementFromHtmlString.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "../../src",
+        "params": ["html: string", "selector: string"],
+        "returns": "HTMLElement | null"
+      }
+    },
+    {
+      "id": "get_locale_from_url_spec_file",
+      "label": "getLocaleFromUrl.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/getLocaleFromUrl.spec.ts",
+      "source_location": "getLocaleFromUrl.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 5 }
+    },
+    {
+      "id": "get_locale_from_url_function",
+      "label": "getLocaleFromUrl",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/getLocaleFromUrl.spec.ts",
+      "source_location": "getLocaleFromUrl.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "modules",
+        "params": ["url: string", "overrides?: string[]"],
+        "returns": "string | null",
+        "reads_html_lang": true,
+        "reads_alt_lang_links": true
+      }
+    },
+    {
+      "id": "get_time_to_spec_file",
+      "label": "getTimeTo.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/getTimeTo.spec.ts",
+      "source_location": "getTimeTo.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 3 }
+    },
+    {
+      "id": "get_time_to_function",
+      "label": "getTimeTo",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/getTimeTo.spec.ts",
+      "source_location": "getTimeTo.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "modules",
+        "params": ["timestamp: number", "shouldPad?: boolean"],
+        "returns": "ParsedTimeObject"
+      }
+    },
+    {
+      "id": "parsed_time_object_type",
+      "label": "ParsedTimeObject",
+      "type": "data",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/getTimeTo.spec.ts",
+      "source_location": "getTimeTo.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "imported_from": "modules", "fields": ["days", "hours", "minutes", "seconds"] }
+    },
+    {
+      "id": "insert_html_spec_file",
+      "label": "insertHTML.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/insertHTML.spec.ts",
+      "source_location": "insertHTML.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 4 }
+    },
+    {
+      "id": "insert_html_function",
+      "label": "insertHTML",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/insertHTML.spec.ts",
+      "source_location": "insertHTML.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "../../src",
+        "params": ["html", "selector", "containerSelector", "position?", "replace?"],
+        "returns": "boolean",
+        "prevents_duplicates": true
+      }
+    },
+    {
+      "id": "insert_style_spec_file",
+      "label": "insertStyle.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/insertStyle.spec.ts",
+      "source_location": "insertStyle.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 2 }
+    },
+    {
+      "id": "insert_style_function",
+      "label": "insertStyle",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/insertStyle.spec.ts",
+      "source_location": "insertStyle.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "../../src",
+        "params": ["css: string", "id: string"],
+        "returns": "Promise<void>",
+        "prevents_duplicates": true
+      }
+    },
+    {
+      "id": "is_in_dom_spec_file",
+      "label": "isInDom.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/isInDom.spec.ts",
+      "source_location": "isInDom.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 5 }
+    },
+    {
+      "id": "is_in_dom_function",
+      "label": "isInDom",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/isInDom.spec.ts",
+      "source_location": "isInDom.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "../../src",
+        "params": ["element", "dom?"],
+        "returns": "boolean"
+      }
+    },
+    {
+      "id": "is_mobile_spec_file",
+      "label": "isMobile.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/isMobile.spec.ts",
+      "source_location": "isMobile.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 3 }
+    },
+    {
+      "id": "is_mobile_function",
+      "label": "isMobile",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/isMobile.spec.ts",
+      "source_location": "isMobile.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "modules/index",
+        "returns": "boolean",
+        "uses_user_agent": true,
+        "tablets_return_true": true
+      }
+    },
+    {
+      "id": "is_old_safari_spec_file",
+      "label": "isOldSafari.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/isOldSafari.spec.ts",
+      "source_location": "isOldSafari.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 2 }
+    },
+    {
+      "id": "is_old_safari_function",
+      "label": "isOldSafari",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/isOldSafari.spec.ts",
+      "source_location": "isOldSafari.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "modules/index",
+        "returns": "boolean",
+        "old_threshold": "Safari version <= 13",
+        "modern_threshold": "Safari version >= 14"
+      }
+    },
+    {
+      "id": "is_touch_device_spec_file",
+      "label": "isTouchDevice.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/isTouchDevice.spec.ts",
+      "source_location": "isTouchDevice.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 2 }
+    },
+    {
+      "id": "is_touch_device_function",
+      "label": "isTouchDevice",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/isTouchDevice.spec.ts",
+      "source_location": "isTouchDevice.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "modules/index",
+        "returns": "boolean",
+        "checks_ontouchstart": true,
+        "checks_max_touch_points": true
+      }
+    },
+    {
+      "id": "is_wto_preview_spec_file",
+      "label": "isWtoPreview.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/isWtoPreview.spec.ts",
+      "source_location": "isWtoPreview.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 3 }
+    },
+    {
+      "id": "is_wto_preview_function",
+      "label": "isWtoPreview",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/isWtoPreview.spec.ts",
+      "source_location": "isWtoPreview.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "modules/isWtoPreview",
+        "returns": "boolean",
+        "checks_url_search": "_wt.pid",
+        "checks_cookie": "_wt.bdebug=true"
+      }
+    },
+    {
+      "id": "listen_for_swipe_spec_file",
+      "label": "listenForSwipe.spec.ts",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/listenForSwipe.spec.ts",
+      "source_location": "listenForSwipe.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "test_count": 8 }
+    },
+    {
+      "id": "listen_for_swipe_function",
+      "label": "listenForSwipe",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/listenForSwipe.spec.ts",
+      "source_location": "listenForSwipe.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "imported_from": "../../src",
+        "params": ["element", "leftCallback", "rightCallback"],
+        "swipe_threshold_px": 50,
+        "supports_touch_events": true,
+        "supports_mouse_events": true
+      }
+    },
+    {
+      "id": "dx_lib_src_module",
+      "label": "dx-lib src (../../src)",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/createElement.spec.ts",
+      "source_location": "createElement.spec.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "alias": "../../src", "also_aliased_as": "modules" }
+    }
+  ],
+  "edges": [
+    {
+      "source": "create_element_spec_file",
+      "target": "create_element_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "create_element_spec_file",
+      "target": "dx_lib_src_module",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "debounce_spec_file",
+      "target": "debounce_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "debounce_spec_file",
+      "target": "dx_lib_src_module",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "doc_ready_spec_file",
+      "target": "doc_ready_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "doc_ready_spec_file",
+      "target": "dx_lib_src_module",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "element_removed_spec_file",
+      "target": "element_removed_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "element_removed_function",
+      "target": "element_removed_jf_observers",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "element_removed_function",
+      "target": "element_removed_jf_lib_global",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "emit_event_spec_file",
+      "target": "emit_event_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "emit_event_spec_file",
+      "target": "jf_events_constant",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "emit_event_spec_file",
+      "target": "dx_lib_src_module",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "emit_event_function",
+      "target": "emit_event_jf_experiment",
+      "relation": "consumes",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "empty_elem_spec_file",
+      "target": "empty_elem_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "find_parents_spec_file",
+      "target": "find_parents_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "find_parents_spec_file",
+      "target": "dx_lib_src_module",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "generate_id_spec_file",
+      "target": "generate_id_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "generate_id_spec_file",
+      "target": "dx_lib_src_module",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "get_element_by_text_spec_file",
+      "target": "get_element_by_text_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "get_element_by_xpath_spec_file",
+      "target": "get_element_by_xpath_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "get_element_by_xpath_spec_file",
+      "target": "dx_lib_src_module",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "get_element_from_html_string_spec_file",
+      "target": "get_element_from_html_string_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "get_element_from_html_string_spec_file",
+      "target": "dx_lib_src_module",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "get_locale_from_url_spec_file",
+      "target": "get_locale_from_url_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "get_time_to_spec_file",
+      "target": "get_time_to_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "get_time_to_spec_file",
+      "target": "parsed_time_object_type",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "get_time_to_function",
+      "target": "parsed_time_object_type",
+      "relation": "produces",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "insert_html_spec_file",
+      "target": "insert_html_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "insert_html_spec_file",
+      "target": "dx_lib_src_module",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "insert_style_spec_file",
+      "target": "insert_style_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "insert_style_spec_file",
+      "target": "dx_lib_src_module",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "is_in_dom_spec_file",
+      "target": "is_in_dom_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "is_in_dom_spec_file",
+      "target": "dx_lib_src_module",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "is_mobile_spec_file",
+      "target": "is_mobile_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "is_old_safari_spec_file",
+      "target": "is_old_safari_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "is_touch_device_spec_file",
+      "target": "is_touch_device_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "is_wto_preview_spec_file",
+      "target": "is_wto_preview_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "listen_for_swipe_spec_file",
+      "target": "listen_for_swipe_function",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "listen_for_swipe_spec_file",
+      "target": "dx_lib_src_module",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "create_element_spec_file",
+      "target": "create_element_function",
+      "relation": "documents",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "debounce_spec_file",
+      "target": "debounce_function",
+      "relation": "documents",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "element_removed_spec_file",
+      "target": "element_removed_function",
+      "relation": "documents",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "emit_event_spec_file",
+      "target": "emit_event_function",
+      "relation": "documents",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "listen_for_swipe_spec_file",
+      "target": "listen_for_swipe_function",
+      "relation": "documents",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "is_mobile_spec_file",
+      "target": "is_old_safari_function",
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "properties": { "note": "shares same user agent fixture data" }
+    }
+  ],
+  "hyperedges": [],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

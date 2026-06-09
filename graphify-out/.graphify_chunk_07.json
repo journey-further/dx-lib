@@ -1,0 +1,1000 @@
+{
+  "nodes": [
+    {
+      "id": "module_get_element_by_text",
+      "label": "Module: getElementByText",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_getElementByText.html",
+      "source_location": "modules/getElementByText.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "3", "category": "element_selection" }
+    },
+    {
+      "id": "fn_get_element_by_text",
+      "label": "getElementByText",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_getElementByText.html",
+      "source_location": "modules/getElementByText.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Select element by its text content" }
+    },
+    {
+      "id": "module_get_element_by_xpath",
+      "label": "Module: getElementByXPath",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_getElementByXPath.html",
+      "source_location": "modules/getElementByXPath.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "4", "category": "element_selection" }
+    },
+    {
+      "id": "fn_get_element_by_xpath",
+      "label": "getElementByXPath",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_getElementByXPath.html",
+      "source_location": "modules/getElementByXPath.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Select element by XPath expression" }
+    },
+    {
+      "id": "module_get_element_from_html_string",
+      "label": "Module: getElementFromHtmlString",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_getElementFromHtmlString.html",
+      "source_location": "modules/getElementFromHtmlString.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "4", "category": "element_creation" }
+    },
+    {
+      "id": "fn_get_element_from_html_string",
+      "label": "getElementFromHtmlString",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_getElementFromHtmlString.html",
+      "source_location": "modules/getElementFromHtmlString.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Parse an HTML string into a DOM element" }
+    },
+    {
+      "id": "module_get_locale_from_url",
+      "label": "Module: getLocaleFromUrl",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_getLocaleFromUrl.html",
+      "source_location": "modules/getLocaleFromUrl.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "4", "category": "url_utility" }
+    },
+    {
+      "id": "fn_get_locale_from_url",
+      "label": "getLocaleFromUrl",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_getLocaleFromUrl.html",
+      "source_location": "modules/getLocaleFromUrl.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Extract locale information from the current URL" }
+    },
+    {
+      "id": "module_get_time_to",
+      "label": "Module: getTimeTo",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_getTimeTo.html",
+      "source_location": "modules/getTimeTo.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "4", "category": "timing_utility" }
+    },
+    {
+      "id": "fn_get_time_to",
+      "label": "getTimeTo",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_getTimeTo.html",
+      "source_location": "modules/getTimeTo.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Calculate time remaining to a target time/date" }
+    },
+    {
+      "id": "type_parsed_time_object",
+      "label": "ParsedTimeObject",
+      "type": "data",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_getTimeTo.html",
+      "source_location": "modules/getTimeTo.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "kind": "TypeAlias" }
+    },
+    {
+      "id": "module_insert_html",
+      "label": "Module: insertHTML",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_insertHTML.html",
+      "source_location": "modules/insertHTML.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "3", "category": "dom_manipulation" }
+    },
+    {
+      "id": "fn_insert_html",
+      "label": "insertHTML",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_insertHTML.html",
+      "source_location": "modules/insertHTML.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Insert HTML content into a target element" }
+    },
+    {
+      "id": "module_insert_style",
+      "label": "Module: insertStyle",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_insertStyle.html",
+      "source_location": "modules/insertStyle.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "1", "category": "css_injection" }
+    },
+    {
+      "id": "fn_insert_style",
+      "label": "insertStyle",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_insertStyle.html",
+      "source_location": "modules/insertStyle.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Inject a <style> tag into the document" }
+    },
+    {
+      "id": "module_is_in_dom",
+      "label": "Module: isInDom",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_isInDom.html",
+      "source_location": "modules/isInDom.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "4", "category": "dom_utility" }
+    },
+    {
+      "id": "fn_is_in_dom",
+      "label": "isInDom",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_isInDom.html",
+      "source_location": "modules/isInDom.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Check if an element is currently in the DOM" }
+    },
+    {
+      "id": "module_is_mobile",
+      "label": "Module: isMobile",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_isMobile.html",
+      "source_location": "modules/isMobile.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "3", "category": "device_detection" }
+    },
+    {
+      "id": "fn_is_mobile",
+      "label": "isMobile",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_isMobile.html",
+      "source_location": "modules/isMobile.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Detect if the current device is mobile" }
+    },
+    {
+      "id": "module_use_mutation_observer",
+      "label": "Module: useMutationObserver",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useMutationObserver.html",
+      "source_location": "modules/useMutationObserver.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "2", "category": "dom_observation", "spa_safe": true, "pooled": true }
+    },
+    {
+      "id": "fn_use_mutation_observer",
+      "label": "useMutationObserver",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useMutationObserver.html",
+      "source_location": "modules/useMutationObserver.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Watch for DOM mutations; pooled and SPA-safe" }
+    },
+    {
+      "id": "interface_jf_observer_object",
+      "label": "JfObserverObject",
+      "type": "class",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useMutationObserver.html",
+      "source_location": "modules/useMutationObserver.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "kind": "Interface" }
+    },
+    {
+      "id": "interface_jf_observer",
+      "label": "JfObserver",
+      "type": "class",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useMutationObserver.html",
+      "source_location": "modules/useMutationObserver.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "kind": "Interface" }
+    },
+    {
+      "id": "type_jf_observe_function",
+      "label": "JfObserveFunction",
+      "type": "data",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useMutationObserver.html",
+      "source_location": "modules/useMutationObserver.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "kind": "TypeAlias" }
+    },
+    {
+      "id": "module_use_spa",
+      "label": "Module: useSPA",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useSPA.html",
+      "source_location": "modules/useSPA.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "1", "category": "spa_lifecycle", "core": true }
+    },
+    {
+      "id": "fn_use_spa",
+      "label": "useSPA",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useSPA.html",
+      "source_location": "modules/useSPA.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "SPA test lifecycle: URL matching, apply/reset callbacks, DOM reset detection, CSS injection" }
+    },
+    {
+      "id": "fn_is_location_object",
+      "label": "isLocationObject",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useSPA.html",
+      "source_location": "modules/useSPA.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Type guard to check if value is a location object" }
+    },
+    {
+      "id": "fn_is_page_object_type",
+      "label": "isPageObjectType",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useSPA.html",
+      "source_location": "modules/useSPA.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Type guard to check if value is a page object type" }
+    },
+    {
+      "id": "interface_jf_spa_details",
+      "label": "JfSPADetails",
+      "type": "class",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useSPA.html",
+      "source_location": "modules/useSPA.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "kind": "Interface" }
+    },
+    {
+      "id": "interface_jf_spa",
+      "label": "JfSPA",
+      "type": "class",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useSPA.html",
+      "source_location": "modules/useSPA.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "kind": "Interface" }
+    },
+    {
+      "id": "interface_jf_spa_state",
+      "label": "JfSPAState",
+      "type": "class",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useSPA.html",
+      "source_location": "modules/useSPA.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "kind": "Interface" }
+    },
+    {
+      "id": "interface_jf_spa_options",
+      "label": "JfSPAOptions",
+      "type": "class",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useSPA.html",
+      "source_location": "modules/useSPA.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "kind": "Interface" }
+    },
+    {
+      "id": "interface_jf_spa_page_options",
+      "label": "JfSPAPageOptions",
+      "type": "class",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useSPA.html",
+      "source_location": "modules/useSPA.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "kind": "Interface" }
+    },
+    {
+      "id": "type_jf_spa_error",
+      "label": "JfSPAError",
+      "type": "data",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useSPA.html",
+      "source_location": "modules/useSPA.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "kind": "TypeAlias" }
+    },
+    {
+      "id": "module_use_set_timeout",
+      "label": "Module: useSetTimeout",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useSetTimeout.html",
+      "source_location": "modules/useSetTimeout.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "3", "category": "timing_utility" }
+    },
+    {
+      "id": "fn_use_set_timeout",
+      "label": "useSetTimeout",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useSetTimeout.html",
+      "source_location": "modules/useSetTimeout.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Managed setTimeout with cleanup" }
+    },
+    {
+      "id": "type_jf_timer_object",
+      "label": "JfTimerObject",
+      "type": "data",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useSetTimeout.html",
+      "source_location": "modules/useSetTimeout.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "kind": "TypeAlias" }
+    },
+    {
+      "id": "module_use_event_listener",
+      "label": "Module: useEventListener",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useEventListener.html",
+      "source_location": "modules/useEventListener.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "2", "category": "event_management", "spa_safe": true }
+    },
+    {
+      "id": "fn_use_event_listener",
+      "label": "useEventListener",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useEventListener.html",
+      "source_location": "modules/useEventListener.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Managed addEventListener with cleanup; prevents duplicates on SPA re-init" }
+    },
+    {
+      "id": "type_jf_listener_object",
+      "label": "JfListenerObject",
+      "type": "data",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useEventListener.html",
+      "source_location": "modules/useEventListener.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "kind": "TypeAlias" }
+    },
+    {
+      "id": "module_push_to_dl",
+      "label": "Module: pushToDL",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_pushToDL.html",
+      "source_location": "modules/pushToDL.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "2", "category": "analytics" }
+    },
+    {
+      "id": "fn_push_to_dl",
+      "label": "pushToDL",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_pushToDL.html",
+      "source_location": "modules/pushToDL.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Push an event object to the analytics data layer" }
+    },
+    {
+      "id": "module_wait_for",
+      "label": "Module: waitFor",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_waitFor.html",
+      "source_location": "modules/waitFor.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "1", "category": "polling" }
+    },
+    {
+      "id": "fn_wait_for",
+      "label": "waitFor",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_waitFor.html",
+      "source_location": "modules/waitFor.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Poll a function until it returns truthy; short waits only (default 20x100ms)" }
+    },
+    {
+      "id": "module_wait_for_element",
+      "label": "Module: waitForElement",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_waitForElement.html",
+      "source_location": "modules/waitForElement.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "2", "category": "dom_observation" }
+    },
+    {
+      "id": "fn_wait_for_element",
+      "label": "waitForElement",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_waitForElement.html",
+      "source_location": "modules/waitForElement.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Promise-based element wait; use when .then() is needed" }
+    },
+    {
+      "id": "module_wait_for_nuxt_stable",
+      "label": "Module: waitForNuxtStable",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_waitForNuxtStable.html",
+      "source_location": "modules/waitForNuxtStable.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "4", "category": "spa_lifecycle", "nuxt2_only": true }
+    },
+    {
+      "id": "module_query_all",
+      "label": "Module: queryAll",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_queryAll.html",
+      "source_location": "modules/queryAll.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "3", "category": "element_selection" }
+    },
+    {
+      "id": "fn_query_all",
+      "label": "queryAll",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_queryAll.html",
+      "source_location": "modules/queryAll.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Query all elements matching a selector, returning an array" }
+    },
+    {
+      "id": "module_empty_elem",
+      "label": "Module: emptyElem",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_emptyElem.html",
+      "source_location": "modules/emptyElem.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "3", "category": "dom_manipulation" }
+    },
+    {
+      "id": "fn_empty_elem",
+      "label": "emptyElem",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_emptyElem.html",
+      "source_location": "modules/emptyElem.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Remove all children from a DOM element" }
+    },
+    {
+      "id": "module_redirect",
+      "label": "Module: redirect",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_redirect.html",
+      "source_location": "modules/redirect.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "4", "category": "navigation" }
+    },
+    {
+      "id": "fn_redirect",
+      "label": "redirect",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_redirect.html",
+      "source_location": "modules/redirect.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Redirect the browser to a different URL" }
+    },
+    {
+      "id": "module_replace_html",
+      "label": "Module: replaceHTML",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_replaceHTML.html",
+      "source_location": "modules/replaceHTML.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "3", "category": "dom_manipulation" }
+    },
+    {
+      "id": "fn_replace_html",
+      "label": "replaceHTML",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_replaceHTML.html",
+      "source_location": "modules/replaceHTML.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Replace the inner HTML of a target element" }
+    },
+    {
+      "id": "module_find_parents",
+      "label": "Module: findParents",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_findParents.html",
+      "source_location": "modules/findParents.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "3", "category": "element_selection" }
+    },
+    {
+      "id": "fn_find_parents",
+      "label": "findParents",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_findParents.html",
+      "source_location": "modules/findParents.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "purpose": "Walk up the DOM tree and collect ancestor elements" }
+    },
+    {
+      "id": "dx_lib_root",
+      "label": "DX Lib",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/modules/modules_useSPA.html",
+      "source_location": "index.html",
+      "confidence": "EXTRACTED",
+      "properties": { "description": "Root library providing DOM manipulation and SPA lifecycle utilities" }
+    }
+  ],
+  "edges": [
+    {
+      "source": "module_get_element_by_text",
+      "target": "fn_get_element_by_text",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_get_element_by_xpath",
+      "target": "fn_get_element_by_xpath",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_get_element_from_html_string",
+      "target": "fn_get_element_from_html_string",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_get_locale_from_url",
+      "target": "fn_get_locale_from_url",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_get_time_to",
+      "target": "fn_get_time_to",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_get_time_to",
+      "target": "type_parsed_time_object",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "fn_get_time_to",
+      "target": "type_parsed_time_object",
+      "relation": "produces",
+      "confidence": "INFERRED",
+      "properties": {}
+    },
+    {
+      "source": "module_insert_html",
+      "target": "fn_insert_html",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_insert_style",
+      "target": "fn_insert_style",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_is_in_dom",
+      "target": "fn_is_in_dom",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_is_mobile",
+      "target": "fn_is_mobile",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_use_mutation_observer",
+      "target": "fn_use_mutation_observer",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_use_mutation_observer",
+      "target": "interface_jf_observer_object",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_use_mutation_observer",
+      "target": "interface_jf_observer",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_use_mutation_observer",
+      "target": "type_jf_observe_function",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "fn_use_mutation_observer",
+      "target": "interface_jf_observer",
+      "relation": "produces",
+      "confidence": "INFERRED",
+      "properties": {}
+    },
+    {
+      "source": "module_use_spa",
+      "target": "fn_use_spa",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_use_spa",
+      "target": "fn_is_location_object",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_use_spa",
+      "target": "fn_is_page_object_type",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_use_spa",
+      "target": "interface_jf_spa_details",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_use_spa",
+      "target": "interface_jf_spa",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_use_spa",
+      "target": "interface_jf_spa_state",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_use_spa",
+      "target": "interface_jf_spa_options",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_use_spa",
+      "target": "interface_jf_spa_page_options",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_use_spa",
+      "target": "type_jf_spa_error",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "fn_use_spa",
+      "target": "interface_jf_spa",
+      "relation": "produces",
+      "confidence": "INFERRED",
+      "properties": {}
+    },
+    {
+      "source": "fn_use_spa",
+      "target": "interface_jf_spa_options",
+      "relation": "consumes",
+      "confidence": "INFERRED",
+      "properties": {}
+    },
+    {
+      "source": "fn_use_spa",
+      "target": "fn_insert_style",
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "properties": { "note": "useSPA injects and auto-removes CSS styles" }
+    },
+    {
+      "source": "module_use_set_timeout",
+      "target": "fn_use_set_timeout",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_use_set_timeout",
+      "target": "type_jf_timer_object",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "fn_use_set_timeout",
+      "target": "type_jf_timer_object",
+      "relation": "produces",
+      "confidence": "INFERRED",
+      "properties": {}
+    },
+    {
+      "source": "module_use_event_listener",
+      "target": "fn_use_event_listener",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_use_event_listener",
+      "target": "type_jf_listener_object",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "fn_use_event_listener",
+      "target": "type_jf_listener_object",
+      "relation": "produces",
+      "confidence": "INFERRED",
+      "properties": {}
+    },
+    {
+      "source": "module_push_to_dl",
+      "target": "fn_push_to_dl",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_wait_for",
+      "target": "fn_wait_for",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_wait_for_element",
+      "target": "fn_wait_for_element",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_query_all",
+      "target": "fn_query_all",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_empty_elem",
+      "target": "fn_empty_elem",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_redirect",
+      "target": "fn_redirect",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_replace_html",
+      "target": "fn_replace_html",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "module_find_parents",
+      "target": "fn_find_parents",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_get_element_by_text",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_get_element_by_xpath",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_get_element_from_html_string",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_get_locale_from_url",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_get_time_to",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_insert_html",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_insert_style",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_is_in_dom",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_is_mobile",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_use_mutation_observer",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_use_spa",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_use_set_timeout",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_use_event_listener",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_push_to_dl",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_wait_for",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_wait_for_element",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_wait_for_nuxt_stable",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_query_all",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_empty_elem",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_redirect",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_replace_html",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "dx_lib_root",
+      "target": "module_find_parents",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "fn_wait_for_element",
+      "target": "fn_wait_for",
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "properties": { "note": "Both are polling/waiting utilities; waitForElement is Promise-based alternative" }
+    },
+    {
+      "source": "fn_use_mutation_observer",
+      "target": "fn_use_spa",
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "properties": { "note": "useMutationObserver is SPA-safe and integrates with SPA lifecycle" }
+    },
+    {
+      "source": "fn_use_event_listener",
+      "target": "fn_use_spa",
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "properties": { "note": "useEventListener prevents duplicate listeners on SPA re-init" }
+    }
+  ],
+  "hyperedges": [],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

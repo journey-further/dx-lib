@@ -1,0 +1,1479 @@
+{
+  "communities": {
+    "0": [
+      "generateindex",
+      "generateindex_fetchexports",
+      "generateindex_init",
+      "generateindex_listallfiles",
+      "helpers_consolelog",
+      "helpers_consolelog_log",
+      "helpers_consolelog_loglevel",
+      "helpers_index",
+      "helpers_isdebug",
+      "helpers_isdebug_isdebug",
+      "helpers_typeguards",
+      "helpers_typeguards_isfunction",
+      "helpers_typeguards_isnodearray",
+      "helpers_typeguards_isnodeaselement",
+      "helpers_typeguards_isnodelist",
+      "helpers_typeguards_isnumber",
+      "helpers_typeguards_isobject",
+      "helpers_typeguards_isregexp",
+      "helpers_typeguards_isstring",
+      "helpers_typeguards_isstringarray",
+      "helpers_validateselectors",
+      "helpers_validateselectors_isselectorvalid",
+      "helpers_validateselectors_validateselectors",
+      "modules_debounce_debounce",
+      "modules_debounce_spec",
+      "modules_elementready",
+      "modules_elementready_createobserver",
+      "modules_elementready_elementready",
+      "modules_elementready_getobserver",
+      "modules_elementready_initializejflib",
+      "modules_elementready_jfready",
+      "modules_elementready_jfreadyobject",
+      "modules_elementready_spec",
+      "modules_elementremoved",
+      "modules_elementremoved_createobserver",
+      "modules_elementremoved_elementremoved",
+      "modules_elementremoved_getobserver",
+      "modules_elementremoved_initializejflib",
+      "modules_elementremoved_jfremoved",
+      "modules_elementremoved_jfremovedobject",
+      "modules_elementremoved_spec",
+      "modules_elementupdated",
+      "modules_elementupdated_createobserver",
+      "modules_elementupdated_elementupdated",
+      "modules_elementupdated_getobserver",
+      "modules_elementupdated_initializejflib",
+      "modules_elementupdated_jfupdated",
+      "modules_elementupdated_jfupdatedobject",
+      "modules_elementupdated_jfupdatedoptions",
+      "modules_elementupdated_spec",
+      "modules_rbtest",
+      "modules_rbtest_isrbtesttype",
+      "modules_rbtest_rbtest",
+      "modules_rbtest_rbtest_constructor",
+      "modules_usemutationobserver",
+      "modules_usemutationobserver_jfobservefunction",
+      "modules_usemutationobserver_jfobserver",
+      "modules_usemutationobserver_jfobserverobject",
+      "modules_usemutationobserver_spec",
+      "modules_usemutationobserver_usemutationobserver",
+      "modules_usespa",
+      "modules_usespa_islocationobject",
+      "modules_usespa_ispageobjecttype",
+      "modules_usespa_jfspa",
+      "modules_usespa_jfspadetails",
+      "modules_usespa_jfspaerror",
+      "modules_usespa_jfspaoptions",
+      "modules_usespa_jfspapageoptions",
+      "modules_usespa_jfspastate",
+      "modules_usespa_lib_init",
+      "modules_usespa_spec",
+      "modules_usespa_usespa",
+      "src_globals_d",
+      "src_globals_d_element",
+      "src_globals_d_jflib",
+      "src_globals_d_jftests",
+      "src_globals_d_nuxtinstance",
+      "src_globals_d_window"
+    ],
+    "1": [
+      "package_devdependencies",
+      "package_devdependencies_audit_ci",
+      "package_devdependencies_autoprefixer",
+      "package_devdependencies_conventional_changelog_eslint",
+      "package_devdependencies_css_loader",
+      "package_devdependencies_cssnano",
+      "package_devdependencies_eslint",
+      "package_devdependencies_eslint_compat",
+      "package_devdependencies_eslint_eslintrc",
+      "package_devdependencies_eslint_import_resolver_typescript",
+      "package_devdependencies_eslint_js",
+      "package_devdependencies_eslint_plugin_import_x",
+      "package_devdependencies_eslint_plugin_jsdoc",
+      "package_devdependencies_globals",
+      "package_devdependencies_html_loader",
+      "package_devdependencies_jsdom",
+      "package_devdependencies_node_env_run",
+      "package_devdependencies_postcss",
+      "package_devdependencies_postcss_cli",
+      "package_devdependencies_postcss_color_rgba_fallback",
+      "package_devdependencies_postcss_combine_media_query",
+      "package_devdependencies_postcss_custom_media",
+      "package_devdependencies_postcss_loader",
+      "package_devdependencies_postcss_media_minmax",
+      "package_devdependencies_postcss_mixins",
+      "package_devdependencies_postcss_nested",
+      "package_devdependencies_postcss_preset_env",
+      "package_devdependencies_postcss_scss",
+      "package_devdependencies_postcss_simple_vars",
+      "package_devdependencies_prettier",
+      "package_devdependencies_prettier_plugin_jsdoc",
+      "package_devdependencies_rspack_cli",
+      "package_devdependencies_rspack_core",
+      "package_devdependencies_sass",
+      "package_devdependencies_sass_loader",
+      "package_devdependencies_semantic_release",
+      "package_devdependencies_semantic_release_git",
+      "package_devdependencies_semantic_release_npm",
+      "package_devdependencies_semantic_release_release_notes_generator",
+      "package_devdependencies_swc_core",
+      "package_devdependencies_swc_loader",
+      "package_devdependencies_ts_node",
+      "package_devdependencies_tsc_alias",
+      "package_devdependencies_tslib",
+      "package_devdependencies_typedoc_github_theme",
+      "package_devdependencies_types_node",
+      "package_devdependencies_typescript",
+      "package_devdependencies_typescript_eslint",
+      "package_devdependencies_typescript_eslint_eslint_plugin",
+      "package_devdependencies_typescript_eslint_parser",
+      "package_devdependencies_vitest",
+      "package_devdependencies_vitest_coverage_v8",
+      "package_devdependencies_yarn"
+    ],
+    "2": [
+      "create_element_fn",
+      "create_element_module",
+      "create_element_params_interface",
+      "doc_index_html",
+      "doc_ready_fn",
+      "doc_use_mutation_observer",
+      "doc_use_spa",
+      "element_in_view_fn",
+      "element_ready_fn",
+      "element_ready_initialize_jflib",
+      "element_ready_jf_ready_interface",
+      "element_ready_jf_ready_object_type",
+      "element_removed_fn",
+      "element_removed_jf_removed_interface",
+      "element_removed_jf_removed_object_type",
+      "element_updated_fn",
+      "element_updated_jf_updated_interface",
+      "element_updated_jf_updated_object_type",
+      "element_updated_jf_updated_options_interface",
+      "emit_event_fn",
+      "emit_event_is_jf_event_guard",
+      "emit_event_jf_event_type",
+      "emit_event_jf_events_const",
+      "emit_event_jf_experiment_interface",
+      "emit_event_jf_wx_err_custom_event",
+      "emit_event_jf_wx_test_custom_event",
+      "emit_event_jf_wx_track_custom_event",
+      "empty_elem_fn",
+      "globals_element_jf_ready",
+      "globals_jf_lib_interface",
+      "globals_window_jf_lib",
+      "module_create_element",
+      "modules_index_barrel",
+      "replace_html_fn",
+      "type_guards_is_function",
+      "type_guards_is_node_array",
+      "type_guards_is_node_as_element",
+      "type_guards_is_node_list",
+      "type_guards_is_number",
+      "type_guards_is_object",
+      "type_guards_is_reg_exp",
+      "type_guards_is_string",
+      "type_guards_is_string_array",
+      "type_guards_module",
+      "validate_selectors_fn",
+      "validate_selectors_is_selector_valid",
+      "validate_selectors_module",
+      "validate_selectors_validate_selectors"
+    ],
+    "3": [
+      "package",
+      "package_author",
+      "package_dependencies",
+      "package_engines",
+      "package_engines_node",
+      "package_license",
+      "package_main",
+      "package_name",
+      "package_private",
+      "package_repository",
+      "package_resolutions",
+      "package_resolutions_ajv",
+      "package_resolutions_brace_expansion",
+      "package_resolutions_cross_spawn",
+      "package_resolutions_diff",
+      "package_resolutions_flatted",
+      "package_resolutions_form_data",
+      "package_resolutions_glob",
+      "package_resolutions_handlebars",
+      "package_resolutions_js_yaml",
+      "package_resolutions_lodash",
+      "package_resolutions_lodash_es",
+      "package_resolutions_markdown_it",
+      "package_resolutions_micromatch",
+      "package_resolutions_minimatch",
+      "package_resolutions_node_forge",
+      "package_resolutions_on_headers",
+      "package_resolutions_path_to_regexp",
+      "package_resolutions_picomatch",
+      "package_resolutions_postcss",
+      "package_resolutions_qs",
+      "package_resolutions_tar",
+      "package_resolutions_yaml",
+      "package_scripts",
+      "package_scripts_audit_security",
+      "package_scripts_build",
+      "package_scripts_build_dev",
+      "package_scripts_build_docs",
+      "package_scripts_dev",
+      "package_scripts_index",
+      "package_scripts_lint",
+      "package_scripts_prepare",
+      "package_scripts_prettier",
+      "package_scripts_release_dry",
+      "package_scripts_test",
+      "package_type",
+      "package_types",
+      "package_version"
+    ],
+    "4": [
+      "debounce_fn",
+      "debounce_function_with_args_import",
+      "insert_style_fn",
+      "insert_style_module",
+      "rb_test_apply_test",
+      "rb_test_bind_main_removal_listener",
+      "rb_test_bind_page_change_listener",
+      "rb_test_bind_watch_for_removal",
+      "rb_test_class",
+      "rb_test_init_method",
+      "use_mutation_observer_fn",
+      "use_mutation_observer_jf_observer_interface",
+      "use_mutation_observer_jf_observers_global",
+      "use_mutation_observer_wrapped_disconnect",
+      "use_mutation_observer_wrapped_observe",
+      "use_spa_apply_test",
+      "use_spa_bind_page_change_listener",
+      "use_spa_bind_reinit_listener",
+      "use_spa_bind_watch_for_removal",
+      "use_spa_check_page_condition",
+      "use_spa_check_page_url",
+      "use_spa_fn",
+      "use_spa_handle_page_change",
+      "use_spa_handle_reinit",
+      "use_spa_handle_resize_debounced",
+      "use_spa_init_test",
+      "use_spa_jf_lib_global",
+      "use_spa_jf_pagechange_event",
+      "use_spa_jf_reinit_event",
+      "use_spa_jf_spa_interface",
+      "use_spa_reset_test",
+      "use_spa_setup_test",
+      "wait_for_element_fn",
+      "wait_for_fn",
+      "wait_for_fn_ref",
+      "wait_for_nuxt_stable_fn"
+    ],
+    "5": [
+      "assets_main",
+      "assets_main_be",
+      "assets_main_ce",
+      "assets_main_constructor",
+      "assets_main_createcomponents",
+      "assets_main_de",
+      "assets_main_ee",
+      "assets_main_ensureactivepagevisible",
+      "assets_main_ensurefocusedelementvisible",
+      "assets_main_fe",
+      "assets_main_filterchanged",
+      "assets_main_fromlocalstorage",
+      "assets_main_g",
+      "assets_main_getitem",
+      "assets_main_handlevaluechange",
+      "assets_main_he",
+      "assets_main_le",
+      "assets_main_listenforcodecopies",
+      "assets_main_ne",
+      "assets_main_ondocumentpointerdown",
+      "assets_main_ondocumentpointerup",
+      "assets_main_onpointerup",
+      "assets_main_scrolltohash",
+      "assets_main_se",
+      "assets_main_setactive",
+      "assets_main_setitem",
+      "assets_main_setlocalstorage",
+      "assets_main_showpage",
+      "assets_main_te",
+      "assets_main_update",
+      "assets_main_updateindexvisibility",
+      "assets_main_ve",
+      "assets_main_we",
+      "assets_main_xe"
+    ],
+    "6": [
+      "package_devdependencies_typedoc",
+      "typedoc",
+      "typedoc_categorizebygroup",
+      "typedoc_categoryorder",
+      "typedoc_defaultcategory",
+      "typedoc_entrypoints",
+      "typedoc_entrypointstrategy",
+      "typedoc_exclude",
+      "typedoc_excludeinternal",
+      "typedoc_excludenotdocumented",
+      "typedoc_excludeprivate",
+      "typedoc_excludeprotected",
+      "typedoc_githubpages",
+      "typedoc_gitremote",
+      "typedoc_gitrevision",
+      "typedoc_includeversion",
+      "typedoc_loglevel",
+      "typedoc_name",
+      "typedoc_navigation",
+      "typedoc_navigation_includecategories",
+      "typedoc_navigation_includefolders",
+      "typedoc_navigation_includegroups",
+      "typedoc_out",
+      "typedoc_plugin",
+      "typedoc_readme",
+      "typedoc_searchincomments",
+      "typedoc_sort",
+      "typedoc_treatwarningsaserrors",
+      "typedoc_validation",
+      "typedoc_validation_invalidlink",
+      "typedoc_validation_notdocumented"
+    ],
+    "7": [
+      "claude_md_doc",
+      "claude_md_element_ready",
+      "claude_md_element_removed",
+      "claude_md_element_updated",
+      "claude_md_emit_event",
+      "claude_md_rb_test_deprecated",
+      "claude_md_standard_test_pattern",
+      "claude_md_use_event_listener",
+      "claude_md_use_mutation_observer",
+      "claude_md_use_spa",
+      "claude_md_wait_for",
+      "claude_md_wait_for_element",
+      "concept_spa_lifecycle",
+      "concept_ticket_id_prefix",
+      "global_jf_lib",
+      "global_jf_listeners",
+      "global_jf_observers",
+      "mock_webpack_entry",
+      "readme_doc",
+      "spec_element_ready",
+      "spec_element_removed",
+      "spec_element_updated",
+      "spec_use_event_listener",
+      "spec_use_mutation_observer",
+      "spec_use_spa",
+      "spec_wait_for",
+      "spec_wait_for_element"
+    ],
+    "8": [
+      "element_ready_function",
+      "element_ready_jf_lib_global",
+      "element_ready_jf_observers_global",
+      "element_ready_spec_test_suite",
+      "element_removed_function",
+      "element_removed_jf_lib_global",
+      "element_removed_jf_observers",
+      "element_removed_spec_file",
+      "element_removed_spec_test_suite",
+      "element_updated_function",
+      "element_updated_options_type",
+      "element_updated_spec_test_suite",
+      "jf_ready_interface",
+      "jf_removed_interface",
+      "jf_updated_interface",
+      "jf_updated_options_interface",
+      "use_mutation_observer_details_object",
+      "use_mutation_observer_function",
+      "use_mutation_observer_spec_test_suite",
+      "use_spa_details_concept",
+      "use_spa_function",
+      "use_spa_jf_lib_type",
+      "use_spa_jf_spa_options_type",
+      "use_spa_screen_option",
+      "use_spa_spec_test_suite"
+    ],
+    "9": [
+      "jf_spa_destroy_method",
+      "jf_spa_details_id",
+      "jf_spa_details_interface",
+      "jf_spa_details_is_running",
+      "jf_spa_details_prop",
+      "jf_spa_init_method",
+      "jf_spa_interface",
+      "jf_spa_interface_destroy_method",
+      "jf_spa_interface_init_method",
+      "jf_spa_interface_reset_method",
+      "jf_spa_options_always_reset",
+      "jf_spa_options_apply",
+      "jf_spa_options_interface",
+      "jf_spa_options_location",
+      "jf_spa_options_reset",
+      "jf_spa_options_screen",
+      "jf_spa_options_screen_property",
+      "jf_spa_options_style",
+      "jf_spa_page_options_interface",
+      "jf_spa_page_options_match",
+      "jf_spa_page_options_type",
+      "jf_spa_reset_method"
+    ],
+    "10": [
+      "vscode_settings",
+      "vscode_settings_cspell_words",
+      "vscode_settings_editor_codeactionsonsave",
+      "vscode_settings_editor_codeactionsonsave_source_fixall_eslint",
+      "vscode_settings_editor_formatonpaste",
+      "vscode_settings_editor_formatonsave",
+      "vscode_settings_files_associations",
+      "vscode_settings_files_associations_yaml",
+      "vscode_settings_html",
+      "vscode_settings_html_editor_defaultformatter",
+      "vscode_settings_javascript",
+      "vscode_settings_javascript_editor_defaultformatter",
+      "vscode_settings_json",
+      "vscode_settings_json_editor_defaultformatter",
+      "vscode_settings_jsonc",
+      "vscode_settings_jsonc_editor_defaultformatter",
+      "vscode_settings_scss",
+      "vscode_settings_scss_editor_defaultformatter",
+      "vscode_settings_typescript",
+      "vscode_settings_typescript_editor_defaultformatter",
+      "vscode_settings_typescript_validate_enable"
+    ],
+    "11": [
+      "modules_debounce",
+      "modules_elementinview",
+      "modules_elementinview_elementinview",
+      "modules_getelementbytext",
+      "modules_getelementbytext_getelementbytext",
+      "modules_getlocalefromurl",
+      "modules_getlocalefromurl_getlocalefromurl",
+      "modules_index",
+      "modules_ismobile",
+      "modules_ismobile_ismobile",
+      "modules_isoldsafari",
+      "modules_isoldsafari_isoldsafari",
+      "modules_istouchdevice",
+      "modules_istouchdevice_istouchdevice",
+      "modules_iswtopreview",
+      "modules_iswtopreview_iswtopreview",
+      "modules_listenforswipe",
+      "modules_listenforswipe_functionwithargs",
+      "modules_redirect",
+      "modules_redirect_redirect"
+    ],
+    "12": [
+      "mocks_common",
+      "mocks_common_createsearchresultdom",
+      "mocks_common_fetchproductsdata",
+      "mocks_common_getproducthtml",
+      "mocks_common_gettrendingproductdatafromresponse",
+      "mocks_common_reset",
+      "mocks_common_runscript",
+      "mocks_common_state",
+      "mocks_webpackentry",
+      "mocks_webpackentry_applychanges",
+      "mocks_webpackentry_insertblock",
+      "mocks_webpackentry_jfexperiment",
+      "modules_emitevent",
+      "modules_emitevent_emitevent",
+      "modules_emitevent_isjfevent",
+      "modules_emitevent_jfevent",
+      "modules_emitevent_jfevents",
+      "modules_emitevent_jfexperiment",
+      "modules_emitevent_spec"
+    ],
+    "13": [
+      "dx_lib_root",
+      "fn_empty_elem",
+      "fn_find_parents",
+      "fn_push_to_dl",
+      "fn_query_all",
+      "fn_redirect",
+      "fn_replace_html",
+      "fn_wait_for",
+      "fn_wait_for_element",
+      "module_empty_elem",
+      "module_find_parents",
+      "module_push_to_dl",
+      "module_query_all",
+      "module_redirect",
+      "module_replace_html",
+      "module_wait_for",
+      "module_wait_for_element",
+      "module_wait_for_nuxt_stable"
+    ],
+    "14": [
+      "tsconfig",
+      "tsconfig_compileroptions",
+      "tsconfig_compileroptions_allowsyntheticdefaultimports",
+      "tsconfig_compileroptions_baseurl",
+      "tsconfig_compileroptions_declaration",
+      "tsconfig_compileroptions_declarationmap",
+      "tsconfig_compileroptions_downleveliteration",
+      "tsconfig_compileroptions_esmoduleinterop",
+      "tsconfig_compileroptions_lib",
+      "tsconfig_compileroptions_module",
+      "tsconfig_compileroptions_moduleresolution",
+      "tsconfig_compileroptions_outdir",
+      "tsconfig_compileroptions_resolvejsonmodule",
+      "tsconfig_compileroptions_rootdir",
+      "tsconfig_compileroptions_skiplibcheck",
+      "tsconfig_compileroptions_target",
+      "tsconfig_exclude"
+    ],
+    "15": [
+      "create_element_function",
+      "create_element_spec_file",
+      "doc_ready_function",
+      "doc_ready_spec_file",
+      "dx_lib_src_module",
+      "find_parents_function",
+      "find_parents_spec_file",
+      "generate_id_function",
+      "generate_id_spec_file",
+      "get_element_by_xpath_function",
+      "get_element_by_xpath_spec_file",
+      "get_element_from_html_string_function",
+      "get_element_from_html_string_spec_file",
+      "is_in_dom_function",
+      "is_in_dom_spec_file"
+    ],
+    "16": [
+      "modules_insertstyle",
+      "modules_insertstyle_insertstyle",
+      "modules_insertstyle_spec",
+      "modules_waitfor",
+      "modules_waitfor_spec",
+      "modules_waitfor_waitfor",
+      "modules_waitforelement",
+      "modules_waitforelement_spec",
+      "modules_waitforelement_waitforelement",
+      "modules_waitfornuxtstable",
+      "modules_waitfornuxtstable_spec",
+      "modules_waitfornuxtstable_waitfornuxtstable",
+      "src_index"
+    ],
+    "17": [
+      "dx_lib_docs_site",
+      "icons_svg_asset",
+      "insert_style_function",
+      "insert_style_spec_file",
+      "prevent_scroll_function",
+      "prevent_scroll_spec_test_suite",
+      "rbtest_class",
+      "rbtest_constructor",
+      "rbtest_init_method",
+      "rbtest_is_running_prop",
+      "rbtest_module",
+      "search_js_asset"
+    ],
+    "18": [
+      "fn_insert_style",
+      "fn_is_location_object",
+      "fn_is_page_object_type",
+      "fn_use_spa",
+      "interface_jf_spa",
+      "interface_jf_spa_details",
+      "interface_jf_spa_options",
+      "interface_jf_spa_page_options",
+      "interface_jf_spa_state",
+      "module_insert_style",
+      "module_use_spa",
+      "type_jf_spa_error"
+    ],
+    "19": [
+      "generate_index_js",
+      "package_json_build_script",
+      "package_json_index_script",
+      "package_json_jf_lib",
+      "package_json_semantic_release_dep",
+      "package_json_test_script",
+      "package_json_vitest_dep",
+      "readme_contribution_guidelines",
+      "vitest_config",
+      "vitest_config_alias_helpers",
+      "vitest_config_alias_modules",
+      "vitest_config_dirname"
+    ],
+    "20": [
+      "fn_get_time_to",
+      "get_time_to_fn",
+      "get_time_to_function",
+      "get_time_to_module",
+      "get_time_to_parsed_time_object",
+      "get_time_to_parsed_time_object_type",
+      "get_time_to_spec_file",
+      "get_time_to_spec_test_suite",
+      "module_get_time_to",
+      "parsed_time_object_type",
+      "type_parsed_time_object"
+    ],
+    "21": [
+      "function_with_args_type",
+      "listen_for_swipe_fn",
+      "listen_for_swipe_function_with_args",
+      "listen_for_swipe_handle_mouse_down",
+      "listen_for_swipe_handle_touch_end",
+      "listen_for_swipe_handle_touch_start",
+      "listen_for_swipe_module",
+      "listen_for_swipe_reset_touch",
+      "module_listen_for_swipe"
+    ],
+    "22": [
+      "modules_enablescroll",
+      "modules_enablescroll_enablescroll",
+      "modules_enablescroll_spec",
+      "modules_isiphone",
+      "modules_isiphone_isiphone",
+      "modules_preventscroll",
+      "modules_preventscroll_preventscroll",
+      "modules_preventscroll_spec",
+      "modules_preventscroll_spec_added_inline_style_attrs"
+    ],
+    "23": [
+      "tsconfig_prod",
+      "tsconfig_prod_compileroptions",
+      "tsconfig_prod_compileroptions_declarationdir",
+      "tsconfig_prod_compileroptions_rootdir",
+      "tsconfig_prod_exclude",
+      "tsconfig_prod_extends",
+      "tsconfig_prod_include",
+      "tsconfig_prod_tsc_alias",
+      "tsconfig_prod_tsc_alias_resolvefullpaths"
+    ],
+    "24": [
+      "emit_event_function",
+      "emit_event_jf_experiment",
+      "emit_event_jf_experiment_type",
+      "emit_event_module",
+      "emit_event_spec_file",
+      "is_jf_event_function",
+      "jf_events_constant",
+      "jf_experiment_interface"
+    ],
+    "25": [
+      "release_workflow",
+      "release_workflow_badge",
+      "release_workflow_merge_back",
+      "releaserc_commit_analyzer",
+      "releaserc_git_plugin",
+      "releaserc_github_plugin",
+      "releaserc_npm_plugin",
+      "releaserc_semantic_release"
+    ],
+    "26": [
+      "is_iphone_fn",
+      "is_iphone_module",
+      "module_is_iphone",
+      "module_prevent_scroll",
+      "prevent_scroll_fn",
+      "prevent_scroll_is_iphone_import",
+      "prevent_scroll_module"
+    ],
+    "27": [
+      "is_mobile_function",
+      "is_mobile_spec_file",
+      "is_old_safari_function",
+      "is_old_safari_modern_user_agents",
+      "is_old_safari_old_user_agents",
+      "is_old_safari_spec_file",
+      "is_old_safari_spec_test_suite"
+    ],
+    "28": [
+      "module_element_ready",
+      "module_element_removed",
+      "module_element_updated",
+      "wait_for_element_function",
+      "wait_for_element_spec_test_suite",
+      "wait_for_function",
+      "wait_for_spec_test_suite"
+    ],
+    "29": [
+      "modules_isiphone_spec",
+      "modules_isiphone_spec_desktop_user_agents",
+      "modules_isiphone_spec_iphone_user_agents",
+      "modules_isiphone_spec_modern_safari_user_agents",
+      "modules_isiphone_spec_non_iphone_user_agents",
+      "modules_isiphone_spec_old_safari_user_agents",
+      "modules_isiphone_spec_tablet_user_agents"
+    ],
+    "30": [
+      "tsconfig_test",
+      "tsconfig_test_compileroptions",
+      "tsconfig_test_compileroptions_noemit",
+      "tsconfig_test_compileroptions_types",
+      "tsconfig_test_exclude",
+      "tsconfig_test_extends",
+      "tsconfig_test_include"
+    ],
+    "31": [
+      "empty_elem_function",
+      "empty_elem_spec_file",
+      "insert_html_function",
+      "insert_html_spec_file",
+      "replace_html_function",
+      "replace_html_spec_test_suite"
+    ],
+    "32": [
+      "eslint_config",
+      "eslint_config_compat",
+      "eslint_config_dirname",
+      "eslint_config_filename",
+      "eslint_jsdoc_plugin",
+      "eslint_typescript_plugin"
+    ],
+    "33": [
+      "modules_ismobile_spec",
+      "modules_ismobile_spec_desktop_user_agents",
+      "modules_ismobile_spec_mobile_user_agents",
+      "modules_ismobile_spec_modern_safari_user_agents",
+      "modules_ismobile_spec_old_safari_user_agents",
+      "modules_ismobile_spec_tablet_user_agents"
+    ],
+    "34": [
+      "data_layer_concept",
+      "module_emit_event",
+      "push_to_dl_data_layer",
+      "push_to_dl_function",
+      "push_to_dl_spec_test_suite"
+    ],
+    "35": [
+      "fn_use_mutation_observer",
+      "interface_jf_observer",
+      "interface_jf_observer_object",
+      "module_use_mutation_observer",
+      "type_jf_observe_function"
+    ],
+    "36": [
+      "listen_for_swipe_function",
+      "listen_for_swipe_left_callback",
+      "listen_for_swipe_right_callback",
+      "listen_for_swipe_spec_file",
+      "listen_for_swipe_spec_test_suite"
+    ],
+    "37": [
+      "modules_parsejsontoformdata",
+      "modules_parsejsontoformdata_parsejsontoformdata",
+      "modules_parsetoformdata_spec",
+      "modules_parsetoformdata_spec_json_data",
+      "modules_parsetoformdata_spec_jsondata"
+    ],
+    "38": [
+      "use_event_listener_fn",
+      "use_event_listener_function",
+      "use_event_listener_jf_listener_object_type",
+      "use_event_listener_jf_listeners_global",
+      "use_event_listener_spec_test_suite"
+    ],
+    "39": [
+      "use_set_timeout_fn",
+      "use_set_timeout_function",
+      "use_set_timeout_jf_timer_object_type",
+      "use_set_timeout_jf_timers_global",
+      "use_set_timeout_spec_test_suite"
+    ],
+    "40": [
+      "ci_job_build",
+      "ci_job_lint",
+      "ci_job_test",
+      "ci_workflow"
+    ],
+    "41": [
+      "fn_get_element_by_text",
+      "get_element_by_text_fn",
+      "get_element_by_text_module",
+      "module_get_element_by_text"
+    ],
+    "42": [
+      "fn_get_element_by_xpath",
+      "get_element_by_xpath_fn",
+      "get_element_by_xpath_module",
+      "module_get_element_by_xpath"
+    ],
+    "43": [
+      "fn_get_element_from_html_string",
+      "get_element_from_html_string_fn",
+      "get_element_from_html_string_module",
+      "module_get_element_from_html_string"
+    ],
+    "44": [
+      "fn_get_locale_from_url",
+      "get_locale_from_url_fn",
+      "get_locale_from_url_module",
+      "module_get_locale_from_url"
+    ],
+    "45": [
+      "fn_insert_html",
+      "insert_html_fn",
+      "insert_html_module",
+      "module_insert_html"
+    ],
+    "46": [
+      "fn_is_in_dom",
+      "is_in_dom_fn",
+      "is_in_dom_module",
+      "module_is_in_dom"
+    ],
+    "47": [
+      "fn_is_mobile",
+      "is_mobile_fn",
+      "is_mobile_module",
+      "module_is_mobile"
+    ],
+    "48": [
+      "get_element_by_text_function",
+      "get_element_by_text_spec_file",
+      "query_all_function",
+      "query_all_spec_test_suite"
+    ],
+    "49": [
+      "modules_createelement",
+      "modules_createelement_createelement",
+      "modules_createelement_createelementparams",
+      "modules_createelement_spec"
+    ],
+    "50": [
+      "modules_emptyelem",
+      "modules_emptyelem_emptyelem",
+      "modules_replacehtml",
+      "modules_replacehtml_replacehtml"
+    ],
+    "51": [
+      "modules_listenforswipe_listenforswipe",
+      "modules_listenforswipe_spec",
+      "modules_listenforswipe_spec_left_callback",
+      "modules_listenforswipe_spec_right_callback"
+    ],
+    "52": [
+      "modules_pushtodl",
+      "modules_pushtodl_pushtodl",
+      "modules_pushtodl_spec",
+      "modules_pushtodl_window"
+    ],
+    "53": [
+      "modules_useeventlistener",
+      "modules_useeventlistener_jflistenerobject",
+      "modules_useeventlistener_useeventlistener",
+      "modules_useeventlistener_window"
+    ],
+    "54": [
+      "modules_usesettimeout",
+      "modules_usesettimeout_jftimerobject",
+      "modules_usesettimeout_usesettimeout",
+      "modules_usesettimeout_window"
+    ],
+    "55": [
+      "assets_icons",
+      "assets_icons_addicons",
+      "assets_icons_updateuseelements"
+    ],
+    "56": [
+      "debounce_function",
+      "debounce_module",
+      "debounce_spec_file"
+    ],
+    "57": [
+      "fn_use_event_listener",
+      "module_use_event_listener",
+      "type_jf_listener_object"
+    ],
+    "58": [
+      "fn_use_set_timeout",
+      "module_use_set_timeout",
+      "type_jf_timer_object"
+    ],
+    "59": [
+      "generate_id_fn",
+      "generate_id_module",
+      "module_generate_id"
+    ],
+    "60": [
+      "generate_index_fetch_exports",
+      "generate_index_init",
+      "generate_index_list_all_files"
+    ],
+    "61": [
+      "get_locale_from_url_function",
+      "get_locale_from_url_spec_file",
+      "get_locale_from_url_spec_test_suite"
+    ],
+    "62": [
+      "is_old_safari_fn",
+      "is_old_safari_module",
+      "module_is_old_safari"
+    ],
+    "63": [
+      "is_touch_device_fn",
+      "is_touch_device_module",
+      "module_is_touch_device"
+    ],
+    "64": [
+      "is_touch_device_function",
+      "is_touch_device_spec_file",
+      "is_touch_device_spec_test_suite"
+    ],
+    "65": [
+      "is_wto_preview_fn",
+      "is_wto_preview_module",
+      "module_is_wto_preview"
+    ],
+    "66": [
+      "is_wto_preview_function",
+      "is_wto_preview_spec_file",
+      "is_wto_preview_spec_test_suite"
+    ],
+    "67": [
+      "module_parse_json_to_form_data",
+      "parse_json_to_form_data_fn",
+      "parse_json_to_form_data_module"
+    ],
+    "68": [
+      "modules_docready",
+      "modules_docready_docready",
+      "modules_docready_spec"
+    ],
+    "69": [
+      "modules_findparents",
+      "modules_findparents_findparents",
+      "modules_findparents_spec"
+    ],
+    "70": [
+      "modules_generateid",
+      "modules_generateid_generateid",
+      "modules_generateid_spec"
+    ],
+    "71": [
+      "modules_getelementbytext_spec",
+      "modules_getelementbytext_spec_regex_to_match",
+      "modules_getelementbytext_spec_regex_to_not_match"
+    ],
+    "72": [
+      "modules_getelementbyxpath",
+      "modules_getelementbyxpath_getelementbyxpath",
+      "modules_getelementbyxpath_spec"
+    ],
+    "73": [
+      "modules_getelementfromhtmlstring",
+      "modules_getelementfromhtmlstring_getelementfromhtmlstring",
+      "modules_getelementfromhtmlstring_spec"
+    ],
+    "74": [
+      "modules_getlocalefromurl_spec",
+      "modules_getlocalefromurl_spec_countries",
+      "modules_getlocalefromurl_spec_domtypes"
+    ],
+    "75": [
+      "modules_gettimeto",
+      "modules_gettimeto_gettimeto",
+      "modules_gettimeto_parsedtimeobject"
+    ],
+    "76": [
+      "modules_gettimeto_spec",
+      "modules_gettimeto_spec_expected_result_1",
+      "modules_gettimeto_spec_expected_result_2"
+    ],
+    "77": [
+      "modules_inserthtml",
+      "modules_inserthtml_inserthtml",
+      "modules_inserthtml_spec"
+    ],
+    "78": [
+      "modules_isindom",
+      "modules_isindom_isindom",
+      "modules_isindom_spec"
+    ],
+    "79": [
+      "modules_isoldsafari_spec",
+      "modules_isoldsafari_spec_modern_safari_user_agents",
+      "modules_isoldsafari_spec_old_safari_user_agents"
+    ],
+    "80": [
+      "modules_queryall",
+      "modules_queryall_queryall",
+      "modules_queryall_spec"
+    ],
+    "81": [
+      "push_to_dl_fn",
+      "push_to_dl_module",
+      "push_to_dl_window_data_layer"
+    ],
+    "82": [
+      "releaserc",
+      "releaserc_branches",
+      "releaserc_plugins"
+    ],
+    "83": [
+      "rspack_config",
+      "rspack_config_dirname",
+      "rspack_config_filename"
+    ],
+    "84": [
+      "vscode_launch",
+      "vscode_launch_configurations",
+      "vscode_launch_version"
+    ],
+    "85": [
+      "concept_nuxt_stable",
+      "spec_wait_for_nuxt_stable"
+    ],
+    "86": [
+      "find_parents_fn",
+      "find_parents_module"
+    ],
+    "87": [
+      "global_jf_timers",
+      "spec_use_set_timeout"
+    ],
+    "88": [
+      "globals_jf_tests_interface",
+      "globals_window_jf_tests"
+    ],
+    "89": [
+      "mock_webpack_apply_changes",
+      "mock_webpack_insert_block"
+    ],
+    "90": [
+      "redirect_function",
+      "redirect_spec_test_suite"
+    ],
+    "91": [
+      "tests_tsconfig",
+      "tests_tsconfig_extends"
+    ],
+    "92": [
+      "wait_for_nuxt_stable_function",
+      "wait_for_nuxt_stable_spec_test_suite"
+    ],
+    "93": [
+      "assets_navigation"
+    ],
+    "94": [
+      "assets_search"
+    ],
+    "95": [
+      "claude_md_insert_style"
+    ],
+    "96": [
+      "claude_md_push_to_dl"
+    ],
+    "97": [
+      "doc_push_to_dl"
+    ],
+    "98": [
+      "doc_use_event_listener"
+    ],
+    "99": [
+      "doc_use_set_timeout"
+    ],
+    "100": [
+      "doc_wait_for"
+    ],
+    "101": [
+      "doc_wait_for_element"
+    ],
+    "102": [
+      "element_in_view_function"
+    ],
+    "103": [
+      "globals_nuxt_instance_interface"
+    ],
+    "104": [
+      "listen_for_swipe_function_with_args_type"
+    ],
+    "105": [
+      "mock_common_js"
+    ],
+    "106": [
+      "mock_common_reset"
+    ],
+    "107": [
+      "mock_common_run_script"
+    ],
+    "108": [
+      "mock_common_state"
+    ],
+    "109": [
+      "module_debounce"
+    ],
+    "110": [
+      "module_doc_ready"
+    ],
+    "111": [
+      "module_element_in_view"
+    ],
+    "112": [
+      "modules_elementisinview_spec"
+    ],
+    "113": [
+      "modules_emptyelem_spec"
+    ],
+    "114": [
+      "modules_istouchdevice_spec"
+    ],
+    "115": [
+      "modules_iswtopreview_spec"
+    ],
+    "116": [
+      "modules_redirect_spec"
+    ],
+    "117": [
+      "modules_replacehtml_spec"
+    ],
+    "118": [
+      "modules_useeventlistener_spec"
+    ],
+    "119": [
+      "modules_usesettimeout_spec"
+    ],
+    "120": [
+      "package_json_typedoc_dep"
+    ],
+    "121": [
+      "parse_json_to_form_data_function"
+    ],
+    "122": [
+      "postcss_config"
+    ],
+    "123": [
+      "query_all_fn"
+    ],
+    "124": [
+      "rb_test_run_reset"
+    ],
+    "125": [
+      "redirect_fn"
+    ],
+    "126": [
+      "tsconfig_compiler_options"
+    ],
+    "127": [
+      "type_guards_is_regexp"
+    ],
+    "128": [
+      "use_mutation_observer_jf_observe_function_type"
+    ],
+    "129": [
+      "use_mutation_observer_jf_observer_object_interface"
+    ],
+    "130": [
+      "use_spa_is_location_object_guard"
+    ],
+    "131": [
+      "use_spa_jf_spa_details_interface"
+    ],
+    "132": [
+      "use_spa_jf_spa_error_type"
+    ],
+    "133": [
+      "use_spa_jf_spa_options_interface"
+    ],
+    "134": [
+      "use_spa_jf_spa_page_options_interface"
+    ],
+    "135": [
+      "use_spa_jf_spa_state_interface"
+    ],
+    "136": [
+      "use_spa_page_change_version"
+    ],
+    "137": [
+      "use_spa_remove_test"
+    ],
+    "138": [
+      "use_spa_validate_options"
+    ]
+  },
+  "cohesion": {
+    "0": 0.052614052614052616,
+    "1": 0.03773584905660377,
+    "2": 0.06028368794326241,
+    "3": 0.041666666666666664,
+    "4": 0.06825396825396825,
+    "5": 0.12121212121212122,
+    "6": 0.06451612903225806,
+    "7": 0.11965811965811966,
+    "8": 0.08333333333333333,
+    "9": 0.1038961038961039,
+    "10": 0.09523809523809523,
+    "11": 0.11052631578947368,
+    "12": 0.17543859649122806,
+    "13": 0.11764705882352941,
+    "14": 0.11764705882352941,
+    "15": 0.13333333333333333,
+    "16": 0.2692307692307692,
+    "17": 0.18181818181818182,
+    "18": 0.19696969696969696,
+    "19": 0.16666666666666666,
+    "20": 0.2545454545454545,
+    "21": 0.3333333333333333,
+    "22": 0.3611111111111111,
+    "23": 0.2222222222222222,
+    "24": 0.2857142857142857,
+    "25": 0.25,
+    "26": 0.3333333333333333,
+    "27": 0.2857142857142857,
+    "28": 0.2857142857142857,
+    "29": 0.2857142857142857,
+    "30": 0.2857142857142857,
+    "31": 0.3333333333333333,
+    "32": 0.3333333333333333,
+    "33": 0.3333333333333333,
+    "34": 0.4,
+    "35": 0.5,
+    "36": 0.4,
+    "37": 0.4,
+    "38": 0.4,
+    "39": 0.4,
+    "40": 0.5,
+    "41": 0.5,
+    "42": 0.5,
+    "43": 0.5,
+    "44": 0.5,
+    "45": 0.5,
+    "46": 0.5,
+    "47": 0.5,
+    "48": 0.5,
+    "49": 0.5,
+    "50": 0.8333333333333334,
+    "51": 0.5,
+    "52": 0.5,
+    "53": 0.5,
+    "54": 0.5,
+    "55": 1.0,
+    "56": 0.6666666666666666,
+    "57": 1.0,
+    "58": 1.0,
+    "59": 0.6666666666666666,
+    "60": 0.6666666666666666,
+    "61": 0.6666666666666666,
+    "62": 0.6666666666666666,
+    "63": 0.6666666666666666,
+    "64": 0.6666666666666666,
+    "65": 0.6666666666666666,
+    "66": 0.6666666666666666,
+    "67": 0.6666666666666666,
+    "68": 0.6666666666666666,
+    "69": 0.6666666666666666,
+    "70": 0.6666666666666666,
+    "71": 0.6666666666666666,
+    "72": 0.6666666666666666,
+    "73": 0.6666666666666666,
+    "74": 0.6666666666666666,
+    "75": 0.6666666666666666,
+    "76": 0.6666666666666666,
+    "77": 0.6666666666666666,
+    "78": 0.6666666666666666,
+    "79": 0.6666666666666666,
+    "80": 0.6666666666666666,
+    "81": 1.0,
+    "82": 0.6666666666666666,
+    "83": 0.6666666666666666,
+    "84": 0.6666666666666666,
+    "85": 1.0,
+    "86": 2.0,
+    "87": 1.0,
+    "88": 1.0,
+    "89": 1.0,
+    "90": 1.0,
+    "91": 1.0,
+    "92": 1.0,
+    "93": 1.0,
+    "94": 1.0,
+    "95": 1.0,
+    "96": 1.0,
+    "97": 1.0,
+    "98": 1.0,
+    "99": 1.0,
+    "100": 1.0,
+    "101": 1.0,
+    "102": 1.0,
+    "103": 1.0,
+    "104": 1.0,
+    "105": 1.0,
+    "106": 1.0,
+    "107": 1.0,
+    "108": 1.0,
+    "109": 1.0,
+    "110": 1.0,
+    "111": 1.0,
+    "112": 1.0,
+    "113": 1.0,
+    "114": 1.0,
+    "115": 1.0,
+    "116": 1.0,
+    "117": 1.0,
+    "118": 1.0,
+    "119": 1.0,
+    "120": 1.0,
+    "121": 1.0,
+    "122": 1.0,
+    "123": 1.0,
+    "124": 1.0,
+    "125": 1.0,
+    "126": 1.0,
+    "127": 1.0,
+    "128": 1.0,
+    "129": 1.0,
+    "130": 1.0,
+    "131": 1.0,
+    "132": 1.0,
+    "133": 1.0,
+    "134": 1.0,
+    "135": 1.0,
+    "136": 1.0,
+    "137": 1.0,
+    "138": 1.0
+  },
+  "gods": [
+    {
+      "id": "package_resolutions",
+      "label": "resolutions",
+      "degree": 23
+    },
+    {
+      "id": "dx_lib_root",
+      "label": "DX Lib",
+      "degree": 22
+    },
+    {
+      "id": "tsconfig_compileroptions",
+      "label": "compilerOptions",
+      "degree": 15
+    },
+    {
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 12
+    },
+    {
+      "id": "claude_md_doc",
+      "label": "CLAUDE.md (dx-lib agent guide)",
+      "degree": 12
+    },
+    {
+      "id": "dx_lib_src_module",
+      "label": "dx-lib src (../../src)",
+      "degree": 12
+    },
+    {
+      "id": "modules_usemutationobserver_usemutationobserver",
+      "label": "useMutationObserver()",
+      "degree": 11
+    },
+    {
+      "id": "element_updated_fn",
+      "label": "elementUpdated",
+      "degree": 11
+    },
+    {
+      "id": "assets_main_constructor",
+      "label": "constructor()",
+      "degree": 10
+    },
+    {
+      "id": "jf_spa_options_interface",
+      "label": "JfSPAOptions",
+      "degree": 10
+    }
+  ],
+  "surprises": [
+    {
+      "source": "applyChanges()",
+      "target": "elementReady()",
+      "source_files": [
+        "__mocks__/webpackEntry.js",
+        "src/modules/elementReady.ts"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "applyChanges()",
+      "target": "elementRemoved()",
+      "source_files": [
+        "__mocks__/webpackEntry.js",
+        "src/modules/elementRemoved.ts"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "applyChanges()",
+      "target": "elementUpdated()",
+      "source_files": [
+        "__mocks__/webpackEntry.js",
+        "src/modules/elementUpdated.ts"
+      ],
+      "confidence": "INFERRED",
+      "relation": "calls",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "Contribution Guidelines",
+      "target": "jf-lib Package",
+      "source_files": [
+        "/Users/samrenfrew/Documents/Work/dx-lib/README.md",
+        "/Users/samrenfrew/Documents/Work/dx-lib/package.json"
+      ],
+      "confidence": "INFERRED",
+      "relation": "configures",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (code ↔ doc); peripheral node `Contribution Guidelines` unexpectedly reaches hub `jf-lib Package`"
+    },
+    {
+      "source": "emitEvent",
+      "target": "DX Lib TypeDoc Documentation Site",
+      "source_files": [
+        "/Users/samrenfrew/Documents/Work/dx-lib/__tests__/modules/emitEvent.spec.ts",
+        "/Users/samrenfrew/Documents/Work/dx-lib/docs/classes/modules_rbTest.RBTest.html"
+      ],
+      "confidence": "INFERRED",
+      "relation": "documents",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (code ↔ doc); bridges separate communities"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `DX Lib` connect `Community 13` to `Community 35`, `Community 41`, `Community 42`, `Community 43`, `Community 44`, `Community 45`, `Community 46`, `Community 47`, `Community 18`, `Community 20`, `Community 57`, `Community 58`?",
+      "why": "High betweenness centrality (0.021) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `devDependencies` connect `Community 1` to `Community 3`, `Community 6`?",
+      "why": "High betweenness centrality (0.017) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `branches`, `plugins`, `version` to the rest of the system?",
+      "why": "434 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 0` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.052614052614052616 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 1` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.03773584905660377 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 2` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.06028368794326241 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `Community 3` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.041666666666666664 - nodes in this community are weakly interconnected."
+    }
+  ]
+}

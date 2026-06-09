@@ -1,0 +1,682 @@
+{
+  "nodes": [
+    {
+      "id": "search_js_asset",
+      "label": "search.js (TypeDoc Search Asset)",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/assets/search.js",
+      "source_location": "search.js:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "description": "Base64-encoded search index for TypeDoc documentation site",
+        "format": "data URI octet stream"
+      }
+    },
+    {
+      "id": "icons_svg_asset",
+      "label": "icons.svg (TypeDoc Icons Asset)",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/assets/icons.svg",
+      "source_location": "icons.svg:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "description": "SVG icon sprite used throughout TypeDoc documentation UI"
+      }
+    },
+    {
+      "id": "rbtest_class",
+      "label": "RBTest Class",
+      "type": "class",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/classes/modules_rbTest.RBTest.html",
+      "source_location": "modules/rbTest.ts:48",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "deprecated": true,
+        "deprecation_message": "Use useSPA instead",
+        "description": "Class framework to create and manage A/B tests on Russell & Bromley websites",
+        "features": [
+          "Automatically applies test when initialized",
+          "Validates test setup",
+          "Watches for DOM element removal and re-applies",
+          "Listens for page changes in SPAs",
+          "Integrates with useMutationObserver and waitForElement"
+        ]
+      }
+    },
+    {
+      "id": "rbtest_constructor",
+      "label": "RBTest Constructor",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/classes/modules_rbTest.RBTest.html",
+      "source_location": "modules/rbTest.ts:107",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "deprecated": true,
+        "params": {
+          "id": "string - unique identifier for the test",
+          "options.apply": "() => void - required",
+          "options.reset": "() => void - optional",
+          "options.style": "string - optional CSS",
+          "options.pageRegex": "RegExp - required",
+          "options.watchForRemoval": "string - optional CSS selector"
+        }
+      }
+    },
+    {
+      "id": "rbtest_init_method",
+      "label": "RBTest.init()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/classes/modules_rbTest.RBTest.html",
+      "source_location": "modules/rbTest.ts:193",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "deprecated": true,
+        "returns": "Promise<void>",
+        "description": "Start the test"
+      }
+    },
+    {
+      "id": "rbtest_is_running_prop",
+      "label": "RBTest.isRunning",
+      "type": "variable",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/classes/modules_rbTest.RBTest.html",
+      "source_location": "modules/rbTest.ts:49",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "type": "boolean",
+        "default": false
+      }
+    },
+    {
+      "id": "rbtest_module",
+      "label": "modules/rbTest Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/classes/modules_rbTest.RBTest.html",
+      "source_location": "modules/rbTest.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "deprecated": true,
+        "replacement": "useSPA"
+      }
+    },
+    {
+      "id": "debounce_function",
+      "label": "debounce()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_debounce.debounce.html",
+      "source_location": "modules/debounce.ts:13",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "debounce(callback: FunctionWithArgs, delay?: number = 200): (...args: unknown[]) => void",
+        "description": "Creates a debounced version of a function that delays execution until after a wait time",
+        "params": {
+          "callback": "FunctionWithArgs - function to execute after delay",
+          "delay": "number - default 200ms"
+        },
+        "returns": "debounced function"
+      }
+    },
+    {
+      "id": "debounce_module",
+      "label": "modules/debounce Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_debounce.debounce.html",
+      "source_location": "modules/debounce.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "id": "doc_ready_function",
+      "label": "docReady()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_docReady.docReady.html",
+      "source_location": "modules/docReady.ts:14",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "docReady(maxAttempts?: number = 10, timeout?: number = 200): Promise<boolean>",
+        "description": "Waits asynchronously until the document reaches the complete ready state",
+        "params": {
+          "maxAttempts": "number - default 10",
+          "timeout": "number - delay ms between checks, default 200"
+        },
+        "returns": "Promise<boolean> - true if complete, false if max attempts exceeded"
+      }
+    },
+    {
+      "id": "element_in_view_function",
+      "label": "elementInView()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_elementInView.elementInView.html",
+      "source_location": "modules/elementInView.ts:13",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "elementInView(element: HTMLElement, partial?: boolean = true): boolean",
+        "description": "Determines whether a given HTML element is visible within the user's viewport",
+        "params": {
+          "element": "HTMLElement",
+          "partial": "boolean - default true, allows partial visibility"
+        },
+        "returns": "boolean"
+      }
+    },
+    {
+      "id": "element_ready_function",
+      "label": "elementReady()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_elementReady.elementReady.html",
+      "source_location": "modules/elementReady.ts:130",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "elementReady(selector: string, callback: (el: Element) => void, id: string, conditions?: (el: Element) => boolean): JfReady",
+        "description": "Detects when an element matching a CSS selector is added to the DOM and executes a callback",
+        "params": {
+          "selector": "string CSS selector",
+          "callback": "(el: Element) => void",
+          "id": "string - unique identifier to track elements already triggered",
+          "conditions": "optional (el: Element) => boolean"
+        },
+        "returns": "JfReady with init, pause, destroy methods",
+        "tier": "Tier 1 Core"
+      }
+    },
+    {
+      "id": "jf_ready_interface",
+      "label": "JfReady Interface",
+      "type": "concept",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_elementReady.elementReady.html",
+      "source_location": "modules/elementReady.ts",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "methods": ["init", "pause", "destroy"],
+        "description": "Return type of elementReady providing lifecycle control"
+      }
+    },
+    {
+      "id": "element_removed_function",
+      "label": "elementRemoved()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_elementRemoved.elementRemoved.html",
+      "source_location": "modules/elementRemoved.ts",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "elementRemoved(selector: string, callback: (el: Element) => void, id: string, conditions?: (el: Element) => boolean): JfRemoved",
+        "description": "Detects when an element matching a CSS selector is removed from the DOM and executes a callback",
+        "params": {
+          "selector": "string CSS selector",
+          "callback": "(el: Element) => void",
+          "id": "string - unique identifier",
+          "conditions": "optional (el: Element) => boolean"
+        },
+        "returns": "JfRemoved with destroy, init methods",
+        "tier": "Tier 2"
+      }
+    },
+    {
+      "id": "jf_removed_interface",
+      "label": "JfRemoved Interface",
+      "type": "concept",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_elementRemoved.elementRemoved.html",
+      "source_location": "modules/elementRemoved.ts",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "methods": ["init", "destroy"]
+      }
+    },
+    {
+      "id": "element_updated_function",
+      "label": "elementUpdated()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_elementUpdated.elementUpdated.html",
+      "source_location": "modules/elementUpdated.ts",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "elementUpdated(selector: string, callback: (el: Element) => void, id: string, options: JfUpdatedOptions, conditions?: (el: Element) => boolean): JfUpdated",
+        "description": "Detects when an element matching a CSS selector is updated in the DOM and executes a callback",
+        "params": {
+          "selector": "string CSS selector",
+          "callback": "(el: Element) => void",
+          "id": "string",
+          "options": "JfUpdatedOptions - attributes, textContent, attributesFilter",
+          "conditions": "optional (el: Element) => boolean"
+        },
+        "returns": "JfUpdated with destroy, init methods",
+        "tier": "Tier 2"
+      }
+    },
+    {
+      "id": "jf_updated_interface",
+      "label": "JfUpdated Interface",
+      "type": "concept",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_elementUpdated.elementUpdated.html",
+      "source_location": "modules/elementUpdated.ts",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "methods": ["init", "destroy"]
+      }
+    },
+    {
+      "id": "jf_updated_options_interface",
+      "label": "JfUpdatedOptions Interface",
+      "type": "concept",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_elementUpdated.elementUpdated.html",
+      "source_location": "modules/elementUpdated.ts",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "fields": ["attributes", "textContent", "attributesFilter"]
+      }
+    },
+    {
+      "id": "emit_event_function",
+      "label": "emitEvent()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_emitEvent.emitEvent.html",
+      "source_location": "modules/emitEvent.ts:45",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "emitEvent(type: 'load' | 'error' | 'track', experiment: JfExperiment, err?: string | Error): void",
+        "description": "Emits an event related to a Journey Further experiment for monitoring and debugging purposes",
+        "params": {
+          "type": "'load' | 'error' | 'track'",
+          "experiment": "JfExperiment - ticket ID and variant information",
+          "err": "optional string | Error"
+        },
+        "tier": "Tier 1 Core",
+        "standard_error_pattern": "emitEvent('error', { ticketId }, e)"
+      }
+    },
+    {
+      "id": "jf_experiment_interface",
+      "label": "JfExperiment Interface",
+      "type": "concept",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_emitEvent.emitEvent.html",
+      "source_location": "modules/emitEvent.ts",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "fields": ["ticketId", "variant information"],
+        "description": "Experiment details passed to emitEvent"
+      }
+    },
+    {
+      "id": "is_jf_event_function",
+      "label": "isJfEvent()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_emitEvent.isJfEvent.html",
+      "source_location": "modules/emitEvent.ts:2",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "isJfEvent(event: 'track' | 'error' | 'load'): event is 'track' | 'error' | 'load'",
+        "description": "Type guard for JF event types"
+      }
+    },
+    {
+      "id": "empty_elem_function",
+      "label": "emptyElem()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_emptyElem.emptyElem.html",
+      "source_location": "modules/emptyElem.ts:8",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "emptyElem(elem: HTMLElement): void",
+        "description": "Removes all child nodes from a specified HTML element",
+        "tier": "Tier 3"
+      }
+    },
+    {
+      "id": "find_parents_function",
+      "label": "findParents()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_findParents.findParents.html",
+      "source_location": "modules/findParents.ts:11",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "findParents(element: HTMLElement, selector: string): HTMLElement",
+        "description": "Searches up the DOM tree to find the nearest parent element matching a CSS selector",
+        "params": {
+          "element": "HTMLElement - start element",
+          "selector": "string CSS selector"
+        },
+        "returns": "HTMLElement or null",
+        "tier": "Tier 3"
+      }
+    },
+    {
+      "id": "generate_id_function",
+      "label": "generateId()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_generateId.generateId.html",
+      "source_location": "modules/generateId.ts:12",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "generateId(): string",
+        "description": "Generates a unique string that can be used as an HTML ID, ensures no digit start and no existing DOM collision",
+        "tier": "Tier 3"
+      }
+    },
+    {
+      "id": "get_element_by_text_function",
+      "label": "getElementByText()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_getElementByText.getElementByText.html",
+      "source_location": "modules/getElementByText.ts",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "getElementByText(tag: keyof HTMLElementTagNameMap, query: string | RegExp, parentSelector?: string): Element",
+        "description": "Finds an element by matching its text content to a string or regex",
+        "params": {
+          "tag": "HTML tag name",
+          "query": "string | RegExp - exact match or regex",
+          "parentSelector": "optional CSS selector for parent"
+        },
+        "tier": "Tier 3"
+      }
+    },
+    {
+      "id": "get_element_by_xpath_function",
+      "label": "getElementByXPath()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_getElementByXPath.getElementByXPath.html",
+      "source_location": "modules/getElementByXPath.ts:11",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "getElementByXPath(path: string): HTMLElement",
+        "description": "Finds and returns the first element matching the given XPath string",
+        "returns": "HTMLElement or undefined",
+        "tier": "Tier 4"
+      }
+    },
+    {
+      "id": "get_element_from_html_string_function",
+      "label": "getElementFromHtmlString()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_getElementFromHtmlString.getElementFromHtmlString.html",
+      "source_location": "modules/getElementFromHtmlString.ts:12",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "getElementFromHtmlString(html: string, selector: string): HTMLElement",
+        "description": "Extracts an HTML element from a provided HTML string by matching a CSS selector",
+        "returns": "HTMLElement or null",
+        "tier": "Tier 4"
+      }
+    },
+    {
+      "id": "get_locale_from_url_function",
+      "label": "getLocaleFromUrl()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_getLocaleFromUrl.getLocaleFromUrl.html",
+      "source_location": "modules/getLocaleFromUrl.ts",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "getLocaleFromUrl(url?: string = window.location.pathname, userOverrides?: string[]): string",
+        "description": "Extracts the localisation segment from a given URL using in-page attributes and specific checks",
+        "detection_order": [
+          "1. Check userOverrides array",
+          "2. Check HTML lang attribute vs first URL segment",
+          "3. Check <link rel=alternate> pointing to same segment"
+        ],
+        "returns": "locale string or null",
+        "tier": "Tier 4"
+      }
+    },
+    {
+      "id": "get_time_to_function",
+      "label": "getTimeTo()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_getTimeTo.getTimeTo.html",
+      "source_location": "modules/getTimeTo.ts:32",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "getTimeTo(timestamp: number, shouldPad?: boolean = false): ParsedTimeObject",
+        "description": "Calculates time remaining until a given timestamp, returns object with days, hours, minutes, seconds",
+        "params": {
+          "timestamp": "number - future timestamp in ms",
+          "shouldPad": "boolean - pad numbers < 10 with leading zero, default false"
+        },
+        "returns": "ParsedTimeObject",
+        "tier": "Tier 4"
+      }
+    },
+    {
+      "id": "parsed_time_object_type",
+      "label": "ParsedTimeObject Type",
+      "type": "concept",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_getTimeTo.getTimeTo.html",
+      "source_location": "modules/getTimeTo.ts",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "fields": ["days", "hours", "minutes", "seconds"]
+      }
+    },
+    {
+      "id": "insert_html_function",
+      "label": "insertHTML()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_insertHTML.insertHTML.html",
+      "source_location": "modules/insertHTML.ts",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "description": "Inserts HTML into a target element using insertAdjacentHTML, preventing duplicates unless replace=true",
+        "returns": "false if no target found or duplicate with replace=false",
+        "tier": "Tier 3"
+      }
+    },
+    {
+      "id": "insert_style_function",
+      "label": "insertStyle()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_insertStyle.insertStyle.html",
+      "source_location": "modules/insertStyle.ts:19",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "insertStyle(style: string, id: string, options?: { position?: InsertPosition; elem?: HTMLElement }): Promise<void>",
+        "description": "Inserts a <style> element containing CSS into a specified element or document body; prevents duplicate style tags",
+        "params": {
+          "style": "CSS string",
+          "id": "unique ID for deduplication",
+          "options.position": "InsertPosition default 'beforeend'",
+          "options.elem": "HTMLElement default document.body"
+        },
+        "tier": "Tier 1 Core"
+      }
+    },
+    {
+      "id": "is_in_dom_function",
+      "label": "isInDom()",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_isInDom.isInDom.html",
+      "source_location": "modules/isInDom.ts:12",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "signature": "isInDom(element: Element, dom?: Document): boolean",
+        "description": "Checks if the provided element is part of the DOM",
+        "params": {
+          "element": "Element to check",
+          "dom": "optional Document to check within, default document"
+        },
+        "returns": "boolean",
+        "tier": "Tier 4"
+      }
+    },
+    {
+      "id": "dx_lib_docs_site",
+      "label": "DX Lib TypeDoc Documentation Site",
+      "type": "document",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/classes/modules_rbTest.RBTest.html",
+      "source_location": "docs/index.html",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "generator": "TypeDoc with typedoc-github-theme",
+        "url": "https://journey-further.github.io/dx-lib/"
+      }
+    },
+    {
+      "id": "function_with_args_type",
+      "label": "FunctionWithArgs Type",
+      "type": "concept",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/docs/functions/modules_debounce.debounce.html",
+      "source_location": "modules/listenForSwipe.ts",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "description": "Type alias for a function accepting variadic args, referenced from listenForSwipe module"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "rbtest_class",
+      "target": "rbtest_module",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "rbtest_constructor",
+      "target": "rbtest_class",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "rbtest_init_method",
+      "target": "rbtest_class",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "rbtest_is_running_prop",
+      "target": "rbtest_class",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "rbtest_module",
+      "target": "dx_lib_docs_site",
+      "relation": "documents",
+      "confidence": "INFERRED",
+      "properties": {}
+    },
+    {
+      "source": "debounce_function",
+      "target": "debounce_module",
+      "relation": "defines",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "debounce_function",
+      "target": "function_with_args_type",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "param": "callback"
+      }
+    },
+    {
+      "source": "emit_event_function",
+      "target": "jf_experiment_interface",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "param": "experiment"
+      }
+    },
+    {
+      "source": "is_jf_event_function",
+      "target": "emit_event_function",
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "properties": {
+        "description": "isJfEvent is a type guard used internally by emitEvent module"
+      }
+    },
+    {
+      "source": "element_ready_function",
+      "target": "jf_ready_interface",
+      "relation": "produces",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "element_removed_function",
+      "target": "jf_removed_interface",
+      "relation": "produces",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "element_updated_function",
+      "target": "jf_updated_interface",
+      "relation": "produces",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "element_updated_function",
+      "target": "jf_updated_options_interface",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "param": "options"
+      }
+    },
+    {
+      "source": "get_time_to_function",
+      "target": "parsed_time_object_type",
+      "relation": "produces",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "rbtest_class",
+      "target": "insert_style_function",
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "properties": {
+        "description": "RBTest internally inserts and removes stylesheet via #insertStyleSheet and #removeStyleSheet methods"
+      }
+    },
+    {
+      "source": "search_js_asset",
+      "target": "dx_lib_docs_site",
+      "relation": "configures",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "description": "Provides search index for the TypeDoc docs site"
+      }
+    },
+    {
+      "source": "icons_svg_asset",
+      "target": "dx_lib_docs_site",
+      "relation": "configures",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "description": "SVG icon sprite referenced throughout the docs UI"
+      }
+    },
+    {
+      "source": "insert_style_function",
+      "target": "dx_lib_docs_site",
+      "relation": "documents",
+      "confidence": "INFERRED",
+      "properties": {}
+    },
+    {
+      "source": "element_ready_function",
+      "target": "dx_lib_docs_site",
+      "relation": "documents",
+      "confidence": "INFERRED",
+      "properties": {}
+    },
+    {
+      "source": "emit_event_function",
+      "target": "dx_lib_docs_site",
+      "relation": "documents",
+      "confidence": "INFERRED",
+      "properties": {}
+    }
+  ],
+  "hyperedges": [],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

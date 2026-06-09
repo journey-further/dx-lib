@@ -1,0 +1,1003 @@
+{
+  "nodes": [
+    {
+      "id": "type_guards_is_reg_exp",
+      "label": "isRegExp",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/typeGuards.ts",
+      "source_location": "typeGuards.ts:7",
+      "confidence": "EXTRACTED",
+      "properties": { "returns": "value is RegExp", "exported": true }
+    },
+    {
+      "id": "type_guards_is_string_array",
+      "label": "isStringArray",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/typeGuards.ts",
+      "source_location": "typeGuards.ts:15",
+      "confidence": "EXTRACTED",
+      "properties": { "returns": "value is string[]", "exported": true }
+    },
+    {
+      "id": "type_guards_is_string",
+      "label": "isString",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/typeGuards.ts",
+      "source_location": "typeGuards.ts:24",
+      "confidence": "EXTRACTED",
+      "properties": { "returns": "value is string", "exported": true }
+    },
+    {
+      "id": "type_guards_is_number",
+      "label": "isNumber",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/typeGuards.ts",
+      "source_location": "typeGuards.ts:32",
+      "confidence": "EXTRACTED",
+      "properties": { "returns": "value is number", "exported": true }
+    },
+    {
+      "id": "type_guards_is_function",
+      "label": "isFunction",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/typeGuards.ts",
+      "source_location": "typeGuards.ts:40",
+      "confidence": "EXTRACTED",
+      "properties": { "returns": "value is Function", "exported": true }
+    },
+    {
+      "id": "type_guards_is_object",
+      "label": "isObject",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/typeGuards.ts",
+      "source_location": "typeGuards.ts:48",
+      "confidence": "EXTRACTED",
+      "properties": { "returns": "value is object", "exported": true }
+    },
+    {
+      "id": "type_guards_is_node_array",
+      "label": "isNodeArray",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/typeGuards.ts",
+      "source_location": "typeGuards.ts:56",
+      "confidence": "EXTRACTED",
+      "properties": { "returns": "value is Node[]", "exported": true }
+    },
+    {
+      "id": "type_guards_is_node_list",
+      "label": "isNodeList",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/typeGuards.ts",
+      "source_location": "typeGuards.ts:65",
+      "confidence": "EXTRACTED",
+      "properties": { "returns": "value is NodeListOf<Node>", "exported": true }
+    },
+    {
+      "id": "type_guards_is_node_as_element",
+      "label": "isNodeAsElement",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/typeGuards.ts",
+      "source_location": "typeGuards.ts:74",
+      "confidence": "EXTRACTED",
+      "properties": { "returns": "value is Element", "param": "Node", "exported": true }
+    },
+    {
+      "id": "type_guards_module",
+      "label": "typeGuards Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/typeGuards.ts",
+      "source_location": "typeGuards.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "helper" }
+    },
+    {
+      "id": "validate_selectors_validate_selectors",
+      "label": "validateSelectors",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/validateSelectors.ts",
+      "source_location": "validateSelectors.ts:7",
+      "confidence": "EXTRACTED",
+      "properties": { "returns": "boolean", "exported": true, "accepts": "string | string[]" }
+    },
+    {
+      "id": "validate_selectors_is_selector_valid",
+      "label": "isSelectorValid",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/validateSelectors.ts",
+      "source_location": "validateSelectors.ts:19",
+      "confidence": "EXTRACTED",
+      "properties": { "returns": "boolean", "exported": false, "uses": "document.createDocumentFragment().querySelector" }
+    },
+    {
+      "id": "validate_selectors_module",
+      "label": "validateSelectors Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/helpers/validateSelectors.ts",
+      "source_location": "validateSelectors.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": "helper" }
+    },
+    {
+      "id": "create_element_params_interface",
+      "label": "CreateElementParams",
+      "type": "class",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/createElement.ts",
+      "source_location": "createElement.ts:9",
+      "confidence": "EXTRACTED",
+      "properties": { "kind": "interface", "exported": true, "shape": "{ [key: string]: string }" }
+    },
+    {
+      "id": "create_element_fn",
+      "label": "createElement",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/createElement.ts",
+      "source_location": "createElement.ts:32",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "HTMLElement",
+        "params": ["elem: keyof HTMLElementTagNameMap | undefined = 'div'", "params?: CreateElementParams"],
+        "tier": 3
+      }
+    },
+    {
+      "id": "create_element_module",
+      "label": "createElement Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/createElement.ts",
+      "source_location": "createElement.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 3 }
+    },
+    {
+      "id": "find_parents_fn",
+      "label": "findParents",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/findParents.ts",
+      "source_location": "findParents.ts:11",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "HTMLElement | null",
+        "params": ["element: HTMLElement", "selector: string"],
+        "strategy": "recursive DOM traversal",
+        "tier": 3
+      }
+    },
+    {
+      "id": "find_parents_module",
+      "label": "findParents Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/findParents.ts",
+      "source_location": "findParents.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 3 }
+    },
+    {
+      "id": "generate_id_fn",
+      "label": "generateId",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/generateId.ts",
+      "source_location": "generateId.ts:12",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "string",
+        "strategy": "random base-36 substring; avoids digit-start and existing IDs",
+        "tier": 3
+      }
+    },
+    {
+      "id": "generate_id_module",
+      "label": "generateId Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/generateId.ts",
+      "source_location": "generateId.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 3 }
+    },
+    {
+      "id": "get_element_by_text_fn",
+      "label": "getElementByText",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/getElementByText.ts",
+      "source_location": "getElementByText.ts:17",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "Element | null",
+        "params": ["tag: keyof HTMLElementTagNameMap", "query: string | RegExp", "parentSelector?: string"],
+        "tier": 3
+      }
+    },
+    {
+      "id": "get_element_by_text_module",
+      "label": "getElementByText Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/getElementByText.ts",
+      "source_location": "getElementByText.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 3 }
+    },
+    {
+      "id": "get_element_by_xpath_fn",
+      "label": "getElementByXPath",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/getElementByXPath.ts",
+      "source_location": "getElementByXPath.ts:11",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "HTMLElement | undefined",
+        "params": ["path: string"],
+        "uses": "document.evaluate / XPathResult",
+        "tier": 4
+      }
+    },
+    {
+      "id": "get_element_by_xpath_module",
+      "label": "getElementByXPath Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/getElementByXPath.ts",
+      "source_location": "getElementByXPath.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 4 }
+    },
+    {
+      "id": "get_element_from_html_string_fn",
+      "label": "getElementFromHtmlString",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/getElementFromHtmlString.ts",
+      "source_location": "getElementFromHtmlString.ts:12",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "HTMLElement | null",
+        "params": ["html: string", "selector: string"],
+        "uses": "DOMParser",
+        "tier": 4
+      }
+    },
+    {
+      "id": "get_element_from_html_string_module",
+      "label": "getElementFromHtmlString Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/getElementFromHtmlString.ts",
+      "source_location": "getElementFromHtmlString.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 4 }
+    },
+    {
+      "id": "get_locale_from_url_fn",
+      "label": "getLocaleFromUrl",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/getLocaleFromUrl.ts",
+      "source_location": "getLocaleFromUrl.ts:18",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "string | null",
+        "params": ["url?: string = window.location.pathname", "userOverrides?: string[]"],
+        "tier": 4
+      }
+    },
+    {
+      "id": "get_locale_from_url_module",
+      "label": "getLocaleFromUrl Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/getLocaleFromUrl.ts",
+      "source_location": "getLocaleFromUrl.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 4 }
+    },
+    {
+      "id": "get_time_to_parsed_time_object",
+      "label": "ParsedTimeObject",
+      "type": "data",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/getTimeTo.ts",
+      "source_location": "getTimeTo.ts:12",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "kind": "type",
+        "exported": true,
+        "shape": "{ days: string | number; hours: string | number; minutes: string | number; seconds: string | number }"
+      }
+    },
+    {
+      "id": "get_time_to_fn",
+      "label": "getTimeTo",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/getTimeTo.ts",
+      "source_location": "getTimeTo.ts:32",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "ParsedTimeObject",
+        "params": ["timestamp: number", "shouldPad?: boolean = false"],
+        "tier": 4
+      }
+    },
+    {
+      "id": "get_time_to_module",
+      "label": "getTimeTo Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/getTimeTo.ts",
+      "source_location": "getTimeTo.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 4 }
+    },
+    {
+      "id": "insert_html_fn",
+      "label": "insertHTML",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/insertHTML.ts",
+      "source_location": "insertHTML.ts:22",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "boolean",
+        "params": [
+          "html: string",
+          "selector: string",
+          "targetSelector: string",
+          "position?: 'afterbegin'|'beforebegin'|'afterend'|'beforeend' = 'beforeend'",
+          "replace?: boolean = false"
+        ],
+        "tier": 2
+      }
+    },
+    {
+      "id": "insert_html_module",
+      "label": "insertHTML Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/insertHTML.ts",
+      "source_location": "insertHTML.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 2 }
+    },
+    {
+      "id": "insert_style_fn",
+      "label": "insertStyle",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/insertStyle.ts",
+      "source_location": "insertStyle.ts:19",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "Promise<void>",
+        "async": true,
+        "params": [
+          "style: string",
+          "id: string",
+          "options?: { position?: string; elem?: HTMLElement }"
+        ],
+        "tier": 1
+      }
+    },
+    {
+      "id": "insert_style_module",
+      "label": "insertStyle Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/insertStyle.ts",
+      "source_location": "insertStyle.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 1 }
+    },
+    {
+      "id": "wait_for_fn_ref",
+      "label": "waitFor (imported)",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/insertStyle.ts",
+      "source_location": "insertStyle.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "importedFrom": "./waitFor" }
+    },
+    {
+      "id": "is_in_dom_fn",
+      "label": "isInDom",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isInDom.ts",
+      "source_location": "isInDom.ts:12",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "boolean",
+        "params": ["element: Element", "dom?: Document = document"],
+        "tier": 4
+      }
+    },
+    {
+      "id": "is_in_dom_module",
+      "label": "isInDom Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isInDom.ts",
+      "source_location": "isInDom.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 4 }
+    },
+    {
+      "id": "is_iphone_fn",
+      "label": "isIphone",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isIphone.ts",
+      "source_location": "isIphone.ts:9",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "boolean",
+        "strategy": "navigator.userAgent regex /iPhone/i",
+        "tier": 3
+      }
+    },
+    {
+      "id": "is_iphone_module",
+      "label": "isIphone Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isIphone.ts",
+      "source_location": "isIphone.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 3 }
+    },
+    {
+      "id": "is_mobile_fn",
+      "label": "isMobile",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isMobile.ts",
+      "source_location": "isMobile.ts:10",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "boolean",
+        "strategy": "navigator.userAgent broad mobile regex",
+        "tier": 3
+      }
+    },
+    {
+      "id": "is_mobile_module",
+      "label": "isMobile Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isMobile.ts",
+      "source_location": "isMobile.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 3 }
+    },
+    {
+      "id": "is_old_safari_fn",
+      "label": "isOldSafari",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isOldSafari.ts",
+      "source_location": "isOldSafari.ts:9",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "boolean",
+        "strategy": "navigator.userAgent version/1-13 safari regex",
+        "tier": 4
+      }
+    },
+    {
+      "id": "is_old_safari_module",
+      "label": "isOldSafari Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isOldSafari.ts",
+      "source_location": "isOldSafari.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 4 }
+    },
+    {
+      "id": "is_touch_device_fn",
+      "label": "isTouchDevice",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isTouchDevice.ts",
+      "source_location": "isTouchDevice.ts:10",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "boolean",
+        "strategy": "'ontouchstart' in window || navigator.maxTouchPoints > 0",
+        "tier": 3
+      }
+    },
+    {
+      "id": "is_touch_device_module",
+      "label": "isTouchDevice Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isTouchDevice.ts",
+      "source_location": "isTouchDevice.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 3 }
+    },
+    {
+      "id": "is_wto_preview_fn",
+      "label": "isWtoPreview",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isWtoPreview.ts",
+      "source_location": "isWtoPreview.ts:12",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "boolean",
+        "strategy": "checks _wt.pid query param or _wt.bdebug cookie",
+        "tier": 4
+      }
+    },
+    {
+      "id": "is_wto_preview_module",
+      "label": "isWtoPreview Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/isWtoPreview.ts",
+      "source_location": "isWtoPreview.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 4 }
+    },
+    {
+      "id": "listen_for_swipe_function_with_args",
+      "label": "FunctionWithArgs",
+      "type": "data",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/listenForSwipe.ts",
+      "source_location": "listenForSwipe.ts:9",
+      "confidence": "EXTRACTED",
+      "properties": { "kind": "type", "exported": true, "shape": "(...args: unknown[]) => void" }
+    },
+    {
+      "id": "listen_for_swipe_fn",
+      "label": "listenForSwipe",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/listenForSwipe.ts",
+      "source_location": "listenForSwipe.ts:23",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "void",
+        "params": [
+          "element: Element",
+          "leftCallback: FunctionWithArgs",
+          "rightCallback: FunctionWithArgs",
+          "minDistance?: number = 50"
+        ],
+        "listensTo": ["touchstart", "touchmove", "touchend", "mousedown", "mouseup"],
+        "tier": 3
+      }
+    },
+    {
+      "id": "listen_for_swipe_reset_touch",
+      "label": "resetTouch (inner)",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/listenForSwipe.ts",
+      "source_location": "listenForSwipe.ts:34",
+      "confidence": "EXTRACTED",
+      "properties": { "exported": false, "inner": true }
+    },
+    {
+      "id": "listen_for_swipe_module",
+      "label": "listenForSwipe Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/listenForSwipe.ts",
+      "source_location": "listenForSwipe.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 3 }
+    },
+    {
+      "id": "parse_json_to_form_data_fn",
+      "label": "parseJsonToFormData",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/parseJsonToFormData.ts",
+      "source_location": "parseJsonToFormData.ts:12",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "FormData",
+        "params": ["json: { [key: string]: unknown }"],
+        "tier": 4
+      }
+    },
+    {
+      "id": "parse_json_to_form_data_module",
+      "label": "parseJsonToFormData Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/parseJsonToFormData.ts",
+      "source_location": "parseJsonToFormData.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 4 }
+    },
+    {
+      "id": "prevent_scroll_fn",
+      "label": "preventScroll",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/preventScroll.ts",
+      "source_location": "preventScroll.ts:13",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "void",
+        "injects": "#JFCRO-no-scroll style element",
+        "adds_class": "JFCRO_no-scroll on body and html",
+        "tier": 3
+      }
+    },
+    {
+      "id": "prevent_scroll_module",
+      "label": "preventScroll Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/preventScroll.ts",
+      "source_location": "preventScroll.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 3 }
+    },
+    {
+      "id": "prevent_scroll_is_iphone_import",
+      "label": "isIphone (imported in preventScroll)",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/preventScroll.ts",
+      "source_location": "preventScroll.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "importedFrom": "./isIphone" }
+    },
+    {
+      "id": "push_to_dl_window_data_layer",
+      "label": "window.dataLayer",
+      "type": "variable",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/pushToDL.ts",
+      "source_location": "pushToDL.ts:3",
+      "confidence": "EXTRACTED",
+      "properties": { "global": true, "declared_via": "declare global interface Window" }
+    },
+    {
+      "id": "push_to_dl_fn",
+      "label": "pushToDL",
+      "type": "function",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/pushToDL.ts",
+      "source_location": "pushToDL.ts:19",
+      "confidence": "EXTRACTED",
+      "properties": {
+        "exported": true,
+        "returns": "void",
+        "params": ["event?: string = 'Optimize-View'", "action: string", "label: string"],
+        "tier": 2
+      }
+    },
+    {
+      "id": "push_to_dl_module",
+      "label": "pushToDL Module",
+      "type": "module",
+      "source_file": "/Users/samrenfrew/Documents/Work/dx-lib/src/modules/pushToDL.ts",
+      "source_location": "pushToDL.ts:1",
+      "confidence": "EXTRACTED",
+      "properties": { "tier": 2 }
+    }
+  ],
+  "edges": [
+    {
+      "source": "type_guards_module",
+      "target": "type_guards_is_reg_exp",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "type_guards_module",
+      "target": "type_guards_is_string_array",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "type_guards_module",
+      "target": "type_guards_is_string",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "type_guards_module",
+      "target": "type_guards_is_number",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "type_guards_module",
+      "target": "type_guards_is_function",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "type_guards_module",
+      "target": "type_guards_is_object",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "type_guards_module",
+      "target": "type_guards_is_node_array",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "type_guards_module",
+      "target": "type_guards_is_node_list",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "type_guards_module",
+      "target": "type_guards_is_node_as_element",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "validate_selectors_module",
+      "target": "validate_selectors_validate_selectors",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "validate_selectors_module",
+      "target": "validate_selectors_is_selector_valid",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "validate_selectors_validate_selectors",
+      "target": "validate_selectors_is_selector_valid",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "properties": { "via": "bind(this)" }
+    },
+    {
+      "source": "create_element_module",
+      "target": "create_element_params_interface",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "create_element_module",
+      "target": "create_element_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "create_element_fn",
+      "target": "create_element_params_interface",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "properties": { "as": "params type" }
+    },
+    {
+      "source": "find_parents_module",
+      "target": "find_parents_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "find_parents_fn",
+      "target": "find_parents_fn",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "properties": { "note": "recursive self-call" }
+    },
+    {
+      "source": "generate_id_module",
+      "target": "generate_id_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "get_element_by_text_module",
+      "target": "get_element_by_text_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "get_element_by_xpath_module",
+      "target": "get_element_by_xpath_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "get_element_from_html_string_module",
+      "target": "get_element_from_html_string_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "get_locale_from_url_module",
+      "target": "get_locale_from_url_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "get_time_to_module",
+      "target": "get_time_to_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "get_time_to_module",
+      "target": "get_time_to_parsed_time_object",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "get_time_to_fn",
+      "target": "get_time_to_parsed_time_object",
+      "relation": "produces",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "insert_html_module",
+      "target": "insert_html_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "insert_style_module",
+      "target": "insert_style_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "insert_style_module",
+      "target": "wait_for_fn_ref",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": { "from": "./waitFor" }
+    },
+    {
+      "source": "insert_style_fn",
+      "target": "wait_for_fn_ref",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "properties": { "reason": "ensure document.body exists before insertion" }
+    },
+    {
+      "source": "is_in_dom_module",
+      "target": "is_in_dom_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "is_iphone_module",
+      "target": "is_iphone_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "is_mobile_module",
+      "target": "is_mobile_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "is_old_safari_module",
+      "target": "is_old_safari_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "is_touch_device_module",
+      "target": "is_touch_device_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "is_wto_preview_module",
+      "target": "is_wto_preview_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "listen_for_swipe_module",
+      "target": "listen_for_swipe_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "listen_for_swipe_module",
+      "target": "listen_for_swipe_function_with_args",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "listen_for_swipe_fn",
+      "target": "listen_for_swipe_function_with_args",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "properties": { "as": "callback param types" }
+    },
+    {
+      "source": "listen_for_swipe_fn",
+      "target": "listen_for_swipe_reset_touch",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "parse_json_to_form_data_module",
+      "target": "parse_json_to_form_data_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "prevent_scroll_module",
+      "target": "prevent_scroll_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "prevent_scroll_module",
+      "target": "prevent_scroll_is_iphone_import",
+      "relation": "imports",
+      "confidence": "EXTRACTED",
+      "properties": { "from": "./isIphone" }
+    },
+    {
+      "source": "prevent_scroll_fn",
+      "target": "prevent_scroll_is_iphone_import",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "properties": { "reason": "apply iOS-specific scroll-lock styles" }
+    },
+    {
+      "source": "prevent_scroll_is_iphone_import",
+      "target": "is_iphone_fn",
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "properties": { "note": "same function, cross-module reference" }
+    },
+    {
+      "source": "push_to_dl_module",
+      "target": "push_to_dl_fn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "push_to_dl_module",
+      "target": "push_to_dl_window_data_layer",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "properties": {}
+    },
+    {
+      "source": "push_to_dl_fn",
+      "target": "push_to_dl_window_data_layer",
+      "relation": "produces",
+      "confidence": "EXTRACTED",
+      "properties": { "action": "pushes event object to window.dataLayer array" }
+    }
+  ],
+  "hyperedges": [],
+  "input_tokens": 4800,
+  "output_tokens": 1800
+}
