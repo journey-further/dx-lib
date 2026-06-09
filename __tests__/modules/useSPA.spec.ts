@@ -3,10 +3,12 @@ import { useSPA } from "../../src";
 import { JfSPAOptions } from "../../src/modules/useSPA";
 import { JfLib } from "../../src/globals";
 
-// Mock Error constructor
-const originalError = Error;
+// Mock Error constructor (must use `function` — arrow fns are not constructable in Vitest 4)
+const originalError = globalThis.Error;
 global.Error = Object.assign(
-  vi.fn((message?: string) => new originalError(message)),
+  vi.fn(function (message?: string, options?: ErrorOptions) {
+    return new originalError(message, options);
+  }),
   { captureStackTrace: vi.fn(), stackTraceLimit: 10 }
 ) as unknown as typeof Error;
 
@@ -432,6 +434,322 @@ describe("useSPA", () => {
       });
 
       expect(defaultOptions.apply).toHaveBeenCalled();
+    });
+  });
+
+  describe("option validation errors", () => {
+    it("throws when location is missing", async () => {
+      const spa = useSPA(TEST_ID);
+      await expect(spa.init({ apply: vi.fn() } as any)).rejects.toThrow();
+    });
+
+    it("throws when apply is not a function", async () => {
+      const spa = useSPA(TEST_ID);
+      await expect(spa.init({ apply: "not-a-function" as any, location: "/test" })).rejects.toThrow();
+    });
+
+    it("throws when location is an invalid type", async () => {
+      const spa = useSPA(TEST_ID);
+      await expect(spa.init({ apply: vi.fn(), location: 123 as any })).rejects.toThrow();
+    });
+
+    it("throws when location object is missing match", async () => {
+      const spa = useSPA(TEST_ID);
+      await expect(spa.init({ apply: vi.fn(), location: { match: "" } as any })).rejects.toThrow();
+    });
+
+    it("throws when location.type is invalid", async () => {
+      const spa = useSPA(TEST_ID);
+      await expect(
+        spa.init({ apply: vi.fn(), location: { match: "/test", type: "invalid" as any } })
+      ).rejects.toThrow();
+    });
+
+    it("throws when location.condition is not a function", async () => {
+      const spa = useSPA(TEST_ID);
+      await expect(
+        spa.init({ apply: vi.fn(), location: { match: "/test", condition: "bad" as any } })
+      ).rejects.toThrow();
+    });
+
+    it("throws when location.timeout is not a number", async () => {
+      const spa = useSPA(TEST_ID);
+      await expect(
+        spa.init({ apply: vi.fn(), location: { match: "/test", timeout: "bad" as any } })
+      ).rejects.toThrow();
+    });
+
+    it("throws when reset is not a function", async () => {
+      const spa = useSPA(TEST_ID);
+      await expect(spa.init({ ...defaultOptions, reset: "not-a-function" as any })).rejects.toThrow();
+    });
+
+    it("throws when watchForRemoval is not a string or array", async () => {
+      const spa = useSPA(TEST_ID);
+      await expect(spa.init({ ...defaultOptions, watchForRemoval: 123 as any })).rejects.toThrow();
+    });
+
+    it("throws when removeOnPageChange is not a string or array", async () => {
+      const spa = useSPA(TEST_ID);
+      await expect(spa.init({ ...defaultOptions, removeOnPageChange: 123 as any })).rejects.toThrow();
+    });
+
+    it("throws when removedNode is not a string", async () => {
+      const spa = useSPA(TEST_ID);
+      await expect(spa.init({ ...defaultOptions, removedNode: 123 as any })).rejects.toThrow();
+    });
+
+    it("throws when screen has neither minWidth nor maxWidth", async () => {
+      const spa = useSPA(TEST_ID);
+      await expect(spa.init({ ...defaultOptions, screen: {} as any })).rejects.toThrow();
+    });
+  });
+
+  describe("location types", () => {
+    it("matches one of multiple string paths in an array", async () => {
+      const apply = vi.fn();
+      const spa = useSPA(TEST_ID);
+      await spa.init({ apply, location: ["/other", "/test"] });
+      expect(apply).toHaveBeenCalled();
+    });
+
+    it("does not apply when none of array paths match", async () => {
+      const apply = vi.fn();
+      const spa = useSPA(TEST_ID);
+      await spa.init({ apply, location: ["/no", "/match"] });
+      expect(apply).not.toHaveBeenCalled();
+    });
+
+    it("matches using location object with custom type", async () => {
+      (window.location as any).hostname = "localhost";
+      const apply = vi.fn();
+      const spa = useSPA(TEST_ID);
+      await spa.init({ apply, location: { match: "localhost", type: "hostname" } });
+      expect(apply).toHaveBeenCalled();
+    });
+
+    it("matches using location object with array match", async () => {
+      const apply = vi.fn();
+      const spa = useSPA(TEST_ID);
+      await spa.init({ apply, location: { match: ["/other", "/test"] } });
+      expect(apply).toHaveBeenCalled();
+    });
+
+    it("applies when location condition is satisfied", async () => {
+      const apply = vi.fn();
+      const spa = useSPA(TEST_ID);
+      await spa.init({
+        apply,
+        location: { match: "/test", condition: () => true, timeout: 200 },
+      });
+      expect(apply).toHaveBeenCalled();
+    });
+
+    it("does not apply when location condition times out", async () => {
+      vi.useFakeTimers();
+      const apply = vi.fn();
+      const spa = useSPA(TEST_ID);
+      const initPromise = spa.init({
+        apply,
+        location: { match: "/test", condition: () => false, timeout: 100 },
+      });
+      await vi.advanceTimersByTimeAsync(300);
+      await initPromise;
+      vi.useRealTimers();
+      expect(apply).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("event-driven re-initialization", () => {
+    it("re-applies when page change event is dispatched on a matching page", async () => {
+      const apply = vi.fn();
+      const spa = useSPA(TEST_ID);
+      await spa.init({ ...defaultOptions, apply });
+      apply.mockClear();
+
+      window.dispatchEvent(new Event("jf-pagechange-1.0"));
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(apply).toHaveBeenCalled();
+    });
+
+    it("calls reset when page change event is dispatched on a non-matching page", async () => {
+      const reset = vi.fn();
+      const spa = useSPA(TEST_ID);
+      await spa.init({ ...defaultOptions, reset });
+
+      window.location.pathname = "/no-match";
+      window.dispatchEvent(new Event("jf-pagechange-1.0"));
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(reset).toHaveBeenCalled();
+    });
+
+    it("re-applies when reInit event is dispatched", async () => {
+      const apply = vi.fn();
+      const spa = useSPA(TEST_ID);
+      await spa.init({ ...defaultOptions, apply });
+      apply.mockClear();
+
+      window.dispatchEvent(new Event("jf-reinit-1.0"));
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(apply).toHaveBeenCalled();
+    });
+
+    it("removes string selector elements on page change", async () => {
+      const el = document.createElement("div");
+      el.className = "jf-remove-me";
+      document.body.appendChild(el);
+
+      const spa = useSPA(TEST_ID);
+      await spa.init({ ...defaultOptions, removeOnPageChange: ".jf-remove-me" });
+
+      window.dispatchEvent(new Event("jf-pagechange-1.0"));
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(document.querySelector(".jf-remove-me")).toBeNull();
+    });
+
+    it("removes array selector elements on page change", async () => {
+      const el1 = document.createElement("div");
+      el1.className = "jf-remove-a";
+      const el2 = document.createElement("div");
+      el2.className = "jf-remove-b";
+      document.body.appendChild(el1);
+      document.body.appendChild(el2);
+
+      const spa = useSPA(TEST_ID);
+      await spa.init({ ...defaultOptions, removeOnPageChange: [".jf-remove-a", ".jf-remove-b"] });
+
+      window.dispatchEvent(new Event("jf-pagechange-1.0"));
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(document.querySelector(".jf-remove-a")).toBeNull();
+      expect(document.querySelector(".jf-remove-b")).toBeNull();
+    });
+  });
+
+  describe("DOM features", () => {
+    it("inserts a stylesheet when style option is provided", async () => {
+      const spa = useSPA(TEST_ID);
+      await spa.init({ ...defaultOptions, style: ".test { color: red; }" });
+      expect(document.querySelector(`#${TEST_ID}--style`)).not.toBeNull();
+    });
+
+    it("removes the stylesheet on reset", async () => {
+      const spa = useSPA(TEST_ID);
+      await spa.init({ ...defaultOptions, style: ".test { color: red; }" });
+      await spa.reset();
+      expect(document.querySelector(`#${TEST_ID}--style`)).toBeNull();
+    });
+
+    it("calls reset before applying when alwaysReset is true", async () => {
+      const order: string[] = [];
+      const apply = vi.fn(() => order.push("apply"));
+      const reset = vi.fn(() => order.push("reset"));
+      const spa = useSPA(TEST_ID);
+      await spa.init({ ...defaultOptions, apply, reset, alwaysReset: true });
+      expect(order).toEqual(["reset", "apply"]);
+    });
+
+    it("does not run a second instance with the same ID", async () => {
+      const apply = vi.fn();
+      const spa1 = useSPA(TEST_ID);
+      await spa1.init({ ...defaultOptions, apply });
+      apply.mockClear();
+
+      const spa2 = useSPA(TEST_ID);
+      await spa2.init({ ...defaultOptions, apply });
+      expect(apply).not.toHaveBeenCalled();
+    });
+
+    it("accepts a custom removedNode option", async () => {
+      const apply = vi.fn();
+      const spa = useSPA(TEST_ID);
+      await spa.init({ ...defaultOptions, apply, removedNode: "section" });
+      expect(apply).toHaveBeenCalled();
+    });
+
+    it("should clean up elementRemoved callbacks with test ID prefix on reset", async () => {
+      window.jfLib.elementRemoved = {
+        "1.0": {
+          observer: {
+            details: { observer: new MutationObserver(() => {}), isObserving: false, ticketId: "er-1.0" },
+            observe: vi.fn(),
+            disconnect: vi.fn(),
+          },
+          callbacks: [
+            { id: `${TEST_ID}--my-element`, callback: vi.fn() },
+            { id: "OTHER_TEST--some-element", callback: vi.fn() },
+          ],
+        },
+      };
+      const spa = useSPA(TEST_ID);
+      await spa.init(defaultOptions);
+      await spa.reset();
+      expect(window.jfLib.elementRemoved["1.0"].callbacks).toHaveLength(1);
+      expect(window.jfLib.elementRemoved["1.0"].callbacks[0].id).toBe("OTHER_TEST--some-element");
+    });
+
+    it("should clean up elementUpdated callbacks with test ID prefix on reset", async () => {
+      window.jfLib.elementUpdated = {
+        "1.0": {
+          observer: {
+            details: { observer: new MutationObserver(() => {}), isObserving: false, ticketId: "eu-1.0" },
+            observe: vi.fn(),
+            disconnect: vi.fn(),
+          },
+          callbacks: [
+            { id: `${TEST_ID}--my-element`, callback: vi.fn() },
+            { id: "OTHER_TEST--some-element", callback: vi.fn() },
+          ],
+        },
+      };
+      const spa = useSPA(TEST_ID);
+      await spa.init(defaultOptions);
+      await spa.reset();
+      expect(window.jfLib.elementUpdated["1.0"].callbacks).toHaveLength(1);
+      expect(window.jfLib.elementUpdated["1.0"].callbacks[0].id).toBe("OTHER_TEST--some-element");
+    });
+  });
+
+  describe("watchForRemoval", () => {
+    beforeEach(() => {
+      window.jfObservers?.forEach((obs) => obs.observer?.disconnect());
+      window.jfObservers = [];
+    });
+
+    it("re-applies when a watched element (string) is removed from the DOM", async () => {
+      const apply = vi.fn();
+      const div = document.createElement("div");
+      div.className = "watched";
+      document.body.appendChild(div);
+
+      const spa = useSPA(TEST_ID);
+      await spa.init({ ...defaultOptions, apply, watchForRemoval: ".watched" });
+      apply.mockClear();
+
+      document.body.removeChild(div);
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      expect(apply).toHaveBeenCalled();
+    });
+
+    it("re-applies when a watched element (array) is removed from the DOM", async () => {
+      const apply = vi.fn();
+      const div = document.createElement("div");
+      div.className = "watched";
+      document.body.appendChild(div);
+
+      const spa = useSPA(TEST_ID);
+      await spa.init({ ...defaultOptions, apply, watchForRemoval: [".watched", ".other"] });
+      apply.mockClear();
+
+      document.body.removeChild(div);
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      expect(apply).toHaveBeenCalled();
     });
   });
 });

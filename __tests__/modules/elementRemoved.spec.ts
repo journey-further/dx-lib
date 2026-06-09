@@ -134,4 +134,23 @@ describe("elementRemoved", () => {
     await new Promise((resolve) => setTimeout(resolve, 100));
     expect(callback).toHaveBeenCalledWith(expect.any(Element));
   });
+
+  it("does not re-bind when called with a duplicate id", () => {
+    const callback = vi.fn();
+    elementRemoved(".test", callback, "test-id");
+    expect(() => elementRemoved(".test", callback, "test-id")).not.toThrow();
+  });
+
+  it("does not fire when an unrelated element is removed", async () => {
+    const callback = vi.fn();
+    const div = document.createElement("div");
+    div.className = "unrelated";
+    document.body.appendChild(div);
+
+    elementRemoved(".test", callback, "test-id");
+    document.body.removeChild(div);
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).not.toHaveBeenCalled();
+  });
 });

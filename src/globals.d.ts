@@ -1,4 +1,4 @@
-import { RBTest, JfObserver, JfObserverObject, JfReadyObject, JfRemovedObject, JfSPA } from "./modules";
+import { JfObserver, JfObserverObject, JfReadyObject, JfRemovedObject, JfSPA } from "./modules";
 import { JfUpdatedObject } from "./modules/elementUpdated";
 
 /**
@@ -43,13 +43,19 @@ export interface JfLib {
   /** Current page path */
   pagePath?: string;
   /** Active experiments */
-  experiments?: JfSPAState[];
+  experiments?: JfSPA[];
   /** Custom event buses, keyed by version then experiment ID */
   customEvents?: {
     [version: string]: {
       bus: EventTarget;
     };
   };
+}
+
+/** Minimal shape retained for backward compatibility with window.jfTests */
+export interface JfLegacyTest {
+  id: string;
+  isRunning: boolean;
 }
 
 /**
@@ -59,7 +65,7 @@ export interface JfLib {
  */
 export interface JfTests {
   /** Array of active tests */
-  tests: RBTest[];
+  tests: JfLegacyTest[];
   /** Observer for test reapplication */
   reapplyListener?: JfObserver;
   /** Observer for page changes */

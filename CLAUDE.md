@@ -10,7 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 yarn build          # compile to dist/ (runs tsc + tsc-alias)
-yarn test           # run all tests with jest
+yarn test           # run all tests with vitest
 yarn test --coverage  # run tests with coverage report (aim for ≥90% statements/branches)
 yarn lint           # eslint with auto-fix
 yarn build:docs     # regenerate TypeDoc documentation
@@ -44,19 +44,19 @@ Each utility lives in its own file. The filename must exactly match the exported
 
 ### Key modules to know
 
-- **`useSPA`** — the primary framework for SPA-aware A/B tests. Replaces the deprecated `RBTest` class.
+- **`useSPA`** — the primary framework for SPA-aware A/B tests.
 - **`customEvents`** — a tiny in-process event bus (`emit`/`on`) for decoupling modules without cross-imports.
 - **`pushToDL`** — pushes events into `window.dataLayer` for analytics.
-- **`useMutationObserver`** — named, singleton-style MutationObserver wrapper used internally by `useSPA` and `RBTest`.
+- **`useMutationObserver`** — named, singleton-style MutationObserver wrapper used internally by `useSPA`.
 - **`waitForElement` / `elementReady`** — poll/observe the DOM for elements before acting.
 
 ### Build
 
-TypeScript is compiled with `tsc` (using `tsconfig.prod.json`) and path aliases are resolved by `tsc-alias`. The output lands in `dist/` with declaration files under `dist/declarations/`. Tests use `@swc/jest` for fast transpilation in a `jsdom` environment.
+TypeScript is compiled with `tsc` (using `tsconfig.prod.json`) and path aliases are resolved by `tsc-alias`. The output lands in `dist/` with declaration files under `dist/declarations/`. Tests run in a `jsdom` environment via vitest with `@vitest/coverage-v8` for coverage reports.
 
 ### Releases
 
-Releases are automated via `semantic-release` using the ESLint conventional commit format. Commit messages drive version bumps — use conventional commit prefixes (`feat:`, `fix:`, etc.).
+Releases are automated via the `cycjimmy/semantic-release-action` GitHub Action (`.github/workflows/release.yml`) using the Angular conventional commit format. Commit messages drive version bumps — use conventional commit prefixes (`feat:`, `fix:`, etc.). Runs automatically on push to `main` or `staging`.
 
 ## graphify
 

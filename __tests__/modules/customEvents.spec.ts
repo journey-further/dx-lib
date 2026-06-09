@@ -23,7 +23,7 @@ describe("customEvents", () => {
   describe("emit and on", () => {
     it("delivers detail to handler", () => {
       const { emit, on } = customEvents(ID_A);
-      const handler = jest.fn();
+      const handler = vi.fn();
       on("test:event", handler);
       emit("test:event", { foo: "bar" });
       expect(handler).toHaveBeenCalledTimes(1);
@@ -32,7 +32,7 @@ describe("customEvents", () => {
 
     it("defaults detail to empty object when not provided", () => {
       const { emit, on } = customEvents(ID_A);
-      const handler = jest.fn();
+      const handler = vi.fn();
       on("test:event", handler);
       emit("test:event");
       expect(handler).toHaveBeenCalledWith({});
@@ -41,7 +41,7 @@ describe("customEvents", () => {
     it("does not deliver events to a different experiment's listener", () => {
       const a = customEvents(ID_A);
       const b = customEvents(ID_B);
-      const handlerB = jest.fn();
+      const handlerB = vi.fn();
       b.on("test:event", handlerB);
       a.emit("test:event", { from: "A" });
       expect(handlerB).not.toHaveBeenCalled();
@@ -51,7 +51,7 @@ describe("customEvents", () => {
   describe("unsubscribe", () => {
     it("stops receiving events after calling the returned function", () => {
       const { emit, on } = customEvents(ID_A);
-      const handler = jest.fn();
+      const handler = vi.fn();
       const unsubscribe = on("test:event", handler);
       unsubscribe();
       emit("test:event", { foo: "bar" });
@@ -63,7 +63,7 @@ describe("customEvents", () => {
     it("allows listening to another experiment's events via fromId", () => {
       const a = customEvents(ID_A);
       const b = customEvents(ID_B);
-      const handler = jest.fn();
+      const handler = vi.fn();
       // B listens to A's events
       b.on("hotel:selected", handler, ID_A);
       a.emit("hotel:selected", { hotelId: "latimer-estate" });
@@ -73,7 +73,7 @@ describe("customEvents", () => {
     it("does not receive its own events when listening cross-experiment", () => {
       const a = customEvents(ID_A);
       const b = customEvents(ID_B);
-      const handler = jest.fn();
+      const handler = vi.fn();
       b.on("hotel:selected", handler, ID_A);
       // B emits — should NOT trigger the cross-listener pointed at A
       b.emit("hotel:selected", { hotelId: "should-not-arrive" });

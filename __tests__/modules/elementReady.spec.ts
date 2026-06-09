@@ -203,4 +203,47 @@ describe("elementReady", () => {
     expect(callback).toHaveBeenCalledTimes(1);
     expect(callback).toHaveBeenCalledWith(div);
   });
+
+  it("destroy clears jfReady from marked elements", async () => {
+    document.body.innerHTML = '<div class="test"></div>';
+    const callback = vi.fn();
+    const { destroy } = elementReady(".test", callback, "test-id");
+
+    const el = document.querySelector(".test") as any;
+    expect(el.jfReady).toContain("test-id");
+
+    await destroy(0);
+
+    expect(el.jfReady).toBeUndefined();
+  });
+
+  it("destroy removes only the matching id from jfReady when other ids are still registered", async () => {
+    document.body.innerHTML = '<div class="test"></div>';
+    const cb1 = vi.fn();
+    const cb2 = vi.fn();
+
+    const { destroy } = elementReady(".test", cb1, "id-1");
+    elementReady(".test", cb2, "id-2");
+
+    const el = document.querySelector(".test") as any;
+    expect(el.jfReady).toContain("id-1");
+    expect(el.jfReady).toContain("id-2");
+
+    await destroy(0);
+
+    expect(el.jfReady).not.toContain("id-1");
+    expect(el.jfReady).toContain("id-2");
+    expect(el.jfReady).not.toBeUndefined();
+  });
+
+  it("does not re-bind when called with a duplicate id", () => {
+    const callback = vi.fn();
+    document.body.innerHTML = '<div class="test"></div>';
+
+    elementReady(".test", callback, "test-id");
+    expect(callback).toHaveBeenCalledTimes(1);
+
+    elementReady(".test", callback, "test-id");
+    expect(callback).toHaveBeenCalledTimes(1);
+  });
 });

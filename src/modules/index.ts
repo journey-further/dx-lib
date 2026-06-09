@@ -29,7 +29,6 @@ export * from "./parseJsonToFormData";
 export * from "./preventScroll";
 export * from "./pushToDL";
 export * from "./queryAll";
-export * from "./rbTest";
 export * from "./redirect";
 export * from "./replaceHTML";
 export * from "./useEventListener";

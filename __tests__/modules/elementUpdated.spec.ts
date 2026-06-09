@@ -198,4 +198,47 @@ describe("elementUpdated", () => {
     await new Promise((resolve) => setTimeout(resolve, 100));
     expect(callback).toHaveBeenCalledTimes(3);
   });
+
+  it("does not re-bind when called with a duplicate id", () => {
+    const callback = vi.fn();
+    elementUpdated(".test", callback, "test-id", { attributes: true });
+    expect(() => elementUpdated(".test", callback, "test-id", { attributes: true })).not.toThrow();
+  });
+
+  it("validates missing options parameter", () => {
+    expect(() => elementUpdated(".test", vi.fn(), "test-id", null as any)).toThrow("elementUpdated setup failed");
+    expect(() => elementUpdated(".test", vi.fn(), "test-id", "not-object" as any)).toThrow("elementUpdated setup failed");
+  });
+
+  it("ignores attribute mutations when attributes option is not set", async () => {
+    const callback = vi.fn();
+    const div = document.createElement("div");
+    div.className = "test";
+    document.body.appendChild(div);
+
+    elementUpdated(".test", callback, "test-id", { textContent: true });
+    div.setAttribute("data-ignored", "value");
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).not.toHaveBeenCalled();
+  });
+
+  it("ignores characterData mutations when characterData option is not set", async () => {
+    const callback = vi.fn();
+    const div = document.createElement("div");
+    div.className = "test";
+    // Pre-populate the text node so no childList mutation fires when the observer is active
+    const text = document.createTextNode("initial");
+    div.appendChild(text);
+    document.body.appendChild(div);
+
+    // Only attributes enabled — characterData mutations must be ignored
+    elementUpdated(".test", callback, "test-id", { attributes: true });
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    text.data = "changed";
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).not.toHaveBeenCalled();
+  });
 });
