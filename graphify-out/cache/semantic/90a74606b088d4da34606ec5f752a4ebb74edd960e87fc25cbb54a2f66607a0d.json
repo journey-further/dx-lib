@@ -1,0 +1,1 @@
+{"nodes": [{"id": "module_doc_ready", "label": "Module: docReady", "type": "module", "source_file": "docs/modules/modules_docReady.html", "source_location": "modules/docReady.ts:1", "confidence": "EXTRACTED", "properties": {"exports": ["docReady (function)"], "tier": "3", "description": "Run a callback when the document is ready"}}], "edges": [], "hyperedges": []}

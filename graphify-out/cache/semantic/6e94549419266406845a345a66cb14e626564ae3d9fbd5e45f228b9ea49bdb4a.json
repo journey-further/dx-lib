@@ -1,0 +1,1 @@
+{"nodes": [{"id": "search_js_asset", "label": "search.js (TypeDoc Search Asset)", "type": "document", "source_file": "docs/assets/search.js", "source_location": "search.js:1", "confidence": "EXTRACTED", "properties": {"description": "Base64-encoded search index for TypeDoc documentation site", "format": "data URI octet stream"}}], "edges": [], "hyperedges": []}
