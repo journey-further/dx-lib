@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/modules/getElementFromHtmlString.ts</title>
+    <title>Code coverage report for src/helpers/consoleLog.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/modules</a> getElementFromHtmlString.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/helpers</a> consoleLog.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/2</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
@@ -79,7 +79,22 @@
 <a name='L14'></a><a href='#L14'>14</a>
 <a name='L15'></a><a href='#L15'>15</a>
 <a name='L16'></a><a href='#L16'>16</a>
-<a name='L17'></a><a href='#L17'>17</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -90,26 +105,56 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">34x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">146x</span>
+<span class="cline-any cline-yes">146x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">146x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">140x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
- * Extracts an HTML element from a provided HTML string by matching a CSS selector.
+ * Log level types for internal logging
  *
- * This function parses the given HTML string into a DOM structure and searches for the first element that matches the
- * specified CSS selector.
- *
- * @param {string} html - The HTML string to be parsed.
- * @param {string} selector - The CSS selector to match the desired element.
- * @returns {HTMLElement | null} The matched HTML element, or `null` if no match is found.
+ * @typedef {"info" | "detail" | "success" | "warn" | "error"} LogLevel
  */
+export type LogLevel = "info" | "detail" | "success" | "warn" | "error" | "none";
 &nbsp;
-export const getElementFromHtmlString = (html: string, selector: string): HTMLElement | null =&gt; {
-  const parser = new DOMParser();
-  const dom = parser.parseFromString(html, "text/html");
-  return dom.querySelector(selector) || <span class="branch-1 cbranch-no" title="branch not covered" >null;</span>
+/**
+ * Logs messages to the console with consistent formatting and color coding
+ *
+ * @param {string} message - The message to log
+ * @param {LogLevel} level - The log level (info, detail, success, warn, error)
+ * @param {string} id - The id of the function that the message relates to
+ * @param {unknown} [data] - Optional data to log alongside the message
+ */
+export const log = (message: string, level: LogLevel = <span class="branch-0 cbranch-no" title="branch not covered" >"info",</span> id: string = <span class="branch-0 cbranch-no" title="branch not covered" >"",</span> data?: unknown) =&gt; {
+  const styles = {
+    info: "background: #61afef; color: #fff; padding: 2px 5px;",
+    detail: "background: #c162de; color: #fff; padding: 2px 5px;",
+    success: "background: #8cc265; color: #fff; padding: 2px 5px;",
+    warn: "background: #f0a45d; color: #fff; padding: 2px 5px;",
+    error: "background: #ff616e; color: #fff; padding: 2px 5px;",
+    none: "background: #fff; color: #fff; padding: 2px 5px;",
+  };
+&nbsp;
+  if (!!data) {
+    console.log(`${id} %c${message}`, styles[level], data);
+  } else {
+    console.log(`${id} %c${message}`, styles[level]);
+  }
 };
 &nbsp;</pre></td></tr></table></pre>
 

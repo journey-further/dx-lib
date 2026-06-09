@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/modules/getElementFromHtmlString.ts</title>
+    <title>Code coverage report for src/modules/isWtoPreview.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/modules</a> getElementFromHtmlString.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/modules</a> isWtoPreview.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>6/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
@@ -90,26 +90,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">34x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
- * Extracts an HTML element from a provided HTML string by matching a CSS selector.
+ * Checks if the current session is a WTO (Webtrends Optimization) preview environment.
  *
- * This function parses the given HTML string into a DOM structure and searches for the first element that matches the
- * specified CSS selector.
+ * This function determines if the session is in a preview mode by:
  *
- * @param {string} html - The HTML string to be parsed.
- * @param {string} selector - The CSS selector to match the desired element.
- * @returns {HTMLElement | null} The matched HTML element, or `null` if no match is found.
+ * - Checking the URL query string for `_wt.pid` with a valid value.
+ * - Checking the cookies for `_wt.bdebug=true`.
+ *
+ * @returns {boolean} `true` if the session is in WTO preview mode, otherwise `false`.
  */
 &nbsp;
-export const getElementFromHtmlString = (html: string, selector: string): HTMLElement | null =&gt; {
-  const parser = new DOMParser();
-  const dom = parser.parseFromString(html, "text/html");
-  return dom.querySelector(selector) || <span class="branch-1 cbranch-no" title="branch not covered" >null;</span>
+export const isWtoPreview = () =&gt; {
+  if (/_wt\.pid=[a-zA-Z0-9]+/gi.test(window.location.search)) return true;
+  if (/_wt\.bdebug=true/gi.test(document.cookie)) return true;
+<span class="cstat-no" title="statement not covered" >  return false;</span>
 };
 &nbsp;</pre></td></tr></table></pre>
 

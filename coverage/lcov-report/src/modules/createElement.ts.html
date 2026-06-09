@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -114,7 +114,22 @@
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -130,7 +145,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">27x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -165,21 +195,36 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export interface CreateElementParams {
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
+ * Represents the parameters for creating an HTML element with attributes.
+ *
+ * This interface defines a key-value mapping where:
+ *
+ * - Keys represent attribute names (e.g., "id", "class", "data-attribute").
+ * - Values represent the corresponding attribute values as strings.
+ */
+export interface CreateElementParams {
   [key: string]: string;
 }
 &nbsp;
 /**
- * Function to create a new HTML Element according to the provided string. If no elem parameter is provided it will
- * default to a div container. If the elem parameter is provided but is not of the type string returns null. If the
- * params parameter is not of the true object type it will be ignored If the innerHTML object key is provided the newly
- * created element's innerHTML will be set If a param key is provided with an underscore it will be converted to a
- * hyphen
+ * Creates a new HTML element of the specified type with optional attributes and content.
  *
- * @param elem The HTML node type, defaults to 'div'
- * @param params Optional object of attributes to set on the element. innerHTML and textContent will both invoke their
- *   respective methods
- * @returns Newly created HTML node
+ * This function generates an HTML element based on the provided tag name (e.g., "div", "span"). If no tag name is
+ * supplied, it defaults to a `&lt;div&gt;` element. Attributes and content can be applied via an optional `params` object.
+ *
+ * - If the `params` object includes an `innerHTML` key, its value will set the element's HTML content.
+ * - If the `params` object includes a `textContent` key, its value will set the element's text content.
+ * - Any additional object keys can also be set here - e.g. `class` or `id` to define an elements class/id, or `href` to
+ *   define a link on an `a` tag
+ * - Any attribute keys in `params` containing underscores (`_`) will be converted to hyphens (`-`).
+ *
+ * Invalid input for the `elem` parameter (e.g., non-string types or invalid tag names) will throw an error. If `params`
+ * is not a valid object, it will be ignored.
+ *
+ * @param {string} [elem="div"] - The type of HTML element to create (e.g., "div", "span"). Default is `"div"`
+ * @param {object} [params] - Optional attributes and content for the new element.
+ * @returns {HTMLElement} - The newly created HTML element.
  */
 export const createElement = (
   elem: keyof HTMLElementTagNameMap | undefined = "div",
@@ -223,7 +268,7 @@ export const createElement = (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-01-26T14:42:12.533Z
+                at 2026-06-09T13:25:48.763Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/modules/listenForSwipe.ts</title>
+    <title>Code coverage report for src/helpers/typeGuards.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/modules</a> listenForSwipe.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/helpers</a> typeGuards.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.02% </span>
+                <span class="strong">96.66% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>40/43</span>
+                <span class='fraction'>29/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">71.42% </span>
+                <span class="strong">87.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>10/14</span>
+                <span class='fraction'>7/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">91.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>11/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>39/39</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
@@ -137,20 +137,13 @@
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">37x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -158,6 +151,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">37x</span>
+<span class="cline-any cline-yes">30x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -165,6 +160,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">120x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -172,7 +168,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">34x</span>
+<span class="cline-any cline-yes">37x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -180,150 +176,115 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">101x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">37x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">37x</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">37x</span>
+<span class="cline-any cline-yes">31x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">37x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
- * Represents a function that accepts any number of arguments.
+ * Checks if a value is a regular expression
  *
- * This type defines a function signature where:
- *
- * - The function can take any number of arguments of any type.
- * - The function does not return a value (`void`).
+ * @param {unknown} value - The value to check
+ * @returns {boolean} True if the value is a RegExp instance
  */
-export type FunctionWithArgs = (...args: unknown[]) =&gt; void;
+export const isRegExp = (value: unknown): value is RegExp =&gt; value instanceof RegExp;
 &nbsp;
 /**
- * Watches an element for swipe gestures and triggers the appropriate callback based on the swipe direction.
+ * Checks if a value is an array containing only strings
  *
- * This function listens for touch or mouse events on the specified element to detect left or right swipes. It triggers
- * a callback when a swipe exceeding a specified distance (default: 50px) is detected in either direction.
- *
- * @param {Element} element - The element to monitor for swipe gestures.
- * @param {FunctionWithArgs} leftCallback - The function to execute when a left swipe is detected.
- * @param {FunctionWithArgs} rightCallback - The function to execute when a right swipe is detected.
- * @param {number} [minDistance=50] - The minimum swipe distance, in pixels, required to trigger a callback. Default is
- *   `50`
+ * @param {unknown} value - The value to check
+ * @returns {boolean} True if the value is an array where every item is a string
  */
-export const listenForSwipe = (
-  element: Element,
-  leftCallback: FunctionWithArgs,
-  rightCallback: FunctionWithArgs,
-  minDistance = 50
-) =&gt; {
-  let touchStart: number | undefined;
-  let initialTouch: number | undefined;
-  let touchEnd: number | undefined;
-  let touching = false;
+export const isStringArray = (value: unknown): value is string[] =&gt;
+  Array.isArray(value) &amp;&amp; value.every((item) =&gt; typeof item === "string");
 &nbsp;
-  const resetTouch = () =&gt; {
-    touchEnd = undefined;
-    touching = false;
-    initialTouch = undefined;
-    touchStart = undefined;
-  };
+/**
+ * Checks if a value is a string
+ *
+ * @param {unknown} value - The value to check
+ * @returns {boolean} True if the value is a string
+ */
+export const isString = (value: unknown): value is string =&gt; typeof value === "string";
 &nbsp;
-  const handleTouchMove = (e: TouchEvent) =&gt; {
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (e.touches.length &lt; 1) <span class="cstat-no" title="statement not covered" >return;</span>
-    touchEnd = e.touches[0].clientX;
-  };
+/**
+ * Checks if a value is a number
+ *
+ * @param {unknown} value - The value to check
+ * @returns {boolean} True if the value is a number
+ */
+export const isNumber = (value: unknown): value is number =&gt; typeof value === "number";
 &nbsp;
-  const handleTouchEnd = (e: TouchEvent) =&gt; {
-    const diff = initialTouch &amp;&amp; touchEnd ? initialTouch - touchEnd : <span class="branch-1 cbranch-no" title="branch not covered" >0;</span>
+/**
+ * Checks if a value is a function
+ *
+ * @param {unknown} value - The value to check
+ * @returns {boolean} True if the value is a function
+ */
+export const isFunction = (value: unknown): value is Function =&gt; typeof value === "function";
 &nbsp;
-    // the user moved less than specified minDistance (default: 50px) so open nav or link
-    if (diff &lt;= -minDistance) {
-      rightCallback(e);
-    } else if (diff &gt;= minDistance) {
-      leftCallback(e);
-    }
-    resetTouch();
-    element.removeEventListener("touchmove", handleTouchMove);
-    element.removeEventListener("touchend", handleTouchEnd);
-  };
+/**
+ * Checks if a value is an object
+ *
+ * @param {unknown} value - The value to check
+ * @returns {boolean} True if the value is an object
+ */
+export const isObject = (value: unknown): value is object =&gt; typeof value === "object";
 &nbsp;
-  const handleTouchStart = (e: TouchEvent) =&gt; {
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (touching) <span class="cstat-no" title="statement not covered" >return;</span>
-    touching = true;
-    initialTouch = e?.touches[0]?.clientX;
-    element.addEventListener("touchend", handleTouchEnd);
-    element.addEventListener("touchmove", handleTouchMove);
-  };
+/**
+ * Checks if a value is an array of elements
+ *
+ * @param {unknown} value - The value to check
+ * @returns {boolean} True if the value is an array where every item is a string
+ */
+export const isNodeArray = (value: unknown): value is Node[] =&gt;
+  Array.isArray(value) &amp;&amp; value.every((item) =&gt; item instanceof Node);
 &nbsp;
-  const handleMouseUp = (event: MouseEvent) =&gt; {
-    if (touchStart - event.clientX &lt;= -50) {
-      rightCallback(event);
-    } else if (touchStart - event.clientX &gt;= 50) {
-      leftCallback(event);
-    }
-    resetTouch();
-    element.removeEventListener("mouseup", handleMouseUp);
-  };
+/**
+ * Checks if a value is an nodelist of elements
+ *
+ * @param {unknown} value - The value to check
+ * @returns {boolean} True if the value is an array where every item is a string
+ */
+export const isNodeList = (value: unknown): value is NodeListOf&lt;Node&gt; =&gt;
+  value instanceof NodeList &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >[...value].every(<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item instanceof Node);</span></span>
 &nbsp;
-  const handleMouseDown = (event: MouseEvent) =&gt; {
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (touching) <span class="cstat-no" title="statement not covered" >return;</span>
-    touching = true;
-    touchStart = event.clientX;
-    element.addEventListener("mouseup", handleMouseUp, { capture: true });
-  };
-&nbsp;
-  element.addEventListener("mousedown", handleMouseDown);
-  element.addEventListener("touchstart", handleTouchStart);
-};
+/**
+ * Checks if a node is also an element
+ *
+ * @param {Node} value - The value to check
+ * @returns {Element} True if the value is an Element
+ */
+export const isNodeAsElement = (value: Node): value is Element =&gt; value.nodeType === 1 &amp;&amp; value instanceof Element;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
