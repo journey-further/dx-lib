@@ -10,53 +10,33 @@ describe("elementReady", () => {
   });
 
   it("validates input parameters", () => {
-    expect(() => elementReady("", jest.fn(), "test-id")).toThrow("elementReady setup failed");
+    expect(() => elementReady("", vi.fn(), "test-id")).toThrow("elementReady setup failed");
     expect(() => elementReady(".test", null as any, "test-id")).toThrow("elementReady setup failed");
-    expect(() => elementReady(".test", jest.fn(), "")).toThrow("elementReady setup failed");
+    expect(() => elementReady(".test", vi.fn(), "")).toThrow("elementReady setup failed");
   });
 
   it("detects existing elements", () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     document.body.innerHTML = '<div class="test"></div>';
 
     elementReady(".test", callback, "test-id");
     expect(callback).toHaveBeenCalledWith(expect.any(Element));
   });
 
-  it("detects new elements", (done) => {
-    const callback = jest.fn();
+  it("detects new elements", async () => {
+    const callback = vi.fn();
     elementReady(".test", callback, "test-id");
 
-    // Add element after a delay
-    setTimeout(() => {
-      // Add element in different ways to test all scenarios
-      const div = document.createElement("div");
-      div.className = "test";
-      document.body.appendChild(div);
+    const div = document.createElement("div");
+    div.className = "test";
+    document.body.appendChild(div);
 
-      // Check after delay
-      setTimeout(() => {
-        try {
-          expect(callback).toHaveBeenCalledWith(expect.any(Element));
-          done();
-        } catch (error) {
-          // If it fails, try one more time with innerHTML
-          document.body.innerHTML = '<div class="test"></div>';
-          setTimeout(() => {
-            try {
-              expect(callback).toHaveBeenCalledWith(expect.any(Element));
-              done();
-            } catch (error) {
-              done(error);
-            }
-          }, 100);
-        }
-      }, 100);
-    }, 100);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).toHaveBeenCalledWith(expect.any(Element));
   });
 
   it("marks elements as ready", () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     document.body.innerHTML = '<div class="test"></div>';
 
     elementReady(".test", callback, "test-id");
@@ -71,7 +51,7 @@ describe("elementReady", () => {
   });
 
   it("respects conditions", () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     document.body.innerHTML = '<div class="test"></div>';
 
     elementReady(".test", callback, "test-id", (el) => false);
@@ -82,7 +62,7 @@ describe("elementReady", () => {
   });
 
   it("can be destroyed", async () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     const { destroy } = elementReady(".test", callback, "test-id");
 
     // Wait for observer to be initialized
@@ -99,19 +79,19 @@ describe("elementReady", () => {
 
   it("validates selector format", () => {
     // Only test the number input since invalid[selector is actually valid CSS
-    expect(() => elementReady(123 as any, jest.fn(), "test-id")).toThrow("elementReady setup failed");
+    expect(() => elementReady(123 as any, vi.fn(), "test-id")).toThrow("elementReady setup failed");
     // Test a definitely invalid selector instead
-    expect(() => elementReady(">>>>>>", jest.fn(), "test-id")).toThrow("elementReady setup failed");
+    expect(() => elementReady(">>>>>>", vi.fn(), "test-id")).toThrow("elementReady setup failed");
   });
 
   it("validates conditions parameter", () => {
-    expect(() => elementReady(".test", jest.fn(), "test-id", "not-a-function" as any)).toThrow(
+    expect(() => elementReady(".test", vi.fn(), "test-id", "not-a-function" as any)).toThrow(
       "elementReady setup failed"
     );
   });
 
   it("handles multiple elements with same selector", () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     document.body.innerHTML = `
       <div class="test"></div>
       <div class="test"></div>
@@ -123,7 +103,7 @@ describe("elementReady", () => {
   });
 
   it("handles nested elements", () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     document.body.innerHTML = `
       <div class="parent">
         <div class="test"></div>
@@ -138,8 +118,8 @@ describe("elementReady", () => {
   });
 
   it("maintains separate ready states for different IDs", () => {
-    const callback1 = jest.fn();
-    const callback2 = jest.fn();
+    const callback1 = vi.fn();
+    const callback2 = vi.fn();
     document.body.innerHTML = '<div class="test"></div>';
 
     elementReady(".test", callback1, "test-id-1");
@@ -153,7 +133,7 @@ describe("elementReady", () => {
   });
 
   it("handles complex conditions", () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     document.body.innerHTML = `
       <div class="test" data-ready="true"></div>
       <div class="test" data-ready="false"></div>
@@ -165,7 +145,7 @@ describe("elementReady", () => {
   });
 
   it("can be paused and resumed", async () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     const { pause, init } = elementReady(".test", callback, "test-id");
 
     // Pause the observer
@@ -188,8 +168,8 @@ describe("elementReady", () => {
     expect(callback).toHaveBeenCalled();
   });
 
-  it("handles dynamic class changes", (done) => {
-    const callback = jest.fn();
+  it("handles dynamic class changes", async () => {
+    const callback = vi.fn();
     elementReady(".test", callback, "test-id");
 
     // Create div and add to document
@@ -201,20 +181,13 @@ describe("elementReady", () => {
     div.className = "test";
     document.body.appendChild(div);
 
-    // Check after a delay
-    setTimeout(() => {
-      try {
-        expect(callback).toHaveBeenCalledTimes(1);
-        expect(callback).toHaveBeenCalledWith(expect.any(Element));
-        done();
-      } catch (error) {
-        done(error);
-      }
-    }, 100);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith(expect.any(Element));
   });
 
-  it("detects elements added after attribute changes", (done) => {
-    const callback = jest.fn();
+  it("detects elements added after attribute changes", async () => {
+    const callback = vi.fn();
     elementReady("[data-test]", callback, "test-id");
 
     // Add element without attribute first
@@ -226,14 +199,51 @@ describe("elementReady", () => {
     div.setAttribute("data-test", "true");
     document.body.appendChild(div);
 
-    setTimeout(() => {
-      try {
-        expect(callback).toHaveBeenCalledTimes(1);
-        expect(callback).toHaveBeenCalledWith(div);
-        done();
-      } catch (error) {
-        done(error);
-      }
-    }, 100);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith(div);
+  });
+
+  it("destroy clears jfReady from marked elements", async () => {
+    document.body.innerHTML = '<div class="test"></div>';
+    const callback = vi.fn();
+    const { destroy } = elementReady(".test", callback, "test-id");
+
+    const el = document.querySelector(".test") as any;
+    expect(el.jfReady).toContain("test-id");
+
+    await destroy(0);
+
+    expect(el.jfReady).toBeUndefined();
+  });
+
+  it("destroy removes only the matching id from jfReady when other ids are still registered", async () => {
+    document.body.innerHTML = '<div class="test"></div>';
+    const cb1 = vi.fn();
+    const cb2 = vi.fn();
+
+    const { destroy } = elementReady(".test", cb1, "id-1");
+    elementReady(".test", cb2, "id-2");
+
+    const el = document.querySelector(".test") as any;
+    expect(el.jfReady).toContain("id-1");
+    expect(el.jfReady).toContain("id-2");
+
+    await destroy(0);
+
+    expect(el.jfReady).not.toContain("id-1");
+    expect(el.jfReady).toContain("id-2");
+    expect(el.jfReady).not.toBeUndefined();
+  });
+
+  it("does not re-bind when called with a duplicate id", () => {
+    const callback = vi.fn();
+    document.body.innerHTML = '<div class="test"></div>';
+
+    elementReady(".test", callback, "test-id");
+    expect(callback).toHaveBeenCalledTimes(1);
+
+    elementReady(".test", callback, "test-id");
+    expect(callback).toHaveBeenCalledTimes(1);
   });
 });

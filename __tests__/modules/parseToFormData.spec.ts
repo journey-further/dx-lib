@@ -12,7 +12,7 @@ const JSON_DATA: JsonData = {
 };
 describe("parseToFormData", () => {
   afterEach(() => {
-    jest.resetModules();
+    vi.resetModules();
   });
 
   it("will throw if the argument is not a json", () => {

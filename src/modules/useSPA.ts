@@ -54,6 +54,12 @@ export interface JfSPADetails {
   isRunning: boolean;
   /** Unique identifier for the test */
   id: string;
+  /** True after the page URL check passes */
+  pageMatched: boolean;
+  /** True after the apply function completes */
+  isApplied: boolean;
+  /** True after the reset function completes */
+  isReset: boolean;
 }
 
 /**
@@ -331,6 +337,9 @@ export const useSPA = (id: string): JfSPA => {
     details: {
       isRunning: false,
       id: "",
+      pageMatched: false,
+      isApplied: false,
+      isReset: false,
     },
   };
   const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
@@ -453,7 +462,7 @@ export const useSPA = (id: string): JfSPA => {
 
       // Push this test to global object and mark it as running
       STATE.details.isRunning = true;
-      window.jfLib.experiments.push(STATE);
+      window.jfLib.experiments.push(publicApi);
       return true;
     } catch (e) {
       log("Setup Error", "error", false, STATE);
@@ -687,6 +696,7 @@ export const useSPA = (id: string): JfSPA => {
       }
 
       log(`Page matched!`, "success");
+      STATE.details.pageMatched = true;
 
       // Wait for the body to exist to avoid issues
       await waitForElement("body");
@@ -705,10 +715,25 @@ export const useSPA = (id: string): JfSPA => {
    */
   const resetTest = async (): Promise<void> => {
     log(`Resetting Test`, "info");
-    // Remove the inserted stylesheet
     removeStyleSheet();
-    // Run the reset function
+
+    // Remove callbacks registered with this test's ID prefix — runs on every reset (incl. alwaysReset cycles)
+    const prefix = `${STATE.details.id}--`;
+    (["elementReady", "elementRemoved", "elementUpdated"] as const).forEach((key) => {
+      const lib = window.jfLib?.[key];
+      if (!lib) return;
+      Object.values(lib).forEach((versionObj) => {
+        if (!versionObj?.callbacks) return;
+        versionObj.callbacks = (versionObj.callbacks as { id?: string }[]).filter(
+          (cb) => !cb?.id?.startsWith(prefix)
+        ) as typeof versionObj.callbacks;
+      });
+    });
+
     if (isFunction(STATE.options.reset)) await STATE.options.reset();
+    STATE.details.isApplied = false;
+    STATE.details.isReset = true;
+    STATE.details.pageMatched = false;
   };
 
   /**
@@ -1041,6 +1066,8 @@ export const useSPA = (id: string): JfSPA => {
       //
       bindWatchForRemoval();
       STATE.options.apply();
+      STATE.details.isApplied = true;
+      STATE.details.isReset = false;
     } catch (e) {
       throwError(e);
     }
@@ -1157,15 +1184,12 @@ export const useSPA = (id: string): JfSPA => {
     }
   };
 
-  // Return our functions to call
-  return {
+  const publicApi: JfSPA = {
     details: STATE.details,
     init: async (options: JfSPAOptions) => {
       try {
-        // set up the test
         const isSetup = setupTest(options);
         if (!!!isSetup) return;
-        // run the init function
         await initTest();
       } catch (error) {
         throwError(error);
@@ -1174,4 +1198,5 @@ export const useSPA = (id: string): JfSPA => {
     reset: resetTest,
     destroy: removeTest,
   };
+  return publicApi;
 };

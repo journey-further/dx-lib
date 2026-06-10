@@ -21,7 +21,7 @@ const EXPECTED_RESULT_2: ParsedTimeObject = {
 };
 describe("getTimeTo", () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
   it("will throw if the timestamp provided has already passed", () => {
     expect(() => getTimeTo(new Date().getTime() - 2000)).toThrowError(PASSED_TIMESTAMP_ERROR);
@@ -29,7 +29,7 @@ describe("getTimeTo", () => {
 
   it("will return an object with the correct number for days, time, minutes and seconds", () => {
     // 10 days, 11 hours, 29 minutes, 30 seconds
-    jest.useFakeTimers().setSystemTime(TIMESTAMP_TODAY_1);
+    vi.useFakeTimers().setSystemTime(TIMESTAMP_TODAY_1);
     const result = getTimeTo(TIMESTAMP_FUTURE);
     expect(result.days).toBe(EXPECTED_RESULT_1.days);
     expect(result.hours).toBe(EXPECTED_RESULT_1.hours);
@@ -39,7 +39,7 @@ describe("getTimeTo", () => {
 
   it("will prepend numbers lower than 10 with a 0 if should pad is true", () => {
     // 06 days, 01 hours, 02 minutes, 03 seconds
-    jest.useFakeTimers().setSystemTime(TIMESTAMP_TODAY_2);
+    vi.useFakeTimers().setSystemTime(TIMESTAMP_TODAY_2);
     const result = getTimeTo(TIMESTAMP_FUTURE, true);
     expect(result.days).toBe(EXPECTED_RESULT_2.days);
     expect(result.hours).toBe(EXPECTED_RESULT_2.hours);

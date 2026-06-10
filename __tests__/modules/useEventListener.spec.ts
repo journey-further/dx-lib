@@ -6,8 +6,8 @@ describe("useEventListener", () => {
   const ARG_3_ERROR = "Arg 3 must be of type string";
   const ARG_4_ERROR = "Arg 4 must be of type function";
   const ARG_5_ERROR = "Arg 5 must be an object";
-  const EVENT_HANDLER = jest.fn();
-  const EVENT_HANDLER_2 = jest.fn();
+  const EVENT_HANDLER = vi.fn();
+  const EVENT_HANDLER_2 = vi.fn();
   const HANDLER_ID_1 = "a-handler";
   const HANDLER_ID_2 = "another-handler";
   const ELEMENT_ID_1 = "an-element";
@@ -26,7 +26,7 @@ describe("useEventListener", () => {
     // Add an element
     document.body.appendChild(GENERATE_ELEMENT(ELEMENT_ID_1));
     // clear all mock functions
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("will throw the correct errors", () => {

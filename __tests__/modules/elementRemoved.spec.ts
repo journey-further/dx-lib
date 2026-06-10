@@ -10,24 +10,24 @@ describe("elementRemoved", () => {
   });
 
   it("validates input parameters", () => {
-    expect(() => elementRemoved("", jest.fn(), "test-id")).toThrow("elementRemoved setup failed");
+    expect(() => elementRemoved("", vi.fn(), "test-id")).toThrow("elementRemoved setup failed");
     expect(() => elementRemoved(".test", null as any, "test-id")).toThrow("elementRemoved setup failed");
-    expect(() => elementRemoved(".test", jest.fn(), "")).toThrow("elementRemoved setup failed");
+    expect(() => elementRemoved(".test", vi.fn(), "")).toThrow("elementRemoved setup failed");
   });
 
   it("validates selector format", () => {
-    expect(() => elementRemoved(123 as any, jest.fn(), "test-id")).toThrow("elementRemoved setup failed");
-    expect(() => elementRemoved(">>>>>>", jest.fn(), "test-id")).toThrow("elementRemoved setup failed");
+    expect(() => elementRemoved(123 as any, vi.fn(), "test-id")).toThrow("elementRemoved setup failed");
+    expect(() => elementRemoved(">>>>>>", vi.fn(), "test-id")).toThrow("elementRemoved setup failed");
   });
 
   it("validates conditions parameter", () => {
-    expect(() => elementRemoved(".test", jest.fn(), "test-id", "not-a-function" as any)).toThrow(
+    expect(() => elementRemoved(".test", vi.fn(), "test-id", "not-a-function" as any)).toThrow(
       "elementRemoved setup failed"
     );
   });
 
-  it("detects removed elements", (done) => {
-    const callback = jest.fn();
+  it("detects removed elements", async () => {
+    const callback = vi.fn();
     const div = document.createElement("div");
     div.className = "test";
     document.body.appendChild(div);
@@ -35,18 +35,12 @@ describe("elementRemoved", () => {
     elementRemoved(".test", callback, "test-id");
     document.body.removeChild(div);
 
-    setTimeout(() => {
-      try {
-        expect(callback).toHaveBeenCalledWith(expect.any(Element));
-        done();
-      } catch (error) {
-        done(error);
-      }
-    }, 100);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).toHaveBeenCalledWith(expect.any(Element));
   });
 
-  it("handles nested element removal", (done) => {
-    const callback = jest.fn();
+  it("handles nested element removal", async () => {
+    const callback = vi.fn();
     document.body.innerHTML = `
       <div class="parent">
         <div class="test"></div>
@@ -61,20 +55,13 @@ describe("elementRemoved", () => {
 
     if (parent) {
       document.body.removeChild(parent);
-
-      setTimeout(() => {
-        try {
-          expect(callback).toHaveBeenCalledTimes(1);
-          done();
-        } catch (error) {
-          done(error);
-        }
-      }, 100);
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      expect(callback).toHaveBeenCalledTimes(1);
     }
   });
 
-  it("respects conditions", (done) => {
-    const callback = jest.fn();
+  it("respects conditions", async () => {
+    const callback = vi.fn();
     document.body.innerHTML = `
       <div class="test" data-remove="true"></div>
       <div class="test" data-remove="false"></div>
@@ -85,19 +72,13 @@ describe("elementRemoved", () => {
     const elements = document.querySelectorAll(".test");
     elements.forEach((el) => document.body.removeChild(el));
 
-    setTimeout(() => {
-      try {
-        expect(callback).toHaveBeenCalledTimes(1);
-        expect(callback).toHaveBeenCalledWith(expect.any(Element));
-        done();
-      } catch (error) {
-        done(error);
-      }
-    }, 100);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith(expect.any(Element));
   });
 
   it("can be destroyed", async () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     const div = document.createElement("div");
     div.className = "test";
     document.body.appendChild(div);
@@ -115,8 +96,8 @@ describe("elementRemoved", () => {
     expect(callback).not.toHaveBeenCalled();
   });
 
-  it("handles multiple removals with same selector", (done) => {
-    const callback = jest.fn();
+  it("handles multiple removals with same selector", async () => {
+    const callback = vi.fn();
     document.body.innerHTML = `
       <div class="test"></div>
       <div class="test"></div>
@@ -128,18 +109,12 @@ describe("elementRemoved", () => {
     const elements = document.querySelectorAll(".test");
     elements.forEach((el) => document.body.removeChild(el));
 
-    setTimeout(() => {
-      try {
-        expect(callback).toHaveBeenCalledTimes(3);
-        done();
-      } catch (error) {
-        done(error);
-      }
-    }, 100);
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).toHaveBeenCalledTimes(3);
   });
 
   it("can be reinitialized after destruction", async () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     const { destroy, init } = elementRemoved(".test", callback, "test-id");
 
     // Wait for observer to be initialized
@@ -158,5 +133,24 @@ describe("elementRemoved", () => {
     // Wait for mutation observer
     await new Promise((resolve) => setTimeout(resolve, 100));
     expect(callback).toHaveBeenCalledWith(expect.any(Element));
+  });
+
+  it("does not re-bind when called with a duplicate id", () => {
+    const callback = vi.fn();
+    elementRemoved(".test", callback, "test-id");
+    expect(() => elementRemoved(".test", callback, "test-id")).not.toThrow();
+  });
+
+  it("does not fire when an unrelated element is removed", async () => {
+    const callback = vi.fn();
+    const div = document.createElement("div");
+    div.className = "unrelated";
+    document.body.appendChild(div);
+
+    elementRemoved(".test", callback, "test-id");
+    document.body.removeChild(div);
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).not.toHaveBeenCalled();
   });
 });

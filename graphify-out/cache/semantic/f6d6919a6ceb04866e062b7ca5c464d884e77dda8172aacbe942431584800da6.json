@@ -1,0 +1,1 @@
+{"nodes": [{"id": "module_debounce", "label": "Module: debounce", "type": "module", "source_file": "docs/modules/modules_debounce.html", "source_location": "modules/debounce.ts:1", "confidence": "EXTRACTED", "properties": {"exports": ["debounce (function)"], "tier": "3"}}], "edges": [], "hyperedges": []}

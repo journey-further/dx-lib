@@ -5,16 +5,16 @@ const DEFAULT_ATTEMPTS = 10;
 
 describe("docReady", () => {
   beforeEach(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
-    jest.useRealTimers();
+    vi.resetAllMocks();
+    vi.useRealTimers();
   });
 
   it("will return true if the document.readyState param is complete", async () => {
-    jest.spyOn(global, "setTimeout");
+    vi.spyOn(global, "setTimeout");
     Object.defineProperty(document, "readyState", {
       value: "complete",
       configurable: true,
@@ -24,7 +24,7 @@ describe("docReady", () => {
   });
 
   it("will try maxAttempts times before returning false is readyState is not complete", async () => {
-    jest.spyOn(global, "setTimeout");
+    vi.spyOn(global, "setTimeout");
     Object.defineProperty(document, "readyState", {
       value: "not-complete",
       configurable: true,
@@ -32,7 +32,7 @@ describe("docReady", () => {
     // Store our promise
     const promise = docReady(1);
     // Fast forward the timers
-    jest.advanceTimersByTime(200);
+    vi.advanceTimersByTime(200);
     // Resolve the promise
     await promise;
     // Check set timeout
@@ -40,7 +40,7 @@ describe("docReady", () => {
   });
 
   it("will stop trying and return true when the readyState is complete", async () => {
-    jest.spyOn(global, "setTimeout");
+    vi.spyOn(global, "setTimeout");
     Object.defineProperty(document, "readyState", {
       value: "not-complete",
       configurable: true,
@@ -48,7 +48,7 @@ describe("docReady", () => {
     const promise = docReady(5);
     // iterate twice
     for (let i = 0; i < 2; i++) {
-      jest.advanceTimersByTime(200);
+      vi.advanceTimersByTime(200);
       await Promise.resolve();
     }
     // make the readyState complete
@@ -57,7 +57,7 @@ describe("docReady", () => {
       configurable: true,
     });
     // Move forward
-    jest.advanceTimersByTime(200);
+    vi.advanceTimersByTime(200);
     await Promise.resolve();
     // Resolve our promise
     const result = await promise;
@@ -66,7 +66,7 @@ describe("docReady", () => {
   });
 
   it("will default to 10 attempts", async () => {
-    jest.spyOn(global, "setTimeout");
+    vi.spyOn(global, "setTimeout");
     Object.defineProperty(document, "readyState", {
       value: "not-complete",
       configurable: true,
@@ -75,7 +75,7 @@ describe("docReady", () => {
     const promise = docReady();
     // Fast forward the timers 15 times to try and force more attempts
     for (let i = 0; i < 15; i++) {
-      jest.advanceTimersByTime(DEFAULT_TIMEOUT);
+      vi.advanceTimersByTime(DEFAULT_TIMEOUT);
       await Promise.resolve();
     }
     // Resolve the promise
@@ -85,14 +85,14 @@ describe("docReady", () => {
   });
 
   it("will have a default timeout of 200ms", async () => {
-    const spy = jest.spyOn(global, "setTimeout");
+    const spy = vi.spyOn(global, "setTimeout");
     Object.defineProperty(document, "readyState", {
       value: "not-complete",
       configurable: true,
     });
     // Store our promise
     const promise = docReady(1);
-    jest.advanceTimersByTime(DEFAULT_TIMEOUT);
+    vi.advanceTimersByTime(DEFAULT_TIMEOUT);
     await Promise.resolve();
     await promise;
     expect(spy.mock.calls[0][1]).toBe(DEFAULT_TIMEOUT);
