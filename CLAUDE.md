@@ -9,18 +9,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-yarn build          # compile to dist/ (runs tsc + tsc-alias)
-yarn test           # run all tests with vitest
-yarn test --coverage  # run tests with coverage report (aim for ≥90% statements/branches)
-yarn lint           # eslint with auto-fix
-yarn build:docs     # regenerate TypeDoc documentation
-yarn index          # regenerate src/index.ts barrel exports (run after adding a new module)
+npm run build          # compile to dist/ (runs tsc + tsc-alias)
+npm test               # run all tests with vitest
+npm test -- --coverage  # run tests with coverage report (aim for ≥90% statements/branches)
+npm run lint           # eslint with auto-fix
+npm run build:docs     # regenerate TypeDoc documentation
+npm run index          # regenerate src/index.ts barrel exports (run after adding a new module)
 ```
 
 To run a single test file:
 
 ```bash
-yarn test __tests__/modules/myFunction.spec.ts
+npm test -- __tests__/modules/myFunction.spec.ts
 ```
 
 ## Architecture
