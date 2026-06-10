@@ -12,46 +12,6 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  install-deps:
-    name: Install Dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout commit
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1 # Only fetch the latest commit
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: "npm"
-
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Install Dependencies
-        run: |
-          for i in {1..3}; do
-            npm ci --prefer-offline && break
-            if [ $i -eq 3 ]; then
-              echo "Failed to install dependencies after 3 attempts"
-              exit 1
-            fi
-            echo "Retrying installation (attempt $i)..."
-            sleep 2
-          done
-
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-modules-
-
   check-source-branch:
     runs-on: ubuntu-latest
     steps:
@@ -63,7 +23,6 @@ jobs:
             core.setFailed('Changes to prod should merge from staging')
 
   test:
-    needs: install-deps
     name: Test
     runs-on: ubuntu-latest
     steps:
@@ -76,20 +35,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
 
-      - name: Restore node_modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-modules-
+      - name: Install dependencies
+        run: npm ci
 
       - name: Run tests
         run: npm test
 
   lint:
-    needs: install-deps
     name: Lint
     runs-on: ubuntu-latest
     steps:
@@ -102,20 +56,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
 
-      - name: Restore node_modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-modules-
+      - name: Install dependencies
+        run: npm ci
 
       - name: Run linter
         run: npm run lint
 
   security:
-    needs: install-deps
     name: Security
     runs-on: ubuntu-latest
     steps:
@@ -128,20 +77,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
 
-      - name: Restore node_modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-modules-
+      - name: Install dependencies
+        run: npm ci
 
       - name: Run security check
         run: npm run audit:security
 
   build:
-    needs: install-deps
     name: Build
     runs-on: ubuntu-latest
     steps:
@@ -154,14 +98,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
 
-      - name: Restore node_modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-modules-
+      - name: Install dependencies
+        run: npm ci
 
       - name: Run build
         run: npm run build
