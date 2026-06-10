@@ -102,6 +102,7 @@ export default [
       "prefer-const": "warn",
       "prefer-arrow-callback": "warn",
       quotes: "off",
+      "preserve-caught-error": "off",
       "vars-on-top": "off",
       "no-console": "off",
       "func-names": "off",
@@ -143,15 +144,6 @@ export default [
       "import/no-extraneous-dependencies": "off",
       "import/no-unresolved": "off",
       "import-x/no-unresolved": [2, { commonjs: true, amd: true }],
-      "node/no-missing-import": "off",
-      "node/no-unpublished-require": "off",
-      "node/no-unpublished-import": "off",
-      "node/no-unsupported-features/es-syntax": [
-        "error",
-        {
-          ignores: ["modules"],
-        },
-      ],
 
       // JSDoc rules
       "jsdoc/require-param-type": "off",

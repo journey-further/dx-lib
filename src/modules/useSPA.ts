@@ -342,7 +342,6 @@ export const useSPA = (id: string): JfSPA => {
       isReset: false,
     },
   };
-  let _publicApi: JfSPA;
   const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
     if (!!debug && !isDebug()) return;
     _log(msg, lvl, `[${id}] useSPA`, data);
@@ -463,7 +462,7 @@ export const useSPA = (id: string): JfSPA => {
 
       // Push this test to global object and mark it as running
       STATE.details.isRunning = true;
-      window.jfLib.experiments.push(_publicApi);
+      window.jfLib.experiments.push(publicApi);
       return true;
     } catch (e) {
       log("Setup Error", "error", false, STATE);
@@ -1185,7 +1184,7 @@ export const useSPA = (id: string): JfSPA => {
     }
   };
 
-  _publicApi = {
+  const publicApi: JfSPA = {
     details: STATE.details,
     init: async (options: JfSPAOptions) => {
       try {
@@ -1199,5 +1198,5 @@ export const useSPA = (id: string): JfSPA => {
     reset: resetTest,
     destroy: removeTest,
   };
-  return _publicApi;
+  return publicApi;
 };

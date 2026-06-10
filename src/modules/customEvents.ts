@@ -1,6 +1,6 @@
 const VERSION = "1.0";
 
-type Detail = { [key: string]: any };
+type Detail = { [key: string]: unknown };
 
 const initBus = () => {
   window.jfLib = window.jfLib || {};
@@ -21,8 +21,6 @@ const getBus = (): EventTarget => window.jfLib.customEvents[VERSION].bus;
  * The underlying `EventTarget` is shared on `window.jfLib.customEvents["1.0"].bus` so it persists across module
  * boundaries without import cycles.
  *
- * @param {string} id - The experiment ID (e.g. "TIK_123456"). Used to namespace all emitted events.
- * @returns {{ emit, on }} Event bus scoped to this experiment.
  * @example
  *   const { emit, on } = customEvents("TIK_123456");
  *
@@ -33,6 +31,9 @@ const getBus = (): EventTarget => window.jfLib.customEvents[VERSION].bus;
  *   emit("hotel:selected", { hotelId: "latimer-estate" });
  *
  *   unsubscribe(); // remove listener
+ *
+ * @param {string} id - The experiment ID (e.g. "TIK_123456"). Used to namespace all emitted events.
+ * @returns {{ emit; on }} Event bus scoped to this experiment.
  */
 export const customEvents = (id: string) => {
   initBus();
