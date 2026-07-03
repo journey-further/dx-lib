@@ -3,10 +3,8 @@ import { elementReady } from "../../src/modules/elementReady";
 describe("elementReady", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
-    window.jfLib = { elementReady: {} };
-    // Clear any existing observers
-    window.jfObservers?.forEach((obs) => obs.observer?.disconnect());
-    window.jfObservers = [];
+    window.jfLib?.observers?.["1.0"]?.forEach((obs) => obs.observer?.disconnect());
+    window.jfLib = { elementReady: {}, observers: { "1.0": [] } };
   });
 
   it("validates input parameters", () => {

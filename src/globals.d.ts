@@ -1,6 +1,8 @@
 import { JfObserver, JfObserverObject, JfReadyObject, JfRemovedObject, JfSPA } from "./modules";
 import { JfBusListener } from "./modules/customEvents";
 import { JfUpdatedObject } from "./modules/elementUpdated";
+import { JfListenerObject } from "./modules/useEventListener";
+import { JfTimerObject } from "./modules/useSetTimeout";
 
 /**
  * Global library interface for managing DOM observers and experiments
@@ -12,6 +14,8 @@ export interface JfLib {
   pageChange?: {
     [version: string]: {
       observer: JfObserver;
+      /** Last seen full location (path + search + hash) — the comparison base for change detection */
+      pagePath?: string;
     };
   };
   /** Observer for re-initialization events */
@@ -43,10 +47,22 @@ export interface JfLib {
       callbacks: (JfUpdatedObject | null)[];
     };
   };
-  /** Current page path */
-  pagePath?: string;
-  /** Active experiments */
-  experiments?: JfSPA[];
+  /** Active experiments, keyed by version */
+  experiments?: {
+    [version: string]: JfSPA[];
+  };
+  /** MutationObservers tracked by useMutationObserver, keyed by version */
+  observers?: {
+    [version: string]: JfObserverObject[];
+  };
+  /** Event listeners tracked by useEventListener, keyed by version */
+  listeners?: {
+    [version: string]: JfListenerObject[];
+  };
+  /** Timers tracked by useSetTimeout, keyed by version */
+  timers?: {
+    [version: string]: JfTimerObject[];
+  };
   /** Custom event buses, keyed by version then experiment ID */
   customEvents?: {
     [version: string]: {
@@ -89,7 +105,6 @@ declare global {
   interface Window {
     jfLib: JfLib;
     jfTests: JfTests;
-    jfObservers: JfObserverObject[];
     $nuxt?: NuxtInstance;
   }
 }

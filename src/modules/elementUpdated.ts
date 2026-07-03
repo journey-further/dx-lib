@@ -92,7 +92,7 @@ const initializeJFLib = () => {
  */
 const createObserver = () => {
   window.jfLib.elementUpdated[VERSION] = {
-    observer: useMutationObserver(`elementUpdated-${VERSION}`),
+    observer: useMutationObserver(`elementUpdated--${VERSION}`),
     callbacks: [],
   };
 };

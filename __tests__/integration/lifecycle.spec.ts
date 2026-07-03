@@ -13,11 +13,9 @@ const tick = (ms = 20) => new Promise((r) => setTimeout(r, ms));
 
 const cleanGlobals = () => {
   // disconnect any live observers from the previous test, then wipe all registries and DOM
-  window.jfObservers?.forEach((o) => o.details?.observer?.disconnect());
+  window.jfLib?.observers?.["1.0"]?.forEach((o) => o.observer?.disconnect());
   // @ts-expect-error test cleanup
   delete window.jfLib;
-  // @ts-expect-error test cleanup
-  delete window.jfObservers;
   document.head.innerHTML = "";
   document.body.innerHTML = "";
   window.history.replaceState({}, "", "/");
@@ -128,7 +126,7 @@ describe("page-change detection (H4)", () => {
     await tick(50);
 
     expect(pcSpy).toHaveBeenCalledTimes(1);
-    expect(window.jfLib.pagePath).toBe("/next-page");
+    expect(window.jfLib.pageChange["1.0"].pagePath).toBe("/next-page");
     window.removeEventListener("jf-pagechange-1.0", pcSpy);
   });
 
@@ -147,7 +145,7 @@ describe("page-change detection (H4)", () => {
     document.body.appendChild(document.createElement("div"));
     await tick(50);
     expect(pcSpy).toHaveBeenCalledTimes(2);
-    expect(window.jfLib.pagePath).toBe("/?page=2#reviews");
+    expect(window.jfLib.pageChange["1.0"].pagePath).toBe("/?page=2#reviews");
     window.removeEventListener("jf-pagechange-1.0", pcSpy);
   });
 });
@@ -160,7 +158,7 @@ describe("teardown and re-init correctness (H5, H6, H7)", () => {
     expect(apply).toHaveBeenCalledTimes(1);
 
     Test.destroy();
-    expect(window.jfLib.experiments).toHaveLength(0);
+    expect(window.jfLib.experiments["1.0"]).toHaveLength(0);
 
     window.dispatchEvent(new Event("jf-pagechange-1.0"));
     window.dispatchEvent(new Event("jf-reinit-1.0"));

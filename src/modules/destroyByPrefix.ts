@@ -8,7 +8,7 @@
  *   cleared too, so a reapply re-fires for surviving elements). When a registry hits zero callbacks its shared
  *   observer is disconnected and the entry removed, so it can be cleanly recreated.
  * - `window.jfLib.customEvents` bus listeners subscribed by the owner
- * - `window.jfListeners` (useEventListener), `window.jfTimers` (useSetTimeout), `window.jfObservers`
+ * - `window.jfLib.listeners` (useEventListener), `window.jfLib.timers` (useSetTimeout), `window.jfLib.observers`
  *   (useMutationObserver)
  *
  * `useSPA` calls this from its reset/destroy paths, which is what makes resources registered inside `apply()` with a
@@ -66,17 +66,23 @@ export const destroyByPrefix = (ownerId: string): void => {
     });
   }
 
-  // flat window registries — all three expose disconnect on the tracked object
-  window.jfListeners?.filter((l) => matches(l.id)).forEach((l) => l.disconnect());
-  window.jfTimers?.filter((t) => matches(t.id)).forEach((t) => t.disconnect());
-  window.jfObservers
-    ?.filter((o) => matches(o.ticketId))
-    .forEach((o) => {
-      o.observer?.disconnect();
-      o.observer = undefined;
-      o.isObserving = false;
+  // versioned listener/timer/observer registries — all three expose disconnect on the tracked object
+  Object.values(window.jfLib?.listeners ?? {}).forEach((registry) => {
+    registry.filter((l) => matches(l.id)).forEach((l) => l.disconnect());
+  });
+  Object.values(window.jfLib?.timers ?? {}).forEach((registry) => {
+    registry.filter((t) => matches(t.id)).forEach((t) => t.disconnect());
+  });
+  const observersLib = window.jfLib?.observers;
+  if (observersLib) {
+    Object.keys(observersLib).forEach((version) => {
+      observersLib[version].forEach((o) => {
+        if (!matches(o.ticketId)) return;
+        o.observer?.disconnect();
+        o.observer = undefined;
+        o.isObserving = false;
+      });
+      observersLib[version] = observersLib[version].filter((o) => !matches(o.ticketId));
     });
-  if (window.jfObservers) {
-    window.jfObservers = window.jfObservers.filter((o) => !matches(o.ticketId));
   }
 };

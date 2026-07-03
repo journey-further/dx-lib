@@ -3,10 +3,8 @@ import { elementRemoved } from "../../src/modules/elementRemoved";
 describe("elementRemoved", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
-    window.jfLib = { elementRemoved: {} };
-    // Clear any existing observers
-    window.jfObservers?.forEach((obs) => obs.observer?.disconnect());
-    window.jfObservers = [];
+    window.jfLib?.observers?.["1.0"]?.forEach((obs) => obs.observer?.disconnect());
+    window.jfLib = { elementRemoved: {}, observers: { "1.0": [] } };
   });
 
   it("validates input parameters", () => {

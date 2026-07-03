@@ -3,9 +3,8 @@ import { elementUpdated } from "../../src/modules/elementUpdated";
 describe("elementUpdated", () => {
   beforeEach(() => {
     // Disconnect observers BEFORE resetting state to prevent stale callbacks
-    window.jfObservers?.forEach((obs) => obs.observer?.disconnect());
-    window.jfObservers = [];
-    window.jfLib = { elementUpdated: {} };
+    window.jfLib?.observers?.["1.0"]?.forEach((obs) => obs.observer?.disconnect());
+    window.jfLib = { elementUpdated: {}, observers: { "1.0": [] } };
     document.body.innerHTML = "";
   });
 

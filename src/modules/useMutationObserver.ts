@@ -1,5 +1,15 @@
 import { createLogger, isNodeArray, isNodeList } from "../helpers";
 
+const VERSION = "1.0";
+
+/** Lazily initialise and return the versioned observer registry */
+const getRegistry = (): JfObserverObject[] => {
+  window.jfLib = window.jfLib || {};
+  window.jfLib.observers = window.jfLib.observers || {};
+  window.jfLib.observers[VERSION] = window.jfLib.observers[VERSION] || [];
+  return window.jfLib.observers[VERSION];
+};
+
 /**
  * An object with information relating to a mutation observer applied by `useMutationObserver`.
  *
@@ -111,7 +121,7 @@ export interface JfObserver {
  * Scoped MutationObserver wrapper that prevents duplicate observers and manages them globally to avoid memory leaks.
  *
  * This utility creates and manages a `MutationObserver` scoped to a specific ID. It uses a globally scoped
- * `jfObservers` array on the `window` object to track and manage active observers. This ensures that observers can be
+ * `window.jfLib.observers` registry to track and manage active observers. This ensures that observers can be
  * cleaned up efficiently, especially during page changes (particularly relevant for Single Page Apps)
  *
  * To use, define an observer within a `STATE` object to init the observer, and then bind it's functionality (target,
@@ -144,10 +154,8 @@ export interface JfObserver {
 export const useMutationObserver = (id: string): JfObserver => {
   const log = createLogger(`[${id}] useMutationObserver`);
 
-  // Get the current observer array
-  window.jfObservers = window.jfObservers || [];
   // Get the current observer object
-  let observerObject: JfObserverObject | undefined = window.jfObservers.find(
+  let observerObject: JfObserverObject | undefined = getRegistry().find(
     (obs: JfObserverObject) => obs.ticketId === id
   );
 
@@ -157,8 +165,8 @@ export const useMutationObserver = (id: string): JfObserver => {
       isObserving: false,
       ticketId: id,
     };
-    // Push new instance to the global array
-    window.jfObservers.push(observerObject);
+    // Push new instance to the global registry
+    getRegistry().push(observerObject);
     log("Created observer", "info");
   } else {
     // Warn the user it's already been bound
@@ -173,8 +181,8 @@ export const useMutationObserver = (id: string): JfObserver => {
     // A prior disconnect() removes this entry from the global registry, but a caller may still
     // hold this handle and call observe() again - re-register it so a fresh useMutationObserver(id)
     // finds this same instance instead of spinning up a duplicate, untracked observer.
-    if (!window.jfObservers.some((obs: JfObserverObject) => obs.ticketId === id)) {
-      window.jfObservers.push(observerObject);
+    if (!getRegistry().some((obs: JfObserverObject) => obs.ticketId === id)) {
+      getRegistry().push(observerObject);
     }
     // Observe if not
     observerObject.observer = new MutationObserver(callback);
@@ -197,8 +205,8 @@ export const useMutationObserver = (id: string): JfObserver => {
     observerObject.observer?.disconnect();
     observerObject.observer = undefined;
     observerObject.isObserving = false;
-    // Remove this instance from the global array
-    window.jfObservers = window.jfObservers.filter((obs: JfObserverObject) => obs.ticketId !== id);
+    // Remove this instance from the global registry
+    window.jfLib.observers[VERSION] = getRegistry().filter((obs: JfObserverObject) => obs.ticketId !== id);
     log("Disconnected observer", "info");
   };
 

@@ -68,7 +68,7 @@ const initializeJFLib = () => {
  */
 const createObserver = () => {
   window.jfLib.elementRemoved[VERSION] = {
-    observer: useMutationObserver(`elementRemoved-${VERSION}`),
+    observer: useMutationObserver(`elementRemoved--${VERSION}`),
     callbacks: [],
   };
 };

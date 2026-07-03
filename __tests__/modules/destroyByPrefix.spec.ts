@@ -9,15 +9,9 @@ const tick = (ms = 20) => new Promise((r) => setTimeout(r, ms));
 
 describe("destroyByPrefix", () => {
   beforeEach(() => {
-    window.jfObservers?.forEach((o) => o.observer?.disconnect());
+    window.jfLib?.observers?.["1.0"]?.forEach((o) => o.observer?.disconnect());
     // @ts-expect-error test cleanup
     delete window.jfLib;
-    // @ts-expect-error test cleanup
-    delete window.jfObservers;
-    // @ts-expect-error test cleanup
-    delete window.jfListeners;
-    // @ts-expect-error test cleanup
-    delete window.jfTimers;
     document.body.innerHTML = "";
   });
 
@@ -36,7 +30,7 @@ describe("destroyByPrefix", () => {
 
     expect(el.jfReady).not.toContain("OWN_000001--decorate");
     expect(window.jfLib.elementReady?.["1.0"]).toBeUndefined(); // entry dropped at zero callbacks
-    expect(window.jfObservers.find((o) => o.ticketId === "elementReady-1.0")).toBeUndefined();
+    expect(window.jfLib.observers["1.0"].find((o) => o.ticketId === "elementReady--1.0")).toBeUndefined();
   });
 
   it("leaves other owners' callbacks and their shared observer alone", async () => {
@@ -48,7 +42,7 @@ describe("destroyByPrefix", () => {
     destroyByPrefix("OWN_000002");
 
     expect(window.jfLib.elementReady["1.0"].callbacks.map((c) => c?.id)).toEqual(["OWN_999999--b"]);
-    expect(window.jfObservers.find((o) => o.ticketId === "elementReady-1.0")).toBeDefined();
+    expect(window.jfLib.observers["1.0"].find((o) => o.ticketId === "elementReady--1.0")).toBeDefined();
   });
 
   it("removes the owner's customEvents listeners (exact owner id, no prefix)", () => {
@@ -67,7 +61,7 @@ describe("destroyByPrefix", () => {
     expect(other).toHaveBeenCalledTimes(1);
   });
 
-  it("disconnects prefixed jfListeners, jfTimers and jfObservers", async () => {
+  it("disconnects prefixed listeners, timers and observers", async () => {
     const el = document.createElement("button");
     document.body.appendChild(el);
     const clickHandler = vi.fn();
@@ -83,9 +77,9 @@ describe("destroyByPrefix", () => {
     await tick(80);
     expect(clickHandler).not.toHaveBeenCalled();
     expect(timerHandler).not.toHaveBeenCalled();
-    expect(window.jfListeners).toHaveLength(0);
-    expect(window.jfTimers).toHaveLength(0);
-    expect(window.jfObservers.find((o) => o.ticketId === "OWN_000004--observer")).toBeUndefined();
+    expect(window.jfLib.listeners["1.0"]).toHaveLength(0);
+    expect(window.jfLib.timers["1.0"]).toHaveLength(0);
+    expect(window.jfLib.observers["1.0"].find((o) => o.ticketId === "OWN_000004--observer")).toBeUndefined();
   });
 
   it("is a safe no-op with no registries or a bad owner id", () => {

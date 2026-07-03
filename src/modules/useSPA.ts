@@ -19,6 +19,7 @@ import { debounce } from "./debounce";
 
 const PAGE_CHANGE_VERSION = "1.0";
 const REINIT_VERSION = "1.0";
+const EXPERIMENTS_VERSION = "1.0";
 
 /**
  * Type guard to check if an unknown value is a JfSPAPageOptions instance
@@ -359,12 +360,12 @@ export const useSPA = (id: string): JfSPA => {
 
       // Check if this test is already setup — a fresh object per assignment, so an external
       // wipe of window.jfLib can never resurrect stale module-level state
-      window.jfLib = window.jfLib || {
-        pagePath: window.location.pathname + window.location.search + window.location.hash,
-        experiments: [],
-      };
-      window.jfLib.experiments = window.jfLib.experiments || [];
-      const alreadyRunning = !!window.jfLib.experiments.find((test) => test?.details && test?.details?.id == id);
+      window.jfLib = window.jfLib || {};
+      window.jfLib.experiments = window.jfLib.experiments || {};
+      window.jfLib.experiments[EXPERIMENTS_VERSION] = window.jfLib.experiments[EXPERIMENTS_VERSION] || [];
+      const alreadyRunning = !!window.jfLib.experiments[EXPERIMENTS_VERSION].find(
+        (test) => test?.details && test?.details?.id == id
+      );
       if (alreadyRunning) {
         log(`Test already setup`, "warn");
         // initTest = () => null;
@@ -451,7 +452,7 @@ export const useSPA = (id: string): JfSPA => {
 
       // Push this test to global object and mark it as running
       STATE.details.isRunning = true;
-      window.jfLib.experiments.push(publicApi);
+      window.jfLib.experiments[EXPERIMENTS_VERSION].push(publicApi);
       return true;
     } catch (e) {
       log("Setup Error", "error", STATE);
@@ -505,7 +506,7 @@ export const useSPA = (id: string): JfSPA => {
       };
 
       // Setup the reInit observer
-      window.jfLib.reInit[REINIT_VERSION] = { observer: useMutationObserver(`reInit-${REINIT_VERSION}`), nodeNames };
+      window.jfLib.reInit[REINIT_VERSION] = { observer: useMutationObserver(`reInit--${REINIT_VERSION}`), nodeNames };
       window.jfLib.reInit[REINIT_VERSION].observer.observe(target, config, callback);
     } catch (e) {
       log("Re-Init Error", "error");
@@ -533,23 +534,22 @@ export const useSPA = (id: string): JfSPA => {
       const callback: MutationCallback = () => {
         // compare the full location — pathname alone misses query-string and hash navigations
         const current = window.location.pathname + window.location.search + window.location.hash;
-        if (typeof window.jfLib?.pagePath !== "string" || current === window.jfLib.pagePath) return;
+        const entry = window.jfLib?.pageChange?.[PAGE_CHANGE_VERSION];
+        if (typeof entry?.pagePath !== "string" || current === entry.pagePath) return;
 
         // Update the current path
-        window.jfLib.pagePath = current;
+        entry.pagePath = current;
 
         // Dispatch an event
         window.dispatchEvent(new Event(`jf-pagechange-${PAGE_CHANGE_VERSION}`));
       };
 
-      // Setup the reInit observer
+      // Setup the page-change observer, seeding pagePath with the current location
       window.jfLib.pageChange[PAGE_CHANGE_VERSION] = {
-        observer: useMutationObserver(`pageChange-${PAGE_CHANGE_VERSION}`),
+        observer: useMutationObserver(`pageChange--${PAGE_CHANGE_VERSION}`),
+        pagePath: window.location.pathname + window.location.search + window.location.hash,
       };
       window.jfLib.pageChange[PAGE_CHANGE_VERSION].observer.observe(target, config, callback);
-
-      // Set the current path initially
-      window.jfLib.pagePath = window.location.pathname + window.location.search + window.location.hash;
     } catch (e) {
       log("Page Change Error", "error");
       throwError(e);
@@ -700,7 +700,7 @@ export const useSPA = (id: string): JfSPA => {
     removeStyleSheet();
 
     // Sweep every auto-tracked resource registered under this test's id (element* callbacks + jfReady
-    // marks, customEvents listeners, jfListeners/jfTimers/jfObservers) — runs on every reset
+    // marks, customEvents listeners, jfLib listeners/timers/observers) — runs on every reset
     destroyByPrefix(STATE.details.id);
 
     try {
@@ -728,13 +728,15 @@ export const useSPA = (id: string): JfSPA => {
     window.removeEventListener(`jf-pagechange-${PAGE_CHANGE_VERSION}`, handlePageChange);
     window.removeEventListener(`jf-reinit-${REINIT_VERSION}`, handleReInit);
     window.removeEventListener("resize", handleResize);
-    // disconnect the per-test removal observer
-    if (!!STATE.options.watchForRemoval) useMutationObserver(`_${STATE.details.id}_`).disconnect();
+    // destroy the per-test removal observer
+    if (!!STATE.options.watchForRemoval) useMutationObserver(`${STATE.details.id}--removal`).destroy();
     // sweep every auto-tracked resource registered under this test's id
     destroyByPrefix(STATE.details.id);
     // delete it from our records
-    if (window.jfLib?.experiments) {
-      window.jfLib.experiments = window.jfLib.experiments.filter((test) => test.details.id !== STATE.details.id);
+    if (window.jfLib?.experiments?.[EXPERIMENTS_VERSION]) {
+      window.jfLib.experiments[EXPERIMENTS_VERSION] = window.jfLib.experiments[EXPERIMENTS_VERSION].filter(
+        (test) => test.details.id !== STATE.details.id
+      );
     }
   };
 
@@ -1075,8 +1077,9 @@ export const useSPA = (id: string): JfSPA => {
       if (!!!watchForRemoval) return;
       log(`+ Binding Removal Watcher`, "detail");
 
-      // Create a new observer
-      const observer = useMutationObserver(`_${STATE.details.id}_`);
+      // Create a new observer — the --removal suffix puts it under the test's compound-id prefix,
+      // so resetTest's destroyByPrefix sweep destroys it; this rebind recreates it on re-apply
+      const observer = useMutationObserver(`${STATE.details.id}--removal`);
 
       // Abort if already bound
       if (observer.details.isObserving) return;

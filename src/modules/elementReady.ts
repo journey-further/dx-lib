@@ -75,7 +75,7 @@ const initializeJFLib = () => {
  */
 const createObserver = () => {
   window.jfLib.elementReady[VERSION] = {
-    observer: useMutationObserver(`elementReady-${VERSION}`),
+    observer: useMutationObserver(`elementReady--${VERSION}`),
     callbacks: [],
   };
 };

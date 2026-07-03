@@ -31,18 +31,15 @@ export type JfListenerObject = {
   destroy: () => void;
 };
 
-/**
- * Extends the `Window` interface to include a globally scoped array of `JfListenerObject` instances.
- *
- * This global array (`window.jfListeners`) is used to track all active event listeners, allowing for centralized
- * management and cleanup of listeners across the application. It ensures that duplicate listeners are not added and
- * that listeners can be removed efficiently when no longer needed.
- */
-declare global {
-  interface Window {
-    jfListeners: JfListenerObject[];
-  }
-}
+const VERSION = "1.0";
+
+/** Lazily initialise and return the versioned listener registry */
+const getRegistry = (): JfListenerObject[] => {
+  window.jfLib = window.jfLib || {};
+  window.jfLib.listeners = window.jfLib.listeners || {};
+  window.jfLib.listeners[VERSION] = window.jfLib.listeners[VERSION] || [];
+  return window.jfLib.listeners[VERSION];
+};
 
 /**
  * Adds an event listener to an element and tracks it globally to prevent duplicates and manage cleanup.
@@ -77,31 +74,29 @@ export const useEventListener = (
   if (typeof eventName !== "string") throw new Error("Arg 3 must be of type string");
   if (typeof handler !== "function") throw new Error("Arg 4 must be of type function");
   if (typeof options !== "object" && options) throw new Error("Arg 5 must be an object or undefined");
-  // define the array in case there isnt one
-  window.jfListeners = window.jfListeners || [];
   // define callback to remove this listener
   const disconnect = () => {
     element.removeEventListener(eventName, handler, options);
-    window.jfListeners = window.jfListeners.filter((l) => l.id !== id);
+    window.jfLib.listeners[VERSION] = getRegistry().filter((l) => l.id !== id);
   };
 
   // See if a listener with this ID has been added already
-  const currentListener = window.jfListeners.find((listener) => listener.id === id);
+  const currentListener = getRegistry().find((listener) => listener.id === id);
   // remove the current listener if the element is still in the DOM
   if (currentListener && document.documentElement.contains(currentListener.element)) {
     currentListener.disconnect?.();
   }
 
-  //cleanup the array
+  //cleanup the registry
   if (currentListener) {
-    window.jfListeners = window.jfListeners.filter((listener) => listener.id !== id);
+    window.jfLib.listeners[VERSION] = getRegistry().filter((listener) => listener.id !== id);
   }
   // Add the listener
   element?.addEventListener(eventName, handler, options);
-  // object to return and push to window
+  // object to return and push to the registry
   const listenerObject = { element, eventName, id, handler, options, disconnect, destroy: disconnect };
   // Push the object
-  window.jfListeners.push(listenerObject);
+  getRegistry().push(listenerObject);
   // Return method to remove it
   return listenerObject;
 };
