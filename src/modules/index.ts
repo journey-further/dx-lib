@@ -1,6 +1,7 @@
 export * from "./createElement";
 export * from "./customEvents";
 export * from "./debounce";
+export * from "./destroyByPrefix";
 export * from "./docReady";
 export * from "./elementInView";
 export * from "./elementReady";

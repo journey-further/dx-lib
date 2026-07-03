@@ -50,6 +50,8 @@ export interface JfReady {
 export type JfReadyObject = {
   id: string;
   callback: (el: Element) => void;
+  /** The CSS selector this callback watches — lets teardown sweeps clear matching jfReady marks */
+  selector?: string;
 };
 
 /**
@@ -272,6 +274,8 @@ export const elementReady = (
       const config: MutationObserverInit = { childList: true, subtree: true };
 
       const mutationCallback: MutationCallback = (mutations) => {
+        // the observer can outlive its environment (jsdom teardown, detached frames) - never touch a dead window
+        if (typeof window === "undefined") return;
         mutations.forEach((mutation) => {
           // we only want to observe added nodes
           if (mutation.addedNodes.length == 0) return;
@@ -321,6 +325,7 @@ export const elementReady = (
       // 3. Push our callback into the array
       getObserver()?.callbacks.push({
         id: id,
+        selector: selector,
         callback: (target) => {
           // check whether this element matches the selector, or a child element of this element matches the selector
           if (!target.matches(selector) && !target.querySelector(selector)) {

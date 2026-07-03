@@ -1,3 +1,4 @@
+import { destroyByPrefix } from "./destroyByPrefix";
 import { insertStyle } from "./insertStyle";
 import { useMutationObserver } from "./useMutationObserver";
 import { waitForElement } from "./waitForElement";
@@ -719,18 +720,9 @@ export const useSPA = (id: string): JfSPA => {
     log(`Resetting Test`, "info");
     removeStyleSheet();
 
-    // Remove callbacks registered with this test's ID prefix — runs on every reset (incl. alwaysReset cycles)
-    const prefix = `${STATE.details.id}--`;
-    (["elementReady", "elementRemoved", "elementUpdated"] as const).forEach((key) => {
-      const lib = window.jfLib?.[key];
-      if (!lib) return;
-      Object.values(lib).forEach((versionObj) => {
-        if (!versionObj?.callbacks) return;
-        versionObj.callbacks = (versionObj.callbacks as { id?: string }[]).filter(
-          (cb) => !cb?.id?.startsWith(prefix)
-        ) as typeof versionObj.callbacks;
-      });
-    });
+    // Sweep every auto-tracked resource registered under this test's id (element* callbacks + jfReady
+    // marks, customEvents listeners, jfListeners/jfTimers/jfObservers) — runs on every reset
+    destroyByPrefix(STATE.details.id);
 
     try {
       if (isFunction(STATE.options.reset)) await STATE.options.reset();
@@ -759,6 +751,8 @@ export const useSPA = (id: string): JfSPA => {
     window.removeEventListener("resize", handleResize);
     // disconnect the per-test removal observer
     if (!!STATE.options.watchForRemoval) useMutationObserver(`_${STATE.details.id}_`).disconnect();
+    // sweep every auto-tracked resource registered under this test's id
+    destroyByPrefix(STATE.details.id);
     // delete it from our records
     if (window.jfLib?.experiments) {
       window.jfLib.experiments = window.jfLib.experiments.filter((test) => test.details.id !== STATE.details.id);

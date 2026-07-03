@@ -1,4 +1,5 @@
 import { JfObserver, JfObserverObject, JfReadyObject, JfRemovedObject, JfSPA } from "./modules";
+import { JfBusListener } from "./modules/customEvents";
 import { JfUpdatedObject } from "./modules/elementUpdated";
 
 /**
@@ -50,6 +51,8 @@ export interface JfLib {
   customEvents?: {
     [version: string]: {
       bus: EventTarget;
+      /** Tracked subscriptions so teardown sweeps can remove an experiment's listeners */
+      listeners: JfBusListener[];
     };
   };
 }

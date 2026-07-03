@@ -318,6 +318,8 @@ export const elementUpdated = (
       };
 
       const mutationCallback: MutationCallback = (mutations) => {
+        // the observer can outlive its environment (jsdom teardown, detached frames) - never touch a dead window
+        if (typeof window === "undefined") return;
         mutations.forEach((mutation) => {
           // Grab all the callbacks from our callbacks array and run them each
           getObserver().callbacks.forEach((cb) => {

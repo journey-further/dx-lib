@@ -2,18 +2,27 @@ const VERSION = "1.0";
 
 type Detail = { [key: string]: unknown };
 
+/** A tracked bus subscription, so teardown sweeps can remove an experiment's listeners */
+export type JfBusListener = {
+  ownerId: string;
+  eventType: string;
+  listener: EventListener;
+};
+
 const initBus = () => {
   window.jfLib = window.jfLib || {};
   window.jfLib.customEvents = window.jfLib.customEvents || {};
   if (!window.jfLib.customEvents[VERSION]) {
-    window.jfLib.customEvents[VERSION] = { bus: new EventTarget() };
+    window.jfLib.customEvents[VERSION] = { bus: new EventTarget(), listeners: [] };
   }
 };
 
-const getBus = (): EventTarget => {
+const getEntry = () => {
   initBus();
-  return window.jfLib.customEvents[VERSION].bus;
+  return window.jfLib.customEvents[VERSION];
 };
+
+const getBus = (): EventTarget => getEntry().bus;
 
 /**
  * Per-experiment event bus, scoped to the provided experiment ID.
@@ -22,7 +31,8 @@ const getBus = (): EventTarget => {
  * Cross-experiment listening is supported via the optional `fromId` argument on `on`.
  *
  * The underlying `EventTarget` is shared on `window.jfLib.customEvents["1.0"].bus` so it persists across module
- * boundaries without import cycles.
+ * boundaries without import cycles. Every subscription is tracked in `window.jfLib.customEvents["1.0"].listeners`
+ * under the subscribing experiment's id, so `destroyByPrefix`/useSPA resets can sweep them.
  *
  * @example
  *   const { emit, on } = customEvents("TIK_123456");
@@ -61,11 +71,19 @@ export const customEvents = (id: string) => {
    */
   const on = (type: string, handler: (detail: Detail) => void, fromId?: string): (() => void) => {
     const namespace = fromId ?? id;
+    const eventType = `${namespace}:${type}`;
     const listener = (e: Event): void => {
       handler((e as CustomEvent<Detail>).detail);
     };
-    getBus().addEventListener(`${namespace}:${type}`, listener);
-    return () => getBus().removeEventListener(`${namespace}:${type}`, listener);
+    getBus().addEventListener(eventType, listener);
+    getEntry().listeners.push({ ownerId: id, eventType, listener });
+
+    const off = (): void => {
+      getBus().removeEventListener(eventType, listener);
+      const entry = getEntry();
+      entry.listeners = entry.listeners.filter((l) => l.listener !== listener);
+    };
+    return off;
   };
 
   return { emit, on };

@@ -224,3 +224,48 @@ describe("teardown and re-init correctness (H5, H6, H7)", () => {
     B.destroy();
   });
 });
+
+describe("reset teardown sweep (M1, D1)", () => {
+  it("M1: elementReady re-decorates surviving elements after a reset/reapply cycle", async () => {
+    const el = document.createElement("div");
+    el.className = "target";
+    document.body.appendChild(el);
+
+    const cb = vi.fn();
+    const apply = vi.fn(() => {
+      elementReady(".target", cb, "TST_000030--decorate");
+    });
+    const Test = useSPA("TST_000030");
+    await Test.init({ apply, location: "/" });
+    await tick(60); // elementReady marks after its initial scan
+    expect(cb).toHaveBeenCalledTimes(1);
+
+    await Test.reset(); // must clear the callback AND the element's jfReady mark
+
+    window.dispatchEvent(new Event("jf-reinit-1.0"));
+    await tick(60);
+    expect(apply).toHaveBeenCalledTimes(2);
+    expect(cb).toHaveBeenCalledTimes(2); // surviving element re-decorated
+    Test.destroy();
+  });
+
+  it("D1: customEvents subscriptions from apply() do not stack across reset/reapply cycles", async () => {
+    const handler = vi.fn();
+    const { emit, on } = customEvents("TST_000031");
+    const apply = vi.fn(() => {
+      on("basket:updated", handler); // typical build pattern: subscribe in apply()
+    });
+    const Test = useSPA("TST_000031");
+    await Test.init({ apply, location: "/" });
+    expect(apply).toHaveBeenCalledTimes(1);
+
+    await Test.reset();
+    window.dispatchEvent(new Event("jf-reinit-1.0"));
+    await tick(50);
+    expect(apply).toHaveBeenCalledTimes(2);
+
+    emit("basket:updated", {});
+    expect(handler).toHaveBeenCalledTimes(1); // one logical subscription, one delivery
+    Test.destroy();
+  });
+});

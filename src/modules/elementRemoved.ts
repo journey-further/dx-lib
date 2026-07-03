@@ -209,6 +209,8 @@ export const elementRemoved = (
       const config: MutationObserverInit = { childList: true, subtree: true };
 
       const mutationCallback: MutationCallback = (mutations) => {
+        // the observer can outlive its environment (jsdom teardown, detached frames) - never touch a dead window
+        if (typeof window === "undefined") return;
         mutations.forEach((mutation) => {
           // we only want to observe removed nodes
           if (mutation.removedNodes.length == 0) return;
