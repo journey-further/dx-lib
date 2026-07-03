@@ -73,28 +73,6 @@ export interface JfLib {
   };
 }
 
-/** Minimal shape retained for backward compatibility with window.jfTests */
-export interface JfLegacyTest {
-  id: string;
-  isRunning: boolean;
-}
-
-/**
- * Global interface for managing tests
- *
- * @interface
- */
-export interface JfTests {
-  /** Array of active tests */
-  tests: JfLegacyTest[];
-  /** Observer for test reapplication */
-  reapplyListener?: JfObserver;
-  /** Observer for page changes */
-  pageListener?: JfObserver;
-  /** Current page path */
-  pagePath?: string;
-}
-
 export interface NuxtInstance {
   $store?: Record<string, unknown>;
   $nextTick?: (callback?: () => void) => Promise<void>;
@@ -104,16 +82,13 @@ export interface NuxtInstance {
 declare global {
   interface Window {
     jfLib: JfLib;
-    jfTests: JfTests;
+    /** GTM/analytics data layer written to by pushToDL */
+    dataLayer: any[]; // eslint-disable-line
     $nuxt?: NuxtInstance;
   }
-}
 
-declare global {
-  // Add 'ready' to an Element
+  // elementReady's per-element fired marks
   interface Element {
     jfReady?: string[];
-    jfRemoved?: string[];
-    jfUpdated?: string[];
   }
 }

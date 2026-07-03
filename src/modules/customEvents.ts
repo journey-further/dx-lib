@@ -66,7 +66,8 @@ export const customEvents = (id: string) => {
    *
    * @param {string} type - Event name.
    * @param {Function} handler - Callback receiving the event detail.
-   * @param {string} [fromId] - Source experiment ID when listening cross-experiment.
+   * @param {string} [fromId] - Source experiment ID when listening cross-experiment. There is no replay: subscribe
+   *   before the source experiment emits, or the event is missed.
    * @returns {Function} Unsubscribe function.
    */
   const on = (type: string, handler: (detail: Detail) => void, fromId?: string): (() => void) => {
