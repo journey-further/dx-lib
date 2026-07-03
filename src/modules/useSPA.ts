@@ -440,23 +440,12 @@ export const useSPA = (id: string): JfSPA => {
       window.addEventListener(`jf-reinit-${REINIT_VERSION}`, handleReInit);
 
       if (!!screen) {
-        STATE.options.screen = screen;
-        // set default min/max if not provided
-        if (screen.maxWidth === undefined) STATE.options.screen.maxWidth = 99999;
-        if (screen.minWidth === undefined) STATE.options.screen.minWidth = 0;
+        // copy with defaults — never mutate the caller's (possibly frozen/shared) options object
+        STATE.options.screen = { minWidth: 0, maxWidth: 99999, ...screen };
         // Bind an event to handle the page change
         log(`+ Binding Resize Listener`, "detail");
         window.removeEventListener(`resize`, handleResize);
         window.addEventListener(`resize`, handleResize);
-        // check it now and abort if it's not within the params
-        // if (window.innerWidth < screen.minWidth) {
-        //   log(`Screen is smaller than minWidth`, "warn", screen.minWidth);
-        //   // return false;
-        // }
-        // if (window.innerWidth > screen.maxWidth) {
-        //   log(`Screen is larger than maxWidth`, "warn", screen.maxWidth);
-        //   // return false;
-        // }
       }
 
       // Push this test to global object and mark it as running
@@ -575,8 +564,9 @@ export const useSPA = (id: string): JfSPA => {
 
       // Check if it's regex
       if (isRegExp(match)) {
-        // It's regex
-        const regex = new RegExp(match, "gi");
+        // use the user's RegExp as-is (its case sensitivity and flags are respected) — only strip
+        // g/y so a stateful lastIndex can't make repeated checks flaky
+        const regex = match.global || match.sticky ? new RegExp(match.source, match.flags.replace(/[gy]/g, "")) : match;
         if (!regex.test(window.location[type])) {
           return false;
         }
@@ -658,23 +648,11 @@ export const useSPA = (id: string): JfSPA => {
       if (destroyed) return;
       // NOTE: check screen size here if options for screen is passed and resetTest is wrong size
       if (!!STATE.options.screen) {
-        const { minWidth, maxWidth } = STATE.options.screen;
-        // Check if screen is SMALLER than minWidth
-        if (window.innerWidth < minWidth) {
-          log("Screen is smaller than minWidth, resetting", "warn", minWidth);
-          // screen is smaller, reset
+        if (!isScreenInBounds()) {
+          log("Screen is outside the configured min/max bounds, resetting", "warn", STATE.options.screen);
           await resetTest();
           return;
         }
-
-        // Check if screen is LARGER than maxWidth
-        if (window.innerWidth > maxWidth) {
-          log("Screen is larger than maxWidth, resetting", "warn", minWidth);
-          // screen is smaller, reset
-          await resetTest();
-          return;
-        }
-
         log("Screen is correct size, proceeding", "info");
       }
 
@@ -984,37 +962,32 @@ export const useSPA = (id: string): JfSPA => {
   };
 
   /**
+   * The single bounds check shared by init and resize paths — inclusive on both ends so exact
+   * breakpoint widths (an iPad rotating onto 768/1024) behave the same on load and on resize
+   *
+   * @returns {boolean} True when the current width is within the configured screen bounds
+   */
+  const isScreenInBounds = (): boolean => {
+    const { minWidth, maxWidth } = STATE.options.screen;
+    return window.innerWidth >= minWidth && window.innerWidth <= maxWidth;
+  };
+
+  /**
    * Handles window resize events, using the `minWidth` and/or `maxWidth` passed in the `screen` options
    *
    * @returns {Promise<void>}
    * @throws {Error} If resize handling fails
    */
   const handleResizeDebounced = debounce(async () => {
-    // log("Screen resized", "info");
     try {
-      const { minWidth, maxWidth } = STATE.options.screen;
-
-      // Check if the screen is within the min/max
-      if (window.innerWidth > minWidth && window.innerWidth < maxWidth) {
+      if (isScreenInBounds()) {
         log("Screen is correct size", "info");
         await initTest();
         return;
       }
 
-      // Check if screen is SMALLER than minWidth
-      if (window.innerWidth < minWidth) {
-        log("Screen is smaller than minWidth, resetting", "warn", minWidth);
-        // screen is smaller, reset
-        await resetTest();
-        return;
-      }
-
-      // Check if screen is LARGER than maxWidth
-      if (window.innerWidth > maxWidth) {
-        log("Screen is larger than maxWidth, resetting", "warn", minWidth);
-        // screen is smaller, reset
-        await resetTest();
-      }
+      log("Screen is outside the configured min/max bounds, resetting", "warn", STATE.options.screen);
+      await resetTest();
     } catch (e) {
       reportLifecycle(e);
     }

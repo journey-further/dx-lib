@@ -269,3 +269,44 @@ describe("reset teardown sweep (M1, D1)", () => {
     Test.destroy();
   });
 });
+
+describe("option handling (M3, M5, L4)", () => {
+  it("M3: resizing to exactly minWidth applies the test — no boundary dead zone", async () => {
+    (window as unknown as { innerWidth: number }).innerWidth = 500;
+    const apply = vi.fn();
+    const Test = useSPA("TST_000040");
+    await Test.init({ apply, location: "/", screen: { minWidth: 601, maxWidth: 1023 } });
+    expect(apply).not.toHaveBeenCalled(); // 500 < 601
+
+    (window as unknown as { innerWidth: number }).innerWidth = 601; // exactly the documented lower bound
+    window.dispatchEvent(new Event("resize"));
+    await tick(200); // past the 100ms debounce
+    expect(apply).toHaveBeenCalledTimes(1);
+    Test.destroy();
+  });
+
+  it("M5: a case-sensitive location RegExp is used as-is, not rebuilt with forced gi flags", async () => {
+    window.history.replaceState({}, "", "/products/x");
+    const apply = vi.fn();
+    const Test = useSPA("TST_000041");
+    await Test.init({ apply, location: /\/Products\// });
+    expect(apply).not.toHaveBeenCalled(); // lowercase path must not match a capital-P regex
+    Test.destroy();
+
+    const apply2 = vi.fn();
+    const Test2 = useSPA("TST_000042");
+    await Test2.init({ apply: apply2, location: /\/products\// });
+    expect(apply2).toHaveBeenCalledTimes(1);
+    Test2.destroy();
+  });
+
+  it("L4: a frozen screen options object does not make init reject", async () => {
+    (window as unknown as { innerWidth: number }).innerWidth = 800;
+    const apply = vi.fn();
+    const Test = useSPA("TST_000043");
+    const screen = Object.freeze({ minWidth: 601 });
+    await expect(Test.init({ apply, location: "/", screen })).resolves.not.toThrow();
+    expect(apply).toHaveBeenCalledTimes(1);
+    Test.destroy();
+  });
+});
