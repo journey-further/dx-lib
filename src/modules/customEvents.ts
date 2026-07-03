@@ -10,7 +10,10 @@ const initBus = () => {
   }
 };
 
-const getBus = (): EventTarget => window.jfLib.customEvents[VERSION].bus;
+const getBus = (): EventTarget => {
+  initBus();
+  return window.jfLib.customEvents[VERSION].bus;
+};
 
 /**
  * Per-experiment event bus, scoped to the provided experiment ID.
