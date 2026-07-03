@@ -147,6 +147,27 @@ describe("useMutationObserver", () => {
     expect(details2.ticketId).toBe("observer2");
   });
 
+  it("re-registers a stale handle on re-observe, so a fresh call for the same id doesn't create a duplicate live observer", () => {
+    const node = document.createElement("div");
+    document.body.appendChild(node);
+
+    const stale = useMutationObserver(OBSERVER_ID);
+    stale.observe(node, CONFIG, CALLBACK);
+    stale.disconnect();
+
+    // Simulate a caller that kept the handle around and re-observes after disconnect
+    const reObserved = stale.observe(node, CONFIG, CALLBACK);
+    expect(reObserved).toBe(true);
+    // The stale handle's entry must be visible in the registry again
+    expect(window.jfObservers.find((obs) => obs.ticketId === OBSERVER_ID)).toBe(stale.details);
+
+    // A fresh call for the same id must see it as already observing, not spin up a second live observer
+    const fresh = useMutationObserver(OBSERVER_ID);
+    const freshObserveResult = fresh.observe(node, CONFIG, CALLBACK);
+    expect(freshObserveResult).toBe(false);
+    expect(window.jfObservers).toHaveLength(1);
+  });
+
   // it("throws error if ID already exists", () => {
   //   // Create first observer
   //   const observer1 = useMutationObserver(OBSERVER_ID);

@@ -167,6 +167,12 @@ export const useMutationObserver = (id: string): JfObserver => {
     if (observerObject.isObserving) {
       return false;
     }
+    // A prior disconnect() removes this entry from the global registry, but a caller may still
+    // hold this handle and call observe() again - re-register it so a fresh useMutationObserver(id)
+    // finds this same instance instead of spinning up a duplicate, untracked observer.
+    if (!window.jfObservers.some((obs: JfObserverObject) => obs.ticketId === id)) {
+      window.jfObservers.push(observerObject);
+    }
     // Observe if not
     observerObject.observer = new MutationObserver(callback);
     // if we've got an array of targets, add an observer to each one

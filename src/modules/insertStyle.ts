@@ -24,24 +24,22 @@ export const insertStyle = async (
     elem?: HTMLElement;
   }
 ): Promise<void> => {
-  // Exit an element exists with this ID
-  if (!!document.querySelector(`#${id}`)) return;
   // Generate our HTML
   const styleElem = `<style id="${id}">${style.toString()}</style>`;
   // Get our insert position
   const insertPosition = options?.position ? options.position : "beforeend";
 
-  try {
-    // If an element was passed
-    if (options?.elem) {
-      options.elem.insertAdjacentHTML(insertPosition, styleElem);
-    } else {
-      // default to document.body
-      // NOTE: @samrenfrew added waitFor here to ensure that the body exists before we try to insert into it - fixes some errors with this function
-      await waitFor(() => !!document.body);
-      document.body.insertAdjacentHTML(insertPosition, styleElem);
-    }
-  } catch (error) {
-    console.warn(error);
+  // Exit if an element already exists with this ID (getElementById does no selector parsing, so
+  // ids that aren't valid CSS selectors - e.g. starting with a digit - are handled correctly)
+  if (!!document.getElementById(id)) return;
+
+  // If an element was passed
+  if (options?.elem) {
+    options.elem.insertAdjacentHTML(insertPosition, styleElem);
+  } else {
+    // default to document.body
+    // NOTE: @samrenfrew added waitFor here to ensure that the body exists before we try to insert into it - fixes some errors with this function
+    await waitFor(() => !!document.body);
+    document.body.insertAdjacentHTML(insertPosition, styleElem);
   }
 };
