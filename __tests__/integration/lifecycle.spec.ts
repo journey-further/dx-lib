@@ -151,3 +151,76 @@ describe("page-change detection (H4)", () => {
     window.removeEventListener("jf-pagechange-1.0", pcSpy);
   });
 });
+
+describe("teardown and re-init correctness (H5, H6, H7)", () => {
+  it("H5: destroy() removes listeners — no zombie re-apply on the next page change", async () => {
+    const apply = vi.fn();
+    const Test = useSPA("TST_000020");
+    await Test.init({ apply, location: "/" });
+    expect(apply).toHaveBeenCalledTimes(1);
+
+    Test.destroy();
+    expect(window.jfLib.experiments).toHaveLength(0);
+
+    window.dispatchEvent(new Event("jf-pagechange-1.0"));
+    window.dispatchEvent(new Event("jf-reinit-1.0"));
+    await tick(50);
+    expect(apply).toHaveBeenCalledTimes(1); // destroyed test must stay gone
+  });
+
+  it("H6: the watchForRemoval cap applies per loop, resets on page change, and stops re-running the user reset", async () => {
+    const apply = vi.fn();
+    const reset = vi.fn();
+    const Test = useSPA("TST_000021");
+    await Test.init({ apply, reset, location: "/", watchForRemoval: ".watched" });
+    expect(apply).toHaveBeenCalledTimes(1);
+
+    const rerender = async () => {
+      const el = document.createElement("div");
+      el.className = "watched";
+      document.body.appendChild(el);
+      await tick(10);
+      el.remove();
+      await tick(30);
+    };
+
+    for (let i = 0; i < 12; i++) await rerender();
+
+    // reapplies capped: 1 initial + 5 loop reapplies
+    expect(apply.mock.calls.length).toBe(6);
+    // reset fires once at the cap, then never again per removal
+    expect(reset.mock.calls.length).toBe(1);
+
+    // a page change starts a new loop: the cap must not be a per-session kill switch
+    window.history.pushState({}, "", "/again");
+    window.history.pushState({}, "", "/");
+    window.dispatchEvent(new Event("jf-pagechange-1.0"));
+    await tick(50);
+    expect(apply.mock.calls.length).toBe(7); // re-applied after page change
+    await rerender();
+    expect(apply.mock.calls.length).toBe(8); // watch loop live again
+  });
+
+  it("H7: the shared jf-reinit observer honours every instance's removedNode, not just the first binder's", async () => {
+    const reinitSpy = vi.fn();
+    window.addEventListener("jf-reinit-1.0", reinitSpy);
+
+    const A = useSPA("TST_000022");
+    await A.init({ apply: vi.fn(), location: "/" }); // binds singleton with default MAIN
+
+    const B = useSPA("TST_000023");
+    await B.init({ apply: vi.fn(), location: "/", removedNode: "app-root" });
+
+    document.body.appendChild(document.createElement("app-root"));
+    await tick(50);
+    expect(reinitSpy.mock.calls.length).toBeGreaterThanOrEqual(1); // B's node now fires
+
+    document.body.appendChild(document.createElement("main"));
+    await tick(50);
+    expect(reinitSpy.mock.calls.length).toBeGreaterThanOrEqual(2); // A's node still fires
+
+    window.removeEventListener("jf-reinit-1.0", reinitSpy);
+    A.destroy();
+    B.destroy();
+  });
+});

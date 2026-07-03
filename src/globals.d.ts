@@ -17,6 +17,8 @@ export interface JfLib {
   reInit?: {
     [version: string]: {
       observer: JfObserver;
+      /** Node names watched for re-addition — a shared registry so every instance's removedNode is honoured */
+      nodeNames?: Set<string>;
     };
   };
   /** Observer for element ready events */

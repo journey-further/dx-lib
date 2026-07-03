@@ -17,10 +17,6 @@ import { debounce } from "./debounce";
 
 const PAGE_CHANGE_VERSION = "1.0";
 const REINIT_VERSION = "1.0";
-const LIB_INIT = {
-  pagePath: window.location.pathname,
-  experiments: [],
-};
 
 /**
  * Type guard to check if an unknown value is a JfSPAPageOptions instance
@@ -342,6 +338,8 @@ export const useSPA = (id: string): JfSPA => {
     },
   };
   const log = createLogger(`[${id}] useSPA`);
+  // Set by destroy() — checked before any (re-)apply so a destroyed test can never zombie back
+  let destroyed = false;
   /**
    * Sets up the SPA test with provided options
    *
@@ -357,8 +355,12 @@ export const useSPA = (id: string): JfSPA => {
       // Push the id
       STATE.details.id = id;
 
-      // Check if this test is already setup
-      window.jfLib = window.jfLib || LIB_INIT;
+      // Check if this test is already setup — a fresh object per assignment, so an external
+      // wipe of window.jfLib can never resurrect stale module-level state
+      window.jfLib = window.jfLib || {
+        pagePath: window.location.pathname + window.location.search + window.location.hash,
+        experiments: [],
+      };
       window.jfLib.experiments = window.jfLib.experiments || [];
       const alreadyRunning = !!window.jfLib.experiments.find((test) => test?.details && test?.details?.id == id);
       if (alreadyRunning) {
@@ -483,21 +485,26 @@ export const useSPA = (id: string): JfSPA => {
    */
   const bindReInitListener = () => {
     window.jfLib.reInit = window.jfLib.reInit || {};
-    // Abort if we've already added this listener as we only need one
-    if (!!window.jfLib.reInit[REINIT_VERSION]) return;
+    // The observer is a shared singleton — later instances register their removedNode in the
+    // shared nodeNames set instead of being ignored (the observer must not close over one test's option)
+    const existing = window.jfLib.reInit[REINIT_VERSION];
+    if (existing) {
+      existing.nodeNames?.add(STATE.options.removedNode);
+      return;
+    }
     try {
       const target = document.querySelector("html");
       if (!!!target) throw new Error("no target");
-      window.jfLib.reInit = {};
       const config: MutationObserverInit = { childList: true, subtree: true };
 
+      const nodeNames = new Set<string>([STATE.options.removedNode]);
       const callback: MutationCallback = (mutations) => {
         mutations.forEach((mutation) => {
           if (mutation.addedNodes.length === 0) return;
-          mutation.addedNodes.forEach(async (node) => {
+          mutation.addedNodes.forEach((node) => {
             try {
-              if (node.nodeName !== STATE.options.removedNode) return;
-              // the MAIN element has been re-added, so dispatch an event
+              if (!nodeNames.has(node.nodeName)) return;
+              // a watched element has been re-added, so dispatch an event
               window.dispatchEvent(new Event(`jf-reinit-${REINIT_VERSION}`));
             } catch (e) {
               reportLifecycle(e);
@@ -507,8 +514,7 @@ export const useSPA = (id: string): JfSPA => {
       };
 
       // Setup the reInit observer
-
-      window.jfLib.reInit[REINIT_VERSION] = { observer: useMutationObserver(`reInit-${REINIT_VERSION}`) };
+      window.jfLib.reInit[REINIT_VERSION] = { observer: useMutationObserver(`reInit-${REINIT_VERSION}`), nodeNames };
       window.jfLib.reInit[REINIT_VERSION].observer.observe(target, config, callback);
     } catch (e) {
       log("Re-Init Error", "error");
@@ -648,6 +654,7 @@ export const useSPA = (id: string): JfSPA => {
    */
   const initTest = async (): Promise<void> => {
     try {
+      if (destroyed) return;
       // NOTE: check screen size here if options for screen is passed and resetTest is wrong size
       if (!!STATE.options.screen) {
         const { minWidth, maxWidth } = STATE.options.screen;
@@ -743,10 +750,19 @@ export const useSPA = (id: string): JfSPA => {
    * @returns {void}
    */
   const removeTest = (): void => {
-    // wipe the test
+    // wipe the test — initTest checks this flag so no surviving event can re-apply
+    destroyed = true;
     STATE.details.isRunning = false;
+    // unhook this instance's listeners
+    window.removeEventListener(`jf-pagechange-${PAGE_CHANGE_VERSION}`, handlePageChange);
+    window.removeEventListener(`jf-reinit-${REINIT_VERSION}`, handleReInit);
+    window.removeEventListener("resize", handleResize);
+    // disconnect the per-test removal observer
+    if (!!STATE.options.watchForRemoval) useMutationObserver(`_${STATE.details.id}_`).disconnect();
     // delete it from our records
-    window.jfLib.experiments = window.jfLib.experiments.filter((test) => test.details.id !== STATE.details.id);
+    if (window.jfLib?.experiments) {
+      window.jfLib.experiments = window.jfLib.experiments.filter((test) => test.details.id !== STATE.details.id);
+    }
   };
 
   /**
@@ -949,6 +965,8 @@ export const useSPA = (id: string): JfSPA => {
   const handlePageChange = async () => {
     try {
       log(`Page changed`, "info");
+      // a new page starts a new removal-watch loop — the reapply cap is per loop, not per session
+      STATE.loopCount = 0;
       if (!!STATE.options.removeOnPageChange) handleRemoveOnPageChange();
       await initTest();
     } catch (e) {
@@ -1108,9 +1126,6 @@ export const useSPA = (id: string): JfSPA => {
               try {
                 if (node.nodeType !== 1) return;
 
-                // If we've already run this 5 times, don't proceed
-                if (STATE.loopCount >= 6) return;
-
                 // Define a function that checks if the element matches
                 const checkElementMatches = async (selector: string) => {
                   try {
@@ -1118,8 +1133,12 @@ export const useSPA = (id: string): JfSPA => {
                     if (node.matches(selector)) {
                       log(`Element was removed, re-init`, "warn");
                       if (STATE.loopCount >= 5) {
-                        log(`Max loop count reached, aborting`, "error");
-                        resetTest();
+                        // reset exactly once at the cap — further removals must not re-run the user's reset
+                        if (STATE.loopCount === 5) {
+                          log(`Max loop count reached, aborting`, "error");
+                          STATE.loopCount += 1;
+                          await resetTest();
+                        }
                         return;
                       }
                       STATE.loopCount += 1;
