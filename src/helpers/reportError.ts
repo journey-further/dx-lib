@@ -26,7 +26,9 @@ export interface JfErrorDetail {
  *
  * @param {string} ticket - The experiment/test id the error belongs to
  * @param {string | Error | unknown} err - The error to report
- * @param {object} [extra] - Optional `variant`/`malformed` fields for the event detail
+ * @param {object} [extra] - Optional extra fields for the event detail
+ * @param {string} [extra.variant] - The experiment variant, when known
+ * @param {boolean} [extra.malformed] - True when the report itself had invalid experiment data
  */
 export const reportError = (ticket: string, err: unknown, extra?: { variant?: string; malformed?: boolean }): void => {
   try {

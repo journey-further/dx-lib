@@ -15,9 +15,11 @@ export type JfTimerObject = {
   timer: ReturnType<typeof setTimeout>;
   timeout: number;
   handler: () => void;
-  /** Clear this timer
+  /**
+   * Clear this timer
    *
-   * @deprecated Use `destroy` - the library-wide teardown verb. Behaviour is identical. */
+   * @deprecated Use `destroy` - the library-wide teardown verb. Behaviour is identical.
+   */
   disconnect: () => void;
   /** Clear this timer - the standard teardown verb (idempotent, sync, never throws) */
   destroy: () => void;
