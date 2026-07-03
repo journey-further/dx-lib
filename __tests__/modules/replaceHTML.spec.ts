@@ -1,9 +1,9 @@
 import { replaceHTML } from "modules";
 
-const NO_ELEM_ERR = "Provide a HTML element as arg 1";
-const WRONG_ELEM_TYPE_ERR = "Parameter 1 must be a HTML element";
-const NO_HTML_ARG_ERR = "Provide HTML markup as arg 2";
-const WRONG_ARG_TYPE_2_ERR = "Parameter 2 must be a string";
+const NO_ELEM_ERR = "elem must be provided";
+const WRONG_ELEM_TYPE_ERR = "elem must be a HTMLElement";
+const NO_HTML_ARG_ERR = "html must be provided";
+const WRONG_ARG_TYPE_2_ERR = "html must be a string";
 const HTML_ID = `new`;
 const HTML_STRING = `<p id="${HTML_ID}">Hey</p>`;
 const REPLACE_ID = "replace";

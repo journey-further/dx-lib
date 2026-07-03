@@ -2,6 +2,7 @@ import { useMutationObserver } from "./useMutationObserver";
 import {
   validateSelectors,
   createLogger,
+  jfError,
   isFunction,
   isString,
   isObject,
@@ -163,50 +164,40 @@ export const elementUpdated = (
   const validateSetup = () => {
     // -- VALIDATE SELECTOR --
     if (!!!selector) {
-      log("selector is not defined", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: selector is not defined");
     }
     if (!isString(selector)) {
-      log("selector must be a string", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: selector must be a string");
     }
     if (!validateSelectors(selector)) {
-      log("selector must be a valid css selector", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: selector must be a valid css selector");
     }
 
     // -- VALIDATE CALLBACK --
     if (!!!callback) {
-      log("callback is not defined", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: callback is not defined");
     }
     if (!isFunction(callback)) {
-      log("callback must be a function", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: callback must be a function");
     }
 
     // -- VALIDATE ID --
     if (!!!id) {
-      log("id is not defined", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: id is not defined");
     }
     if (!isString(id)) {
-      log("id must be a string", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: id must be a string");
     }
 
     // -- VALIDATE OPTIONS --
     if (!!!options) {
-      log("options is not defined", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: options is not defined");
     }
     if (!isObject(options)) {
-      log("options must be an object", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: options must be an object");
     }
     if (!options.attributes && !options.characterData && !options.textContent) {
-      log("At least one of the following must be provided in options: attributes, characterData, textContent", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: At least one of the following must be provided in options: attributes, characterData, textContent");
     }
     if (options.attributeFilter) {
       if (!isString(options.attributeFilter) && !isStringArray(options.attributeFilter)) {
@@ -222,8 +213,7 @@ export const elementUpdated = (
 
     // -- VALIDATE CONDITIONS --
     if (conditions && !isFunction(conditions)) {
-      log("conditions must be a function", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: conditions must be a function");
     }
 
     return true;

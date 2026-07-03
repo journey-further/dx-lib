@@ -4,6 +4,7 @@ import { useMutationObserver } from "./useMutationObserver";
 import { waitForElement } from "./waitForElement";
 import {
   createLogger,
+  jfError,
   reportError,
   isFunction,
   isNumber,
@@ -759,7 +760,7 @@ export const useSPA = (id: string): JfSPA => {
       throw error;
     }
     // Otherwise, format the error
-    throw new Error(`[${STATE?.details?.id}] ${errorObj.code}: ${errorObj.message}`, { cause: errorObj?.details });
+    throw jfError(errorObj.code, `[${STATE?.details?.id}] ${errorObj.code}: ${errorObj.message}`, errorObj?.details);
   };
 
   /**

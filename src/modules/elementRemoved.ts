@@ -1,5 +1,5 @@
 import { useMutationObserver } from "./useMutationObserver";
-import { validateSelectors, createLogger, isFunction, isString, isNodeAsElement } from "../helpers";
+import { validateSelectors, createLogger, jfError, isFunction, isString, isNodeAsElement } from "../helpers";
 
 const VERSION: string = "1.0";
 
@@ -138,42 +138,34 @@ export const elementRemoved = (
   const validateSetup = () => {
     // -- VALIDATE SELECTOR --
     if (!!!selector) {
-      log("selector is not defined", "error");
-      throw new Error("elementRemoved setup failed");
+      throw jfError("INVALID_OPTIONS", "elementRemoved setup failed: selector is not defined");
     }
     if (!isString(selector)) {
-      log("selector must be a string", "error");
-      throw new Error("elementRemoved setup failed");
+      throw jfError("INVALID_OPTIONS", "elementRemoved setup failed: selector must be a string");
     }
     if (!validateSelectors(selector)) {
-      log("selector must be a valid css selector", "error");
-      throw new Error("elementRemoved setup failed");
+      throw jfError("INVALID_OPTIONS", "elementRemoved setup failed: selector must be a valid css selector");
     }
 
     // -- VALIDATE CALLBACK --
     if (!!!callback) {
-      log("callback is not defined", "error");
-      throw new Error("elementRemoved setup failed");
+      throw jfError("INVALID_OPTIONS", "elementRemoved setup failed: callback is not defined");
     }
     if (!isFunction(callback)) {
-      log("callback must be a function", "error");
-      throw new Error("elementRemoved setup failed");
+      throw jfError("INVALID_OPTIONS", "elementRemoved setup failed: callback must be a function");
     }
 
     // -- VALIDATE ID --
     if (!!!id) {
-      log("id is not defined", "error");
-      throw new Error("elementRemoved setup failed");
+      throw jfError("INVALID_OPTIONS", "elementRemoved setup failed: id is not defined");
     }
     if (!isString(id)) {
-      log("id must be a string", "error");
-      throw new Error("elementRemoved setup failed");
+      throw jfError("INVALID_OPTIONS", "elementRemoved setup failed: id must be a string");
     }
 
     // -- VALIDATE CONDITIONS --
     if (conditions && !isFunction(conditions)) {
-      log("conditions must be a function", "error");
-      throw new Error("elementRemoved setup failed");
+      throw jfError("INVALID_OPTIONS", "elementRemoved setup failed: conditions must be a function");
     }
 
     return true;
