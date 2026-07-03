@@ -958,6 +958,8 @@ export const useSPA = (id: string): JfSPA => {
   const handleReInit = async () => {
     try {
       log(`SPA reset, restarting test`, "warn");
+      // a SPA wipe starts a new removal-watch loop, same as a page change — the cap is per loop
+      STATE.loopCount = 0;
       await initTest();
     } catch (e) {
       reportLifecycle(e);
@@ -1056,6 +1058,8 @@ export const useSPA = (id: string): JfSPA => {
       bindWatchForRemoval();
       // await the build's apply (async apply is the norm in SPA tests) — isApplied only flips on success
       await Promise.resolve(STATE.options.apply());
+      // destroy() may have landed while apply was in flight — a destroyed test must not write state
+      if (destroyed) return;
       STATE.details.isApplied = true;
       STATE.details.isReset = false;
     } catch (e) {

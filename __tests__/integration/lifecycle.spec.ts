@@ -166,6 +166,30 @@ describe("teardown and re-init correctness (H5, H6, H7)", () => {
     expect(apply).toHaveBeenCalledTimes(1); // destroyed test must stay gone
   });
 
+  it("H5: a destroy() landing while a re-apply is in flight must not resurrect isApplied", async () => {
+    let call = 0;
+    let resolveSecond!: () => void;
+    const apply = vi.fn(() => {
+      call++;
+      if (call < 2) return Promise.resolve();
+      return new Promise<void>((res) => (resolveSecond = res));
+    });
+    const Test = useSPA("TST_000024");
+    await Test.init({ apply, location: "/" });
+    await Test.reset();
+    expect(Test.details.isApplied).toBe(false);
+
+    // a reinit starts a second apply that stays pending while destroy() lands
+    window.dispatchEvent(new Event("jf-reinit-1.0"));
+    await tick(10);
+    expect(call).toBe(2);
+    Test.destroy();
+
+    resolveSecond();
+    await tick(10);
+    expect(Test.details.isApplied).toBe(false); // the zombie apply must not write state
+  });
+
   it("H6: the watchForRemoval cap applies per loop, resets on page change, and stops re-running the user reset", async () => {
     const apply = vi.fn();
     const reset = vi.fn();
@@ -197,6 +221,34 @@ describe("teardown and re-init correctness (H5, H6, H7)", () => {
     expect(apply.mock.calls.length).toBe(7); // re-applied after page change
     await rerender();
     expect(apply.mock.calls.length).toBe(8); // watch loop live again
+  });
+
+  it("H6: a reinit also starts a new removal-watch loop — the cap must not outlive the loop", async () => {
+    const apply = vi.fn();
+    const reset = vi.fn();
+    const Test = useSPA("TST_000025");
+    await Test.init({ apply, reset, location: "/", watchForRemoval: ".watched" });
+
+    const rerender = async () => {
+      const el = document.createElement("div");
+      el.className = "watched";
+      document.body.appendChild(el);
+      await tick(10);
+      el.remove();
+      await tick(30);
+    };
+
+    for (let i = 0; i < 12; i++) await rerender();
+    expect(apply.mock.calls.length).toBe(6); // capped
+
+    // SPA wipe with no URL change: a legitimate re-apply happens...
+    window.dispatchEvent(new Event("jf-reinit-1.0"));
+    await tick(50);
+    expect(apply.mock.calls.length).toBe(7);
+
+    // ...and the removal-watch loop must be live again, not dead until the next URL change
+    await rerender();
+    expect(apply.mock.calls.length).toBe(8);
   });
 
   it("H7: the shared jf-reinit observer honours every instance's removedNode, not just the first binder's", async () => {
