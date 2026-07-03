@@ -3,6 +3,7 @@ import { useMutationObserver } from "./useMutationObserver";
 import { waitForElement } from "./waitForElement";
 import {
   createLogger,
+  reportError,
   isFunction,
   isNumber,
   isString,
@@ -283,12 +284,12 @@ export interface JfSPAPageOptions {
  *     // do something
  *   };
  *
- *   (() => {
+ *   (async () => {
  *     try {
  *       const Test = useSPA("TestID");
  *
- *       // Start the test
- *       Test.init({
+ *       // Start the test — await it, or setup/validation errors will surface only as unhandled rejections
+ *       await Test.init({
  *         apply: applyChanges,
  *         reset: resetChanges,
  *         style: ".my-test { color: red; }",
@@ -461,7 +462,7 @@ export const useSPA = (id: string): JfSPA => {
       return true;
     } catch (e) {
       log("Setup Error", "error", STATE);
-      throw new Error(e);
+      throw e;
     }
   };
 
@@ -499,7 +500,7 @@ export const useSPA = (id: string): JfSPA => {
               // the MAIN element has been re-added, so dispatch an event
               window.dispatchEvent(new Event(`jf-reinit-${REINIT_VERSION}`));
             } catch (e) {
-              throwError(e);
+              reportLifecycle(e);
             }
           });
         });
@@ -597,7 +598,7 @@ export const useSPA = (id: string): JfSPA => {
       log(`+ URL matched`, "success");
       return true;
     } catch (error) {
-      throwError(error);
+      reportLifecycle(error);
       return false;
     }
   };
@@ -635,7 +636,7 @@ export const useSPA = (id: string): JfSPA => {
       if (!conditionMatched) return false;
       return true;
     } catch (error) {
-      throwError(error);
+      reportLifecycle(error);
       return false;
     }
   };
@@ -655,7 +656,7 @@ export const useSPA = (id: string): JfSPA => {
         if (window.innerWidth < minWidth) {
           log("Screen is smaller than minWidth, resetting", "warn", minWidth);
           // screen is smaller, reset
-          resetTest();
+          await resetTest();
           return;
         }
 
@@ -663,7 +664,7 @@ export const useSPA = (id: string): JfSPA => {
         if (window.innerWidth > maxWidth) {
           log("Screen is larger than maxWidth, resetting", "warn", minWidth);
           // screen is smaller, reset
-          resetTest();
+          await resetTest();
           return;
         }
 
@@ -676,7 +677,7 @@ export const useSPA = (id: string): JfSPA => {
         // Not the right page
         log("Page URL not matched", "info");
         // Reset the test
-        resetTest();
+        await resetTest();
         // quit
         return;
       }
@@ -685,7 +686,7 @@ export const useSPA = (id: string): JfSPA => {
       const conditionMatched = await checkPageCondition();
       if (!conditionMatched) {
         // Reset the test
-        resetTest();
+        await resetTest();
         // quit
         return;
       }
@@ -699,7 +700,7 @@ export const useSPA = (id: string): JfSPA => {
       // Apply the test
       await applyTest();
     } catch (e) {
-      throwError(e);
+      reportLifecycle(e);
     }
   };
 
@@ -725,10 +726,16 @@ export const useSPA = (id: string): JfSPA => {
       });
     });
 
-    if (isFunction(STATE.options.reset)) await STATE.options.reset();
-    STATE.details.isApplied = false;
-    STATE.details.isReset = true;
-    STATE.details.pageMatched = false;
+    try {
+      if (isFunction(STATE.options.reset)) await STATE.options.reset();
+    } catch (e) {
+      reportLifecycle(e);
+    } finally {
+      // a rejecting user reset must not leave isApplied stuck true
+      STATE.details.isApplied = false;
+      STATE.details.isReset = true;
+      STATE.details.pageMatched = false;
+    }
   };
 
   /**
@@ -744,12 +751,13 @@ export const useSPA = (id: string): JfSPA => {
   };
 
   /**
-   * Handles errors by formatting them and throwing with a consistent structure
+   * Handles errors by formatting them and throwing with a consistent structure. Only for setup/validation paths where
+   * the caller is awaiting `init` — post-init lifecycle paths must use `reportLifecycle` instead
    *
    * @param {JfSPAError | Error} error - The error to process
    * @throws {Error} A formatted error with test ID and details
    */
-  const throwError = (error: JfSPAError | Error) => {
+  const throwError = (error: JfSPAError | Error): never => {
     const errorObj =
       error instanceof Error
         ? {
@@ -764,7 +772,24 @@ export const useSPA = (id: string): JfSPA => {
       throw error;
     }
     // Otherwise, format the error
-    throw new Error(`[${STATE?.details?.id}] ${errorObj.code}: ${errorObj.message}`, errorObj?.details);
+    throw new Error(`[${STATE?.details?.id}] ${errorObj.code}: ${errorObj.message}`, { cause: errorObj?.details });
+  };
+
+  /**
+   * The non-throwing side of the error channel: reports a lifecycle error on the wire (`jf-err-1.0`) and to the
+   * console, without propagating. Every post-init lifecycle path routes through this — an async event listener has no
+   * caller to throw to, so throwing there is just an invisible unhandled rejection
+   *
+   * @param {JfSPAError | Error | unknown} error - The error to report
+   */
+  const reportLifecycle = (error: unknown): void => {
+    const err =
+      error instanceof Error
+        ? error
+        : typeof error === "object" && error !== null && "message" in error
+          ? new Error(`${(error as JfSPAError).code}: ${(error as JfSPAError).message}`)
+          : new Error(String(error));
+    reportError(STATE.details.id || id, err);
   };
 
   /**
@@ -784,7 +809,6 @@ export const useSPA = (id: string): JfSPA => {
         code: "MISSING_OPTION",
         message: "apply must be provided",
       });
-      return false;
     }
     // Check we have 'location'
     if (!location) {
@@ -792,7 +816,6 @@ export const useSPA = (id: string): JfSPA => {
         code: "MISSING_OPTION",
         message: "location must be provided",
       });
-      return false;
     }
     // If we've been passed an object for 'location', check it has a 'match' property
     if (isLocationObject(location)) {
@@ -801,7 +824,6 @@ export const useSPA = (id: string): JfSPA => {
           code: "MISSING_OPTION",
           message: "location.match must be provided",
         });
-        return false;
       }
     }
 
@@ -812,7 +834,6 @@ export const useSPA = (id: string): JfSPA => {
         code: "INVALID_TYPE",
         message: "apply must be a function",
       });
-      return false;
     }
     // Check 'location' is string|string[]|RegExp|JfSPAPageObject
     if (!(isRegExp(location) || isStringArray(location) || isString(location) || isLocationObject(location))) {
@@ -820,7 +841,6 @@ export const useSPA = (id: string): JfSPA => {
         code: "INVALID_TYPE",
         message: "location must be a string, an array of strings, a RegExp match, or an options object",
       });
-      return false;
     }
     // If 'location' is JfSPAPageObject
     if (isLocationObject(location)) {
@@ -831,7 +851,6 @@ export const useSPA = (id: string): JfSPA => {
           code: "INVALID_TYPE",
           message: "location.match must be a string, an array of strings, a RegExp match",
         });
-        return false;
       }
       // Check 'type' is path or href
       if (type && !isPageObjectType(type)) {
@@ -839,7 +858,6 @@ export const useSPA = (id: string): JfSPA => {
           code: "INVALID_TYPE",
           message: "location.type must be one of: pathname, hostname, href, hash, search",
         });
-        return false;
       }
       // Check 'condition' is path or href
       if (condition && !isFunction(condition)) {
@@ -847,7 +865,6 @@ export const useSPA = (id: string): JfSPA => {
           code: "INVALID_TYPE",
           message: "location.condition must be a function",
         });
-        return false;
       }
       // Check 'type' is path or href
       if (timeout && !isNumber(timeout)) {
@@ -855,7 +872,6 @@ export const useSPA = (id: string): JfSPA => {
           code: "INVALID_TYPE",
           message: "location.timeout must be a number",
         });
-        return false;
       }
     }
 
@@ -864,21 +880,18 @@ export const useSPA = (id: string): JfSPA => {
         code: "INVALID_TYPE",
         message: "reset must be a function",
       });
-      return false;
     }
     if (watchForRemoval && !(isString(watchForRemoval) || isStringArray(watchForRemoval))) {
       throwError({
         code: "INVALID_SELECTOR",
         message: "watchForRemoval must be a string or array of strings",
       });
-      return false;
     }
     if (removeOnPageChange && !(isString(removeOnPageChange) || isStringArray(removeOnPageChange))) {
       throwError({
         code: "INVALID_SELECTOR",
         message: "removeOnPageChange must be a string or array of strings",
       });
-      return false;
     }
 
     // validate css strings
@@ -887,14 +900,12 @@ export const useSPA = (id: string): JfSPA => {
         code: "INVALID_SELECTOR",
         message: "watchForRemoval must be valid CSS selectors",
       });
-      return false;
     }
     if (removeOnPageChange && !validateSelectors(removeOnPageChange)) {
       throwError({
         code: "INVALID_SELECTOR",
         message: "removeOnPageChange must be valid CSS selectors",
       });
-      return false;
     }
 
     if (removedNode && !isString(removedNode)) {
@@ -902,7 +913,6 @@ export const useSPA = (id: string): JfSPA => {
         code: "INVALID_TYPE",
         message: "removedNode must be a string",
       });
-      return false;
     }
 
     if (screen) {
@@ -912,21 +922,18 @@ export const useSPA = (id: string): JfSPA => {
           code: "INVALID_TYPE",
           message: "screen must be an object containing one of: minWidth, maxWidth",
         });
-        return false;
       }
       if (!!screen.minWidth && !isNumber(screen.minWidth)) {
         throwError({
           code: "INVALID_TYPE",
           message: "minWidth must be a number",
         });
-        return false;
       }
       if (!!screen.maxWidth && !isNumber(screen.maxWidth)) {
         throwError({
           code: "INVALID_TYPE",
           message: "maxWidth must be a number",
         });
-        return false;
       }
       // TODO: need some error checking if the passed value is 0 as this may cause issues (and the minimum should be greater than this anyway)
     }
@@ -946,7 +953,7 @@ export const useSPA = (id: string): JfSPA => {
       if (!!STATE.options.removeOnPageChange) handleRemoveOnPageChange();
       await initTest();
     } catch (e) {
-      throwError(e);
+      reportLifecycle(e);
     }
   };
 
@@ -961,7 +968,7 @@ export const useSPA = (id: string): JfSPA => {
       log(`SPA reset, restarting test`, "warn");
       await initTest();
     } catch (e) {
-      throwError(e);
+      reportLifecycle(e);
     }
   };
 
@@ -987,7 +994,7 @@ export const useSPA = (id: string): JfSPA => {
       if (window.innerWidth < minWidth) {
         log("Screen is smaller than minWidth, resetting", "warn", minWidth);
         // screen is smaller, reset
-        resetTest();
+        await resetTest();
         return;
       }
 
@@ -995,10 +1002,10 @@ export const useSPA = (id: string): JfSPA => {
       if (window.innerWidth > maxWidth) {
         log("Screen is larger than maxWidth, resetting", "warn", minWidth);
         // screen is smaller, reset
-        resetTest();
+        await resetTest();
       }
     } catch (e) {
-      throwError(e);
+      reportLifecycle(e);
     }
   }, 100);
 
@@ -1057,14 +1064,17 @@ export const useSPA = (id: string): JfSPA => {
       if (!!STATE.options.alwaysReset) await resetTest();
       log(`Applying Test`, "info");
       // Insert our stylesheet (if we have it)
-      if (!!STATE.options.style) insertStyleSheet();
+      if (!!STATE.options.style) await insertStyleSheet();
       //
       bindWatchForRemoval();
-      STATE.options.apply();
+      // await the build's apply (async apply is the norm in SPA tests) — isApplied only flips on success
+      await Promise.resolve(STATE.options.apply());
       STATE.details.isApplied = true;
       STATE.details.isReset = false;
     } catch (e) {
-      throwError(e);
+      // the current apply did not complete — isApplied must not claim it did
+      STATE.details.isApplied = false;
+      reportLifecycle(e);
     }
   };
 
@@ -1117,7 +1127,7 @@ export const useSPA = (id: string): JfSPA => {
                       await initTest();
                     }
                   } catch (e) {
-                    throwError(e);
+                    reportLifecycle(e);
                   }
                 };
 
@@ -1133,17 +1143,17 @@ export const useSPA = (id: string): JfSPA => {
                 // Otherwise its a string, so just pass it
                 await checkElementMatches(STATE.options.watchForRemoval as string);
               } catch (e) {
-                throwError(e);
+                reportLifecycle(e);
               }
             });
           } catch (e) {
-            throwError(e);
+            reportLifecycle(e);
           }
         });
       };
       observer.observe(target, config, callback);
     } catch (e) {
-      throwError(e);
+      reportLifecycle(e);
     }
   };
 
@@ -1153,16 +1163,12 @@ export const useSPA = (id: string): JfSPA => {
    *
    * @throws {Error} If stylesheet insertion fails
    */
-  const insertStyleSheet = () => {
-    try {
-      // Abort if we don't have a stylesheet
-      if (!!!STATE.options.style) return;
-      // Insert our stylesheet
-      log(`+ Inserting styles`, "detail");
-      insertStyle(STATE.options.style, `${STATE.details.id}--style`);
-    } catch (e) {
-      throwError(e);
-    }
+  const insertStyleSheet = async () => {
+    // Abort if we don't have a stylesheet
+    if (!!!STATE.options.style) return;
+    // Insert our stylesheet — awaited so a failed insertion surfaces in applyTest's catch
+    log(`+ Inserting styles`, "detail");
+    await insertStyle(STATE.options.style, `${STATE.details.id}--style`);
   };
 
   /**
@@ -1175,7 +1181,7 @@ export const useSPA = (id: string): JfSPA => {
       log(`- Removing styles`, "detail");
       document.querySelectorAll(`#${STATE.details.id}--style`).forEach((el) => el.remove());
     } catch (e) {
-      throwError(e);
+      reportLifecycle(e);
     }
   };
 
@@ -1187,7 +1193,9 @@ export const useSPA = (id: string): JfSPA => {
         if (!!!isSetup) return;
         await initTest();
       } catch (error) {
-        throwError(error);
+        // report on the wire first — an un-awaited init would otherwise swallow this entirely
+        reportLifecycle(error);
+        throwError(error as JfSPAError | Error);
       }
     },
     reset: resetTest,
