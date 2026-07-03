@@ -285,6 +285,7 @@ export const elementUpdated = (
     ) {
       if (!options.textContent) {
         log(`Ignored: textContent`, "warn", true);
+        return false;
       }
       log(`Updated: textContent`, "info", true);
       return true;

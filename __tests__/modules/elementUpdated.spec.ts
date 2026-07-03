@@ -223,6 +223,22 @@ describe("elementUpdated", () => {
     expect(callback).not.toHaveBeenCalled();
   });
 
+  it("ignores textContent mutations when textContent option is not set", async () => {
+    const callback = vi.fn();
+    const div = document.createElement("div");
+    div.className = "test";
+    document.body.appendChild(div);
+
+    // Only attributes enabled — textContent mutations must be ignored
+    elementUpdated(".test", callback, "test-id", { attributes: true });
+
+    const text = document.createTextNode("New content");
+    div.appendChild(text);
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).not.toHaveBeenCalled();
+  });
+
   it("ignores characterData mutations when characterData option is not set", async () => {
     const callback = vi.fn();
     const div = document.createElement("div");
