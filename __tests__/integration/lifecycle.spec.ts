@@ -114,3 +114,40 @@ describe("error channel — jf-err-1.0 (H2, H3, M4)", () => {
     window.removeEventListener("jf-err-1.0", errSpy);
   });
 });
+
+describe("page-change detection (H4)", () => {
+  it("dispatches jf-pagechange-1.0 on pages without meta description or canonical link", async () => {
+    const pcSpy = vi.fn();
+    window.addEventListener("jf-pagechange-1.0", pcSpy);
+    const Test = useSPA("TST_000010");
+    await Test.init({ apply: vi.fn(), location: "/" });
+
+    // SPA navigation: pathname changes, DOM mutates — no meta/canonical anywhere on the page
+    window.history.pushState({}, "", "/next-page");
+    document.body.appendChild(document.createElement("div"));
+    await tick(50);
+
+    expect(pcSpy).toHaveBeenCalledTimes(1);
+    expect(window.jfLib.pagePath).toBe("/next-page");
+    window.removeEventListener("jf-pagechange-1.0", pcSpy);
+  });
+
+  it("detects query-string and hash navigations, not just pathname changes", async () => {
+    const pcSpy = vi.fn();
+    window.addEventListener("jf-pagechange-1.0", pcSpy);
+    const Test = useSPA("TST_000011");
+    await Test.init({ apply: vi.fn(), location: "/" });
+
+    window.history.pushState({}, "", "/?page=2");
+    document.body.appendChild(document.createElement("div"));
+    await tick(50);
+    expect(pcSpy).toHaveBeenCalledTimes(1);
+
+    window.history.pushState({}, "", "/?page=2#reviews");
+    document.body.appendChild(document.createElement("div"));
+    await tick(50);
+    expect(pcSpy).toHaveBeenCalledTimes(2);
+    expect(window.jfLib.pagePath).toBe("/?page=2#reviews");
+    window.removeEventListener("jf-pagechange-1.0", pcSpy);
+  });
+});

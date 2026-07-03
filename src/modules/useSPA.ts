@@ -517,9 +517,9 @@ export const useSPA = (id: string): JfSPA => {
   };
 
   /**
-   * Sets up a mutation observer to detect page changes in Single Page Applications. Watches for changes to meta
-   * description or canonical link elements. Only one observer is created globally and shared across all test
-   * instances.
+   * Sets up a mutation observer to detect page changes in Single Page Applications by comparing the full location
+   * (path + search + hash) against the last seen value on every DOM mutation. Only one observer is created globally
+   * and shared across all test instances.
    *
    * @throws {Error} If observer setup fails
    */
@@ -534,13 +534,12 @@ export const useSPA = (id: string): JfSPA => {
       const config: MutationObserverInit = { childList: true, subtree: true };
 
       const callback: MutationCallback = () => {
-        const linkElement =
-          document.querySelector('meta[name="description"]') || document.querySelector('link[rel="canonical"]');
-
-        if (!!!linkElement || !!!window.jfLib.pagePath || window.location.pathname === window.jfLib.pagePath) return;
+        // compare the full location — pathname alone misses query-string and hash navigations
+        const current = window.location.pathname + window.location.search + window.location.hash;
+        if (typeof window.jfLib?.pagePath !== "string" || current === window.jfLib.pagePath) return;
 
         // Update the current path
-        window.jfLib.pagePath = window.location.pathname;
+        window.jfLib.pagePath = current;
 
         // Dispatch an event
         window.dispatchEvent(new Event(`jf-pagechange-${PAGE_CHANGE_VERSION}`));
@@ -553,7 +552,7 @@ export const useSPA = (id: string): JfSPA => {
       window.jfLib.pageChange[PAGE_CHANGE_VERSION].observer.observe(target, config, callback);
 
       // Set the current path initially
-      window.jfLib.pagePath = window.location.pathname || "";
+      window.jfLib.pagePath = window.location.pathname + window.location.search + window.location.hash;
     } catch (e) {
       log("Page Change Error", "error");
       throwError(e);
