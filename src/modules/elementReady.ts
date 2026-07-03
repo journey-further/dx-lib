@@ -1,5 +1,5 @@
 import { useMutationObserver } from "./useMutationObserver";
-import { validateSelectors, log as _log, isDebug, LogLevel, isFunction, isString, isNodeAsElement } from "../helpers";
+import { validateSelectors, createLogger, isFunction, isString, isNodeAsElement } from "../helpers";
 
 const VERSION: string = "1.0";
 
@@ -133,10 +133,7 @@ export const elementReady = (
   id: string,
   conditions?: (el: Element) => boolean
 ): JfReady => {
-  const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
-    if (!!debug && !isDebug()) return;
-    _log(msg, lvl, `[${id}] elementReady`, data);
-  };
+  const log = createLogger(`[${id}] elementReady`);
 
   /**
    * Validates all input parameters for the elementReady function
@@ -200,7 +197,7 @@ export const elementReady = (
     // check if it also matches the conditions
     if (!!conditions && typeof conditions == "function") {
       if (conditions(target) !== true) {
-        log("Ignored: conditions not matched", "warn", true, target);
+        log("Ignored: conditions not matched", "warn", target);
         return false;
       }
     }
@@ -220,7 +217,7 @@ export const elementReady = (
   const checkElement = (target: Element) => {
     // if it's already been marked as ready, then skip this
     if (target?.jfReady?.includes(id)) {
-      log("Ignored: Already marked as ready", "warn", true, target);
+      log("Ignored: Already marked as ready", "warn", target);
       return;
     }
 
@@ -228,7 +225,7 @@ export const elementReady = (
     if (!checkConditions(target)) return;
 
     // then run our callback
-    log("Element found", "info", true);
+    log("Element found", "info");
     try {
       callback(target);
       // mark it as ready, but only once the callback has run successfully - a throwing
@@ -246,7 +243,7 @@ export const elementReady = (
    * handled yet
    */
   const checkDOMElements = () => {
-    log("Checking existing elements", "info", true);
+    log("Checking existing elements", "info");
     const elements = document.querySelectorAll(selector);
     elements.forEach((element) => {
       checkElement(element);
@@ -262,11 +259,11 @@ export const elementReady = (
     initializeJFLib();
     // Abort if we've already added this listener as we only need one
     if (!!getObserver()) {
-      log("Global observer exists", "warn", true);
+      log("Global observer exists", "warn");
       return;
     }
 
-    log("Binding observer", "detail", true);
+    log("Binding observer", "detail");
 
     try {
       // bind to html
@@ -308,7 +305,7 @@ export const elementReady = (
   /** Initializes the element ready functionality. Sets up observers and processes existing elements */
   const initFunctionality = () => {
     try {
-      log("Creating listener", "info", true);
+      log("Creating listener", "info");
 
       // 1. Check if we've already bound this callback with matching id
       const hasCallback = window.jfLib?.elementReady?.[VERSION]?.callbacks?.find((cb) => cb.id == id);

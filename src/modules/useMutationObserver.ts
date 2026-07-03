@@ -1,4 +1,4 @@
-import { isDebug, isNodeArray, isNodeList, LogLevel, log as _log } from "../helpers";
+import { createLogger, isNodeArray, isNodeList } from "../helpers";
 
 /**
  * An object with information relating to a mutation observer applied by `useMutationObserver`.
@@ -134,12 +134,7 @@ export interface JfObserver {
  * - observe: A function to start observing a target node with specific configurations and a callback.
  */
 export const useMutationObserver = (id: string): JfObserver => {
-  const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
-    if (!!debug && !isDebug()) return;
-    _log(msg, lvl, `[${id}] useMutationObserver`, data);
-  };
-
-  const isCoreFn = /pageChange|reInit|element(Ready|Updated|Removed)/.test(id);
+  const log = createLogger(`[${id}] useMutationObserver`);
 
   // Get the current observer array
   window.jfObservers = window.jfObservers || [];
@@ -156,10 +151,10 @@ export const useMutationObserver = (id: string): JfObserver => {
     };
     // Push new instance to the global array
     window.jfObservers.push(observerObject);
-    log("Created observer", "info", isCoreFn);
+    log("Created observer", "info");
   } else {
     // Warn the user it's already been bound
-    log("ID is already bound", "warn", isCoreFn);
+    log("ID is already bound", "warn");
   }
 
   const wrappedObserve: JfObserveFunction = (target, config, callback) => {
@@ -185,7 +180,7 @@ export const useMutationObserver = (id: string): JfObserver => {
     }
 
     observerObject.isObserving = true;
-    log("Observing", "success", isCoreFn);
+    log("Observing", "success");
     return true;
   };
 

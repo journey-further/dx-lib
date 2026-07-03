@@ -1,9 +1,7 @@
 import { useMutationObserver } from "./useMutationObserver";
 import {
   validateSelectors,
-  log as _log,
-  isDebug,
-  LogLevel,
+  createLogger,
   isFunction,
   isString,
   isObject,
@@ -142,10 +140,7 @@ export const elementUpdated = (
   options: JfUpdatedOptions,
   conditions?: (el: Element) => boolean
 ): JfUpdated => {
-  const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
-    if (!!debug && !isDebug()) return;
-    _log(msg, lvl, `[${id}] elementUpdated`, data);
-  };
+  const log = createLogger(`[${id}] elementUpdated`);
 
   /**
    * Validates all input parameters for the elementUpdated function
@@ -234,7 +229,7 @@ export const elementUpdated = (
     // check if it also matches the conditions
     if (!!conditions && typeof conditions == "function") {
       if (conditions(target) !== true) {
-        log("Ignored: conditions not matched", "warn", true, target);
+        log("Ignored: conditions not matched", "warn", target);
         return false;
       }
     }
@@ -254,26 +249,26 @@ export const elementUpdated = (
     // Check the attributes
     if (mutation.type == "attributes") {
       if (!options.attributes) {
-        log(`Ignored: attributes`, "warn", true);
+        log(`Ignored: attributes`, "warn");
         return false;
       }
       // If we have attributeFilter, check if this attribute is matched
       if (options.attributeFilter && !options.attributeFilter.includes(mutation.attributeName)) {
-        log(`Ignored: ${mutation.attributeName} attribute`, "warn", true);
+        log(`Ignored: ${mutation.attributeName} attribute`, "warn");
         return false;
       }
 
-      log(`Updated: ${mutation.attributeName} attribute`, "info", true);
+      log(`Updated: ${mutation.attributeName} attribute`, "info");
       return true;
     }
 
     // Check the characterData
     if (mutation.type == "characterData") {
       if (!options.characterData) {
-        log(`Ignored: characterData`, "warn", true);
+        log(`Ignored: characterData`, "warn");
         return false;
       }
-      log(`Updated: characterData`, "info", true);
+      log(`Updated: characterData`, "info");
       return true;
     }
 
@@ -284,10 +279,10 @@ export const elementUpdated = (
       !![...mutation.addedNodes].find((node) => node.nodeName == "#text")
     ) {
       if (!options.textContent) {
-        log(`Ignored: textContent`, "warn", true);
+        log(`Ignored: textContent`, "warn");
         return false;
       }
-      log(`Updated: textContent`, "info", true);
+      log(`Updated: textContent`, "info");
       return true;
     }
 
@@ -304,11 +299,11 @@ export const elementUpdated = (
     initializeJFLib();
     // Abort if we've already added this listener as we only need one
     if (!!getObserver()) {
-      log("Global observer exists", "warn", true);
+      log("Global observer exists", "warn");
       return;
     }
 
-    log("Binding observer", "detail", true);
+    log("Binding observer", "detail");
 
     try {
       // bind to html
@@ -342,7 +337,7 @@ export const elementUpdated = (
 
   /** Initializes the element removed functionality. Sets up observers and processes existing elements */
   const initFunctionality = () => {
-    log("Creating listener", "info", true);
+    log("Creating listener", "info");
 
     // 1. Check if we've already bound this callback with matching id
     const hasCallback = window.jfLib?.elementUpdated?.[VERSION]?.callbacks?.find((cb) => cb.id == id);
@@ -352,7 +347,7 @@ export const elementUpdated = (
     }
 
     log("Listening", "success");
-    log("Passed options", "info", true, options);
+    log("Passed options", "info", options);
 
     // 2. Bind the elementUpdated observer to listen for any future changes
     bindObserver();

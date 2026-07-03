@@ -1,5 +1,5 @@
 import { useMutationObserver } from "./useMutationObserver";
-import { validateSelectors, log as _log, isDebug, LogLevel, isFunction, isString, isNodeAsElement } from "../helpers";
+import { validateSelectors, createLogger, isFunction, isString, isNodeAsElement } from "../helpers";
 
 const VERSION: string = "1.0";
 
@@ -115,10 +115,7 @@ export const elementRemoved = (
   id: string,
   conditions?: (el: Element) => boolean
 ): JfRemoved => {
-  const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
-    if (!!debug && !isDebug()) return;
-    _log(msg, lvl, `[${id}] elementRemoved`, data);
-  };
+  const log = createLogger(`[${id}] elementRemoved`);
 
   /**
    * Validates all input parameters for the elementRemoved function
@@ -182,7 +179,7 @@ export const elementRemoved = (
     // check if it also matches the conditions
     if (!!conditions && typeof conditions == "function") {
       if (conditions(target) !== true) {
-        log("Ignored: conditions not matched", "warn", true, target);
+        log("Ignored: conditions not matched", "warn", target);
         return false;
       }
     }
@@ -199,11 +196,11 @@ export const elementRemoved = (
     initializeJFLib();
     // Abort if we've already added this listener as we only need one
     if (!!getObserver()) {
-      log("Global observer exists", "warn", true);
+      log("Global observer exists", "warn");
       return;
     }
 
-    log("Binding observer", "detail", true);
+    log("Binding observer", "detail");
 
     try {
       // bind to html
@@ -238,7 +235,7 @@ export const elementRemoved = (
 
   /** Initializes the element removed functionality. Sets up observers and processes existing elements */
   const initFunctionality = () => {
-    log("Creating listener", "info", true);
+    log("Creating listener", "info");
 
     // 1. Check if we've already bound this callback with matching id
     const hasCallback = window.jfLib?.elementRemoved?.[VERSION]?.callbacks?.find((cb) => cb.id == id);
@@ -264,7 +261,7 @@ export const elementRemoved = (
         if (!checkConditions(target)) return;
 
         // then run our callback
-        log("Removed", "info", true);
+        log("Removed", "info");
         callback(target);
       },
     });
