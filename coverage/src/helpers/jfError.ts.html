@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/modules/pushToDL.ts</title>
+    <title>Code coverage report for src/helpers/jfError.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/modules</a> pushToDL.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/helpers</a> jfError.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>13/13</span>
+                <span class='fraction'>1/2</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/10</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
@@ -91,9 +91,7 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -104,54 +102,50 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">39x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
- * Pushes an event object into the website's global `dataLayer` with the specified details.
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">44x</span>
+<span class="cline-any cline-yes">50x</span>
+<span class="cline-any cline-yes">50x</span>
+<span class="cline-any cline-yes">50x</span>
+<span class="cline-any cline-yes">50x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/** Error codes shared by every JfError the library throws */
+export type JfErrorCode =
+  | "INVALID_ID"
+  | "MISSING_OPTION"
+  | "INVALID_TYPE"
+  | "INVALID_SELECTOR"
+  | "INVALID_OPTIONS"
+  | "RUNTIME_ERROR";
+&nbsp;
+/** An Error carrying the library's standard machine-readable code */
+export type JfErrorInstance = Error &amp; { code: JfErrorCode };
+&nbsp;
+/**
+ * Creates the library's standard coded error — a plain `Error` (so every consumer's instanceof/catch logic works)
+ * named `JfError`, carrying a machine-readable `code` and an optional `cause`. The one error shape thrown by all
+ * modules: the message always contains the human-readable reason, never a generic placeholder.
  *
- * This function is used to add tracking events to the `dataLayer` for analytics purposes. It validates the inputs and
- * then pushes an object containing the event name, action, and label into the `dataLayer`.
- *
- * @param {string} action - The ticket ID associated with the event.
- * @param {string} label - The test ID associated with the event.
- * @param {string} [event="Optimize-View"] - The name of the event. Default is `"Optimize-View"`
+ * @param {JfErrorCode} code - Machine-readable error code
+ * @param {string} message - Human-readable reason
+ * @param {unknown} [details] - Optional cause attached as `error.cause`
+ * @returns {JfErrorInstance} The coded error, ready to throw
  */
-&nbsp;
-export const pushToDL = (action: string, label: string, event = "Optimize-View"): void =&gt; {
-  if (!!!action || !!!label) throw new Error("Action and label must be provided");
-&nbsp;
-  if (typeof action !== "string") {
-    throw new TypeError("Action must be of type string");
-  }
-  if (typeof label !== "string") {
-    throw new TypeError("Label must be of type string");
-  }
-  if (typeof event !== "string") {
-    throw new TypeError("Event must be of type string");
-  }
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({
-    event: event,
-    eventAction: action,
-    eventLabel: label,
-  });
+export const jfError = (code: JfErrorCode, message: string, details?: unknown): JfErrorInstance =&gt; {
+  const err = (details === undefined ? new Error(message) : <span class="branch-1 cbranch-no" title="branch not covered" >new Error(message, { cause: details })) as JfErrorInstance;</span>
+  err.name = "JfError";
+  err.code = code;
+  return err;
 };
 &nbsp;</pre></td></tr></table></pre>
 
