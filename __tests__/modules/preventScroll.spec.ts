@@ -29,6 +29,12 @@ describe("preventScroll", () => {
     expect(document.querySelector("html")?.classList.contains(ADDED_CLASS)).toBe(false);
   });
 
+  it("will actually lock scrolling by making the injected stylesheet rule apply overflow:hidden to the body once the class is added", () => {
+    expect(getComputedStyle(document.body).overflow).not.toBe("hidden");
+    preventScroll();
+    expect(getComputedStyle(document.body).overflow).toBe("hidden");
+  });
+
   it("will add inline style attributes to the body if on an iPhone", () => {
     // Add user agent
     Object.defineProperty(window.navigator, "userAgent", {

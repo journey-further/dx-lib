@@ -15,7 +15,7 @@ export const preventScroll = (): void => {
   if (!!!document.querySelector("#JFCRO-no-scroll")) {
     document.body.insertAdjacentHTML(
       "beforeend",
-      `<style id="JFCRO-no-scroll">.JFCRO-no-scroll{overflow: hidden !important;}</style>`
+      `<style id="JFCRO-no-scroll">.JFCRO_no-scroll{overflow: hidden !important;}</style>`
     );
   }
   // If is mobile use some JS trickery to prevent scroll on the main DOM
