@@ -236,6 +236,53 @@ describe("elementReady", () => {
     expect(el.jfReady).not.toBeUndefined();
   });
 
+  it("does not let a throwing callback starve other callbacks, and retries the throwing element on the next mutation", async () => {
+    const cb1 = vi.fn(() => {
+      throw new Error("boom");
+    });
+    const cb2 = vi.fn();
+
+    elementReady(".test", cb1, "id-1");
+    elementReady(".test", cb2, "id-2");
+
+    const div = document.createElement("div");
+    div.className = "test";
+    document.body.appendChild(div);
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // cb2 must still fire for this mutation despite cb1 throwing for the same element
+    expect(cb2).toHaveBeenCalledTimes(1);
+    expect(cb1).toHaveBeenCalledTimes(1);
+
+    // the throwing callback's id must NOT be marked ready - a transient throw shouldn't
+    // permanently skip the element
+    expect((div as any).jfReady).not.toContain("id-1");
+    expect((div as any).jfReady).toContain("id-2");
+
+    // a further mutation should retry the throwing callback against the still-unmarked element
+    const other = document.createElement("div");
+    other.className = "test";
+    document.body.appendChild(other);
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    expect(cb1.mock.calls.length).toBeGreaterThan(1);
+    expect((div as any).jfReady).not.toContain("id-1");
+  });
+
+  it("pause and destroy do not reject when window.jfLib is wiped externally", async () => {
+    document.body.innerHTML = '<div class="test"></div>';
+    const callback = vi.fn();
+    const handle = elementReady(".test", callback, "test-id");
+
+    // simulate external cleanup (e.g. a tag manager) nulling out the shared namespace
+    (window as any).jfLib = undefined;
+
+    await expect(handle.pause(0)).resolves.toBeUndefined();
+    await expect(handle.destroy(0)).resolves.toBeUndefined();
+  });
+
   it("does not re-bind when called with a duplicate id", () => {
     const callback = vi.fn();
     document.body.innerHTML = '<div class="test"></div>';

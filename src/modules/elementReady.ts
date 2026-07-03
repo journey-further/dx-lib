@@ -227,14 +227,18 @@ export const elementReady = (
     // check if it also matches the conditions
     if (!checkConditions(target)) return;
 
-    // mark it as ready
-    target.jfReady = target.jfReady || [];
-    target.jfReady.push(id);
-    // target.setAttribute("jf-ready", "");
-
     // then run our callback
     log("Element found", "info", true);
-    callback(target);
+    try {
+      callback(target);
+      // mark it as ready, but only once the callback has run successfully - a throwing
+      // callback must not permanently block retries on future mutations
+      target.jfReady = target.jfReady || [];
+      target.jfReady.push(id);
+      // target.setAttribute("jf-ready", "");
+    } catch (err) {
+      log(err, "error");
+    }
   };
 
   /**
@@ -281,7 +285,11 @@ export const elementReady = (
             // Grab all the callbacks from our callbacks array and run them each
             getObserver().callbacks.forEach((cb) => {
               if (isFunction(cb.callback) && isNodeAsElement(node)) {
-                cb.callback(node);
+                try {
+                  cb.callback(node);
+                } catch (err) {
+                  log(err, "error");
+                }
               }
             });
           });
@@ -343,7 +351,7 @@ export const elementReady = (
    * @returns Promise that resolves when cleanup is complete
    */
   const pause = async (delay: number = 50) => {
-    if (!!!getObserver().callbacks) return;
+    if (!window?.jfLib?.elementReady?.[VERSION]?.callbacks) return;
 
     try {
       // wait a small delay
@@ -371,7 +379,7 @@ export const elementReady = (
    * @returns Promise that resolves when cleanup is complete
    */
   const destroy = async (delay: number = 50) => {
-    if (!!!getObserver().callbacks) return;
+    if (!window?.jfLib?.elementReady?.[VERSION]?.callbacks) return;
 
     try {
       // wait a small delay
