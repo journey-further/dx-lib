@@ -154,3 +154,12 @@ describe("elementRemoved", () => {
     expect(callback).not.toHaveBeenCalled();
   });
 });
+
+describe("standard handle shape", () => {
+  it("exposes details and pause with a live isListening flag", async () => {
+    const handle = elementRemoved(".handle-test", vi.fn(), "HANDLE_2");
+    expect(handle.details.isListening).toBe(true);
+    await handle.pause(0);
+    expect(handle.details.isListening).toBe(false);
+  });
+});

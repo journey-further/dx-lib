@@ -11,6 +11,12 @@ const VERSION: string = "1.0";
  * - `destroy` Remove the listener completely
  */
 export interface JfReady {
+  /** Introspection details for this listener: its id, selector, and whether it is currently listening */
+  details: {
+    id: string;
+    selector: string;
+    readonly isListening: boolean;
+  };
   /**
    * Start listening for the requested element to be ready again
    *
@@ -119,7 +125,7 @@ const getObserver = () => {
  * @param {string} selector - A CSS selector string used to identify the target element. _(required)_
  * @param {Function} callback - A function to execute when the element is found. Receives the element as its parameter.
  *   _(required)_
- * @param {string} id - A unique identifier to track elements that have already triggered the callback. _(required)_
+ * @param {string} id - A unique identifier to track elements that have already triggered the callback. Use the `<ownerId>--<childId>` convention (e.g. `"TIK_123456--hero"`) so useSPA resets/destroys sweep this resource automatically. _(required)_
  * @param {Function} conditions - Optional conditions to validate the element before triggering the callback. Must be a
  *   function that returns `true` for the callback to execute.
  * @returns Functions:
@@ -419,6 +425,13 @@ export const elementReady = (
 
   // Return the exposed functions
   return {
+    details: {
+      id,
+      selector,
+      get isListening() {
+        return !!window?.jfLib?.elementReady?.[VERSION]?.callbacks?.some((cb) => cb?.id === id);
+      },
+    },
     init,
     pause,
     destroy,

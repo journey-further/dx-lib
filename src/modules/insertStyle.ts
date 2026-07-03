@@ -8,7 +8,7 @@ import { waitFor } from "./waitFor";
  * insertion position is not specified, it defaults to `"beforeend"`.
  *
  * @param {string} style - The CSS string to include in the `<style>` element.
- * @param {string} id - A unique ID to assign to the `<style>` element, ensuring no duplicates are added.
+ * @param {string} id - A unique ID to assign to the `<style>` element, ensuring no duplicates are added. Use the `<ownerId>--<childId>` convention (e.g. `"TIK_123456--hero"`) so useSPA resets/destroys sweep this resource automatically.
  * @param {object} [options] - Configuration options for the insertion.
  * @param {"beforebegin" | "afterbegin" | "beforeend" | "afterend"} [options.position="beforeend"] - The position where
  *   the `<style>` element should be inserted. Default is `"beforeend"`

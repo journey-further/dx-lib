@@ -60,10 +60,18 @@ export interface JfObserver {
   /**
    * Disconnect the observer, removing it from the DOM
    *
+   * @deprecated Use `destroy` — the library-wide teardown verb. Behaviour is identical.
    * @example
    *   if (STATE.observer.details.isObserving) STATE.observer.disconnect();
    */
   disconnect: () => void;
+  /**
+   * Destroy the observer, removing it from the DOM — the standard teardown verb (idempotent, sync, never throws)
+   *
+   * @example
+   *   if (STATE.observer.details.isObserving) STATE.observer.destroy();
+   */
+  destroy: () => void;
   /**
    * Bind the observer to an element and start watching for changes. If no target exists, or the target fails to match,
    * this will error out
@@ -121,7 +129,7 @@ export interface JfObserver {
  *
  *   STATE.observer.observe(target, { childList: true }, () => {});
  *
- * @param {string} id - The unique ID for the observer.
+ * @param {string} id - The unique ID for the observer. Use the `<ownerId>--<childId>` convention (e.g. `"TIK_123456--hero"`) so useSPA resets/destroys sweep this resource automatically.
  * @returns {JfObserver} An object containing details of the observer, and functions to manage its lifecycle.
  * @interface JfObserverObject
  * - observer: The `MutationObserver` instance (or `undefined` if not active).
@@ -191,12 +199,13 @@ export const useMutationObserver = (id: string): JfObserver => {
     observerObject.isObserving = false;
     // Remove this instance from the global array
     window.jfObservers = window.jfObservers.filter((obs: JfObserverObject) => obs.ticketId !== id);
-    log("Disconnected observer", "error");
+    log("Disconnected observer", "info");
   };
 
   return {
     details: observerObject,
     observe: wrappedObserve,
     disconnect: wrappedDisconnect,
+    destroy: wrappedDisconnect,
   };
 };

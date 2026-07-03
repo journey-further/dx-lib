@@ -15,7 +15,12 @@ export type JfTimerObject = {
   timer: ReturnType<typeof setTimeout>;
   timeout: number;
   handler: () => void;
+  /** Clear this timer
+   *
+   * @deprecated Use `destroy` - the library-wide teardown verb. Behaviour is identical. */
   disconnect: () => void;
+  /** Clear this timer - the standard teardown verb (idempotent, sync, never throws) */
+  destroy: () => void;
 };
 
 /**
@@ -43,7 +48,7 @@ declare global {
  *
  * @param {() => void} handler - A function to execute when the timer expires. _(Required)_
  * @param {number} timeout - The time, in milliseconds, to wait before executing the handler. _(Required)_
- * @param {string} id - A unique identifier for the timer. _(Required)_
+ * @param {string} id - A unique identifier for the timer. Use the `<ownerId>--<childId>` convention (e.g. `"TIK_123456--hero"`) so useSPA resets/destroys sweep this resource automatically. _(Required)_
  * @returns {JfTimerObject} An object containing details about the timer and a method to clear it.
  */
 
@@ -77,6 +82,7 @@ export const useSetTimeout = (handler: () => void, timeout: number, id: string):
     timeout,
     handler,
     disconnect,
+    destroy: disconnect,
   };
   // push the object to our array so we can clear it
   window.jfTimers.push(timerObj);

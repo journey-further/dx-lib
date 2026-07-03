@@ -258,3 +258,12 @@ describe("elementUpdated", () => {
     expect(callback).not.toHaveBeenCalled();
   });
 });
+
+describe("standard handle shape", () => {
+  it("exposes details and pause with a live isListening flag", async () => {
+    const handle = elementUpdated(".handle-test", vi.fn(), "HANDLE_3", { attributes: true });
+    expect(handle.details.isListening).toBe(true);
+    await handle.pause(0);
+    expect(handle.details.isListening).toBe(false);
+  });
+});

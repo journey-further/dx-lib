@@ -21,8 +21,14 @@ export type JfListenerObject = {
   options: AddEventListenerOptions;
   /** The name of the event to listen for */
   eventName: string;
-  /** A method to disconnect this listener */
+  /**
+   * A method to remove this listener
+   *
+   * @deprecated Use `destroy` — the library-wide teardown verb. Behaviour is identical.
+   */
   disconnect: () => void;
+  /** Remove this listener — the standard teardown verb (idempotent, sync, never throws) */
+  destroy: () => void;
 };
 
 /**
@@ -51,7 +57,7 @@ declare global {
  * preventing memory leaks or unexpected behaviour. It can also be helpful in static sites to avoid duplicate
  * listeners.
  *
- * @param {string} id - A unique ID for the listener to track it globally.
+ * @param {string} id - A unique ID for the listener to track it globally. Use the `<ownerId>--<childId>` convention (e.g. `"TIK_123456--hero"`) so useSPA resets/destroys sweep this resource automatically.
  * @param {HTMLElement} element - The element to attach the listener to.
  * @param {string} eventName - The name of the event to listen for (e.g., "click", "keydown").
  * @param {EventListener} handler - The function to execute when the event is triggered.
@@ -93,7 +99,7 @@ export const useEventListener = (
   // Add the listener
   element?.addEventListener(eventName, handler, options);
   // object to return and push to window
-  const listenerObject = { element, eventName, id, handler, options, disconnect };
+  const listenerObject = { element, eventName, id, handler, options, disconnect, destroy: disconnect };
   // Push the object
   window.jfListeners.push(listenerObject);
   // Return method to remove it

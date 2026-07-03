@@ -18,6 +18,12 @@ const VERSION: string = "1.0";
  * - `destroy` Remove the listener completely
  */
 export interface JfUpdated {
+  /** Introspection details for this listener: its id, selector, and whether it is currently listening */
+  details: {
+    id: string;
+    selector: string;
+    readonly isListening: boolean;
+  };
   /**
    * Start listening for the requested element to be removed again
    *
@@ -27,6 +33,12 @@ export interface JfUpdated {
    * @returns
    */
   init: () => void;
+  /**
+   * Stop this elementUpdated listener without removing any other state — `init` restarts it
+   *
+   * @returns
+   */
+  pause: (delay?: number) => Promise<void>;
   /**
    * Completely remove this elementUpdated listener. Will stop listening for any future elements to be
    *
@@ -124,7 +136,7 @@ const getObserver = () => {
  *
  * @param {string} selector - A CSS selector string used to identify the target element. _(required)_
  * @param {Function} callback - A function to execute when the element is removed. _(required)_
- * @param {string} id - A unique identifier to track elements that have already triggered the callback. _(required)_
+ * @param {string} id - A unique identifier to track elements that have already triggered the callback. Use the `<ownerId>--<childId>` convention (e.g. `"TIK_123456--hero"`) so useSPA resets/destroys sweep this resource automatically. _(required)_
  * @param {JfUpdatedOptions} options - Object to filter by specific updates _(required)_
  * @param {Function} [conditions] - Optional conditions to validate the element before triggering the callback. Must be
  *   a function that returns `true` for the callback to execute.
@@ -385,18 +397,27 @@ export const elementUpdated = (
    * @returns Promise that resolves when cleanup is complete
    */
   const destroy = async (delay: number = 50) => {
-    if (!!!getObserver().callbacks) return;
+    if (!window?.jfLib?.elementUpdated?.[VERSION]?.callbacks) return;
 
     try {
       // wait a small delay
       await new Promise((resolve) => setTimeout(resolve, delay));
       // remove the listener
-      log("Removing listener", "error");
+      log("Removing listener", "info");
       getObserver().callbacks = getObserver().callbacks.filter((cb) => cb.id !== id);
     } catch (error) {
       log(error, "error");
     }
   };
+
+  /**
+   * Stops the elementUpdated listener — an alias of `destroy` kept for the standard handle shape (this module tracks
+   * no per-element marks, so there is no extra state for `destroy` to clear)
+   *
+   * @param delay - Optional delay before cleanup _(default: 50ms)_
+   * @returns Promise that resolves when cleanup is complete
+   */
+  const pause = (delay: number = 50) => destroy(delay);
 
   // Start the functionality
   const init = () => {
@@ -407,7 +428,15 @@ export const elementUpdated = (
 
   // Return the exposed functions
   return {
+    details: {
+      id,
+      selector,
+      get isListening() {
+        return !!window?.jfLib?.elementUpdated?.[VERSION]?.callbacks?.some((cb) => cb?.id === id);
+      },
+    },
     init,
+    pause,
     destroy,
   };
 };
