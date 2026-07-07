@@ -1,5 +1,5 @@
 import { useMutationObserver } from "./useMutationObserver";
-import { validateSelectors, log as _log, isDebug, LogLevel, isFunction, isString, isNodeAsElement } from "../helpers";
+import { validateSelectors, createLogger, jfError, isFunction, isString, isNodeAsElement } from "../helpers";
 
 const VERSION: string = "1.0";
 
@@ -10,6 +10,12 @@ const VERSION: string = "1.0";
  * - `destroy` Remove the listener completely
  */
 export interface JfRemoved {
+  /** Introspection details for this listener: its id, selector, and whether it is currently listening */
+  details: {
+    id: string;
+    selector: string;
+    readonly isListening: boolean;
+  };
   /**
    * Start listening for the requested element to be removed again
    *
@@ -19,6 +25,12 @@ export interface JfRemoved {
    * @returns
    */
   init: () => void;
+  /**
+   * Stop this elementRemoved listener without removing any other state — `init` restarts it
+   *
+   * @returns
+   */
+  pause: (delay?: number) => Promise<void>;
   /**
    * Completely remove this elementRemoved listener. Will stop listening for any future elements to be
    *
@@ -56,7 +68,7 @@ const initializeJFLib = () => {
  */
 const createObserver = () => {
   window.jfLib.elementRemoved[VERSION] = {
-    observer: useMutationObserver(`elementRemoved-${VERSION}`),
+    observer: useMutationObserver(`elementRemoved--${VERSION}`),
     callbacks: [],
   };
 };
@@ -100,7 +112,7 @@ const getObserver = () => {
  *
  * @param {string} selector - A CSS selector string used to identify the target element. _(required)_
  * @param {Function} callback - A function to execute when the element is removed. _(required)_
- * @param {string} id - A unique identifier to track elements that have already triggered the callback. _(required)_
+ * @param {string} id - A unique identifier to track elements that have already triggered the callback. Use the `<ownerId>--<childId>` convention (e.g. `"TIK_123456--hero"`) so useSPA resets/destroys sweep this resource automatically. _(required)_
  * @param {Function} conditions - Optional conditions to validate the element before triggering the callback. Must be a
  *   function that returns `true` for the callback to execute.
  * @returns Functions:
@@ -115,10 +127,7 @@ export const elementRemoved = (
   id: string,
   conditions?: (el: Element) => boolean
 ): JfRemoved => {
-  const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
-    if (!!debug && !isDebug()) return;
-    _log(msg, lvl, `[${id}] elementRemoved`, data);
-  };
+  const log = createLogger(`[${id}] elementRemoved`);
 
   /**
    * Validates all input parameters for the elementRemoved function
@@ -129,42 +138,34 @@ export const elementRemoved = (
   const validateSetup = () => {
     // -- VALIDATE SELECTOR --
     if (!!!selector) {
-      log("selector is not defined", "error");
-      throw new Error("elementRemoved setup failed");
+      throw jfError("INVALID_OPTIONS", "elementRemoved setup failed: selector is not defined");
     }
     if (!isString(selector)) {
-      log("selector must be a string", "error");
-      throw new Error("elementRemoved setup failed");
+      throw jfError("INVALID_OPTIONS", "elementRemoved setup failed: selector must be a string");
     }
     if (!validateSelectors(selector)) {
-      log("selector must be a valid css selector", "error");
-      throw new Error("elementRemoved setup failed");
+      throw jfError("INVALID_OPTIONS", "elementRemoved setup failed: selector must be a valid css selector");
     }
 
     // -- VALIDATE CALLBACK --
     if (!!!callback) {
-      log("callback is not defined", "error");
-      throw new Error("elementRemoved setup failed");
+      throw jfError("INVALID_OPTIONS", "elementRemoved setup failed: callback is not defined");
     }
     if (!isFunction(callback)) {
-      log("callback must be a function", "error");
-      throw new Error("elementRemoved setup failed");
+      throw jfError("INVALID_OPTIONS", "elementRemoved setup failed: callback must be a function");
     }
 
     // -- VALIDATE ID --
     if (!!!id) {
-      log("id is not defined", "error");
-      throw new Error("elementRemoved setup failed");
+      throw jfError("INVALID_OPTIONS", "elementRemoved setup failed: id is not defined");
     }
     if (!isString(id)) {
-      log("id must be a string", "error");
-      throw new Error("elementRemoved setup failed");
+      throw jfError("INVALID_OPTIONS", "elementRemoved setup failed: id must be a string");
     }
 
     // -- VALIDATE CONDITIONS --
     if (conditions && !isFunction(conditions)) {
-      log("conditions must be a function", "error");
-      throw new Error("elementRemoved setup failed");
+      throw jfError("INVALID_OPTIONS", "elementRemoved setup failed: conditions must be a function");
     }
 
     return true;
@@ -182,7 +183,7 @@ export const elementRemoved = (
     // check if it also matches the conditions
     if (!!conditions && typeof conditions == "function") {
       if (conditions(target) !== true) {
-        log("Ignored: conditions not matched", "warn", true, target);
+        log("Ignored: conditions not matched", "warn", target);
         return false;
       }
     }
@@ -199,11 +200,11 @@ export const elementRemoved = (
     initializeJFLib();
     // Abort if we've already added this listener as we only need one
     if (!!getObserver()) {
-      log("Global observer exists", "warn", true);
+      log("Global observer exists", "warn");
       return;
     }
 
-    log("Binding observer", "detail", true);
+    log("Binding observer", "detail");
 
     try {
       // bind to html
@@ -212,6 +213,8 @@ export const elementRemoved = (
       const config: MutationObserverInit = { childList: true, subtree: true };
 
       const mutationCallback: MutationCallback = (mutations) => {
+        // the observer can outlive its environment (jsdom teardown, detached frames) - never touch a dead window
+        if (typeof window === "undefined") return;
         mutations.forEach((mutation) => {
           // we only want to observe removed nodes
           if (mutation.removedNodes.length == 0) return;
@@ -238,7 +241,7 @@ export const elementRemoved = (
 
   /** Initializes the element removed functionality. Sets up observers and processes existing elements */
   const initFunctionality = () => {
-    log("Creating listener", "info", true);
+    log("Creating listener", "info");
 
     // 1. Check if we've already bound this callback with matching id
     const hasCallback = window.jfLib?.elementRemoved?.[VERSION]?.callbacks?.find((cb) => cb.id == id);
@@ -264,7 +267,7 @@ export const elementRemoved = (
         if (!checkConditions(target)) return;
 
         // then run our callback
-        log("Removed", "info", true);
+        log("Removed", "info");
         callback(target);
       },
     });
@@ -277,18 +280,27 @@ export const elementRemoved = (
    * @returns Promise that resolves when cleanup is complete
    */
   const destroy = async (delay: number = 50) => {
-    if (!!!getObserver().callbacks) return;
+    if (!window?.jfLib?.elementRemoved?.[VERSION]?.callbacks) return;
 
     try {
       // wait a small delay
       await new Promise((resolve) => setTimeout(resolve, delay));
       // remove the listener
-      log("Removing listener", "error");
+      log("Removing listener", "info");
       getObserver().callbacks = getObserver().callbacks.filter((cb) => cb.id !== id);
     } catch (error) {
       log(error, "error");
     }
   };
+
+  /**
+   * Stops the elementRemoved listener — an alias of `destroy` kept for the standard handle shape (this module tracks
+   * no per-element marks, so there is no extra state for `destroy` to clear)
+   *
+   * @param delay - Optional delay before cleanup _(default: 50ms)_
+   * @returns Promise that resolves when cleanup is complete
+   */
+  const pause = (delay: number = 50) => destroy(delay);
 
   // Start the functionality
   const init = () => {
@@ -299,7 +311,15 @@ export const elementRemoved = (
 
   // Return the exposed functions
   return {
+    details: {
+      id,
+      selector,
+      get isListening() {
+        return !!window?.jfLib?.elementRemoved?.[VERSION]?.callbacks?.some((cb) => cb?.id === id);
+      },
+    },
     init,
+    pause,
     destroy,
   };
 };

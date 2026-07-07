@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/12</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/6</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/10</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -108,9 +108,7 @@
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -128,33 +126,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">40x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { waitFor } from "./waitFor";
@@ -167,7 +163,7 @@
  * insertion position is not specified, it defaults to `"beforeend"`.
  *
  * @param {string} style - The CSS string to include in the `&lt;style&gt;` element.
- * @param {string} id - A unique ID to assign to the `&lt;style&gt;` element, ensuring no duplicates are added.
+ * @param {string} id - A unique ID to assign to the `&lt;style&gt;` element, ensuring no duplicates are added. Use the `&lt;ownerId&gt;--&lt;childId&gt;` convention (e.g. `"TIK_123456--hero"`) so useSPA resets/destroys sweep this resource automatically.
  * @param {object} [options] - Configuration options for the insertion.
  * @param {"beforebegin" | "afterbegin" | "beforeend" | "afterend"} [options.position="beforeend"] - The position where
  *   the `&lt;style&gt;` element should be inserted. Default is `"beforeend"`
@@ -183,25 +179,23 @@ export const insertStyle = async (
     elem?: HTMLElement;
   }
 ): Promise&lt;void&gt; =&gt; {
-  // Exit an element exists with this ID
-  if (!!document.querySelector(`#${id}`)) return;
   // Generate our HTML
   const styleElem = `&lt;style id="${id}"&gt;${style.toString()}&lt;/style&gt;`;
   // Get our insert position
   const insertPosition = options?.position ? <span class="branch-0 cbranch-no" title="branch not covered" >options.position : "</span>beforeend";
 &nbsp;
-  try {
-    // If an element was passed
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (options?.elem) {
-<span class="cstat-no" title="statement not covered" >      options.elem.insertAdjacentHTML(insertPosition, styleElem);</span>
-    } else {
-      // default to document.body
-      // NOTE: @samrenfrew added waitFor here to ensure that the body exists before we try to insert into it - fixes some errors with this function
-      await waitFor(() =&gt; !!document.body);
-      document.body.insertAdjacentHTML(insertPosition, styleElem);
-    }
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn(error);</span>
+  // Exit if an element already exists with this ID (getElementById does no selector parsing, so
+  // ids that aren't valid CSS selectors - e.g. starting with a digit - are handled correctly)
+  if (!!document.getElementById(id)) return;
+&nbsp;
+  // If an element was passed
+  if (options?.elem) {
+    options.elem.insertAdjacentHTML(insertPosition, styleElem);
+  } else {
+    // default to document.body
+    // NOTE: @samrenfrew added waitFor here to ensure that the body exists before we try to insert into it - fixes some errors with this function
+    await waitFor(() =&gt; !!document.body);
+    document.body.insertAdjacentHTML(insertPosition, styleElem);
   }
 };
 &nbsp;</pre></td></tr></table></pre>
@@ -211,7 +205,7 @@ export const insertStyle = async (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-09T15:46:53.781Z
+                at 2026-07-03T18:39:10.532Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

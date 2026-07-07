@@ -42,4 +42,17 @@ describe("enableScroll", () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(0, MOCK_SCROLL_Y);
   });
+
+  it("will call scrollTo with 0 (not NaN) on iphone when there is no prior top style set by preventScroll", () => {
+    // Set UA to iPhone
+    Object.defineProperty(global.navigator, "userAgent", {
+      value: IPHONE_USER_AGENT,
+      configurable: true,
+    });
+    // Note: body.style.top is left unset here, simulating enableScroll being called without a prior preventScroll on iPhone
+    const spy = vi.spyOn(window, "scrollTo").mockImplementation(() => {});
+    enableScroll();
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(0, 0);
+  });
 });

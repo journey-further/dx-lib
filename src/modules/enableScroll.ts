@@ -16,9 +16,10 @@ export const enableScroll = (): void => {
   document.body.classList.remove("JFCRO_no-scroll");
   // If the useragent is a mobile then remove our style properties
   if (isIphone()) {
-    const top: number = document.body.style.top.includes("-")
+    const parsedTop = document.body.style.top.includes("-")
       ? parseInt(document.body.style.top.split("-")[1].split("px")[0], 10)
       : parseInt(document.body.style.top.split("px")[0], 10);
+    const top: number = Number.isNaN(parsedTop) ? 0 : parsedTop;
     document.body.style.removeProperty("position");
     document.body.style.removeProperty("top");
     document.body.style.removeProperty("width");

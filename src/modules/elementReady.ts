@@ -1,5 +1,5 @@
 import { useMutationObserver } from "./useMutationObserver";
-import { validateSelectors, log as _log, isDebug, LogLevel, isFunction, isString, isNodeAsElement } from "../helpers";
+import { validateSelectors, createLogger, jfError, isFunction, isString, isNodeAsElement } from "../helpers";
 
 const VERSION: string = "1.0";
 
@@ -11,6 +11,12 @@ const VERSION: string = "1.0";
  * - `destroy` Remove the listener completely
  */
 export interface JfReady {
+  /** Introspection details for this listener: its id, selector, and whether it is currently listening */
+  details: {
+    id: string;
+    selector: string;
+    readonly isListening: boolean;
+  };
   /**
    * Start listening for the requested element to be ready again
    *
@@ -50,6 +56,8 @@ export interface JfReady {
 export type JfReadyObject = {
   id: string;
   callback: (el: Element) => void;
+  /** The CSS selector this callback watches — lets teardown sweeps clear matching jfReady marks */
+  selector?: string;
 };
 
 /**
@@ -67,7 +75,7 @@ const initializeJFLib = () => {
  */
 const createObserver = () => {
   window.jfLib.elementReady[VERSION] = {
-    observer: useMutationObserver(`elementReady-${VERSION}`),
+    observer: useMutationObserver(`elementReady--${VERSION}`),
     callbacks: [],
   };
 };
@@ -117,7 +125,7 @@ const getObserver = () => {
  * @param {string} selector - A CSS selector string used to identify the target element. _(required)_
  * @param {Function} callback - A function to execute when the element is found. Receives the element as its parameter.
  *   _(required)_
- * @param {string} id - A unique identifier to track elements that have already triggered the callback. _(required)_
+ * @param {string} id - A unique identifier to track elements that have already triggered the callback. Use the `<ownerId>--<childId>` convention (e.g. `"TIK_123456--hero"`) so useSPA resets/destroys sweep this resource automatically. _(required)_
  * @param {Function} conditions - Optional conditions to validate the element before triggering the callback. Must be a
  *   function that returns `true` for the callback to execute.
  * @returns Functions:
@@ -133,10 +141,7 @@ export const elementReady = (
   id: string,
   conditions?: (el: Element) => boolean
 ): JfReady => {
-  const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
-    if (!!debug && !isDebug()) return;
-    _log(msg, lvl, `[${id}] elementReady`, data);
-  };
+  const log = createLogger(`[${id}] elementReady`);
 
   /**
    * Validates all input parameters for the elementReady function
@@ -147,42 +152,34 @@ export const elementReady = (
   const validateSetup = () => {
     // -- VALIDATE SELECTOR --
     if (!!!selector) {
-      log("selector is not defined", "error");
-      throw new Error("elementReady setup failed");
+      throw jfError("INVALID_OPTIONS", "elementReady setup failed: selector is not defined");
     }
     if (!isString(selector)) {
-      log("selector must be a string", "error");
-      throw new Error("elementReady setup failed");
+      throw jfError("INVALID_OPTIONS", "elementReady setup failed: selector must be a string");
     }
     if (!validateSelectors(selector)) {
-      log("selector must be a valid css selector", "error");
-      throw new Error("elementReady setup failed");
+      throw jfError("INVALID_OPTIONS", "elementReady setup failed: selector must be a valid css selector");
     }
 
     // -- VALIDATE CALLBACK --
     if (!!!callback) {
-      log("callback is not defined", "error");
-      throw new Error("elementReady setup failed");
+      throw jfError("INVALID_OPTIONS", "elementReady setup failed: callback is not defined");
     }
     if (!isFunction(callback)) {
-      log("callback must be a function", "error");
-      throw new Error("elementReady setup failed");
+      throw jfError("INVALID_OPTIONS", "elementReady setup failed: callback must be a function");
     }
 
     // -- VALIDATE ID --
     if (!!!id) {
-      log("id is not defined", "error");
-      throw new Error("elementReady setup failed");
+      throw jfError("INVALID_OPTIONS", "elementReady setup failed: id is not defined");
     }
     if (!isString(id)) {
-      log("id must be a string", "error");
-      throw new Error("elementReady setup failed");
+      throw jfError("INVALID_OPTIONS", "elementReady setup failed: id must be a string");
     }
 
     // -- VALIDATE CONDITIONS --
     if (conditions && !isFunction(conditions)) {
-      log("conditions must be a function", "error");
-      throw new Error("elementReady setup failed");
+      throw jfError("INVALID_OPTIONS", "elementReady setup failed: conditions must be a function");
     }
 
     return true;
@@ -200,7 +197,7 @@ export const elementReady = (
     // check if it also matches the conditions
     if (!!conditions && typeof conditions == "function") {
       if (conditions(target) !== true) {
-        log("Ignored: conditions not matched", "warn", true, target);
+        log("Ignored: conditions not matched", "warn", target);
         return false;
       }
     }
@@ -220,21 +217,25 @@ export const elementReady = (
   const checkElement = (target: Element) => {
     // if it's already been marked as ready, then skip this
     if (target?.jfReady?.includes(id)) {
-      log("Ignored: Already marked as ready", "warn", true, target);
+      log("Ignored: Already marked as ready", "warn", target);
       return;
     }
 
     // check if it also matches the conditions
     if (!checkConditions(target)) return;
 
-    // mark it as ready
-    target.jfReady = target.jfReady || [];
-    target.jfReady.push(id);
-    // target.setAttribute("jf-ready", "");
-
     // then run our callback
-    log("Element found", "info", true);
-    callback(target);
+    log("Element found", "info");
+    try {
+      callback(target);
+      // mark it as ready, but only once the callback has run successfully - a throwing
+      // callback must not permanently block retries on future mutations
+      target.jfReady = target.jfReady || [];
+      target.jfReady.push(id);
+      // target.setAttribute("jf-ready", "");
+    } catch (err) {
+      log(err, "error");
+    }
   };
 
   /**
@@ -242,7 +243,7 @@ export const elementReady = (
    * handled yet
    */
   const checkDOMElements = () => {
-    log("Checking existing elements", "info", true);
+    log("Checking existing elements", "info");
     const elements = document.querySelectorAll(selector);
     elements.forEach((element) => {
       checkElement(element);
@@ -258,11 +259,11 @@ export const elementReady = (
     initializeJFLib();
     // Abort if we've already added this listener as we only need one
     if (!!getObserver()) {
-      log("Global observer exists", "warn", true);
+      log("Global observer exists", "warn");
       return;
     }
 
-    log("Binding observer", "detail", true);
+    log("Binding observer", "detail");
 
     try {
       // bind to html
@@ -271,6 +272,8 @@ export const elementReady = (
       const config: MutationObserverInit = { childList: true, subtree: true };
 
       const mutationCallback: MutationCallback = (mutations) => {
+        // the observer can outlive its environment (jsdom teardown, detached frames) - never touch a dead window
+        if (typeof window === "undefined") return;
         mutations.forEach((mutation) => {
           // we only want to observe added nodes
           if (mutation.addedNodes.length == 0) return;
@@ -281,7 +284,11 @@ export const elementReady = (
             // Grab all the callbacks from our callbacks array and run them each
             getObserver().callbacks.forEach((cb) => {
               if (isFunction(cb.callback) && isNodeAsElement(node)) {
-                cb.callback(node);
+                try {
+                  cb.callback(node);
+                } catch (err) {
+                  log(err, "error");
+                }
               }
             });
           });
@@ -300,7 +307,7 @@ export const elementReady = (
   /** Initializes the element ready functionality. Sets up observers and processes existing elements */
   const initFunctionality = () => {
     try {
-      log("Creating listener", "info", true);
+      log("Creating listener", "info");
 
       // 1. Check if we've already bound this callback with matching id
       const hasCallback = window.jfLib?.elementReady?.[VERSION]?.callbacks?.find((cb) => cb.id == id);
@@ -316,6 +323,7 @@ export const elementReady = (
       // 3. Push our callback into the array
       getObserver()?.callbacks.push({
         id: id,
+        selector: selector,
         callback: (target) => {
           // check whether this element matches the selector, or a child element of this element matches the selector
           if (!target.matches(selector) && !target.querySelector(selector)) {
@@ -343,7 +351,7 @@ export const elementReady = (
    * @returns Promise that resolves when cleanup is complete
    */
   const pause = async (delay: number = 50) => {
-    if (!!!getObserver().callbacks) return;
+    if (!window?.jfLib?.elementReady?.[VERSION]?.callbacks) return;
 
     try {
       // wait a small delay
@@ -371,7 +379,7 @@ export const elementReady = (
    * @returns Promise that resolves when cleanup is complete
    */
   const destroy = async (delay: number = 50) => {
-    if (!!!getObserver().callbacks) return;
+    if (!window?.jfLib?.elementReady?.[VERSION]?.callbacks) return;
 
     try {
       // wait a small delay
@@ -409,6 +417,13 @@ export const elementReady = (
 
   // Return the exposed functions
   return {
+    details: {
+      id,
+      selector,
+      get isListening() {
+        return !!window?.jfLib?.elementReady?.[VERSION]?.callbacks?.some((cb) => cb?.id === id);
+      },
+    },
     init,
     pause,
     destroy,

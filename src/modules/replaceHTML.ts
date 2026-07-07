@@ -1,3 +1,4 @@
+import { jfError } from "../helpers";
 import { emptyElem } from "./emptyElem";
 
 /**
@@ -10,10 +11,10 @@ import { emptyElem } from "./emptyElem";
  */
 
 export const replaceHTML = (elem: HTMLElement, html: string): void => {
-  if (!!!elem) throw new Error("Provide a HTML element as arg 1");
-  if (!(elem instanceof HTMLElement)) throw Error("Parameter 1 must be a HTML element");
-  if (!!!html) throw new Error("Provide HTML markup as arg 2");
-  if (typeof html !== "string") throw Error("Parameter 2 must be a string");
+  if (!!!elem) throw jfError("MISSING_OPTION", "elem must be provided");
+  if (!(elem instanceof HTMLElement)) throw jfError("INVALID_TYPE", "elem must be a HTMLElement");
+  if (!!!html) throw jfError("MISSING_OPTION", "html must be provided");
+  if (typeof html !== "string") throw jfError("INVALID_TYPE", "html must be a string");
   emptyElem(elem);
   elem.insertAdjacentHTML("afterbegin", html);
 };

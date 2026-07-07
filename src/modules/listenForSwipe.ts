@@ -19,13 +19,14 @@ export type FunctionWithArgs = (...args: unknown[]) => void;
  * @param {FunctionWithArgs} rightCallback - The function to execute when a right swipe is detected.
  * @param {number} [minDistance=50] - The minimum swipe distance, in pixels, required to trigger a callback. Default is
  *   `50`
+ * @returns {{ destroy: () => void }} A handle whose `destroy` removes every listener this call attached
  */
 export const listenForSwipe = (
   element: Element,
   leftCallback: FunctionWithArgs,
   rightCallback: FunctionWithArgs,
   minDistance = 50
-) => {
+): { destroy: () => void } => {
   let touchStart: number | undefined;
   let initialTouch: number | undefined;
   let touchEnd: number | undefined;
@@ -84,4 +85,15 @@ export const listenForSwipe = (
 
   element.addEventListener("mousedown", handleMouseDown);
   element.addEventListener("touchstart", handleTouchStart);
+
+  // the standard teardown handle — without it these outer listeners were unremovable for the page's lifetime
+  const destroy = () => {
+    element.removeEventListener("mousedown", handleMouseDown);
+    element.removeEventListener("touchstart", handleTouchStart);
+    element.removeEventListener("touchmove", handleTouchMove);
+    element.removeEventListener("touchend", handleTouchEnd);
+    element.removeEventListener("mouseup", handleMouseUp, { capture: true });
+    resetTouch();
+  };
+  return { destroy };
 };

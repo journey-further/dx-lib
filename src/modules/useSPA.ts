@@ -1,15 +1,16 @@
+import { destroyByPrefix } from "./destroyByPrefix";
 import { insertStyle } from "./insertStyle";
 import { useMutationObserver } from "./useMutationObserver";
 import { waitForElement } from "./waitForElement";
 import {
-  log as _log,
-  isDebug,
+  createLogger,
+  jfError,
+  reportError,
   isFunction,
   isNumber,
   isString,
   isStringArray,
   isRegExp,
-  LogLevel,
   validateSelectors,
   isObject,
   isNodeAsElement,
@@ -18,10 +19,7 @@ import { debounce } from "./debounce";
 
 const PAGE_CHANGE_VERSION = "1.0";
 const REINIT_VERSION = "1.0";
-const LIB_INIT = {
-  pagePath: window.location.pathname,
-  experiments: [],
-};
+const EXPERIMENTS_VERSION = "1.0";
 
 /**
  * Type guard to check if an unknown value is a JfSPAPageOptions instance
@@ -285,12 +283,12 @@ export interface JfSPAPageOptions {
  *     // do something
  *   };
  *
- *   (() => {
+ *   (async () => {
  *     try {
  *       const Test = useSPA("TestID");
  *
- *       // Start the test
- *       Test.init({
+ *       // Start the test — await it, or setup/validation errors will surface only as unhandled rejections
+ *       await Test.init({
  *         apply: applyChanges,
  *         reset: resetChanges,
  *         style: ".my-test { color: red; }",
@@ -342,10 +340,9 @@ export const useSPA = (id: string): JfSPA => {
       isReset: false,
     },
   };
-  const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
-    if (!!debug && !isDebug()) return;
-    _log(msg, lvl, `[${id}] useSPA`, data);
-  };
+  const log = createLogger(`[${id}] useSPA`);
+  // Set by destroy() — checked before any (re-)apply so a destroyed test can never zombie back
+  let destroyed = false;
   /**
    * Sets up the SPA test with provided options
    *
@@ -361,17 +358,21 @@ export const useSPA = (id: string): JfSPA => {
       // Push the id
       STATE.details.id = id;
 
-      // Check if this test is already setup
-      window.jfLib = window.jfLib || LIB_INIT;
-      window.jfLib.experiments = window.jfLib.experiments || [];
-      const alreadyRunning = !!window.jfLib.experiments.find((test) => test?.details && test?.details?.id == id);
+      // Check if this test is already setup — a fresh object per assignment, so an external
+      // wipe of window.jfLib can never resurrect stale module-level state
+      window.jfLib = window.jfLib || {};
+      window.jfLib.experiments = window.jfLib.experiments || {};
+      window.jfLib.experiments[EXPERIMENTS_VERSION] = window.jfLib.experiments[EXPERIMENTS_VERSION] || [];
+      const alreadyRunning = !!window.jfLib.experiments[EXPERIMENTS_VERSION].find(
+        (test) => test?.details && test?.details?.id == id
+      );
       if (alreadyRunning) {
         log(`Test already setup`, "warn");
         // initTest = () => null;
         return false;
       }
 
-      log(`Creating Test`, "success", false, isDebug() ? options : null);
+      log(`Creating Test`, "success", options);
 
       const hasValidOptions = validateOptions(options);
       if (!hasValidOptions) {
@@ -431,42 +432,31 @@ export const useSPA = (id: string): JfSPA => {
       bindReInitListener();
 
       // Bind an event to handle the page change
-      log(`+ Binding Page Change Listener`, "detail", true);
+      log(`+ Binding Page Change Listener`, "detail");
       window.removeEventListener(`jf-pagechange-${PAGE_CHANGE_VERSION}`, handlePageChange);
       window.addEventListener(`jf-pagechange-${PAGE_CHANGE_VERSION}`, handlePageChange);
 
       // Bind an event to handle the page change
-      log(`+ Binding SPA Re-init Listener`, "detail", true);
+      log(`+ Binding SPA Re-init Listener`, "detail");
       window.removeEventListener(`jf-reinit-${REINIT_VERSION}`, handleReInit);
       window.addEventListener(`jf-reinit-${REINIT_VERSION}`, handleReInit);
 
       if (!!screen) {
-        STATE.options.screen = screen;
-        // set default min/max if not provided
-        if (screen.maxWidth === undefined) STATE.options.screen.maxWidth = 99999;
-        if (screen.minWidth === undefined) STATE.options.screen.minWidth = 0;
+        // copy with defaults — never mutate the caller's (possibly frozen/shared) options object
+        STATE.options.screen = { minWidth: 0, maxWidth: 99999, ...screen };
         // Bind an event to handle the page change
-        log(`+ Binding Resize Listener`, "detail", true);
+        log(`+ Binding Resize Listener`, "detail");
         window.removeEventListener(`resize`, handleResize);
         window.addEventListener(`resize`, handleResize);
-        // check it now and abort if it's not within the params
-        // if (window.innerWidth < screen.minWidth) {
-        //   log(`Screen is smaller than minWidth`, "warn", false, screen.minWidth);
-        //   // return false;
-        // }
-        // if (window.innerWidth > screen.maxWidth) {
-        //   log(`Screen is larger than maxWidth`, "warn", false, screen.maxWidth);
-        //   // return false;
-        // }
       }
 
       // Push this test to global object and mark it as running
       STATE.details.isRunning = true;
-      window.jfLib.experiments.push(publicApi);
+      window.jfLib.experiments[EXPERIMENTS_VERSION].push(publicApi);
       return true;
     } catch (e) {
-      log("Setup Error", "error", false, STATE);
-      throw new Error(e);
+      log("Setup Error", "error", STATE);
+      throw e;
     }
   };
 
@@ -487,32 +477,36 @@ export const useSPA = (id: string): JfSPA => {
    */
   const bindReInitListener = () => {
     window.jfLib.reInit = window.jfLib.reInit || {};
-    // Abort if we've already added this listener as we only need one
-    if (!!window.jfLib.reInit[REINIT_VERSION]) return;
+    // The observer is a shared singleton — later instances register their removedNode in the
+    // shared nodeNames set instead of being ignored (the observer must not close over one test's option)
+    const existing = window.jfLib.reInit[REINIT_VERSION];
+    if (existing) {
+      existing.nodeNames?.add(STATE.options.removedNode);
+      return;
+    }
     try {
       const target = document.querySelector("html");
       if (!!!target) throw new Error("no target");
-      window.jfLib.reInit = {};
       const config: MutationObserverInit = { childList: true, subtree: true };
 
+      const nodeNames = new Set<string>([STATE.options.removedNode]);
       const callback: MutationCallback = (mutations) => {
         mutations.forEach((mutation) => {
           if (mutation.addedNodes.length === 0) return;
-          mutation.addedNodes.forEach(async (node) => {
+          mutation.addedNodes.forEach((node) => {
             try {
-              if (node.nodeName !== STATE.options.removedNode) return;
-              // the MAIN element has been re-added, so dispatch an event
+              if (!nodeNames.has(node.nodeName)) return;
+              // a watched element has been re-added, so dispatch an event
               window.dispatchEvent(new Event(`jf-reinit-${REINIT_VERSION}`));
             } catch (e) {
-              throwError(e);
+              reportLifecycle(e);
             }
           });
         });
       };
 
       // Setup the reInit observer
-
-      window.jfLib.reInit[REINIT_VERSION] = { observer: useMutationObserver(`reInit-${REINIT_VERSION}`) };
+      window.jfLib.reInit[REINIT_VERSION] = { observer: useMutationObserver(`reInit--${REINIT_VERSION}`), nodeNames };
       window.jfLib.reInit[REINIT_VERSION].observer.observe(target, config, callback);
     } catch (e) {
       log("Re-Init Error", "error");
@@ -521,9 +515,9 @@ export const useSPA = (id: string): JfSPA => {
   };
 
   /**
-   * Sets up a mutation observer to detect page changes in Single Page Applications. Watches for changes to meta
-   * description or canonical link elements. Only one observer is created globally and shared across all test
-   * instances.
+   * Sets up a mutation observer to detect page changes in Single Page Applications by comparing the full location
+   * (path + search + hash) against the last seen value on every DOM mutation. Only one observer is created globally
+   * and shared across all test instances.
    *
    * @throws {Error} If observer setup fails
    */
@@ -538,26 +532,24 @@ export const useSPA = (id: string): JfSPA => {
       const config: MutationObserverInit = { childList: true, subtree: true };
 
       const callback: MutationCallback = () => {
-        const linkElement =
-          document.querySelector('meta[name="description"]') || document.querySelector('link[rel="canonical"]');
-
-        if (!!!linkElement || !!!window.jfLib.pagePath || window.location.pathname === window.jfLib.pagePath) return;
+        // compare the full location — pathname alone misses query-string and hash navigations
+        const current = window.location.pathname + window.location.search + window.location.hash;
+        const entry = window.jfLib?.pageChange?.[PAGE_CHANGE_VERSION];
+        if (typeof entry?.pagePath !== "string" || current === entry.pagePath) return;
 
         // Update the current path
-        window.jfLib.pagePath = window.location.pathname;
+        entry.pagePath = current;
 
         // Dispatch an event
         window.dispatchEvent(new Event(`jf-pagechange-${PAGE_CHANGE_VERSION}`));
       };
 
-      // Setup the reInit observer
+      // Setup the page-change observer, seeding pagePath with the current location
       window.jfLib.pageChange[PAGE_CHANGE_VERSION] = {
-        observer: useMutationObserver(`pageChange-${PAGE_CHANGE_VERSION}`),
+        observer: useMutationObserver(`pageChange--${PAGE_CHANGE_VERSION}`),
+        pagePath: window.location.pathname + window.location.search + window.location.hash,
       };
       window.jfLib.pageChange[PAGE_CHANGE_VERSION].observer.observe(target, config, callback);
-
-      // Set the current path initially
-      window.jfLib.pagePath = window.location.pathname || "";
     } catch (e) {
       log("Page Change Error", "error");
       throwError(e);
@@ -569,12 +561,13 @@ export const useSPA = (id: string): JfSPA => {
       // After setupTest, location is always a JfSPAPageOptions object
       const locationObj = STATE.options.location as JfSPAPageOptions;
       const { match, type } = locationObj;
-      log(`Checking URL`, "info", true, `type: ${type}, match: ${match}`);
+      log(`Checking URL`, "info", `type: ${type}, match: ${match}`);
 
       // Check if it's regex
       if (isRegExp(match)) {
-        // It's regex
-        const regex = new RegExp(match, "gi");
+        // use the user's RegExp as-is (its case sensitivity and flags are respected) — only strip
+        // g/y so a stateful lastIndex can't make repeated checks flaky
+        const regex = match.global || match.sticky ? new RegExp(match.source, match.flags.replace(/[gy]/g, "")) : match;
         if (!regex.test(window.location[type])) {
           return false;
         }
@@ -599,10 +592,10 @@ export const useSPA = (id: string): JfSPA => {
         }
       }
 
-      log(`+ URL matched`, "success", true);
+      log(`+ URL matched`, "success");
       return true;
     } catch (error) {
-      throwError(error);
+      reportLifecycle(error);
       return false;
     }
   };
@@ -613,7 +606,7 @@ export const useSPA = (id: string): JfSPA => {
       const locationObj = STATE.options.location as JfSPAPageOptions;
       const { condition, timeout } = locationObj;
       if (condition == null) return true;
-      log(`Checking page condition`, "info", true, `timeout: ${timeout}ms`);
+      log(`Checking page condition`, "info", `timeout: ${timeout}ms`);
 
       const conditionMatched = await new Promise((resolve) => {
         let totalTime = 0;
@@ -631,7 +624,7 @@ export const useSPA = (id: string): JfSPA => {
           // Run our condition check, and if its true, then return a true value and stop polling
           if (isFunction(condition) && condition() == true) {
             clearTimeout(interval);
-            log(`+ Condition matched`, "success", true);
+            log(`+ Condition matched`, "success");
             resolve(true);
           }
         }, 50);
@@ -640,7 +633,7 @@ export const useSPA = (id: string): JfSPA => {
       if (!conditionMatched) return false;
       return true;
     } catch (error) {
-      throwError(error);
+      reportLifecycle(error);
       return false;
     }
   };
@@ -653,35 +646,24 @@ export const useSPA = (id: string): JfSPA => {
    */
   const initTest = async (): Promise<void> => {
     try {
+      if (destroyed) return;
       // NOTE: check screen size here if options for screen is passed and resetTest is wrong size
       if (!!STATE.options.screen) {
-        const { minWidth, maxWidth } = STATE.options.screen;
-        // Check if screen is SMALLER than minWidth
-        if (window.innerWidth < minWidth) {
-          log("Screen is smaller than minWidth, resetting", "warn", false, minWidth);
-          // screen is smaller, reset
-          resetTest();
+        if (!isScreenInBounds()) {
+          log("Screen is outside the configured min/max bounds, resetting", "warn", STATE.options.screen);
+          await resetTest();
           return;
         }
-
-        // Check if screen is LARGER than maxWidth
-        if (window.innerWidth > maxWidth) {
-          log("Screen is larger than maxWidth, resetting", "warn", false, minWidth);
-          // screen is smaller, reset
-          resetTest();
-          return;
-        }
-
-        log("Screen is correct size, proceeding", "info", false);
+        log("Screen is correct size, proceeding", "info");
       }
 
       // Check if the URL matches
       const urlMatched = checkPageUrl();
       if (!urlMatched) {
         // Not the right page
-        log("Page URL not matched", "error");
+        log("Page URL not matched", "info");
         // Reset the test
-        resetTest();
+        await resetTest();
         // quit
         return;
       }
@@ -690,7 +672,7 @@ export const useSPA = (id: string): JfSPA => {
       const conditionMatched = await checkPageCondition();
       if (!conditionMatched) {
         // Reset the test
-        resetTest();
+        await resetTest();
         // quit
         return;
       }
@@ -704,7 +686,7 @@ export const useSPA = (id: string): JfSPA => {
       // Apply the test
       await applyTest();
     } catch (e) {
-      throwError(e);
+      reportLifecycle(e);
     }
   };
 
@@ -717,23 +699,20 @@ export const useSPA = (id: string): JfSPA => {
     log(`Resetting Test`, "info");
     removeStyleSheet();
 
-    // Remove callbacks registered with this test's ID prefix — runs on every reset (incl. alwaysReset cycles)
-    const prefix = `${STATE.details.id}--`;
-    (["elementReady", "elementRemoved", "elementUpdated"] as const).forEach((key) => {
-      const lib = window.jfLib?.[key];
-      if (!lib) return;
-      Object.values(lib).forEach((versionObj) => {
-        if (!versionObj?.callbacks) return;
-        versionObj.callbacks = (versionObj.callbacks as { id?: string }[]).filter(
-          (cb) => !cb?.id?.startsWith(prefix)
-        ) as typeof versionObj.callbacks;
-      });
-    });
+    // Sweep every auto-tracked resource registered under this test's id (element* callbacks + jfReady
+    // marks, customEvents listeners, jfLib listeners/timers/observers) — runs on every reset
+    destroyByPrefix(STATE.details.id);
 
-    if (isFunction(STATE.options.reset)) await STATE.options.reset();
-    STATE.details.isApplied = false;
-    STATE.details.isReset = true;
-    STATE.details.pageMatched = false;
+    try {
+      if (isFunction(STATE.options.reset)) await STATE.options.reset();
+    } catch (e) {
+      reportLifecycle(e);
+    } finally {
+      // a rejecting user reset must not leave isApplied stuck true
+      STATE.details.isApplied = false;
+      STATE.details.isReset = true;
+      STATE.details.pageMatched = false;
+    }
   };
 
   /**
@@ -742,19 +721,33 @@ export const useSPA = (id: string): JfSPA => {
    * @returns {void}
    */
   const removeTest = (): void => {
-    // wipe the test
+    // wipe the test — initTest checks this flag so no surviving event can re-apply
+    destroyed = true;
     STATE.details.isRunning = false;
+    // unhook this instance's listeners
+    window.removeEventListener(`jf-pagechange-${PAGE_CHANGE_VERSION}`, handlePageChange);
+    window.removeEventListener(`jf-reinit-${REINIT_VERSION}`, handleReInit);
+    window.removeEventListener("resize", handleResize);
+    // destroy the per-test removal observer
+    if (!!STATE.options.watchForRemoval) useMutationObserver(`${STATE.details.id}--removal`).destroy();
+    // sweep every auto-tracked resource registered under this test's id
+    destroyByPrefix(STATE.details.id);
     // delete it from our records
-    window.jfLib.experiments = window.jfLib.experiments.filter((test) => test.details.id !== STATE.details.id);
+    if (window.jfLib?.experiments?.[EXPERIMENTS_VERSION]) {
+      window.jfLib.experiments[EXPERIMENTS_VERSION] = window.jfLib.experiments[EXPERIMENTS_VERSION].filter(
+        (test) => test.details.id !== STATE.details.id
+      );
+    }
   };
 
   /**
-   * Handles errors by formatting them and throwing with a consistent structure
+   * Handles errors by formatting them and throwing with a consistent structure. Only for setup/validation paths where
+   * the caller is awaiting `init` — post-init lifecycle paths must use `reportLifecycle` instead
    *
    * @param {JfSPAError | Error} error - The error to process
    * @throws {Error} A formatted error with test ID and details
    */
-  const throwError = (error: JfSPAError | Error) => {
+  const throwError = (error: JfSPAError | Error): never => {
     const errorObj =
       error instanceof Error
         ? {
@@ -769,7 +762,24 @@ export const useSPA = (id: string): JfSPA => {
       throw error;
     }
     // Otherwise, format the error
-    throw new Error(`[${STATE?.details?.id}] ${errorObj.code}: ${errorObj.message}`, errorObj?.details);
+    throw jfError(errorObj.code, `[${STATE?.details?.id}] ${errorObj.code}: ${errorObj.message}`, errorObj?.details);
+  };
+
+  /**
+   * The non-throwing side of the error channel: reports a lifecycle error on the wire (`jf-err-1.0`) and to the
+   * console, without propagating. Every post-init lifecycle path routes through this — an async event listener has no
+   * caller to throw to, so throwing there is just an invisible unhandled rejection
+   *
+   * @param {JfSPAError | Error | unknown} error - The error to report
+   */
+  const reportLifecycle = (error: unknown): void => {
+    const err =
+      error instanceof Error
+        ? error
+        : typeof error === "object" && error !== null && "message" in error
+          ? new Error(`${(error as JfSPAError).code}: ${(error as JfSPAError).message}`)
+          : new Error(String(error));
+    reportError(STATE.details.id || id, err);
   };
 
   /**
@@ -789,7 +799,6 @@ export const useSPA = (id: string): JfSPA => {
         code: "MISSING_OPTION",
         message: "apply must be provided",
       });
-      return false;
     }
     // Check we have 'location'
     if (!location) {
@@ -797,7 +806,6 @@ export const useSPA = (id: string): JfSPA => {
         code: "MISSING_OPTION",
         message: "location must be provided",
       });
-      return false;
     }
     // If we've been passed an object for 'location', check it has a 'match' property
     if (isLocationObject(location)) {
@@ -806,7 +814,6 @@ export const useSPA = (id: string): JfSPA => {
           code: "MISSING_OPTION",
           message: "location.match must be provided",
         });
-        return false;
       }
     }
 
@@ -817,7 +824,6 @@ export const useSPA = (id: string): JfSPA => {
         code: "INVALID_TYPE",
         message: "apply must be a function",
       });
-      return false;
     }
     // Check 'location' is string|string[]|RegExp|JfSPAPageObject
     if (!(isRegExp(location) || isStringArray(location) || isString(location) || isLocationObject(location))) {
@@ -825,7 +831,6 @@ export const useSPA = (id: string): JfSPA => {
         code: "INVALID_TYPE",
         message: "location must be a string, an array of strings, a RegExp match, or an options object",
       });
-      return false;
     }
     // If 'location' is JfSPAPageObject
     if (isLocationObject(location)) {
@@ -836,7 +841,6 @@ export const useSPA = (id: string): JfSPA => {
           code: "INVALID_TYPE",
           message: "location.match must be a string, an array of strings, a RegExp match",
         });
-        return false;
       }
       // Check 'type' is path or href
       if (type && !isPageObjectType(type)) {
@@ -844,7 +848,6 @@ export const useSPA = (id: string): JfSPA => {
           code: "INVALID_TYPE",
           message: "location.type must be one of: pathname, hostname, href, hash, search",
         });
-        return false;
       }
       // Check 'condition' is path or href
       if (condition && !isFunction(condition)) {
@@ -852,7 +855,6 @@ export const useSPA = (id: string): JfSPA => {
           code: "INVALID_TYPE",
           message: "location.condition must be a function",
         });
-        return false;
       }
       // Check 'type' is path or href
       if (timeout && !isNumber(timeout)) {
@@ -860,7 +862,6 @@ export const useSPA = (id: string): JfSPA => {
           code: "INVALID_TYPE",
           message: "location.timeout must be a number",
         });
-        return false;
       }
     }
 
@@ -869,21 +870,18 @@ export const useSPA = (id: string): JfSPA => {
         code: "INVALID_TYPE",
         message: "reset must be a function",
       });
-      return false;
     }
     if (watchForRemoval && !(isString(watchForRemoval) || isStringArray(watchForRemoval))) {
       throwError({
         code: "INVALID_SELECTOR",
         message: "watchForRemoval must be a string or array of strings",
       });
-      return false;
     }
     if (removeOnPageChange && !(isString(removeOnPageChange) || isStringArray(removeOnPageChange))) {
       throwError({
         code: "INVALID_SELECTOR",
         message: "removeOnPageChange must be a string or array of strings",
       });
-      return false;
     }
 
     // validate css strings
@@ -892,14 +890,12 @@ export const useSPA = (id: string): JfSPA => {
         code: "INVALID_SELECTOR",
         message: "watchForRemoval must be valid CSS selectors",
       });
-      return false;
     }
     if (removeOnPageChange && !validateSelectors(removeOnPageChange)) {
       throwError({
         code: "INVALID_SELECTOR",
         message: "removeOnPageChange must be valid CSS selectors",
       });
-      return false;
     }
 
     if (removedNode && !isString(removedNode)) {
@@ -907,7 +903,6 @@ export const useSPA = (id: string): JfSPA => {
         code: "INVALID_TYPE",
         message: "removedNode must be a string",
       });
-      return false;
     }
 
     if (screen) {
@@ -917,21 +912,18 @@ export const useSPA = (id: string): JfSPA => {
           code: "INVALID_TYPE",
           message: "screen must be an object containing one of: minWidth, maxWidth",
         });
-        return false;
       }
       if (!!screen.minWidth && !isNumber(screen.minWidth)) {
         throwError({
           code: "INVALID_TYPE",
           message: "minWidth must be a number",
         });
-        return false;
       }
       if (!!screen.maxWidth && !isNumber(screen.maxWidth)) {
         throwError({
           code: "INVALID_TYPE",
           message: "maxWidth must be a number",
         });
-        return false;
       }
       // TODO: need some error checking if the passed value is 0 as this may cause issues (and the minimum should be greater than this anyway)
     }
@@ -948,10 +940,12 @@ export const useSPA = (id: string): JfSPA => {
   const handlePageChange = async () => {
     try {
       log(`Page changed`, "info");
+      // a new page starts a new removal-watch loop — the reapply cap is per loop, not per session
+      STATE.loopCount = 0;
       if (!!STATE.options.removeOnPageChange) handleRemoveOnPageChange();
       await initTest();
     } catch (e) {
-      throwError(e);
+      reportLifecycle(e);
     }
   };
 
@@ -964,10 +958,23 @@ export const useSPA = (id: string): JfSPA => {
   const handleReInit = async () => {
     try {
       log(`SPA reset, restarting test`, "warn");
+      // a SPA wipe starts a new removal-watch loop, same as a page change — the cap is per loop
+      STATE.loopCount = 0;
       await initTest();
     } catch (e) {
-      throwError(e);
+      reportLifecycle(e);
     }
+  };
+
+  /**
+   * The single bounds check shared by init and resize paths — inclusive on both ends so exact
+   * breakpoint widths (an iPad rotating onto 768/1024) behave the same on load and on resize
+   *
+   * @returns {boolean} True when the current width is within the configured screen bounds
+   */
+  const isScreenInBounds = (): boolean => {
+    const { minWidth, maxWidth } = STATE.options.screen;
+    return window.innerWidth >= minWidth && window.innerWidth <= maxWidth;
   };
 
   /**
@@ -977,33 +984,17 @@ export const useSPA = (id: string): JfSPA => {
    * @throws {Error} If resize handling fails
    */
   const handleResizeDebounced = debounce(async () => {
-    // log("Screen resized", "info");
     try {
-      const { minWidth, maxWidth } = STATE.options.screen;
-
-      // Check if the screen is within the min/max
-      if (window.innerWidth > minWidth && window.innerWidth < maxWidth) {
-        log("Screen is correct size", "info", false);
+      if (isScreenInBounds()) {
+        log("Screen is correct size", "info");
         await initTest();
         return;
       }
 
-      // Check if screen is SMALLER than minWidth
-      if (window.innerWidth < minWidth) {
-        log("Screen is smaller than minWidth, resetting", "warn", false, minWidth);
-        // screen is smaller, reset
-        resetTest();
-        return;
-      }
-
-      // Check if screen is LARGER than maxWidth
-      if (window.innerWidth > maxWidth) {
-        log("Screen is larger than maxWidth, resetting", "warn", false, minWidth);
-        // screen is smaller, reset
-        resetTest();
-      }
+      log("Screen is outside the configured min/max bounds, resetting", "warn", STATE.options.screen);
+      await resetTest();
     } catch (e) {
-      throwError(e);
+      reportLifecycle(e);
     }
   }, 100);
 
@@ -1062,14 +1053,19 @@ export const useSPA = (id: string): JfSPA => {
       if (!!STATE.options.alwaysReset) await resetTest();
       log(`Applying Test`, "info");
       // Insert our stylesheet (if we have it)
-      if (!!STATE.options.style) insertStyleSheet();
+      if (!!STATE.options.style) await insertStyleSheet();
       //
       bindWatchForRemoval();
-      STATE.options.apply();
+      // await the build's apply (async apply is the norm in SPA tests) — isApplied only flips on success
+      await Promise.resolve(STATE.options.apply());
+      // destroy() may have landed while apply was in flight — a destroyed test must not write state
+      if (destroyed) return;
       STATE.details.isApplied = true;
       STATE.details.isReset = false;
     } catch (e) {
-      throwError(e);
+      // the current apply did not complete — isApplied must not claim it did
+      STATE.details.isApplied = false;
+      reportLifecycle(e);
     }
   };
 
@@ -1085,8 +1081,9 @@ export const useSPA = (id: string): JfSPA => {
       if (!!!watchForRemoval) return;
       log(`+ Binding Removal Watcher`, "detail");
 
-      // Create a new observer
-      const observer = useMutationObserver(`_${STATE.details.id}_`);
+      // Create a new observer — the --removal suffix puts it under the test's compound-id prefix,
+      // so resetTest's destroyByPrefix sweep destroys it; this rebind recreates it on re-apply
+      const observer = useMutationObserver(`${STATE.details.id}--removal`);
 
       // Abort if already bound
       if (observer.details.isObserving) return;
@@ -1104,9 +1101,6 @@ export const useSPA = (id: string): JfSPA => {
               try {
                 if (node.nodeType !== 1) return;
 
-                // If we've already run this 5 times, don't proceed
-                if (STATE.loopCount >= 6) return;
-
                 // Define a function that checks if the element matches
                 const checkElementMatches = async (selector: string) => {
                   try {
@@ -1114,15 +1108,19 @@ export const useSPA = (id: string): JfSPA => {
                     if (node.matches(selector)) {
                       log(`Element was removed, re-init`, "warn");
                       if (STATE.loopCount >= 5) {
-                        log(`Max loop count reached, aborting`, "error");
-                        resetTest();
+                        // reset exactly once at the cap — further removals must not re-run the user's reset
+                        if (STATE.loopCount === 5) {
+                          log(`Max loop count reached, aborting`, "error");
+                          STATE.loopCount += 1;
+                          await resetTest();
+                        }
                         return;
                       }
                       STATE.loopCount += 1;
                       await initTest();
                     }
                   } catch (e) {
-                    throwError(e);
+                    reportLifecycle(e);
                   }
                 };
 
@@ -1138,17 +1136,17 @@ export const useSPA = (id: string): JfSPA => {
                 // Otherwise its a string, so just pass it
                 await checkElementMatches(STATE.options.watchForRemoval as string);
               } catch (e) {
-                throwError(e);
+                reportLifecycle(e);
               }
             });
           } catch (e) {
-            throwError(e);
+            reportLifecycle(e);
           }
         });
       };
       observer.observe(target, config, callback);
     } catch (e) {
-      throwError(e);
+      reportLifecycle(e);
     }
   };
 
@@ -1158,16 +1156,12 @@ export const useSPA = (id: string): JfSPA => {
    *
    * @throws {Error} If stylesheet insertion fails
    */
-  const insertStyleSheet = () => {
-    try {
-      // Abort if we don't have a stylesheet
-      if (!!!STATE.options.style) return;
-      // Insert our stylesheet
-      log(`+ Inserting styles`, "detail");
-      insertStyle(STATE.options.style, `${STATE.details.id}--style`);
-    } catch (e) {
-      throwError(e);
-    }
+  const insertStyleSheet = async () => {
+    // Abort if we don't have a stylesheet
+    if (!!!STATE.options.style) return;
+    // Insert our stylesheet — awaited so a failed insertion surfaces in applyTest's catch
+    log(`+ Inserting styles`, "detail");
+    await insertStyle(STATE.options.style, `${STATE.details.id}--style`);
   };
 
   /**
@@ -1180,7 +1174,7 @@ export const useSPA = (id: string): JfSPA => {
       log(`- Removing styles`, "detail");
       document.querySelectorAll(`#${STATE.details.id}--style`).forEach((el) => el.remove());
     } catch (e) {
-      throwError(e);
+      reportLifecycle(e);
     }
   };
 
@@ -1192,7 +1186,9 @@ export const useSPA = (id: string): JfSPA => {
         if (!!!isSetup) return;
         await initTest();
       } catch (error) {
-        throwError(error);
+        // report on the wire first — an un-awaited init would otherwise swallow this entirely
+        reportLifecycle(error);
+        throwError(error as JfSPAError | Error);
       }
     },
     reset: resetTest,

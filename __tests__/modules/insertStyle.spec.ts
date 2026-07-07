@@ -23,4 +23,22 @@ describe("insertStyle", () => {
     expect(style).toBeDefined();
     expect(style?.innerHTML).toBe(MOCK_STYLE_STRING);
   });
+
+  it("does not reject for ids that are invalid CSS selectors (e.g. starting with a digit)", async () => {
+    const id = "123-test";
+    await expect(insertStyle(MOCK_STYLE_STRING, id)).resolves.toBeUndefined();
+    const style = document.getElementById(id);
+    expect(style).not.toBeNull();
+    expect(style?.innerHTML).toBe(MOCK_STYLE_STRING);
+  });
+
+  it("rejects when the underlying insertion genuinely fails, instead of swallowing the error", async () => {
+    const elem = document.createElement("div");
+    const insertionError = new Error("insertion boom");
+    vi.spyOn(elem, "insertAdjacentHTML").mockImplementation(() => {
+      throw insertionError;
+    });
+
+    await expect(insertStyle(MOCK_STYLE_STRING, "some-id", { elem })).rejects.toThrow("insertion boom");
+  });
 });

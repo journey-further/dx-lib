@@ -22,7 +22,7 @@ describe("useEventListener", () => {
     // empty the dom
     document.body.innerHTML = "";
     // empty listeners
-    window.jfListeners = [];
+    window.jfLib = { listeners: { "1.0": [] } };
     // Add an element
     document.body.appendChild(GENERATE_ELEMENT(ELEMENT_ID_1));
     // clear all mock functions
@@ -49,13 +49,13 @@ describe("useEventListener", () => {
     // call the function
     let listenerObject = useEventListener(HANDLER_ID_1, element, "click", EVENT_HANDLER);
     // Check it worked
-    expect(window.jfListeners.length).toBe(1);
-    expect(window.jfListeners[0].id).toBe(HANDLER_ID_1);
+    expect(window.jfLib.listeners["1.0"].length).toBe(1);
+    expect(window.jfLib.listeners["1.0"][0].id).toBe(HANDLER_ID_1);
     // Call it again
     listenerObject = useEventListener(HANDLER_ID_1, element, "click", EVENT_HANDLER);
     // Check there is still only one object in the array
-    expect(window.jfListeners.length).toBe(1);
-    expect(window.jfListeners[0].id).toBe(HANDLER_ID_1);
+    expect(window.jfLib.listeners["1.0"].length).toBe(1);
+    expect(window.jfLib.listeners["1.0"][0].id).toBe(HANDLER_ID_1);
     // Check if the callback only gets called once
     element.click();
     expect(EVENT_HANDLER).toBeCalledTimes(1);
@@ -74,14 +74,14 @@ describe("useEventListener", () => {
     element2.click();
     element1.click();
     // run some checks
-    expect(window.jfListeners.length).toBe(1);
-    expect(window.jfListeners[0].id).toBe(HANDLER_ID_1);
-    expect(window.jfListeners[0].element).toBe(element1);
+    expect(window.jfLib.listeners["1.0"].length).toBe(1);
+    expect(window.jfLib.listeners["1.0"][0].id).toBe(HANDLER_ID_1);
+    expect(window.jfLib.listeners["1.0"][0].element).toBe(element1);
     expect(EVENT_HANDLER_2).toBeCalledTimes(0);
     expect(EVENT_HANDLER).toBeCalledTimes(1);
     // remove the original one
     listenerObject1.disconnect();
-    expect(window.jfListeners.length).toBe(0);
+    expect(window.jfLib.listeners["1.0"].length).toBe(0);
     element1.click();
     // shouldn't fire this time
     expect(EVENT_HANDLER).toBeCalledTimes(1);

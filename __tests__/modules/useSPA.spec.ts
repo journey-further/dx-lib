@@ -22,19 +22,19 @@ describe("useSPA", () => {
 
     // Setup window.jfLib with required observers
     window.jfLib = {
-      experiments: [],
-      pagePath: "/test",
+      experiments: { "1.0": [] },
       pageChange: {
         "1.0": {
           observer: {
             details: {
               observer: new MutationObserver(() => {}),
               isObserving: false,
-              ticketId: "pageChange-1.0",
+              ticketId: "pageChange--1.0",
             },
             observe: vi.fn().mockReturnValue(true),
             disconnect: vi.fn(),
           },
+          pagePath: "/test",
         },
       },
       reInit: {
@@ -43,7 +43,7 @@ describe("useSPA", () => {
             details: {
               observer: new MutationObserver(() => {}),
               isObserving: false,
-              ticketId: "reInit-1.0",
+              ticketId: "reInit--1.0",
             },
             observe: vi.fn().mockReturnValue(true),
             disconnect: vi.fn(),
@@ -75,7 +75,7 @@ describe("useSPA", () => {
   it("should initialize with valid options", async () => {
     const spa = useSPA(TEST_ID);
     await spa.init(defaultOptions);
-    expect(window.jfLib.experiments).toHaveLength(1);
+    expect(window.jfLib.experiments["1.0"]).toHaveLength(1);
   });
 
   it("should not initialize with invalid test ID", async () => {
@@ -141,16 +141,18 @@ describe("useSPA", () => {
     await spa.init(defaultOptions);
 
     // Add experiment with correct structure
-    window.jfLib.experiments = [
-      {
-        details: { id: TEST_ID, isRunning: true },
-        options: defaultOptions,
-        loopCount: 0,
-      } as any,
-    ];
+    window.jfLib.experiments = {
+      "1.0": [
+        {
+          details: { id: TEST_ID, isRunning: true },
+          options: defaultOptions,
+          loopCount: 0,
+        } as any,
+      ],
+    };
 
     spa.destroy();
-    expect(window.jfLib.experiments).toHaveLength(0);
+    expect(window.jfLib.experiments["1.0"]).toHaveLength(0);
   });
 
   it("should execute reset function", async () => {
@@ -199,7 +201,7 @@ describe("useSPA", () => {
   it("should expose public API in jfLib.experiments", async () => {
     const spa = useSPA(TEST_ID);
     await spa.init(defaultOptions);
-    const exp = window.jfLib.experiments[0];
+    const exp = window.jfLib.experiments["1.0"][0];
     expect(typeof exp.init).toBe("function");
     expect(typeof exp.reset).toBe("function");
     expect(typeof exp.destroy).toBe("function");
@@ -212,7 +214,7 @@ describe("useSPA", () => {
     // Re-init with a different id since TEST_ID is now registered
     const spa = useSPA(`${TEST_ID}_2`);
     await spa.init({ ...defaultOptions, reset });
-    await window.jfLib.experiments[0].reset();
+    await window.jfLib.experiments["1.0"][0].reset();
     expect(reset).toHaveBeenCalled();
   });
 
@@ -716,8 +718,8 @@ describe("useSPA", () => {
 
   describe("watchForRemoval", () => {
     beforeEach(() => {
-      window.jfObservers?.forEach((obs) => obs.observer?.disconnect());
-      window.jfObservers = [];
+      window.jfLib.observers?.["1.0"]?.forEach((obs) => obs.observer?.disconnect());
+      window.jfLib.observers = { "1.0": [] };
     });
 
     it("re-applies when a watched element (string) is removed from the DOM", async () => {

@@ -59,6 +59,24 @@ describe("customEvents", () => {
     });
   });
 
+  describe("window.jfLib wiped mid-session", () => {
+    it("does not throw from emit, on, or a previously returned unsubscribe after window.jfLib is wiped", () => {
+      const { emit, on } = customEvents(ID_A);
+      const handler = vi.fn();
+      const unsubscribe = on("test:event", handler);
+      emit("test:event", { foo: "bar" });
+      expect(handler).toHaveBeenCalledTimes(1);
+
+      // Simulate a tag-manager (or other third-party script) wiping window.jfLib mid-session
+      // @ts-expect-error - deliberately simulating external code nulling out the global
+      window.jfLib = undefined;
+
+      expect(() => emit("test:event", { foo: "bar" })).not.toThrow();
+      expect(() => on("test:event", handler)).not.toThrow();
+      expect(() => unsubscribe()).not.toThrow();
+    });
+  });
+
   describe("cross-experiment listening", () => {
     it("allows listening to another experiment's events via fromId", () => {
       const a = customEvents(ID_A);
