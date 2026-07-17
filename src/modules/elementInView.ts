@@ -15,7 +15,6 @@ export const elementInView = (element: HTMLElement, partial = true): boolean => 
   if (!element) throw new Error("Parameter one is required");
   if (!(element instanceof HTMLElement)) throw new Error("Parameter one must be an instance of HTMLElement");
   if (typeof partial !== "boolean") throw new Error("Parameter 2 must be a boolean");
-  console.log(window.innerHeight);
   const { height, top, bottom } = element.getBoundingClientRect();
 
   // Checking whether fully visible

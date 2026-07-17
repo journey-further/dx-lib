@@ -15,9 +15,9 @@ describe("getElementByXPath", () => {
     expect(result.textContent).toBe("Hello");
   });
 
-  it("Will return undefined", async () => {
+  it("Will return null when no match is found", async () => {
     document.body.insertAdjacentHTML("afterbegin", `<h2>Hello</h2>`);
     const result = getElementByXPath(`//h3[contains(string(), 'Hello')]`);
-    expect(result).toBeUndefined();
+    expect(result).toBeNull();
   });
 });

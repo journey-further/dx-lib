@@ -3,10 +3,8 @@ import { elementRemoved } from "../../src/modules/elementRemoved";
 describe("elementRemoved", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
-    window.jfLib = { elementRemoved: {} };
-    // Clear any existing observers
-    window.jfObservers?.forEach((obs) => obs.observer?.disconnect());
-    window.jfObservers = [];
+    window.jfLib?.observers?.["1.0"]?.forEach((obs) => obs.observer?.disconnect());
+    window.jfLib = { elementRemoved: {}, observers: { "1.0": [] } };
   });
 
   it("validates input parameters", () => {
@@ -152,5 +150,14 @@ describe("elementRemoved", () => {
 
     await new Promise((resolve) => setTimeout(resolve, 100));
     expect(callback).not.toHaveBeenCalled();
+  });
+});
+
+describe("standard handle shape", () => {
+  it("exposes details and pause with a live isListening flag", async () => {
+    const handle = elementRemoved(".handle-test", vi.fn(), "HANDLE_2");
+    expect(handle.details.isListening).toBe(true);
+    await handle.pause(0);
+    expect(handle.details.isListening).toBe(false);
   });
 });

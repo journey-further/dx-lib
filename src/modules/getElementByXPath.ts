@@ -5,9 +5,9 @@
  * HTML element.
  *
  * @param {string} path - The XPath string used to locate the element.
- * @returns {HTMLElement | undefined} The matched HTML element, or `undefined` if no match is found.
+ * @returns {HTMLElement | null} The matched HTML element, or `null` if no match is found.
  */
 
-export const getElementByXPath = (path: string): HTMLElement =>
+export const getElementByXPath = (path: string): HTMLElement | null =>
   (document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue as HTMLElement) ||
-  undefined;
+  null;

@@ -18,13 +18,14 @@ describe("useMutationObserver", () => {
     // Setup fresh DOM for each test
     document.body.innerHTML = "";
     // Reset global observers
-    window.jfObservers = [];
+    window.jfLib = { observers: { "1.0": [] } };
   });
 
   afterEach(() => {
     // Cleanup any observers
-    window.jfObservers?.forEach((obs) => obs.observer?.disconnect());
-    delete window.jfObservers;
+    window.jfLib?.observers?.["1.0"]?.forEach((obs) => obs.observer?.disconnect());
+    // @ts-expect-error test cleanup
+    delete window.jfLib;
     document.body.innerHTML = "";
     DEFAULT_OBJECT = {
       ticketId: OBSERVER_ID,
@@ -38,7 +39,7 @@ describe("useMutationObserver", () => {
 
   it("creates an observer object in the global observer array", () => {
     useMutationObserver(OBSERVER_ID);
-    expect(window.jfObservers.find((obs) => obs.ticketId === OBSERVER_ID)).toEqual(DEFAULT_OBJECT);
+    expect(window.jfLib.observers["1.0"].find((obs) => obs.ticketId === OBSERVER_ID)).toEqual(DEFAULT_OBJECT);
   });
 
   it("creates and binds mutation observer when observe is called", () => {
@@ -92,7 +93,7 @@ describe("useMutationObserver", () => {
     const output = observe([node1, node2], CONFIG, CALLBACK);
 
     expect(output).toBe(true);
-    expect(window.jfObservers[0].isObserving).toBe(true);
+    expect(window.jfLib.observers["1.0"][0].isObserving).toBe(true);
   });
 
   it("prevents duplicate observations", () => {
@@ -117,7 +118,7 @@ describe("useMutationObserver", () => {
 
     disconnect();
 
-    expect(window.jfObservers).toHaveLength(0);
+    expect(window.jfLib.observers["1.0"]).toHaveLength(0);
     expect(details.isObserving).toBe(false);
     expect(details.observer).toBeUndefined();
   });
@@ -142,9 +143,30 @@ describe("useMutationObserver", () => {
     const { details: details1 } = useMutationObserver("observer1");
     const { details: details2 } = useMutationObserver("observer2");
 
-    expect(window.jfObservers).toHaveLength(2);
+    expect(window.jfLib.observers["1.0"]).toHaveLength(2);
     expect(details1.ticketId).toBe("observer1");
     expect(details2.ticketId).toBe("observer2");
+  });
+
+  it("re-registers a stale handle on re-observe, so a fresh call for the same id doesn't create a duplicate live observer", () => {
+    const node = document.createElement("div");
+    document.body.appendChild(node);
+
+    const stale = useMutationObserver(OBSERVER_ID);
+    stale.observe(node, CONFIG, CALLBACK);
+    stale.disconnect();
+
+    // Simulate a caller that kept the handle around and re-observes after disconnect
+    const reObserved = stale.observe(node, CONFIG, CALLBACK);
+    expect(reObserved).toBe(true);
+    // The stale handle's entry must be visible in the registry again
+    expect(window.jfLib.observers["1.0"].find((obs) => obs.ticketId === OBSERVER_ID)).toBe(stale.details);
+
+    // A fresh call for the same id must see it as already observing, not spin up a second live observer
+    const fresh = useMutationObserver(OBSERVER_ID);
+    const freshObserveResult = fresh.observe(node, CONFIG, CALLBACK);
+    expect(freshObserveResult).toBe(false);
+    expect(window.jfLib.observers["1.0"]).toHaveLength(1);
   });
 
   // it("throws error if ID already exists", () => {
@@ -155,6 +177,6 @@ describe("useMutationObserver", () => {
   //   expect(() => useMutationObserver(OBSERVER_ID)).toThrow();
 
   //   // Should still only have one observer
-  //   expect(window.jfObservers).toHaveLength(1);
+  //   expect(window.jfLib.observers["1.0"]).toHaveLength(1);
   // });
 });

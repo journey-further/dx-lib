@@ -1,3 +1,5 @@
+import { isDebug } from "./isDebug";
+
 /**
  * Log level types for internal logging
  *
@@ -6,7 +8,10 @@
 export type LogLevel = "info" | "detail" | "success" | "warn" | "error" | "none";
 
 /**
- * Logs messages to the console with consistent formatting and color coding
+ * Logs messages to the console with consistent formatting and color coding.
+ *
+ * `warn` and `error` levels route to `console.warn`/`console.error` so error-tracking tooling can see them; all other
+ * levels use `console.log`.
  *
  * @param {string} message - The message to log
  * @param {LogLevel} level - The log level (info, detail, success, warn, error)
@@ -22,10 +27,25 @@ export const log = (message: string, level: LogLevel = "info", id: string = "", 
     error: "background: #ff616e; color: #fff; padding: 2px 5px;",
     none: "background: #fff; color: #fff; padding: 2px 5px;",
   };
+  const output = level === "error" ? console.error : level === "warn" ? console.warn : console.log;
 
   if (!!data) {
-    console.log(`${id} %c${message}`, styles[level], data);
+    output(`${id} %c${message}`, styles[level], data);
   } else {
-    console.log(`${id} %c${message}`, styles[level]);
+    output(`${id} %c${message}`, styles[level]);
   }
 };
+
+/**
+ * Creates a prefixed logger for a module instance. All output is debug-gated: nothing is written to the console unless
+ * the `jf_debug=true` cookie is set. Genuine runtime errors should go through the error reporter, not this logger.
+ *
+ * @param {string} prefix - Prefix identifying the module/instance, e.g. `[TEST_ID] useSPA`
+ * @returns {(message: string, level?: LogLevel, data?: unknown) => void} The gated logger
+ */
+export const createLogger =
+  (prefix: string) =>
+  (message: string, level: LogLevel = "info", data?: unknown) => {
+    if (!isDebug()) return;
+    log(message, level, prefix, data);
+  };

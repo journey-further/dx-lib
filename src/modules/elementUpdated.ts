@@ -1,9 +1,8 @@
 import { useMutationObserver } from "./useMutationObserver";
 import {
   validateSelectors,
-  log as _log,
-  isDebug,
-  LogLevel,
+  createLogger,
+  jfError,
   isFunction,
   isString,
   isObject,
@@ -20,6 +19,12 @@ const VERSION: string = "1.0";
  * - `destroy` Remove the listener completely
  */
 export interface JfUpdated {
+  /** Introspection details for this listener: its id, selector, and whether it is currently listening */
+  details: {
+    id: string;
+    selector: string;
+    readonly isListening: boolean;
+  };
   /**
    * Start listening for the requested element to be removed again
    *
@@ -29,6 +34,12 @@ export interface JfUpdated {
    * @returns
    */
   init: () => void;
+  /**
+   * Stop this elementUpdated listener without removing any other state — `init` restarts it
+   *
+   * @returns
+   */
+  pause: (delay?: number) => Promise<void>;
   /**
    * Completely remove this elementUpdated listener. Will stop listening for any future elements to be
    *
@@ -81,7 +92,7 @@ const initializeJFLib = () => {
  */
 const createObserver = () => {
   window.jfLib.elementUpdated[VERSION] = {
-    observer: useMutationObserver(`elementUpdated-${VERSION}`),
+    observer: useMutationObserver(`elementUpdated--${VERSION}`),
     callbacks: [],
   };
 };
@@ -126,7 +137,7 @@ const getObserver = () => {
  *
  * @param {string} selector - A CSS selector string used to identify the target element. _(required)_
  * @param {Function} callback - A function to execute when the element is removed. _(required)_
- * @param {string} id - A unique identifier to track elements that have already triggered the callback. _(required)_
+ * @param {string} id - A unique identifier to track elements that have already triggered the callback. Use the `<ownerId>--<childId>` convention (e.g. `"TIK_123456--hero"`) so useSPA resets/destroys sweep this resource automatically. _(required)_
  * @param {JfUpdatedOptions} options - Object to filter by specific updates _(required)_
  * @param {Function} [conditions] - Optional conditions to validate the element before triggering the callback. Must be
  *   a function that returns `true` for the callback to execute.
@@ -142,10 +153,7 @@ export const elementUpdated = (
   options: JfUpdatedOptions,
   conditions?: (el: Element) => boolean
 ): JfUpdated => {
-  const log = (msg: string, lvl: LogLevel, debug: boolean = false, data?: unknown) => {
-    if (!!debug && !isDebug()) return;
-    _log(msg, lvl, `[${id}] elementUpdated`, data);
-  };
+  const log = createLogger(`[${id}] elementUpdated`);
 
   /**
    * Validates all input parameters for the elementUpdated function
@@ -156,50 +164,40 @@ export const elementUpdated = (
   const validateSetup = () => {
     // -- VALIDATE SELECTOR --
     if (!!!selector) {
-      log("selector is not defined", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: selector is not defined");
     }
     if (!isString(selector)) {
-      log("selector must be a string", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: selector must be a string");
     }
     if (!validateSelectors(selector)) {
-      log("selector must be a valid css selector", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: selector must be a valid css selector");
     }
 
     // -- VALIDATE CALLBACK --
     if (!!!callback) {
-      log("callback is not defined", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: callback is not defined");
     }
     if (!isFunction(callback)) {
-      log("callback must be a function", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: callback must be a function");
     }
 
     // -- VALIDATE ID --
     if (!!!id) {
-      log("id is not defined", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: id is not defined");
     }
     if (!isString(id)) {
-      log("id must be a string", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: id must be a string");
     }
 
     // -- VALIDATE OPTIONS --
     if (!!!options) {
-      log("options is not defined", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: options is not defined");
     }
     if (!isObject(options)) {
-      log("options must be an object", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: options must be an object");
     }
     if (!options.attributes && !options.characterData && !options.textContent) {
-      log("At least one of the following must be provided in options: attributes, characterData, textContent", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: At least one of the following must be provided in options: attributes, characterData, textContent");
     }
     if (options.attributeFilter) {
       if (!isString(options.attributeFilter) && !isStringArray(options.attributeFilter)) {
@@ -215,8 +213,7 @@ export const elementUpdated = (
 
     // -- VALIDATE CONDITIONS --
     if (conditions && !isFunction(conditions)) {
-      log("conditions must be a function", "error");
-      throw new Error("elementUpdated setup failed");
+      throw jfError("INVALID_OPTIONS", "elementUpdated setup failed: conditions must be a function");
     }
 
     return true;
@@ -234,7 +231,7 @@ export const elementUpdated = (
     // check if it also matches the conditions
     if (!!conditions && typeof conditions == "function") {
       if (conditions(target) !== true) {
-        log("Ignored: conditions not matched", "warn", true, target);
+        log("Ignored: conditions not matched", "warn", target);
         return false;
       }
     }
@@ -254,26 +251,26 @@ export const elementUpdated = (
     // Check the attributes
     if (mutation.type == "attributes") {
       if (!options.attributes) {
-        log(`Ignored: attributes`, "warn", true);
+        log(`Ignored: attributes`, "warn");
         return false;
       }
       // If we have attributeFilter, check if this attribute is matched
       if (options.attributeFilter && !options.attributeFilter.includes(mutation.attributeName)) {
-        log(`Ignored: ${mutation.attributeName} attribute`, "warn", true);
+        log(`Ignored: ${mutation.attributeName} attribute`, "warn");
         return false;
       }
 
-      log(`Updated: ${mutation.attributeName} attribute`, "info", true);
+      log(`Updated: ${mutation.attributeName} attribute`, "info");
       return true;
     }
 
     // Check the characterData
     if (mutation.type == "characterData") {
       if (!options.characterData) {
-        log(`Ignored: characterData`, "warn", true);
+        log(`Ignored: characterData`, "warn");
         return false;
       }
-      log(`Updated: characterData`, "info", true);
+      log(`Updated: characterData`, "info");
       return true;
     }
 
@@ -284,9 +281,10 @@ export const elementUpdated = (
       !![...mutation.addedNodes].find((node) => node.nodeName == "#text")
     ) {
       if (!options.textContent) {
-        log(`Ignored: textContent`, "warn", true);
+        log(`Ignored: textContent`, "warn");
+        return false;
       }
-      log(`Updated: textContent`, "info", true);
+      log(`Updated: textContent`, "info");
       return true;
     }
 
@@ -303,11 +301,11 @@ export const elementUpdated = (
     initializeJFLib();
     // Abort if we've already added this listener as we only need one
     if (!!getObserver()) {
-      log("Global observer exists", "warn", true);
+      log("Global observer exists", "warn");
       return;
     }
 
-    log("Binding observer", "detail", true);
+    log("Binding observer", "detail");
 
     try {
       // bind to html
@@ -322,6 +320,8 @@ export const elementUpdated = (
       };
 
       const mutationCallback: MutationCallback = (mutations) => {
+        // the observer can outlive its environment (jsdom teardown, detached frames) - never touch a dead window
+        if (typeof window === "undefined") return;
         mutations.forEach((mutation) => {
           // Grab all the callbacks from our callbacks array and run them each
           getObserver().callbacks.forEach((cb) => {
@@ -341,7 +341,7 @@ export const elementUpdated = (
 
   /** Initializes the element removed functionality. Sets up observers and processes existing elements */
   const initFunctionality = () => {
-    log("Creating listener", "info", true);
+    log("Creating listener", "info");
 
     // 1. Check if we've already bound this callback with matching id
     const hasCallback = window.jfLib?.elementUpdated?.[VERSION]?.callbacks?.find((cb) => cb.id == id);
@@ -351,7 +351,7 @@ export const elementUpdated = (
     }
 
     log("Listening", "success");
-    log("Passed options", "info", true, options);
+    log("Passed options", "info", options);
 
     // 2. Bind the elementUpdated observer to listen for any future changes
     bindObserver();
@@ -387,18 +387,27 @@ export const elementUpdated = (
    * @returns Promise that resolves when cleanup is complete
    */
   const destroy = async (delay: number = 50) => {
-    if (!!!getObserver().callbacks) return;
+    if (!window?.jfLib?.elementUpdated?.[VERSION]?.callbacks) return;
 
     try {
       // wait a small delay
       await new Promise((resolve) => setTimeout(resolve, delay));
       // remove the listener
-      log("Removing listener", "error");
+      log("Removing listener", "info");
       getObserver().callbacks = getObserver().callbacks.filter((cb) => cb.id !== id);
     } catch (error) {
       log(error, "error");
     }
   };
+
+  /**
+   * Stops the elementUpdated listener — an alias of `destroy` kept for the standard handle shape (this module tracks
+   * no per-element marks, so there is no extra state for `destroy` to clear)
+   *
+   * @param delay - Optional delay before cleanup _(default: 50ms)_
+   * @returns Promise that resolves when cleanup is complete
+   */
+  const pause = (delay: number = 50) => destroy(delay);
 
   // Start the functionality
   const init = () => {
@@ -409,7 +418,15 @@ export const elementUpdated = (
 
   // Return the exposed functions
   return {
+    details: {
+      id,
+      selector,
+      get isListening() {
+        return !!window?.jfLib?.elementUpdated?.[VERSION]?.callbacks?.some((cb) => cb?.id === id);
+      },
+    },
     init,
+    pause,
     destroy,
   };
 };

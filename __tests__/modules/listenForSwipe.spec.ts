@@ -117,4 +117,15 @@ describe("listenForSwipe", () => {
     expect(RIGHT_CALLBACK).toBeCalledTimes(0);
     expect(LEFT_CALLBACK).toBeCalledTimes(0);
   });
+
+  it("returns a destroy handle that removes all swipe listeners", () => {
+    const element = document.createElement("div");
+    const handle = listenForSwipe(element, LEFT_CALLBACK, RIGHT_CALLBACK);
+    handle.destroy();
+    element.dispatchEvent(new MouseEvent("mousedown", { clientX: 100 }));
+    element.dispatchEvent(new MouseEvent("mouseup", { clientX: 200 }));
+    expect(RIGHT_CALLBACK).toBeCalledTimes(0);
+    expect(LEFT_CALLBACK).toBeCalledTimes(0);
+    expect(() => handle.destroy()).not.toThrow(); // idempotent
+  });
 });

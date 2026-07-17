@@ -45,7 +45,7 @@ export const isFunction = (value: unknown): value is Function => typeof value ==
  * @param {unknown} value - The value to check
  * @returns {boolean} True if the value is an object
  */
-export const isObject = (value: unknown): value is object => typeof value === "object";
+export const isObject = (value: unknown): value is object => typeof value === "object" && value !== null;
 
 /**
  * Checks if a value is an array of elements

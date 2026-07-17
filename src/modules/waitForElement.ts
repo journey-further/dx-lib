@@ -14,7 +14,7 @@ import { waitFor } from "./waitFor";
  */
 
 export const waitForElement = async (selector: string, maxTries = 20, timeout = 100): Promise<Element | null> => {
-  const el = (await waitFor(() => document.querySelector(selector), maxTries, timeout)) as Promise<Element | null>;
+  const el = (await waitFor(() => document.querySelector(selector), maxTries, timeout)) as Element | null;
   return el;
 };
 

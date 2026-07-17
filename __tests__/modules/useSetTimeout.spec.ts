@@ -5,7 +5,8 @@ describe("useSetTimeout", () => {
     vi.useFakeTimers();
     vi.clearAllTimers();
     vi.clearAllMocks();
-    delete window.jfTimers;
+    // @ts-expect-error test cleanup
+    delete window.jfLib;
   });
 
   afterEach(() => {
@@ -30,20 +31,20 @@ describe("useSetTimeout", () => {
     expect(() => useSetTimeout(() => {}, 123, 123)).toThrowError("Arg 3 must be a string");
   });
 
-  it("will push the correct object to the window array when a timer is added", () => {
-    expect(window.jfTimers).not.toBeDefined();
+  it("will push the correct object to the registry when a timer is added", () => {
+    expect(window.jfLib?.timers).not.toBeDefined();
     const obj = useSetTimeout(CALLBACK, 100, TIMEOUT_ID);
-    const objFromWindow = window.jfTimers.find((timer) => timer.id === TIMEOUT_ID);
+    const objFromWindow = window.jfLib.timers["1.0"].find((timer) => timer.id === TIMEOUT_ID);
     expect(obj.timer).toBeDefined();
     expect(obj.id).toBe(TIMEOUT_ID);
     expect(objFromWindow).toBe(obj);
   });
 
   it("will remove the original timer if one with the same ID is added", () => {
-    expect(window.jfTimers).not.toBeDefined();
+    expect(window.jfLib?.timers).not.toBeDefined();
     useSetTimeout(CALLBACK, 100, TIMEOUT_ID);
     useSetTimeout(CALLBACK, 100, TIMEOUT_ID);
-    expect(window.jfTimers.length).toBe(1);
+    expect(window.jfLib.timers["1.0"].length).toBe(1);
     vi.runAllTimers();
     expect(CALLBACK).toBeCalledTimes(1);
   });
@@ -55,14 +56,14 @@ describe("useSetTimeout", () => {
     expect(CALLBACK).toBeCalledTimes(1);
   });
 
-  it("will remove the timerObject from the window array when the timeout is exceeded", () => {
+  it("will remove the timerObject from the registry when the timeout is exceeded", () => {
     expect(CALLBACK).toBeCalledTimes(0);
     useSetTimeout(CALLBACK, 100, TIMEOUT_ID);
     vi.runAllTimers();
     expect(CALLBACK).toBeCalledTimes(1);
-    const objFromWindow = window.jfTimers.find((timer) => timer.id === TIMEOUT_ID);
+    const objFromWindow = window.jfLib.timers["1.0"].find((timer) => timer.id === TIMEOUT_ID);
     expect(objFromWindow).not.toBeDefined();
-    expect(window.jfTimers.length).toBe(0);
+    expect(window.jfLib.timers["1.0"].length).toBe(0);
   });
 
   it("will return the correct object when it is called", () => {

@@ -8,7 +8,7 @@ import { waitFor } from "./waitFor";
  * insertion position is not specified, it defaults to `"beforeend"`.
  *
  * @param {string} style - The CSS string to include in the `<style>` element.
- * @param {string} id - A unique ID to assign to the `<style>` element, ensuring no duplicates are added.
+ * @param {string} id - A unique ID to assign to the `<style>` element, ensuring no duplicates are added. Use the `<ownerId>--<childId>` convention (e.g. `"TIK_123456--hero"`) so useSPA resets/destroys sweep this resource automatically.
  * @param {object} [options] - Configuration options for the insertion.
  * @param {"beforebegin" | "afterbegin" | "beforeend" | "afterend"} [options.position="beforeend"] - The position where
  *   the `<style>` element should be inserted. Default is `"beforeend"`
@@ -24,24 +24,22 @@ export const insertStyle = async (
     elem?: HTMLElement;
   }
 ): Promise<void> => {
-  // Exit an element exists with this ID
-  if (!!document.querySelector(`#${id}`)) return;
   // Generate our HTML
   const styleElem = `<style id="${id}">${style.toString()}</style>`;
   // Get our insert position
   const insertPosition = options?.position ? options.position : "beforeend";
 
-  try {
-    // If an element was passed
-    if (options?.elem) {
-      options.elem.insertAdjacentHTML(insertPosition, styleElem);
-    } else {
-      // default to document.body
-      // NOTE: @samrenfrew added waitFor here to ensure that the body exists before we try to insert into it - fixes some errors with this function
-      await waitFor(() => !!document.body);
-      document.body.insertAdjacentHTML(insertPosition, styleElem);
-    }
-  } catch (error) {
-    console.warn(error);
+  // Exit if an element already exists with this ID (getElementById does no selector parsing, so
+  // ids that aren't valid CSS selectors - e.g. starting with a digit - are handled correctly)
+  if (!!document.getElementById(id)) return;
+
+  // If an element was passed
+  if (options?.elem) {
+    options.elem.insertAdjacentHTML(insertPosition, styleElem);
+  } else {
+    // default to document.body
+    // NOTE: @samrenfrew added waitFor here to ensure that the body exists before we try to insert into it - fixes some errors with this function
+    await waitFor(() => !!document.body);
+    document.body.insertAdjacentHTML(insertPosition, styleElem);
   }
 };

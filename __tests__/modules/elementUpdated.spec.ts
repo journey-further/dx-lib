@@ -3,9 +3,8 @@ import { elementUpdated } from "../../src/modules/elementUpdated";
 describe("elementUpdated", () => {
   beforeEach(() => {
     // Disconnect observers BEFORE resetting state to prevent stale callbacks
-    window.jfObservers?.forEach((obs) => obs.observer?.disconnect());
-    window.jfObservers = [];
-    window.jfLib = { elementUpdated: {} };
+    window.jfLib?.observers?.["1.0"]?.forEach((obs) => obs.observer?.disconnect());
+    window.jfLib = { elementUpdated: {}, observers: { "1.0": [] } };
     document.body.innerHTML = "";
   });
 
@@ -223,6 +222,22 @@ describe("elementUpdated", () => {
     expect(callback).not.toHaveBeenCalled();
   });
 
+  it("ignores textContent mutations when textContent option is not set", async () => {
+    const callback = vi.fn();
+    const div = document.createElement("div");
+    div.className = "test";
+    document.body.appendChild(div);
+
+    // Only attributes enabled — textContent mutations must be ignored
+    elementUpdated(".test", callback, "test-id", { attributes: true });
+
+    const text = document.createTextNode("New content");
+    div.appendChild(text);
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(callback).not.toHaveBeenCalled();
+  });
+
   it("ignores characterData mutations when characterData option is not set", async () => {
     const callback = vi.fn();
     const div = document.createElement("div");
@@ -240,5 +255,14 @@ describe("elementUpdated", () => {
 
     await new Promise((resolve) => setTimeout(resolve, 100));
     expect(callback).not.toHaveBeenCalled();
+  });
+});
+
+describe("standard handle shape", () => {
+  it("exposes details and pause with a live isListening flag", async () => {
+    const handle = elementUpdated(".handle-test", vi.fn(), "HANDLE_3", { attributes: true });
+    expect(handle.details.isListening).toBe(true);
+    await handle.pause(0);
+    expect(handle.details.isListening).toBe(false);
   });
 });

@@ -1,1 +1,0 @@
-{"nodes": [{"id": "redirect_fn", "label": "redirect", "type": "function", "source_file": "src/modules/redirect.ts", "source_location": "redirect.ts:9", "confidence": "EXTRACTED", "properties": {"signature": "(url: string) => void", "description": "Redirects browser to specified URL"}}], "edges": [], "hyperedges": []}

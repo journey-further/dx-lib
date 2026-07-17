@@ -14,6 +14,9 @@ describe("waitForNuxtStable", () => {
     delete (window as Window & { $nuxt?: unknown }).$nuxt;
     vi.clearAllTimers();
     vi.clearAllMocks();
+    // Restores any vi.spyOn mock implementations (e.g. requestAnimationFrame/visibilityState stubs)
+    // so a failing/timed-out test can't leak a stubbed implementation into the next test.
+    vi.restoreAllMocks();
     vi.useRealTimers();
   });
 
@@ -89,5 +92,47 @@ describe("waitForNuxtStable", () => {
     await vi.runAllTimersAsync();
     await timedOutPromise;
     expect(rafSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it("still resolves when the tab is hidden and requestAnimationFrame never fires (D3)", async () => {
+    const visibilitySpy = vi.spyOn(document, "visibilityState", "get").mockReturnValue("hidden");
+    // Simulate a backgrounded/prerendered tab: rAF callbacks never fire.
+    const rafSpy = vi.spyOn(window, "requestAnimationFrame").mockImplementation(() => 0);
+
+    window.$nuxt = { $store: {} };
+    const promise = waitForNuxtStable();
+    await vi.runAllTimersAsync();
+
+    const result = await promise;
+
+    expect(result).toBe(true);
+    expect(rafSpy).not.toHaveBeenCalled();
+
+    visibilitySpy.mockRestore();
+    rafSpy.mockRestore();
+  });
+
+  it("resolves a boolean instead of rejecting when $nextTick rejects (D6)", async () => {
+    const nextTick = vi.fn().mockRejectedValue(new Error("render error"));
+    window.$nuxt = { $store: {}, $nextTick: nextTick };
+
+    const promise = waitForNuxtStable();
+    await vi.runAllTimersAsync();
+
+    await expect(promise).resolves.toBe(true);
+    expect(nextTick).toHaveBeenCalledTimes(1);
+  });
+
+  it("warns on the console when polling times out without $nuxt ever appearing (D5)", async () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+
+    const promise = waitForNuxtStable(2, 1);
+    await vi.runAllTimersAsync();
+    const result = await promise;
+
+    expect(result).toBe(false);
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+
+    warnSpy.mockRestore();
   });
 });
