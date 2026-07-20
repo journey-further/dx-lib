@@ -15,7 +15,7 @@
     "test": "vitest run",
     "lint": "eslint src --fix",
     "prettier": "prettier src --write",
-    "build": "rm -rf dist && tsc-alias -p tsconfig.prod.json && tsc -p tsconfig.prod.json",
+    "build": "rm -rf dist && tsc -p tsconfig.prod.json && tsc-alias -p tsconfig.prod.json",
     "build:docs": "npm run index && typedoc",
     "index": "npx run-func ./generateIndex.js init",
     "audit:security": "audit-ci --config ./audit-ci.jsonc"
