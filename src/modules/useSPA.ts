@@ -2,6 +2,7 @@ import { destroyByPrefix } from "./destroyByPrefix";
 import { insertStyle } from "./insertStyle";
 import { useMutationObserver } from "./useMutationObserver";
 import { waitForElement } from "./waitForElement";
+import { isScreenInBounds } from "./isScreenInBounds";
 import {
   createLogger,
   jfError,
@@ -129,7 +130,7 @@ export interface JfSPAState {
  * Type definition for SPA test errors
  *
  * @typedef {object} JfSPAError
- * @property {"INVALID_ID" | "INVALID_OPTIONS" | "INVALID_SELECTOR" | "RUNTIME_ERROR"} code - Error code
+ * @property {"INVALID_ID" | "MISSING_OPTION" | "INVALID_TYPE" | "INVALID_SELECTOR" | "RUNTIME_ERROR"} code - Error code
  * @property {string} message - Error message
  * @property {unknown} [details] - Additional error details
  */
@@ -649,7 +650,7 @@ export const useSPA = (id: string): JfSPA => {
       if (destroyed) return;
       // NOTE: check screen size here if options for screen is passed and resetTest is wrong size
       if (!!STATE.options.screen) {
-        if (!isScreenInBounds()) {
+        if (!screenInBounds()) {
           log("Screen is outside the configured min/max bounds, resetting", "warn", STATE.options.screen);
           await resetTest();
           return;
@@ -967,15 +968,12 @@ export const useSPA = (id: string): JfSPA => {
   };
 
   /**
-   * The single bounds check shared by init and resize paths — inclusive on both ends so exact
-   * breakpoint widths (an iPad rotating onto 768/1024) behave the same on load and on resize
+   * The single bounds check shared by init and resize paths — delegates to the public `isScreenInBounds`
+   * module so load and resize (and standalone builds) all share the same inclusive-bounds behaviour
    *
    * @returns {boolean} True when the current width is within the configured screen bounds
    */
-  const isScreenInBounds = (): boolean => {
-    const { minWidth, maxWidth } = STATE.options.screen;
-    return window.innerWidth >= minWidth && window.innerWidth <= maxWidth;
-  };
+  const screenInBounds = (): boolean => isScreenInBounds(STATE.options.screen);
 
   /**
    * Handles window resize events, using the `minWidth` and/or `maxWidth` passed in the `screen` options
@@ -985,7 +983,7 @@ export const useSPA = (id: string): JfSPA => {
    */
   const handleResizeDebounced = debounce(async () => {
     try {
-      if (isScreenInBounds()) {
+      if (screenInBounds()) {
         log("Screen is correct size", "info");
         await initTest();
         return;

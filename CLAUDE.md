@@ -39,7 +39,7 @@ Each utility lives in its own file. The filename must exactly match the exported
 
 1. Create `src/modules/<functionName>.ts` with a named export.
 2. Add `export * from "./<functionName>";` to `src/modules/index.ts`.
-3. Run `yarn index` to regenerate `src/index.ts`.
+3. Run `npm run index` to regenerate `src/index.ts`.
 4. Create `__tests__/modules/<functionName>.spec.ts`.
 
 ### Key modules to know
