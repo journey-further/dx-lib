@@ -108,7 +108,7 @@ After adding your function and its accompanying `spec` file you should run a
 `coverage` report and ensure that your test is covering at least 90% of your
 function's statements and branches.
 
-To run a coverage report you can simple call `yarn test --coverage` and you will
+To run a coverage report you can simple call `npm test -- --coverage` and you will
 see a large table in the terminal which highlights any issues.
 
 ### Defining types
