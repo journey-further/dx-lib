@@ -1,6 +1,6 @@
 {
   "name": "jf-lib",
-  "version": "3.0.1",
+  "version": "3.1.0-staging.1",
   "main": "dist/index.js",
   "repository": "https://github.com/journey-further/dx-lib",
   "author": "Paul Singh",
