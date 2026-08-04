@@ -20,7 +20,15 @@ import { debounce } from "./debounce";
 
 const PAGE_CHANGE_VERSION = "1.0";
 const REINIT_VERSION = "1.0";
-const EXPERIMENTS_VERSION = "1.0";
+/**
+ * Shape marker stamped on every entry this lib pushes to `window.jfLib.experiments` — see `JfSPADetails.schema`.
+ *
+ * `window.jfLib.experiments` is deliberately a flat, unversioned array: it is the one registry of every test on the
+ * page, and each build vendors its own copy of the lib, so pre-3.0 copies share it. Both versions only ever read
+ * `details.id` off entries they did not create, so they interoperate; anything reading more than that must branch on
+ * `details.schema` rather than assume a shape.
+ */
+const EXPERIMENTS_SCHEMA = 3;
 
 /**
  * Type guard to check if an unknown value is a JfSPAPageOptions instance
@@ -49,6 +57,15 @@ export const isPageObjectType = (value: unknown): value is "pathname" | "hostnam
  * @interface JfSPADetails
  */
 export interface JfSPADetails {
+  /**
+   * Shape of this entry's `window.jfLib.experiments` record. `3` means the entry is the `JfSPA` public API
+   * (`{details, init, reset, destroy}`); `undefined` means it was pushed by a pre-3.0 lib and is that lib's raw
+   * internal state, where the reset callback lives at `options.reset` and `details` is only `{isRunning, id}`.
+   *
+   * Read this before touching any entry you did not create — the registry is shared by every vendored copy of the
+   * lib on the page, so mixed shapes are normal until the estate is fully on 3.x.
+   */
+  schema?: number;
   /** Whether the test is currently running */
   isRunning: boolean;
   /** Unique identifier for the test */
@@ -334,6 +351,7 @@ export const useSPA = (id: string): JfSPA => {
     },
     loopCount: 0,
     details: {
+      schema: EXPERIMENTS_SCHEMA,
       isRunning: false,
       id: "",
       pageMatched: false,
@@ -359,14 +377,12 @@ export const useSPA = (id: string): JfSPA => {
       // Push the id
       STATE.details.id = id;
 
-      // Check if this test is already setup — a fresh object per assignment, so an external
-      // wipe of window.jfLib can never resurrect stale module-level state
+      // Check if this test is already setup — the registry lives on window, never in module scope, so an external
+      // wipe of window.jfLib can never resurrect stale state (and sibling bundles share one registry).
+      // `details.id` is the one field every version of the lib agrees on, so this dedupes across vendored copies too
       window.jfLib = window.jfLib || {};
-      window.jfLib.experiments = window.jfLib.experiments || {};
-      window.jfLib.experiments[EXPERIMENTS_VERSION] = window.jfLib.experiments[EXPERIMENTS_VERSION] || [];
-      const alreadyRunning = !!window.jfLib.experiments[EXPERIMENTS_VERSION].find(
-        (test) => test?.details && test?.details?.id == id
-      );
+      window.jfLib.experiments = window.jfLib.experiments || [];
+      const alreadyRunning = !!window.jfLib.experiments.find((test) => test?.details && test?.details?.id == id);
       if (alreadyRunning) {
         log(`Test already setup`, "warn");
         // initTest = () => null;
@@ -453,7 +469,7 @@ export const useSPA = (id: string): JfSPA => {
 
       // Push this test to global object and mark it as running
       STATE.details.isRunning = true;
-      window.jfLib.experiments[EXPERIMENTS_VERSION].push(publicApi);
+      window.jfLib.experiments.push(publicApi);
       return true;
     } catch (e) {
       log("Setup Error", "error", STATE);
@@ -733,11 +749,9 @@ export const useSPA = (id: string): JfSPA => {
     if (!!STATE.options.watchForRemoval) useMutationObserver(`${STATE.details.id}--removal`).destroy();
     // sweep every auto-tracked resource registered under this test's id
     destroyByPrefix(STATE.details.id);
-    // delete it from our records
-    if (window.jfLib?.experiments?.[EXPERIMENTS_VERSION]) {
-      window.jfLib.experiments[EXPERIMENTS_VERSION] = window.jfLib.experiments[EXPERIMENTS_VERSION].filter(
-        (test) => test.details.id !== STATE.details.id
-      );
+    // delete it from our records — filter by id only, so a pre-3.0 sibling's entries are left untouched
+    if (window.jfLib?.experiments) {
+      window.jfLib.experiments = window.jfLib.experiments.filter((test) => test.details.id !== STATE.details.id);
     }
   };
 
