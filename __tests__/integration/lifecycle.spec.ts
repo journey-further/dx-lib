@@ -158,7 +158,7 @@ describe("teardown and re-init correctness (H5, H6, H7)", () => {
     expect(apply).toHaveBeenCalledTimes(1);
 
     Test.destroy();
-    expect(window.jfLib.experiments["1.0"]).toHaveLength(0);
+    expect(window.jfLib.experiments).toHaveLength(0);
 
     window.dispatchEvent(new Event("jf-pagechange-1.0"));
     window.dispatchEvent(new Event("jf-reinit-1.0"));

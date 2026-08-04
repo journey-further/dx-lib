@@ -42,6 +42,16 @@ Each utility lives in its own file. The filename must exactly match the exported
 3. Run `npm run index` to regenerate `src/index.ts`.
 4. Create `__tests__/modules/<functionName>.spec.ts`.
 
+### Changing anything on `window.jfLib` — read this first
+
+Every build inlines its own copy of this library, frozen at the version it was published against. Several versions therefore run on the same page at once, and old builds cannot be recalled — they keep executing until someone finds and re-uploads them.
+
+**Adding a new `window.jfLib` key is safe. Changing an existing key's shape in place is not, and a major version bump does not make it safe** — the old code is already deployed. Before touching a shared global, work out what an older vendored copy does with it, and check that both still work in either load order.
+
+This is not hypothetical: v3.0.0 reshaped `window.jfLib.experiments` and crashed every pre-3.0 test that shared a page with a 3.x one. See `adr/0001` for the full story and the rules that came out of it, and `CONTEXT.md` for the vocabulary (*vendored copy*, *the estate*, *coexistence*).
+
+`window.jfLib.experiments` in particular is **deliberately flat and unversioned** while every other `jfLib` key is versioned. That is intentional — don't tidy it into line.
+
 ### Key modules to know
 
 - **`useSPA`** — the primary framework for SPA-aware A/B tests.

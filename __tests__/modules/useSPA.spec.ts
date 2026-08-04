@@ -22,7 +22,7 @@ describe("useSPA", () => {
 
     // Setup window.jfLib with required observers
     window.jfLib = {
-      experiments: { "1.0": [] },
+      experiments: [],
       pageChange: {
         "1.0": {
           observer: {
@@ -75,7 +75,7 @@ describe("useSPA", () => {
   it("should initialize with valid options", async () => {
     const spa = useSPA(TEST_ID);
     await spa.init(defaultOptions);
-    expect(window.jfLib.experiments["1.0"]).toHaveLength(1);
+    expect(window.jfLib.experiments).toHaveLength(1);
   });
 
   it("should not initialize with invalid test ID", async () => {
@@ -141,18 +141,16 @@ describe("useSPA", () => {
     await spa.init(defaultOptions);
 
     // Add experiment with correct structure
-    window.jfLib.experiments = {
-      "1.0": [
-        {
-          details: { id: TEST_ID, isRunning: true },
-          options: defaultOptions,
-          loopCount: 0,
-        } as any,
-      ],
-    };
+    window.jfLib.experiments = [
+      {
+        details: { id: TEST_ID, isRunning: true },
+        options: defaultOptions,
+        loopCount: 0,
+      } as any,
+    ];
 
     spa.destroy();
-    expect(window.jfLib.experiments["1.0"]).toHaveLength(0);
+    expect(window.jfLib.experiments).toHaveLength(0);
   });
 
   it("should execute reset function", async () => {
@@ -201,7 +199,7 @@ describe("useSPA", () => {
   it("should expose public API in jfLib.experiments", async () => {
     const spa = useSPA(TEST_ID);
     await spa.init(defaultOptions);
-    const exp = window.jfLib.experiments["1.0"][0];
+    const exp = window.jfLib.experiments[0];
     expect(typeof exp.init).toBe("function");
     expect(typeof exp.reset).toBe("function");
     expect(typeof exp.destroy).toBe("function");
@@ -214,8 +212,43 @@ describe("useSPA", () => {
     // Re-init with a different id since TEST_ID is now registered
     const spa = useSPA(`${TEST_ID}_2`);
     await spa.init({ ...defaultOptions, reset });
-    await window.jfLib.experiments["1.0"][0].reset();
+    await window.jfLib.experiments[0].reset();
     expect(reset).toHaveBeenCalled();
+  });
+
+  // the registry is shared with pre-3.0 libs vendored into older live tests on the page
+  it("should stamp details.schema so consumers can tell entries apart", async () => {
+    const spa = useSPA(TEST_ID);
+    await spa.init(defaultOptions);
+    expect(window.jfLib.experiments[0].details.schema).toBe(3);
+  });
+
+  it("should register on a flat array a pre-3.0 lib can still call .find on", async () => {
+    delete window.jfLib.experiments;
+    const spa = useSPA(TEST_ID);
+    await spa.init(defaultOptions);
+
+    // exactly the predicate v2.0.11 useSPA.ts:358 uses
+    const found = window.jfLib.experiments.find((test) => test?.details && test?.details?.id == TEST_ID);
+    expect(found?.details.id).toBe(TEST_ID);
+  });
+
+  it("should leave a pre-3.0 entry alone on destroy, and survive its destroy in turn", async () => {
+    // a pre-3.0 lib pushes its raw STATE, which has no init/reset/destroy and no schema
+    const legacyEntry = { details: { id: "LEGACY_TEST", isRunning: true }, options: {}, loopCount: 0 } as any;
+    window.jfLib.experiments = [legacyEntry];
+
+    const spa = useSPA(TEST_ID);
+    await spa.init(defaultOptions);
+    expect(window.jfLib.experiments).toHaveLength(2);
+
+    // our destroy filters by id only — the legacy entry must remain
+    spa.destroy();
+    expect(window.jfLib.experiments).toEqual([legacyEntry]);
+
+    // and v2.0.11 useSPA.ts:723 reassigns the array wholesale — nothing of ours is hung off it to lose
+    window.jfLib.experiments = window.jfLib.experiments.filter((test) => test.details.id !== "LEGACY_TEST");
+    expect(window.jfLib.experiments).toHaveLength(0);
   });
 
   // #107 — observer cleanup on reset

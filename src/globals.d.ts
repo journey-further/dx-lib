@@ -47,10 +47,12 @@ export interface JfLib {
       callbacks: (JfUpdatedObject | null)[];
     };
   };
-  /** Active experiments, keyed by version */
-  experiments?: {
-    [version: string]: JfSPA[];
-  };
+  /**
+   * Every test running on the page — deliberately flat and unversioned, so vendored copies of the lib at different
+   * versions share one registry. Entries have mixed shapes across the estate; branch on `details.schema` before
+   * reading anything beyond `details.id`.
+   */
+  experiments?: JfSPA[];
   /** MutationObservers tracked by useMutationObserver, keyed by version */
   observers?: {
     [version: string]: JfObserverObject[];
