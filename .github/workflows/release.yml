@@ -6,10 +6,13 @@ on:
       - main
       - staging
 
-# Add concurrency to prevent multiple releases running
+# Serialise releases. Must NOT cancel in progress: semantic-release pushes its own commits back to the
+# branch (the version commit, then the badge commit), and those pushes land in this same concurrency group.
+# Cancelling meant a release could kill itself after tagging but before creating the GitHub Release — that
+# is how v3.1.2 got a tag with no release notes. Queued runs simply find no releasable commits and no-op.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   release:
