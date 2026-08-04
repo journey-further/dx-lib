@@ -27,12 +27,17 @@ export const log = (message: string, level: LogLevel = "info", id: string = "", 
     error: "background: #ff616e; color: #fff; padding: 2px 5px;",
     none: "background: #fff; color: #fff; padding: 2px 5px;",
   };
-  const output = level === "error" ? console.error : level === "warn" ? console.warn : console.log;
+  // Called as methods on `console`, never detached into a variable: consumers paste bundles into scopes where
+  // `console` is a testing tool's own debug object (Webtrends' `Test.debug`), whose methods need their receiver.
+  // Written as literal `console.log`/`console.warn` so jf-conversion's build can still string-replace them.
+  const args: unknown[] = !!data ? [`${id} %c${message}`, styles[level], data] : [`${id} %c${message}`, styles[level]];
 
-  if (!!data) {
-    output(`${id} %c${message}`, styles[level], data);
+  if (level === "error") {
+    console.error(...args);
+  } else if (level === "warn") {
+    console.warn(...args);
   } else {
-    output(`${id} %c${message}`, styles[level]);
+    console.log(...args);
   }
 };
 
