@@ -26,6 +26,25 @@ describe("consoleLog", () => {
     expect(console.log).toHaveBeenCalledTimes(4);
   });
 
+  // Regression: the method used to be detached into a variable (`const output = console.error`) and called bare.
+  // Bundles get pasted into scopes where `console` is the testing tool's own debug object, whose methods use `this`
+  // — a detached call threw "this.proxy is not a function" out of Webtrends and killed the calling lifecycle path.
+  it("invokes console methods with their receiver intact", () => {
+    const receivers: unknown[] = [];
+    const record = function (this: unknown) {
+      receivers.push(this);
+    };
+    vi.spyOn(console, "error").mockImplementation(record);
+    vi.spyOn(console, "warn").mockImplementation(record);
+    vi.spyOn(console, "log").mockImplementation(record);
+
+    log("an error", "error", "[T] mod");
+    log("a warning", "warn", "[T] mod");
+    log("plain info", "info", "[T] mod");
+
+    expect(receivers).toEqual([console, console, console]);
+  });
+
   it("appends optional data to the output", () => {
     const data = { key: "value" };
     log("with data", "info", "[T] mod", data);

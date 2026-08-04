@@ -21,6 +21,13 @@ executing in the wild. The estate is permanently heterogeneous: old builds keep 
 deliberately re-uploads them, so "the oldest version we support" is a fact about what was published, not
 a policy anyone gets to choose.
 
+## The host scope
+
+The function scope inside a testing platform's own code that a build's bundle is pasted into. Ambient
+globals are not guaranteed to be the browser's there — Webtrends' `OBF.js` shadows `console` with its
+internal debug object, whose methods need their receiver. The library therefore cannot treat an ambient
+global as a plain value: no detaching a method off it, no caching a reference to it.
+
 ## The registry
 
 `window.jfLib.experiments` — the list of every test running on the current page. Shared by all vendored
