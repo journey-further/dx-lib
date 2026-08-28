@@ -39,7 +39,7 @@ jobs:
         with:
           semantic_version: 24.2.3
           extra_plugins: |
-            conventional-changelog-conventionalcommits
+            conventional-changelog-conventionalcommits@8
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           GIT_COMMITTER_NAME: ${{ vars.GIT_COMMITTER_NAME }}
