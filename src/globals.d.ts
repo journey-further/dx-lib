@@ -49,8 +49,8 @@ export interface JfLib {
   };
   /**
    * Every test running on the page — deliberately flat and unversioned, so vendored copies of the lib at different
-   * versions share one registry. Entries have mixed shapes across the estate; branch on `details.schema` before
-   * reading anything beyond `details.id`.
+   * versions share one registry. Entries have mixed shapes across the estate; branch on `details.schema` before reading
+   * anything beyond `details.id`.
    */
   experiments?: JfSPA[];
   /** MutationObservers tracked by useMutationObserver, keyed by version */
@@ -81,16 +81,45 @@ export interface NuxtInstance {
   [key: string]: unknown;
 }
 
+/**
+ * Nuxt 4's app instance (a Vue `nuxtApp`), as returned by `useNuxtApp()` or read off a mounted Vue app's
+ * `globalProperties.$nuxt`. Untyped beyond `isHydrating` — the object also carries `hooks`, `payload`, `vueApp`, etc,
+ * none of which waitForNuxtStable needs.
+ */
+export interface NuxtApp {
+  isHydrating?: boolean;
+  [key: string]: unknown;
+}
+
+/** The subset of Vue's app instance (`__vue_app__`) that waitForNuxtStable reads to reach a Nuxt 4 nuxtApp. */
+export interface VueApp {
+  config: {
+    globalProperties: {
+      $nuxt?: NuxtApp;
+      [key: string]: unknown;
+    };
+  };
+  [key: string]: unknown;
+}
+
 declare global {
   interface Window {
     jfLib: JfLib;
     /** GTM/analytics data layer written to by pushToDL */
     dataLayer: any[]; // eslint-disable-line
     $nuxt?: NuxtInstance;
+    /**
+     * Nuxt 4's composable for reaching the running nuxtApp. Not standard Nuxt behaviour — Nuxt auto-imports this at
+     * build time rather than placing it on `window` — so its presence here is a side effect of how a given site is
+     * built, not a guarantee. See waitForNuxtStable.
+     */
+    useNuxtApp?: () => NuxtApp;
   }
 
   // elementReady's per-element fired marks
   interface Element {
     jfReady?: string[];
+    /** Vue's own app instance, set on the mount element. Private Vue internal, not a public API. */
+    __vue_app__?: VueApp;
   }
 }

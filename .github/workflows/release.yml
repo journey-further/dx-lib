@@ -4,12 +4,10 @@ on:
   push:
     branches:
       - main
-      - staging
 
-# Serialise releases. Must NOT cancel in progress: semantic-release pushes its own commits back to the
-# branch (the version commit, then the badge commit), and those pushes land in this same concurrency group.
-# Cancelling meant a release could kill itself after tagging but before creating the GitHub Release — that
-# is how v3.1.2 got a tag with no release notes. Queued runs simply find no releasable commits and no-op.
+# Serialise releases. Must NOT cancel in progress: cancelling meant a release could kill itself after
+# tagging but before creating the GitHub Release — that is how v3.1.2 got a tag with no release notes.
+# Queued runs simply find no releasable commits and no-op.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: false
@@ -18,9 +16,6 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    outputs:
-      new_release_published: ${{ steps.semantic.outputs.new_release_published }}
-      new_release_version: ${{ steps.semantic.outputs.new_release_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -51,55 +46,3 @@ jobs:
           GIT_COMMITTER_EMAIL: ${{ vars.GIT_COMMITTER_EMAIL }}
           GIT_AUTHOR_EMAIL: ${{ vars.GIT_AUTHOR_EMAIL }}
           GIT_AUTHOR_NAME: ${{ vars.GIT_AUTHOR_NAME }}
-
-      # Merge the updated version back
-      - name: Merge back to Staging
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          git fetch origin staging
-          git checkout staging
-          git merge main --no-ff -m "Merge main into staging"
-          git push origin staging
-
-  generate-badge:
-    name: Generate Release Badge
-    needs: release
-    runs-on: ubuntu-latest
-    if: |
-      github.ref == 'refs/heads/main' && 
-      github.event_name == 'push'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.ACCESS_TOKEN }}
-
-      - name: Ensure Badges Directory
-        run: mkdir -p .github/badges
-
-      - name: Get Current Version
-        id: version
-        run: |
-          if [ "${{ needs.release.outputs.new_release_published }}" == "true" ] && [ -n "${{ needs.release.outputs.new_release_version }}" ]; then
-            echo "version=${{ needs.release.outputs.new_release_version }}" >> $GITHUB_OUTPUT
-          else
-            CURRENT_VERSION=$(node -p "require('./package.json').version")
-            echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Generate Release Badge
-        uses: emibcn/badge-action@v2.0.3
-        with:
-          label: "Latest Release"
-          status: ${{ steps.version.outputs.version }}
-          color: "green,blue"
-          style: "flat"
-          path: ".github/badges/latest-release.svg"
-
-      - name: Commit Badge
-        run: |
-          git config user.name "CRO Bot"
-          git config user.email "conversion@journeyfurther.com"
-          git add .github/badges/latest-release.svg
-          git commit -m "Update latest release badge to ${{ steps.version.outputs.version }}" || exit 0
-          git push

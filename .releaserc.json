@@ -1,5 +1,5 @@
 {
-  "branches": ["main", { "name": "staging", "prerelease": true }],
+  "branches": ["main"],
   "plugins": [
     [
       "@semantic-release/commit-analyzer",
@@ -24,13 +24,6 @@
       "@semantic-release/release-notes-generator",
       {
         "preset": "conventionalcommits"
-      }
-    ],
-    [
-      "@semantic-release/git",
-      {
-        "assets": ["docs", "package.json"],
-        "message": ":tada: Release: ${nextRelease.version}\n\n${nextRelease.notes}"
       }
     ]
   ]
