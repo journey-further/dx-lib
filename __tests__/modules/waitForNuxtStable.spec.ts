@@ -12,6 +12,8 @@ describe("waitForNuxtStable", () => {
 
   afterEach(() => {
     delete (window as Window & { $nuxt?: unknown }).$nuxt;
+    delete (window as Window & { useNuxtApp?: unknown }).useNuxtApp;
+    document.body.innerHTML = "";
     vi.clearAllTimers();
     vi.clearAllMocks();
     // Restores any vi.spyOn mock implementations (e.g. requestAnimationFrame/visibilityState stubs)
@@ -34,7 +36,8 @@ describe("waitForNuxtStable", () => {
     await vi.runAllTimersAsync();
     const result = await promise;
     expect(result).toBe(false);
-    expect(setTimeoutSpy).toHaveBeenCalledTimes(20);
+    // Default maxTries is 50 (up from 20) — see the JSDoc for the Nuxt 4 hydration measurement behind it.
+    expect(setTimeoutSpy).toHaveBeenCalledTimes(50);
   });
 
   it("resolves true when $nuxt.$store becomes available mid-poll", async () => {
@@ -134,5 +137,58 @@ describe("waitForNuxtStable", () => {
     expect(warnSpy).toHaveBeenCalledTimes(1);
 
     warnSpy.mockRestore();
+  });
+
+  it("resolves true on Nuxt 4 once window.useNuxtApp()'s isHydrating flips to false", async () => {
+    const nuxtApp: { isHydrating: boolean } = { isHydrating: true };
+    (window as Window & { useNuxtApp?: () => unknown }).useNuxtApp = () => nuxtApp;
+
+    const promise = waitForNuxtStable(20, 100);
+    // Advance a couple of polls while still hydrating, then flip the flag.
+    vi.advanceTimersByTime(200);
+    await Promise.resolve();
+    nuxtApp.isHydrating = false;
+    await vi.runAllTimersAsync();
+    const result = await promise;
+
+    expect(result).toBe(true);
+  });
+
+  it("falls back to the #__nuxt/__vue_app__ DOM path when window.useNuxtApp is absent (Nuxt 4)", async () => {
+    const mount = document.createElement("div");
+    mount.id = "__nuxt";
+    const nuxtApp = { isHydrating: false };
+    (mount as Element & { __vue_app__?: unknown }).__vue_app__ = {
+      config: { globalProperties: { $nuxt: nuxtApp } },
+    };
+    document.body.appendChild(mount);
+
+    const promise = waitForNuxtStable();
+    await vi.runAllTimersAsync();
+    const result = await promise;
+
+    expect(result).toBe(true);
+  });
+
+  it("does not treat isHydrating === undefined as ready", async () => {
+    (window as Window & { useNuxtApp?: () => unknown }).useNuxtApp = () => ({ isHydrating: undefined });
+
+    const promise = waitForNuxtStable(2, 1);
+    await vi.runAllTimersAsync();
+    const result = await promise;
+
+    expect(result).toBe(false);
+  });
+
+  it("still honours the Nuxt 2/3 $store path unchanged, awaiting $nextTick", async () => {
+    const nextTick = vi.fn().mockResolvedValue(undefined);
+    window.$nuxt = { $store: {}, $nextTick: nextTick };
+
+    const promise = waitForNuxtStable();
+    await vi.runAllTimersAsync();
+    const result = await promise;
+
+    expect(result).toBe(true);
+    expect(nextTick).toHaveBeenCalledTimes(1);
   });
 });
