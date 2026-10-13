@@ -486,6 +486,37 @@ export const useSPA = (id: string): JfSPA => {
   const removeClassAndId = (selector: string) => selector.replace(/^(\.|#)/, "");
 
   /**
+   * Starts a shared watcher on `<html>`. A bundle can run before `<html>` exists, so the watcher binds once it appears
+   * instead of failing init
+   *
+   * @param {ReturnType<typeof useMutationObserver>} observer - The shared observer handle to start
+   * @param {MutationObserverInit} config - The observer config
+   * @param {MutationCallback} callback - The mutation callback
+   * @param {string} label - The log label used if binding fails
+   */
+  const observeHtml = (
+    observer: ReturnType<typeof useMutationObserver>,
+    config: MutationObserverInit,
+    callback: MutationCallback,
+    label: string
+  ) => {
+    const target = document.querySelector("html");
+    if (!!target) {
+      observer.observe(target, config, callback);
+      return;
+    }
+    waitForElement("html")
+      .then((el) => {
+        if (!!!el) throw new Error("no target");
+        observer.observe(el, config, callback);
+      })
+      .catch((e) => {
+        log(label, "error");
+        reportLifecycle(e);
+      });
+  };
+
+  /**
    * Sets up a mutation observer to watch for the main element being re-added to the page. This handles cases where the
    * entire main content area is replaced in SPAs. Only one observer is created globally and shared across all test
    * instances.
@@ -502,8 +533,6 @@ export const useSPA = (id: string): JfSPA => {
       return;
     }
     try {
-      const target = document.querySelector("html");
-      if (!!!target) throw new Error("no target");
       const config: MutationObserverInit = { childList: true, subtree: true };
 
       const nodeNames = new Set<string>([STATE.options.removedNode]);
@@ -524,7 +553,7 @@ export const useSPA = (id: string): JfSPA => {
 
       // Setup the reInit observer
       window.jfLib.reInit[REINIT_VERSION] = { observer: useMutationObserver(`reInit--${REINIT_VERSION}`), nodeNames };
-      window.jfLib.reInit[REINIT_VERSION].observer.observe(target, config, callback);
+      observeHtml(window.jfLib.reInit[REINIT_VERSION].observer, config, callback, "Re-Init Error");
     } catch (e) {
       log("Re-Init Error", "error");
       throwError(e);
@@ -543,9 +572,6 @@ export const useSPA = (id: string): JfSPA => {
     // Abort if we've already added this listener as we only need one
     if (!!window.jfLib.pageChange[PAGE_CHANGE_VERSION]) return;
     try {
-      // bind to html
-      const target = document.querySelector("html");
-
       const config: MutationObserverInit = { childList: true, subtree: true };
 
       const callback: MutationCallback = () => {
@@ -566,7 +592,7 @@ export const useSPA = (id: string): JfSPA => {
         observer: useMutationObserver(`pageChange--${PAGE_CHANGE_VERSION}`),
         pagePath: window.location.pathname + window.location.search + window.location.hash,
       };
-      window.jfLib.pageChange[PAGE_CHANGE_VERSION].observer.observe(target, config, callback);
+      observeHtml(window.jfLib.pageChange[PAGE_CHANGE_VERSION].observer, config, callback, "Page Change Error");
     } catch (e) {
       log("Page Change Error", "error");
       throwError(e);
